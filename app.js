@@ -29,6 +29,8 @@ const VARIABLES = [
   "照射時間",
   "溫度及供水條件",
 ];
+// Display order is independent of the stable IDs stored in student records.
+const VARIABLE_DISPLAY_ORDER = [4, 1, 2, 3, 0, 5];
 const EXPECTED = { iv: [0], dv: [1], cv: [2, 3, 4, 5] };
 const ASSUMPTIONS = [
   ["similar", "胚芽鞘種類、初始高度及生長階段相近。", true],
@@ -258,7 +260,7 @@ function renderVariables() {
   ]
     .map(
       ([key, label, description]) =>
-        `<fieldset class="variable-group"><legend>${label}<span>（${description}）</span></legend><div class="variable-pills">${VARIABLES.map((v, i) => `<label class="variable-pill"><input type="checkbox" data-variable="${key}" value="${i}"><span>${v}</span></label>`).join("")}</div></fieldset>`,
+        `<fieldset class="variable-group"><legend>${label}<span>（${description}）</span></legend><div class="variable-pills">${VARIABLE_DISPLAY_ORDER.map((i) => `<label class="variable-pill"><input type="checkbox" data-variable="${key}" value="${i}"><span>${VARIABLES[i]}</span></label>`).join("")}</div></fieldset>`,
     )
     .join("");
   $$("[data-variable]").forEach(
