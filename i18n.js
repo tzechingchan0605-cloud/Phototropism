@@ -224,13 +224,7 @@ window.VL3Language = (() => {
     translateTree(document.documentElement);
   }
   function requestSwitch() {
-    const code = window.prompt(t("輸入 CMI 使用中文，或 EMI 使用英文："));
-    if (code === null) return false;
-    if (code !== "CMI" && code !== "EMI") {
-      window.alert(t("代碼不正確。請輸入 CMI 或 EMI；目前語言及作答不變。"));
-      return false;
-    }
-    language = code === "EMI" ? "en" : "zh";
+    language = language === "zh" ? "en" : "zh";
     refresh();
     return true;
   }

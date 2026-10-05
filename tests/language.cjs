@@ -9,29 +9,37 @@ assert(
   "Language tests require an isolated local server",
 );
 const supported = /（(?:胚芽鞘|向光性|生長素|瓊脂|延長|不透光)）/g;
-let nextCode = null,
-  cancel = false;
 const dialogs = [];
 function attachDialogs(page) {
   page.on("dialog", async (dialog) => {
     dialogs.push({ type: dialog.type(), message: dialog.message() });
-    if (dialog.type() === "prompt") {
-      if (cancel) await dialog.dismiss();
-      else await dialog.accept(nextCode);
-    } else await dialog.accept();
+    if (dialog.type() === "prompt") await dialog.dismiss();
+    else await dialog.accept();
   });
 }
 async function switchLanguage(
   page,
-  code,
+  expectedLanguage,
   selector = ".topbar [data-language-switch]",
-  dismiss = false,
 ) {
-  nextCode = code;
-  cancel = dismiss;
+  const beforeDialogs = dialogs.length;
+  const beforeLanguage = await page.evaluate(() => VL3Language.current);
+  assert.notEqual(
+    beforeLanguage,
+    expectedLanguage,
+    "Each click must toggle language",
+  );
   await page.locator(selector).click();
   await page.waitForTimeout(20);
-  cancel = false;
+  assert.equal(
+    dialogs.length,
+    beforeDialogs,
+    "Language switching must not open a dialog",
+  );
+  assert.equal(
+    await page.evaluate(() => VL3Language.current),
+    expectedLanguage,
+  );
 }
 async function stateSnapshot(page) {
   return page.evaluate(() => ({
@@ -151,11 +159,8 @@ async function saveExcel(page, target) {
     assert.equal(await page.evaluate(() => VL3Language.current), "zh");
     await page.fill("#profileName", "光源");
     const loginButton = "#profileDialog [data-language-switch]";
-    await unchanged(page, () => switchLanguage(page, "WRONG", loginButton));
-    assert.match(dialogs.at(-1).message, /代碼不正確/);
-    await unchanged(page, () => switchLanguage(page, null, loginButton, true));
     assert.equal(await page.inputValue("#profileName"), "光源");
-    await unchanged(page, () => switchLanguage(page, "EMI", loginButton));
+    await unchanged(page, () => switchLanguage(page, "en", loginButton));
     assert.equal(
       await page.evaluate(() => document.documentElement.lang),
       "en",
@@ -222,12 +227,12 @@ async function saveExcel(page, target) {
     await page.mouse.up();
     await page.click("#saveDrawing");
     await page.evaluate(() => flushSync());
-    await unchanged(page, () => switchLanguage(page, "CMI"));
+    await unchanged(page, () => switchLanguage(page, "zh"));
     assert.equal(
       await page.getAttribute("#observation", "placeholder"),
       "我觀察到……",
     );
-    await unchanged(page, () => switchLanguage(page, "EMI"));
+    await unchanged(page, () => switchLanguage(page, "en"));
     assert.equal(await page.inputValue("#reason"), "光源");
     assert.equal(
       await page.inputValue("#setupDescription"),
@@ -251,8 +256,8 @@ async function saveExcel(page, target) {
     await page.click("#runExperiment");
     const generation = await page.evaluate(() => runGeneration);
     const controlNode = await page.locator("#growth-A").elementHandle();
-    await switchLanguage(page, "CMI");
-    await switchLanguage(page, "EMI");
+    await switchLanguage(page, "zh");
+    await switchLanguage(page, "en");
     assert.equal(await page.evaluate(() => runGeneration), generation);
     assert(
       await controlNode.evaluate(
@@ -299,8 +304,8 @@ async function saveExcel(page, target) {
       await page.selectOption(`#ext-direction-${id}`, model.direction);
     }
     await page.evaluate(() => flushSync());
-    await unchanged(page, () => switchLanguage(page, "CMI"));
-    await unchanged(page, () => switchLanguage(page, "EMI"));
+    await unchanged(page, () => switchLanguage(page, "zh"));
+    await unchanged(page, () => switchLanguage(page, "en"));
     assert.equal(await page.inputValue("#ruler-G"), "35");
     await page.click("#confirmExtension");
     for (const [id, model] of await page.evaluate(() =>
@@ -339,10 +344,8 @@ async function saveExcel(page, target) {
     await page.fill("#reflection", "我的理由");
     await page.click("#saveReflection");
     await page.evaluate(() => flushSync());
-    await unchanged(page, () => switchLanguage(page, "WRONG"));
-    assert.match(dialogs.at(-1).message, /Incorrect code/);
-    await unchanged(page, () => switchLanguage(page, "CMI"));
-    await unchanged(page, () => switchLanguage(page, "EMI"));
+    await unchanged(page, () => switchLanguage(page, "zh"));
+    await unchanged(page, () => switchLanguage(page, "en"));
     await page.evaluate(() => {
       window.print = () => {
         window.printedLanguage = document.documentElement.lang;
@@ -404,7 +407,7 @@ async function saveExcel(page, target) {
       .locator("#extensionResults")
       .screenshot({ path: "/tmp/vl3-language-extension-mobile.png" });
     await page.setViewportSize({ width: 1440, height: 1000 });
-    await switchLanguage(page, "CMI");
+    await switchLanguage(page, "zh");
     await page.click("#downloadPDF");
     assert.match(await page.locator("#printReport").innerText(), /參考答案/);
     await page.emulateMedia({ media: "print" });
@@ -434,7 +437,7 @@ async function saveExcel(page, target) {
     );
     await saveExcel(teacher, "/tmp/vl3-language-cmi.xlsx");
     await unchanged(teacher, () =>
-      switchLanguage(teacher, "EMI", "#teacherDialog [data-language-switch]"),
+      switchLanguage(teacher, "en", "#teacherDialog [data-language-switch]"),
     );
     await noChineseSystem(teacher);
     await saveExcel(teacher, "/tmp/vl3-language-emi.xlsx");
@@ -455,8 +458,8 @@ async function saveExcel(page, target) {
       JSON.stringify(sharedRecords),
     );
     await teacher.click("#teacherDemo");
-    await unchanged(teacher, () => switchLanguage(teacher, "CMI"));
-    await unchanged(teacher, () => switchLanguage(teacher, "EMI"));
+    await unchanged(teacher, () => switchLanguage(teacher, "zh"));
+    await unchanged(teacher, () => switchLanguage(teacher, "en"));
     await teacher.fill("#observation", "示範原文");
     await teacher.evaluate(() => {
       save();
@@ -478,7 +481,7 @@ async function saveExcel(page, target) {
       deviceScaleFactor: 1,
     });
     await phone.goto(base);
-    await switchLanguage(phone, "EMI", "#profileDialog [data-language-switch]");
+    await switchLanguage(phone, "en", "#profileDialog [data-language-switch]");
     assert(
       await phone.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,
@@ -494,8 +497,8 @@ async function saveExcel(page, target) {
       save();
       return localStorage.getItem("phototropismLab.appsScriptSync.v1");
     });
-    await unchanged(phone, () => switchLanguage(phone, "CMI"));
-    await unchanged(phone, () => switchLanguage(phone, "EMI"));
+    await unchanged(phone, () => switchLanguage(phone, "zh"));
+    await unchanged(phone, () => switchLanguage(phone, "en"));
     assert.equal(
       await phone.evaluate(() =>
         localStorage.getItem("phototropismLab.appsScriptSync.v1"),
@@ -532,7 +535,7 @@ async function saveExcel(page, target) {
       "Tests must never contact production Google or any external collector",
     );
     console.log(
-      "PASS (ISOLATED): CMI/EMI codes, cancellation, full system text and all placeholders, six approved support terms, unaltered student text/state/canvas/options/locks/originals/events/time, running animations, translated actual PDFs, byte-identical Chinese XLSX/images/formulas, teacher demonstration isolation, phone, offline outbox/retry and Chinese reload default. No production requests.",
+      "PASS (ISOLATED): direct Chinese/English switching without dialogs, full system text and all placeholders, six approved support terms, unaltered student text/state/canvas/options/locks/originals/events/time, running animations, translated actual PDFs, byte-identical Chinese XLSX/images/formulas, teacher demonstration isolation, phone, offline outbox/retry and Chinese reload default. No production requests.",
     );
   } finally {
     await browser.close();

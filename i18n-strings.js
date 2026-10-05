@@ -453,9 +453,7 @@ VL3 雲端紀錄連線	VL3 cloud record connection
 雲端紀錄分段不完整	Cloud record chunks are incomplete.
 收集表包含不屬於本模組的紀錄，未提供部分全班資料	The collection sheet contains records from another module. Partial class data has not been provided.
 語言切換	Change language
-輸入 CMI 使用中文，或 EMI 使用英文：	Enter CMI for Chinese or EMI for English:
-代碼不正確。請輸入 CMI 或 EMI；目前語言及作答不變。	Incorrect code. Enter CMI or EMI. Your current language and answers have not changed.
-語言：CMI / EMI	Language: CMI / EMI
+語言：中文 / English	Language: Chinese / English
 主探究原始假說	Original main inquiry hypothesis
 證據限制	Limits of the evidence
 感光部位	Part that senses light
