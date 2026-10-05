@@ -133,6 +133,12 @@ function doPost(event) {
           if (old.extension[field] !== null && old.extension[field] !== undefined) r.extension[field] = old.extension[field];
         }
       }
+      if (old.tipInquiry) {
+        if (!r.tipInquiry || typeof r.tipInquiry !== 'object' || Array.isArray(r.tipInquiry)) r.tipInquiry = old.tipInquiry;
+        for (const field of ['initialPrediction', 'firstObservations', 'firstAnalysis']) {
+          if (old.tipInquiry[field] !== null && old.tipInquiry[field] !== undefined) r.tipInquiry[field] = old.tipInquiry[field];
+        }
+      }
       if (old.experimentVersion !== undefined) r.experimentVersion = old.experimentVersion;
       else delete r.experimentVersion;
     }

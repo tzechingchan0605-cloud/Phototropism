@@ -61,8 +61,11 @@ async function stateSnapshot(page) {
     hasRun,
     extensionRunning,
     extensionHasRun,
+    tipRunning,
+    tipHasRun,
     runGeneration,
     extensionGeneration,
+    tipGeneration,
     pending: cloudSync.getPendingCount(),
   }));
 }
@@ -267,8 +270,9 @@ async function saveExcel(page, target) {
     );
     await page.waitForFunction(() => hasRun);
     await page.emulateMedia({ reducedMotion: "reduce" });
-    for (const id of ["A", "B", "C", "D"]) {
-      await page.selectOption(`#growth-${id}`, id === "C" ? "none" : "clear");
+    assert.equal(await page.locator("#growth-C").count(), 0);
+    for (const id of ["A", "B", "D"]) {
+      await page.selectOption(`#growth-${id}`, "clear");
       await page.selectOption(
         `#obs-${id}`,
         ["A", "D"].includes(id) ? "left" : "straight",
@@ -286,6 +290,71 @@ async function saveExcel(page, target) {
       await page.selectOption(`#${id}`, value);
     await page.fill("#evidence", "頂端");
     await page.click("#toExtension");
+    assert(await page.locator("#tipSection").isVisible());
+    assert(await page.locator("#extensionSection").isHidden());
+    await page.selectOption("#tipPrediction", "same");
+    await page.fill("#tipReason", "頂端原文");
+    await page.fill("#tipFair", "學生公平比較");
+    await page.evaluate(() => flushSync());
+    await unchanged(page, () => switchLanguage(page, "zh"));
+    await unchanged(page, () => switchLanguage(page, "en"));
+    await noChineseSystem(page);
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.click("#runTipExperiment");
+    const tipGenerationBeforeSwitch = await page.evaluate(() => tipGeneration);
+    const tipControlNode = await page.locator("#tip-growth-A").elementHandle();
+    await switchLanguage(page, "zh");
+    await switchLanguage(page, "en");
+    assert.equal(
+      await page.evaluate(() => tipGeneration),
+      tipGenerationBeforeSwitch,
+    );
+    assert(
+      await tipControlNode.evaluate(
+        (node) => node === document.querySelector("#tip-growth-A"),
+      ),
+      "Switching cannot recreate the tip experiment controls",
+    );
+    await page.waitForFunction(() => tipHasRun);
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    const initialTipPrediction = await page.evaluate(() =>
+      structuredClone(state.tipInquiry.initialPrediction),
+    );
+    await page.selectOption("#tipPrediction", "less");
+    assert.deepEqual(
+      await page.evaluate(() => state.tipInquiry.initialPrediction),
+      initialTipPrediction,
+    );
+    for (const id of ["A", "C"]) {
+      await page.selectOption(
+        `#tip-growth-${id}`,
+        id === "C" ? "none" : "clear",
+      );
+      await page.selectOption(
+        `#tip-direction-${id}`,
+        id === "C" ? "straight" : "left",
+      );
+    }
+    await page.click("#confirmTipObservations");
+    for (const [id, value] of await page.evaluate(() =>
+      Object.entries(TIP_ANSWERS),
+    ))
+      await page.selectOption(`#${id}`, value);
+    await page.fill("#tipEvidence", "物質X原文");
+    await page.evaluate(() => flushSync());
+    await unchanged(page, () => switchLanguage(page, "zh"));
+    await unchanged(page, () => switchLanguage(page, "en"));
+    await noChineseSystem(page);
+    assert.doesNotMatch(
+      await page.locator("main").innerText(),
+      /auxin|phototropism/i,
+    );
+    await page.click("#toAgar");
+    assert(await page.locator("#extensionSection").isVisible());
+    assert.match(
+      await page.locator("#extensionSection").innerText(),
+      /substance X/i,
+    );
     await page.selectOption("#extPrediction", "left");
     await page.fill("#extReason", "向右彎曲");
     await page.fill("#extFair", "瓊脂");
@@ -365,6 +434,9 @@ async function saveExcel(page, target) {
       "向左彎曲",
       "學生實驗裝置設計",
       "頂端",
+      "頂端原文",
+      "學生公平比較",
+      "物質X原文",
       "向右彎曲",
       "瓊脂",
       "向光性",
@@ -451,6 +523,19 @@ async function saveExcel(page, target) {
     assert.equal(cloudRecord.form.reflection, "我的理由");
     assert.equal(cloudRecord.initialDesign.form.hypothesisPart, "頂端以下位置");
     assert.equal(cloudRecord.extension.initialPrediction.reason, "向右彎曲");
+    assert.equal(cloudRecord.experimentVersion, 5);
+    assert.deepEqual(Object.keys(cloudRecord.observations), ["A", "B", "D"]);
+    assert.equal(cloudRecord.tipInquiry.initialPrediction.prediction, "same");
+    assert.equal(cloudRecord.tipInquiry.initialPrediction.reason, "頂端原文");
+    assert.equal(cloudRecord.tipInquiry.initialPrediction.fair, "學生公平比較");
+    assert.equal(
+      cloudRecord.tipInquiry.firstObservations.observations.C.growth,
+      "none",
+    );
+    assert.deepEqual(
+      cloudRecord.finalAnswers.tipInquiry,
+      cloudRecord.tipInquiry,
+    );
     const beforeDemo = await teacher.evaluate(() =>
       JSON.stringify(sharedRecords),
     );
@@ -532,7 +617,7 @@ async function saveExcel(page, target) {
       "Tests must never contact production Google or any external collector",
     );
     console.log(
-      "PASS (ISOLATED): direct Chinese/English switching without dialogs, full system text and all placeholders, six approved support terms, unaltered student text/state/canvas/options/locks/originals/events/time, running animations, translated actual PDFs, byte-identical Chinese XLSX/images/formulas, teacher demonstration isolation, phone, offline outbox/retry and Chinese reload default. No production requests.",
+      "PASS (ISOLATED): complete ABD/AC/EFGH flow, direct Chinese/English switching without dialogs, full system text and all placeholders, six approved support terms, unaltered student text/state/canvas/options/locks/three originals/events/time, main and tip running animations, translated actual PDFs, byte-identical Chinese XLSX/images/formulas, teacher demonstration isolation, phone, offline outbox/retry and Chinese reload default. No production requests.",
     );
   } finally {
     await browser.close();

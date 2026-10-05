@@ -21,8 +21,11 @@ window.VL3Language = (() => {
     profileEmail: "輸入電郵地址",
     teacherPassword: "輸入教師密碼",
     controlPlan: "描述你的對照設計……",
-    setupDescription: "描述四組裝置及固定條件……",
+    setupDescription: "描述 A、B、D 三組裝置及固定條件……",
     evidence: "引用比較，解釋你的推論……",
+    tipReason: "寫下你的理由……",
+    tipFair: "說明需要保持相同的條件……",
+    tipEvidence: "引用比較，解釋你的推論……",
     extReason: "寫下你的理由……",
     extFair: "說明需要保持相同的條件……",
     extEvidence: "引用比較，解釋你的推論……",
@@ -107,8 +110,9 @@ window.VL3Language = (() => {
     return source
       .replace(phrases, (key) => dictionary[key])
       .replace(
-        /[；：。]/g,
-        (mark) => ({ "；": "; ", "：": ": ", "。": "." })[mark],
+        /[；：。、，]/g,
+        (mark) =>
+          ({ "；": "; ", "：": ": ", "。": ".", "、": ", ", "，": ", " })[mark],
       );
   }
   function t(value) {
@@ -139,6 +143,7 @@ window.VL3Language = (() => {
     if (node.data !== translated) node.data = translated;
   }
   function translateAttributes(element) {
+    if (element.closest("[data-student-text]")) return;
     const placeholder =
       placeholders[element.id] ||
       (/^ext-angle-/.test(element.id)

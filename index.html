@@ -12,6 +12,7 @@
     <script src="cloud-config.js" defer></script>
     <script src="cloud-bridge.js" defer></script>
     <script src="cloud-sync.js" defer></script>
+    <script src="tip-inquiry.js" defer></script>
     <script src="inquiry.js" defer></script>
     <script src="app.js" defer></script>
   </head>
@@ -76,14 +77,14 @@
               </p>
               <div id="contextPlant"></div>
               <p>
-                學校園藝小組發現，窗邊幼苗逐漸朝窗戶方向彎曲。大家知道植物會朝光源方向生長，但不知道植物哪個部位感受光照，以及甚麼令它彎曲。你能透過實驗找出線索嗎？
+                學校園藝小組發現，窗邊胚芽鞘逐漸朝窗戶方向彎曲。大家知道植物會朝光源方向生長，但不知道植物哪個部位感受光照，以及甚麼令它彎曲。你能透過實驗找出線索嗎？
               </p>
             </article>
             <article class="vl3-card">
               <h3>你的初步觀察</h3>
               <label for="observation"
                 ><strong
-                  >試描述情景中的可觀察變化：幼苗的外形及生長方向有甚麼變化？</strong
+                  >試描述情景中的可觀察變化：胚芽鞘的外形及生長方向有甚麼變化？</strong
                 ></label
               ><textarea
                 id="observation"
@@ -145,8 +146,7 @@
             <article class="vl3-card design-card variables-card">
               <p class="card-kicker">02 · 公平測試設計</p>
               <p>
-                請分類本探究的變量。A–B、A–C、A–D
-                分別比較頂端遮光、頂端是否存在及下部遮光；每項比較保持其他條件相同。
+                本次只改變遮光處理，比較不遮光、頂端遮光及下部遮光。三組頂端均完整，其他條件保持相同。
               </p>
               <div id="variableChoices"></div>
             </article>
@@ -165,7 +165,7 @@
               <p class="card-kicker">04 · 探究的對照組</p>
               <h3>
                 <label for="controlPlan"
-                  >若想判斷不同處理是否影響胚芽鞘的生長方向，你會保留甚麼未經處理的裝置作比較？哪些條件需要保持相同？</label
+                  >若想判斷遮光處理是否影響胚芽鞘的生長方向，你會保留甚麼未經處理的裝置作比較？哪些條件需要保持相同？</label
                 >
               </h3>
               <p class="muted design-hint">
@@ -222,7 +222,8 @@
                 /></label>
               </div>
               <label for="setupDescription" class="design-field-label"
-                >文字設計（可代替繪圖）：描述四組裝置、遮光方法及固定條件。</label
+                >文字設計（可代替繪圖）：描述 A、B、D
+                三組裝置、遮光方法及固定條件。</label
               ><textarea id="setupDescription" maxlength="2500"></textarea
               ><button id="saveTextSetup" class="secondary">
                 儲存文字設計
@@ -236,9 +237,9 @@
           </div>
         </section>
         <section id="phase-3" class="phase">
-          <div class="phase-heading"><h2>03 · 進行探究與收集數據</h2></div>
+          <div class="phase-heading"><h2>03 · 進行主探究與記錄</h2></div>
           <article class="vl3-card">
-            <h3>相同單側光照，四種處理</h3>
+            <h3>相同單側光照，三種遮光處理</h3>
             <p>
               光源統一在左方；各組胚芽鞘在處理前的種類、初始高度及生長階段相近，光強度、照射時間、溫度及供水條件相同。不透光套筒覆蓋頂端以下的整段，頂端外露；套筒可隨生長彎曲，不限制伸長。
             </p>
@@ -246,7 +247,8 @@
               動畫將生長過程加速，只表示典型反應；並非真實時間或量度數據。模型不模擬個體差異。
             </p>
             <div class="vl3-actions">
-              <button id="runExperiment" class="primary">▶ 進行四組實驗</button
+              <button id="runExperiment" class="primary">
+                ▶ 進行三組主探究</button
               ><span id="runStatus" aria-live="polite">等待開始</span>
             </div>
             <div id="bench" class="bench"></div>
@@ -285,37 +287,28 @@
             <h3>根據主探究的比較作推論</h3>
             <div id="evidenceTable"></div>
             <label
-              >1. A 與 C：頂端是否參與正常伸長及朝光反應？<select id="qCap">
-                <option value="">請選擇</option>
-                <option value="tipRole">頂端參與正常伸長及朝光反應。</option>
-                <option value="noEffect">
-                  頂端是否存在不影響伸長及朝光反應。
-                </option>
-              </select></label
-            >
-            <label
-              >2. A 與 B：頂端遮光後有甚麼不同？<select id="qShade">
+              >1. A 與 B：頂端遮光後有甚麼不同？<select id="qShade">
                 <option value="">請選擇</option>
                 <option value="lessBend">仍可伸長，但沒有明顯朝光彎曲。</option>
                 <option value="same">仍有相同的朝光彎曲。</option>
               </select></label
             >
             <label
-              >3. A 與 D：下部沒有直接受光，是否仍可彎曲？<select id="qBelow">
+              >2. A 與 D：下部沒有直接受光，是否仍可彎曲？<select id="qBelow">
                 <option value="">請選擇</option>
                 <option value="bend">仍可朝光彎曲。</option>
                 <option value="straight">沒有明顯朝光彎曲。</option>
               </select></label
             >
             <label
-              >4. 哪個部位可能感受單側光照？<select id="qTip">
+              >3. 哪個部位可能感受單側光照？<select id="qTip">
                 <option value="">請選擇</option>
                 <option value="tip">頂端</option>
                 <option value="below">只有下部</option>
               </select></label
             >
             <label
-              >5. 感光部位與彎曲部位是否一定相同？<select id="qSites">
+              >4. 感光部位與彎曲部位是否一定相同？<select id="qSites">
                 <option value="">請選擇</option>
                 <option value="different">
                   不一定相同，頂端可能影響下方的生長。
@@ -324,25 +317,29 @@
               </select></label
             >
             <label
-              >6. 本實驗的證據限制是甚麼？<select id="qLimit">
+              >5. 本實驗的證據限制是甚麼？<select id="qLimit">
                 <option value="">請選擇</option>
                 <option value="indirect">
-                  切頂也移除其他組織並造成傷口；遮光比較須假設溫度及機械限制受到控制，不能確定頂端只負責感光。
+                  遮光比較提供感光部位的線索，不能單靠它確定內部機制；須控制溫度及機械限制。
                 </option>
                 <option value="proof">
-                  只要切頂組不彎曲，就能確定頂端只負責感光。
+                  只要遮光組不彎曲，就能完全確定頂端的所有作用。
                 </option>
               </select></label
             >
             <label for="evidence"
-              >引用至少兩組的比較，說明數據如何支持你的推論。</label
+              >引用 A–B 及 A–D 的比較，說明哪些觀察支持感光部位的推論。</label
             ><textarea id="evidence" maxlength="2500"></textarea>
-            <button id="toExtension" class="primary">繼續延伸探究 →</button>
+            <button id="toExtension" class="primary">
+              延伸探究一：頂端與伸長 →
+            </button>
           </article>
+          <div id="tipSection" hidden></div>
           <div id="extensionSection" hidden></div>
           <article class="vl3-card">
             <p>
-              完成主探究及延伸的記錄與分析後，遞交並鎖定答案，才開放學習重點。
+              完成遮光主探究、頂端比較及物質 X
+              延伸的記錄與分析後，遞交並鎖定答案，才開放學習重點。
             </p>
             <button id="submitInvestigation" class="primary">
               遞交探究，查看學習重點
@@ -360,7 +357,8 @@
                   在這個燕麥胚芽鞘模型中，頂端參與感受單側光照；切頂比較也涉及傷口及生長訊號，不能獨自確定頂端只負責感光。
                 </li>
                 <li>
-                  生長素是影響植物生長的激素。頂端可產生能向下傳遞的生長促進作用。
+                  本探究中暫稱的「物質
+                  X」，可結合其他研究理解為生長素。生長素是影響植物生長的激素；頂端可產生能向下傳遞的生長促進作用。
                 </li>
                 <li>
                   單側光照下，背光側生長素較多，該側細胞伸長較多，使胚芽鞘向光彎曲；感光部位與彎曲部位可不同。
@@ -383,7 +381,7 @@
               <h3>回到你最初的想法</h3>
               <div id="originalHypothesis" class="reflection-original"></div>
               <label for="reflection"
-                >你的原始想法有哪些需要修訂？請引用主探究及延伸各一項比較，運用學習重點解釋感光、生長訊號及不均勻伸長之間的關係。</label
+                >你的三段原始預測有哪些需要修訂？請引用遮光主探究、頂端比較及瓊脂延伸各一項比較，運用學習重點解釋感光、生長訊號及不均勻伸長之間的關係。</label
               ><textarea id="reflection" maxlength="3500"></textarea
               ><button id="saveReflection" class="primary">
                 儲存並提交學習反思

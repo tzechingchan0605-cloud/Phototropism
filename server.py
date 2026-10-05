@@ -20,7 +20,7 @@ DATA = Path(os.environ.get('VL3_DATA_DIR', ROOT / '.data'))
 TEACHER = 'tzechingchan0605@gmail.com'
 MODULE = 'VL_BIO_PHOTOTROPISM'
 FIELDS = ['observation','hypothesisPart','hypothesisOutcome','reason','controlPlan','setupDescription','qTip','qCap','qBelow','qLimit','evidence','reflection']
-PUBLIC = {'/':'index.html','/index.html':'index.html','/styles.css':'styles.css','/app.js':'app.js','/excel.js':'excel.js','/inquiry.js':'inquiry.js','/cloud-config.js':'cloud-config.js','/cloud-bridge.js':'cloud-bridge.js','/cloud-sync.js':'cloud-sync.js'}
+PUBLIC = {'/':'index.html','/index.html':'index.html','/styles.css':'styles.css','/app.js':'app.js','/excel.js':'excel.js','/i18n.js':'i18n.js','/i18n-strings.js':'i18n-strings.js','/inquiry.js':'inquiry.js','/tip-inquiry.js':'tip-inquiry.js','/cloud-config.js':'cloud-config.js','/cloud-bridge.js':'cloud-bridge.js','/cloud-sync.js':'cloud-sync.js'}
 SESSIONS = {}
 ATTEMPTS = {}
 LOCK = threading.Lock()
@@ -175,11 +175,20 @@ class Handler(BaseHTTPRequestHandler):
                 if existing:
                     if not hmac.compare_digest(existing[0],token_hash): return self.send_json(403, {'error':'record_owner_mismatch'})
                     if sequence <= existing[1]: return self.send_json(200, {'status':'unchanged'})
-                    original=json.loads(existing[2]).get('initialDesign')
+                    previous=json.loads(existing[2])
+                    original=previous.get('initialDesign')
                     # Preserve the first pre-experiment snapshot even on retries.
                     if original is not None: record['initialDesign']=original
-                    first=json.loads(existing[2]).get('firstObservations')
+                    first=previous.get('firstObservations')
                     if first is not None: record['firstObservations']=first
+                    if isinstance(previous.get('tipInquiry'),dict):
+                        inquiry=record.get('tipInquiry')
+                        if not isinstance(inquiry,dict):
+                            inquiry=previous['tipInquiry'].copy()
+                            record['tipInquiry']=inquiry
+                        for field in ['initialPrediction','firstObservations','firstAnalysis']:
+                            if previous['tipInquiry'].get(field) is not None:
+                                inquiry[field]=previous['tipInquiry'][field]
                 db.execute('INSERT INTO records(id,token_hash,sequence,payload) VALUES(?,?,?,?) ON CONFLICT(id) DO UPDATE SET sequence=excluded.sequence,payload=excluded.payload,updated_at=CURRENT_TIMESTAMP', (record['id'],token_hash,sequence,json.dumps(record,ensure_ascii=False)))
             return self.send_json(200, {'status':'saved','id':record['id']})
         return self.send_json(404, {'error':'not_found'})
