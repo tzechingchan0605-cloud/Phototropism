@@ -215,8 +215,8 @@ function windowSeedling(after = false) {
     ? "M100 207 L100 140 C100 110 123 89 156 78"
     : "M100 207 L100 66";
   const description = after
-    ? "6 小時後：幼芽下部保持直立，上部向右方的窗光彎曲"
-    : "開始時：幼芽直立，光從右方窗戶照入";
+    ? "窗邊幼芽：24小時後"
+    : "窗邊幼芽：開始時";
   return `<svg class="window-seedling" viewBox="0 0 260 270" role="img" aria-label="${description}" xmlns="http://www.w3.org/2000/svg">
     <rect x="5" y="5" width="250" height="255" rx="16" fill="#f4f8f1"/>
     <path d="M210 65 L58 38 L58 181 L210 172 Z" fill="#f9d779" opacity=".24"/>
@@ -234,10 +234,10 @@ function windowSeedling(after = false) {
 }
 function contextComparison() {
   return `<div class="context-comparison">
-    <figure class="context-frame">${windowSeedling(false)}<figcaption>開始時：幼芽直立</figcaption></figure>
-    <div class="context-transition"><span>6 小時後</span><svg viewBox="0 0 64 26" aria-hidden="true"><path d="M3 13H57M45 3L57 13L45 23" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    <figure class="context-frame">${windowSeedling(true)}<figcaption>生長後：上部向窗光彎曲</figcaption></figure>
-  </div><p class="context-timing-note muted">生長變化示意；6 小時為情境設定。</p>`;
+    <figure class="context-frame">${windowSeedling(false)}</figure>
+    <div class="context-transition"><span>24小時後</span><svg viewBox="0 0 64 26" aria-hidden="true"><path d="M3 13H57M45 3L57 13L45 23" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <figure class="context-frame">${windowSeedling(true)}</figure>
+  </div><p class="context-timing-note muted">生長變化示意；24小時為情境設定。</p>`;
 }
 function renderBench(p = 0) {
   $("#bench").innerHTML = Object.keys(GROUPS)
