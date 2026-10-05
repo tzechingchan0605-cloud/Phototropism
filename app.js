@@ -35,7 +35,7 @@ const EXPECTED = { iv: [0], dv: [1], cv: [2, 3, 4, 5] };
 const ASSUMPTIONS = [
   ["similar", "胚芽鞘種類、初始高度及生長階段相近。", true],
   ["light", "各组使用相同方向、強度及照射時間的單側光照。", true],
-  ["free", "罩子及套筒不限制胚芽鞘生長，頂端以下遮光組的頂端仍外露。", true],
+  ["free", "罩子及套筒不限制胚芽鞘生長。", true],
   ["different", "各組可使用不同溫度及供水條件。", false],
 ];
 const FIELDS = [
