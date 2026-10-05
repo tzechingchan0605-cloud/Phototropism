@@ -20,7 +20,7 @@ DATA = Path(os.environ.get('VL3_DATA_DIR', ROOT / '.data'))
 TEACHER = 'tzechingchan0605@gmail.com'
 MODULE = 'VL_BIO_PHOTOTROPISM'
 FIELDS = ['observation','hypothesisPart','hypothesisOutcome','reason','controlPlan','setupDescription','qTip','qCap','qBelow','qLimit','evidence','reflection']
-PUBLIC = {'/':'index.html','/index.html':'index.html','/styles.css':'styles.css','/app.js':'app.js','/excel.js':'excel.js'}
+PUBLIC = {'/':'index.html','/index.html':'index.html','/styles.css':'styles.css','/app.js':'app.js','/excel.js':'excel.js','/inquiry.js':'inquiry.js','/cloud-config.js':'cloud-config.js','/cloud-bridge.js':'cloud-bridge.js','/cloud-sync.js':'cloud-sync.js'}
 SESSIONS = {}
 ATTEMPTS = {}
 LOCK = threading.Lock()
@@ -189,9 +189,13 @@ if __name__ == '__main__':
     parser.add_argument('--port',type=int,default=int(os.environ.get('PORT','8000')))
     parser.add_argument('--host',default='0.0.0.0')
     parser.add_argument('--set-teacher-password',action='store_true')
+    parser.add_argument('--export-records',action='store_true',help='Export the existing SQLite records as JSON to stdout for migration')
     args=parser.parse_args()
     setup()
-    if args.set_teacher_password:
+    if args.export_records:
+        with database() as db: rows=[json.loads(row[0]) for row in db.execute('SELECT payload FROM records')]
+        print(json.dumps({'moduleId':MODULE,'records':rows},ensure_ascii=False))
+    elif args.set_teacher_password:
         new=getpass.getpass('New teacher password (at least 12 characters): ')
         if len(new)<12 or new!=getpass.getpass('Confirm password: '): raise SystemExit('Password too short or confirmation mismatch.')
         path=DATA/'teacher-password'

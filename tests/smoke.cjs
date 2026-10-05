@@ -1,242 +1,447 @@
 const { chromium } = require("playwright");
 const assert = require("node:assert/strict");
 const fs = require("node:fs/promises");
-const URL = process.env.LAB_URL || "http://127.0.0.1:8001";
-const passwordPath =
-  process.env.VL3_TEST_PASSWORD_FILE || ".data/teacher-password";
-async function authenticate(page) {
-  await page
-    .locator("#teacherPassword")
-    .fill((await fs.readFile(passwordPath, "utf8")).trim());
-  await page.locator("#teacherLogin button").click();
-  await page.waitForFunction(
-    () => document.querySelector("#teacherLogin").hidden,
+const base = process.env.LAB_URL || "http://127.0.0.1:8001";
+async function login(p, name, email) {
+  await p.fill("#profileName", name);
+  await p.fill("#profileClass", "S4A-05");
+  await p.fill("#profileEmail", email);
+  await p.click("#profileForm button");
+}
+async function authenticate(p) {
+  await p.fill(
+    "#teacherPassword",
+    (
+      await fs.readFile(
+        process.env.VL3_TEST_PASSWORD_FILE || ".data/teacher-password",
+        "utf8",
+      )
+    ).trim(),
   );
+  await p.click("#teacherLogin button");
+  await p.waitForFunction(() => document.querySelector("#teacherLogin").hidden);
+}
+async function flow(p, student = true) {
+  assert.doesNotMatch(await p.locator("main").innerText(), /向光性|生長素/);
+  await p.click("#toDesign");
+  assert(await p.locator("#phase-1").isVisible());
+  await p.fill("#observation", "窗邊幼苗下部直立，上部朝窗戶彎曲。");
+  await p.fill("#initialIdea", "我認為中部感受光，因為它開始彎曲。");
+  await p.click("#toDesign");
+  assert.equal(await p.inputValue("#hypothesisPart"), "");
+  assert.equal(await p.inputValue("#hypothesisOutcome"), "");
+  await p.fill("#hypothesisPart", "下部");
+  assert.match(await p.locator("#hypothesisWarning").innerText(), /請檢查/);
+  assert.doesNotMatch(
+    await p.locator("#hypothesisWarning").innerText(),
+    /頂端感光/,
+  );
+  await p.fill("#hypothesisPart", "頂端");
+  await p.selectOption("#hypothesisOutcome", "bend");
+  await p.fill("#reason", "若上方只是被動生長，遮光後可能仍朝光彎曲。");
+  await p.selectOption("#comparison", "AB");
+  for (const [g, ids] of Object.entries({ iv: [0], dv: [1], cv: [2, 3, 4, 5] }))
+    for (const id of ids)
+      await p.locator(`[data-variable=${g}][value="${id}"]`).check();
+  for (const id of ["similar", "free", "temperature"])
+    await p.locator(`[data-assumption=${id}]`).check();
+  await p.fill(
+    "#controlPlan",
+    "保留A完整不遮蓋；每項比較保持光照、時間、供水、溫度、種類及處理前大小相近。",
+  );
+  await p.fill(
+    "#setupDescription",
+    "A完整 B不透光帽 C剪去頂端 D下部長遮光套；左側光照，帽及套留足空間。",
+  );
+  await p.click("#saveTextSetup");
+  const b = await p.locator("#setupCanvas").boundingBox();
+  await p.mouse.move(b.x + 20, b.y + 30);
+  await p.mouse.down();
+  await p.mouse.move(b.x + 100, b.y + 100);
+  await p.mouse.up();
+  await p.click("#saveDrawing");
+  await p.click("#toExperiment");
+  assert(await p.locator("#phase-3").isVisible());
+  const original = await p.evaluate(() => structuredClone(state.initialDesign));
+  assert.match(original.hypothesisText, /頂端.*仍向光彎曲/);
+  await p.click('[data-back="2"]');
+  await p.selectOption("#hypothesisOutcome", "straight");
+  await p.fill("#reason", "修訂：頂端可能感受光。");
+  await p.click("#toExperiment");
+  assert.deepEqual(await p.evaluate(() => state.initialDesign), original);
+  assert(await p.locator("#recordData").isDisabled());
+  const before = await p.evaluate(() =>
+    Object.fromEntries(Object.keys(GROUPS).map((id) => [id, seedling(id, 0)])),
+  );
+  await p.emulateMedia({ reducedMotion: "no-preference" });
+  await p.click("#runExperiment");
+  assert(await p.locator("#recordData").isDisabled());
+  await p.waitForFunction(() => hasRun);
+  await p.emulateMedia({ reducedMotion: "reduce" });
+  const after = await p.evaluate(() =>
+    Object.fromEntries(Object.keys(GROUPS).map((id) => [id, seedling(id, 1)])),
+  );
+  for (const id of ["A", "B", "C", "D"]) assert.notEqual(before[id], after[id]);
+  assert.match(after.A, /M130 207 L130 150/);
+  assert.match(after.A, /translate\(270 0\) scale\(-1 1\)/);
+  assert.match(after.C, /data-cut-surface/);
+  assert.match(after.C, /130 122/);
+  assert.match(after.D, /data-sleeve/);
+  assert.match(await p.locator("#equipmentBank").innerText(), /剪刀/);
+  assert.match(await p.locator("#equipmentBank").innerText(), /培養容器 × 4/);
+  assert.match(await p.locator("#equipmentBank").innerText(), /計時工具/);
+  for (const id of ["A", "B", "C", "D"]) {
+    await p.selectOption("#growth-" + id, id === "C" ? "reduced" : "clear");
+    await p.selectOption(
+      "#obs-" + id,
+      ["A", "D"].includes(id) ? "left" : "straight",
+    );
+    await p.selectOption(
+      "#position-" + id,
+      ["A", "D"].includes(id) ? "upper" : "none",
+    );
+  }
+  await p.selectOption("#obs-D", "straight");
+  await p.click("#recordData");
+  await p.selectOption("#obs-D", "left");
+  await p.click("#recordData");
+  assert.equal(
+    await p.evaluate(() => state.firstObservations.D.direction),
+    "straight",
+  );
+  assert.equal(await p.evaluate(() => state.observations.D.direction), "left");
+  if (student)
+    await p.screenshot({ path: "/tmp/vl3-experiment.png", fullPage: true });
+  await p.click("#toAnalysis");
+  assert(await p.locator("#learningReveal").isHidden());
+  await p.click("#toExtension");
+  assert(await p.locator("#extensionSection").isHidden());
+  for (const [id, v] of Object.entries({
+    qTip: "tip",
+    qCap: "tipRole",
+    qShade: "lessBend",
+    qBelow: "bend",
+    qSites: "different",
+    qLimit: "indirect",
+  }))
+    await p.selectOption("#" + id, v);
+  await p.fill(
+    "#evidence",
+    "A–B：B仍伸長但不明顯朝光彎曲；A–C：C較少伸長且未彎曲；A–D：D下部遮光仍朝光彎曲。",
+  );
+  assert.doesNotMatch(
+    await p.locator("#conclusionForm").innerText(),
+    /生長素|向光性/,
+  );
+  await p.click("#submitInvestigation");
+  assert(await p.locator("#learningReveal").isHidden());
+  await p.click("#toExtension");
+  assert(await p.locator("#extensionSection").isVisible());
+  await p.click("#runExtension");
+  assert.equal(await p.evaluate(() => extensionHasRun), false);
+  await p.selectOption("#extPrediction", "left");
+  await p.fill("#extReason", "我預測接觸瓊脂的一側會向該側生長。");
+  await p.fill(
+    "#extFair",
+    "E與F同放中央；保持初始大小、瓊脂大小、黑暗、時間、溫度及供水相同。",
+  );
+  await p.emulateMedia({ reducedMotion: "no-preference" });
+  await p.click("#runExtension");
+  assert(await p.locator("#confirmExtension").isDisabled());
+  await p.waitForFunction(() => extensionHasRun);
+  await p.emulateMedia({ reducedMotion: "reduce" });
+  const extOriginal = await p.evaluate(() =>
+    structuredClone(state.extension.initialPrediction),
+  );
+  await p.selectOption("#extPrediction", "right");
+  await p.fill("#extReason", "修訂：左側伸長較多可能向右彎曲。");
+  assert.deepEqual(
+    await p.evaluate(() => state.extension.initialPrediction),
+    extOriginal,
+  );
+  for (const id of ["E", "F", "G", "H"]) {
+    const angle = id === "G" ? 30 : id === "H" ? -35 : 0;
+    await p.locator("#ruler-" + id).fill(String(angle));
+    await p.click("#read-angle-" + id);
+    assert.equal(
+      await p.inputValue("#ext-angle-" + id),
+      String(Math.abs(angle)),
+    );
+    await p.selectOption("#ext-growth-" + id, id === "E" ? "reduced" : "clear");
+    await p.selectOption(
+      "#ext-direction-" + id,
+      id === "G" ? "right" : id === "H" ? "left" : "straight",
+    );
+  }
+  await p.click("#confirmExtension");
+  assert.equal(
+    await p.evaluate(() => state.extension.firstReadings.readings.G.angle),
+    30,
+  );
+  await p.locator("#ruler-G").fill("35");
+  await p.click("#read-angle-G");
+  await p.click("#confirmExtension");
+  assert.equal(
+    await p.evaluate(() => state.extension.firstReadings.readings.G.angle),
+    30,
+  );
+  assert.equal(await p.evaluate(() => state.extension.readings.G.angle), 35);
+  await p.selectOption("#extensionView", "before");
+  assert.match(await p.locator("#ext-plant-G").innerHTML(), /開始時/);
+  await p.selectOption("#extensionView", "after");
+  await p.click("#saveGraph");
+  assert.equal(await p.evaluate(() => state.extension.graphSaved), false);
+  for (const id of ["E", "F", "G", "H"]) {
+    await p.fill("#graph-angle-" + id, ["G", "H"].includes(id) ? "35" : "0");
+    await p.selectOption(
+      "#graph-direction-" + id,
+      id === "G" ? "right" : id === "H" ? "left" : "straight",
+    );
+  }
+  await p.click("#saveGraph");
+  assert(await p.locator("#barChart svg").isVisible());
+  assert.equal(await p.locator("#barChart svg rect").count(), 4);
+  assert.equal(await p.locator("#barChart svg polyline").count(), 0);
+  if (student) {
+    await p
+      .locator("#extensionResults")
+      .screenshot({ path: "/tmp/vl3-extension.png" });
+    await p.locator("#barChart").screenshot({ path: "/tmp/vl3-chart.png" });
+  }
+  for (const [id, v] of Object.entries({
+    extEF: "transfer",
+    extPosition: "position",
+    extSides: "opposite",
+    extDark: "unequal",
+    extLimit: "limited",
+  }))
+    await p.selectOption("#" + id, v);
+  await p.fill(
+    "#extEvidence",
+    "E–F：處理瓊脂中央組伸長较多；G–H：左放向右、右放向左，支持兩側不均勻伸長決定彎曲方向。",
+  );
+  await p.fill(
+    "#extControl",
+    "增加左側及右側空白瓊脂對照，排除單側放置本身的影響。",
+  );
+  assert.doesNotMatch(await p.locator("main").innerText(), /生長素|向光性/);
+  await p.click("#submitInvestigation");
+  assert(await p.locator("#learningReveal").isVisible());
+  assert(await p.locator("#qTip").isDisabled());
+  assert(await p.locator("#extPrediction").isDisabled());
+  assert.match(await p.locator("#originalHypothesis").innerText(), /向左彎曲/);
+  assert.match(
+    await p.locator("#originalHypothesis").innerText(),
+    /仍向光彎曲/,
+  );
+  assert(await p.locator("#downloadPDF").isDisabled());
+  await p.click("#saveReflection");
+  assert(await p.locator("#downloadPDF").isDisabled());
+  await p.selectOption("#knowledgeName", "positive");
+  await p.fill(
+    "#reflection",
+    "主探究原始假說需要修訂：A與B表明頂端遮光後仍伸長但沒有明顯朝光彎曲，支持頂端感光。延伸原預測方向不符：G與H顯示左側伸長較多向右彎曲。生長素是生長激素，頂端的生長訊號可向下傳遞；光照下右側背光側細胞伸長較多使幼芽向左彎曲，屬正向光性。這些實驗沒有直接鑑定物質或測量光照下分布。",
+  );
+  await p.click("#saveReflection");
+  assert(await p.locator("#reflection").isDisabled());
+  assert(await p.locator("#knowledgeName").isDisabled());
+  assert(await p.locator("#downloadPDF").isEnabled());
+  await p.evaluate(() => {
+    window.print = () => {
+      window.printCalled = true;
+      window.printTitle = document.title;
+    };
+  });
+  await p.click("#downloadPDF");
+  assert(await p.evaluate(() => window.printCalled));
+  assert.match(
+    await p.evaluate(() => window.printTitle),
+    /^VL3_幼芽為甚麼朝光生長_S4A-05_/,
+  );
+  const report = await p.locator("#printReport").innerHTML();
+  assert.match(report, /首次確認讀數/);
+  assert.match(report, /參考答案/);
+  assert.match(report, /參考說明/);
+  assert.match(report, /✓/);
+  assert.doesNotMatch(report, /整體分數|SPS 總分/);
+  assert.equal(
+    await p.evaluate(
+      () =>
+        document.querySelector("#printReport .mechanism-svg").outerHTML ===
+        document.querySelector("#mechanismDiagram svg").outerHTML,
+    ),
+    true,
+  );
+  if (student) {
+    await fs.writeFile(
+      "/tmp/vl3-record.json",
+      await p.evaluate(() =>
+        JSON.stringify({ moduleId: MODULE_ID, records: [state] }),
+      ),
+    );
+    await p.emulateMedia({ media: "print" });
+    await p.pdf({
+      path: "/tmp/vl3-report.pdf",
+      format: "A4",
+      printBackground: true,
+    });
+    await p.emulateMedia({ media: "screen" });
+    const check = await p.evaluate(() => {
+      const r = structuredClone(state);
+      r.extension.readings.G.angle = 30;
+      r.extension.graph.G.angle = 30;
+      return { angle: angleScore(r), graph: graphScore(r) };
+    });
+    assert.deepEqual(check, { angle: 1.5, graph: 2 });
+  }
+  return await p.evaluate(() => structuredClone(state));
 }
 (async () => {
   const browser = await chromium.launch({
     headless: true,
     executablePath: process.env.CHROMIUM_PATH || "/usr/bin/chromium",
   });
-  const page = await browser.newPage({
-    viewport: { width: 1440, height: 1000 },
-    reducedMotion: "reduce",
-  });
-  const errors = [];
-  page.on("pageerror", (e) => errors.push(e.message));
-  await page.goto(URL);
-  await page.locator("#profileName").fill("陳小明");
-  await page.locator("#profileClass").fill("S4A-05");
-  await page.locator("#profileEmail").fill("student@example.com");
-  await page.locator("#profileForm button").click();
-  assert.equal(await page.locator("#phase-1").isVisible(), true);
-  await page.locator("#toDesign").click();
-  assert.equal(await page.locator("#phase-2").isVisible(), false);
-  await page.locator("#observation").fill("幼芽向右方光源彎曲。");
-  await page.locator("#toDesign").click();
-  assert.equal(await page.locator("#hypothesisPart").inputValue(), "");
-  assert.equal(await page.locator("#hypothesisOutcome").inputValue(), "");
-  await page.locator("#toExperiment").click();
-  assert.equal(await page.locator("#phase-2").isVisible(), true);
-  await page.locator("#hypothesisPart").selectOption("tip");
-  await page.locator("#hypothesisOutcome").selectOption("bend");
-  await page
-    .locator("#reason")
-    .fill("我預測頂端不是感光部位，需要比較才能知道。");
-  for (const [g, ns] of Object.entries({ iv: [0], dv: [1], cv: [2, 3, 4, 5] }))
-    for (const n of ns)
-      await page.locator(`[data-variable=${g}][value="${n}"]`).check();
-  for (const id of ["similar", "light", "free"])
-    await page.locator(`[data-assumption=${id}]`).check();
-  await page
-    .locator("#controlPlan")
-    .fill("以 A 不遮光、C 透明罩與 B 不透光罩比較，區分罩子及遮光作用。");
-  await page
-    .locator("#setupDescription")
-    .fill(
-      "四組 A 不遮光 B 頂端不透光罩 C 透明罩 D 下部遮光；相同單側光照、時間、溫度及供水。",
+  try {
+    const p = await browser.newPage({
+        viewport: { width: 1440, height: 1000 },
+        reducedMotion: "reduce",
+      }),
+      errors = [];
+    p.on("pageerror", (e) => errors.push(e.message));
+    p.on("dialog", (d) => d.accept());
+    await p.goto(base);
+    assert.equal(await p.evaluate(() => graphScore(fresh())), 0);
+    await login(p, "陳小明", "student@example.com");
+    const final = await flow(p);
+    assert(final.finalAnswers.extension);
+    assert.equal(final.extension.initialPrediction.prediction, "left");
+    assert(final.reflectionSubmittedAt);
+    assert(await p.evaluate(() => flushSync()));
+    await p.click("#newSession");
+    assert.equal(await p.inputValue("#hypothesisPart"), "");
+    assert.equal(await p.evaluate(() => extensionRunning), false);
+    assert.equal(await p.locator("#barChart").innerText(), "");
+    await login(p, "教師", "tzechingchan0605@gmail.com");
+    await authenticate(p);
+    assert.match(await p.locator("#teacherRows").innerText(), /陳小明/);
+    const x = p.waitForEvent("download");
+    await p.click("#exportExcel");
+    await (await x).saveAs("/tmp/vl3-records.xlsx");
+    const legacy = await p.evaluate(() => {
+      const r = structuredClone(records()[0]);
+      delete r.experimentVersion;
+      r.form.qCap = "light";
+      r.observations = { A: "bend", B: "straight", C: "bend", D: "bend" };
+      r.assumptions = ["similar", "free", "light"];
+      return {
+        valid: valid(r),
+        label: groupDefinitions(r).C.label,
+        score: mainObservationScore(r),
+        report: report(r).includes("頂端透明罩"),
+      };
+    });
+    assert.deepEqual(legacy, {
+      valid: true,
+      label: "頂端透明罩",
+      score: 2,
+      report: true,
+    });
+    const teacher = await browser.newPage();
+    teacher.on("dialog", (d) => d.accept());
+    teacher.on("pageerror", (e) => errors.push(e.message));
+    await teacher.goto(base);
+    await login(teacher, "教師", "tzechingchan0605@gmail.com");
+    await authenticate(teacher);
+    assert.equal(await teacher.evaluate(() => records().length), 0);
+    assert.match(await teacher.locator("#teacherRows").innerText(), /陳小明/);
+    await teacher
+      .locator("#importRecords")
+      .setInputFiles("/tmp/vl3-record.json");
+    await teacher.waitForFunction(() => sharedRecords.length === 1);
+    await teacher
+      .locator("#importRecords")
+      .setInputFiles("/tmp/vl3-record.json");
+    assert.equal(await teacher.evaluate(() => sharedRecords.length), 1);
+    const phone = await browser.newPage({
+      viewport: { width: 390, height: 844 },
+    });
+    phone.on("dialog", (d) => d.accept());
+    phone.on("pageerror", (e) => errors.push(e.message));
+    await phone.goto(base);
+    await login(phone, "李同學", "phone-student@example.com");
+    await phone.fill("#observation", "手機瀏覽器的答案。");
+    assert(await phone.evaluate(() => flushSync()));
+    await teacher.click("#refreshTeacher");
+    await teacher.waitForFunction(() => sharedRecords.length === 2);
+    const multi = teacher.waitForEvent("download");
+    await teacher.click("#exportExcel");
+    await (await multi).saveAs("/tmp/vl3-multi.xlsx");
+    await phone.context().setOffline(true);
+    await phone.fill("#observation", "離線補傳答案。");
+    assert.equal(await phone.evaluate(() => flushSync()), false);
+    await phone.context().setOffline(false);
+    assert(await phone.evaluate(() => flushSync()));
+    assert(
+      await phone.evaluate(async () => {
+        try {
+          await cloudSync.list();
+          return false;
+        } catch {
+          return true;
+        }
+      }),
     );
-  await page.locator("#saveTextSetup").click();
-  // A real drawing is retained and exported as an embedded image.
-  const box = await page.locator("#setupCanvas").boundingBox();
-  await page.mouse.move(box.x + 20, box.y + 30);
-  await page.mouse.down();
-  await page.mouse.move(box.x + 100, box.y + 100);
-  await page.mouse.up();
-  await page.locator("#saveDrawing").click();
-  await page.locator("#toExperiment").click();
-  assert.equal(await page.locator("#phase-3").isVisible(), true);
-  const original = await page.evaluate(() => state.initialDesign);
-  assert.match(original.hypothesisText, /頂端.*仍向光彎曲/);
-  await page.locator('[data-back="2"]').click();
-  await page.locator("#hypothesisOutcome").selectOption("straight");
-  await page.locator("#reason").fill("修訂理由：頂端可能感光。");
-  await page.locator("#toExperiment").click();
-  assert.deepEqual(await page.evaluate(() => state.initialDesign), original);
-  assert.equal(await page.locator("#recordData").isDisabled(), true);
-  await page.emulateMedia({ reducedMotion: "no-preference" });
-  await page.locator("#runExperiment").click();
-  assert.equal(await page.locator("#recordData").isDisabled(), true);
-  await page.waitForFunction(() => hasRun);
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  for (const [id, v] of Object.entries({
-    A: "bend",
-    B: "straight",
-    C: "bend",
-    D: "straight",
-  }))
-    await page.locator("#obs-" + id).selectOption(v);
-  await page.locator("#recordData").click();
-  assert.equal(
-    await page.evaluate(() => state.firstObservations.D),
-    "straight",
-  );
-  await page.locator("#obs-D").selectOption("bend");
-  await page.locator("#recordData").click();
-  assert.equal(
-    await page.evaluate(() => state.firstObservations.D),
-    "straight",
-  );
-  assert.equal(await page.evaluate(() => state.observations.D), "bend");
-  await page.evaluate(() => scrollTo(0, 0));
-  await page.screenshot({ path: "/tmp/vl3-experiment.png", fullPage: true });
-  await page.locator("#toAnalysis").click();
-  assert.equal(await page.locator("#learningReveal").isVisible(), false);
-  for (const [id, v] of Object.entries({
-    qTip: "tip",
-    qCap: "light",
-    qBelow: "bend",
-    qLimit: "indirect",
-  }))
-    await page.locator("#" + id).selectOption(v);
-  await page
-    .locator("#evidence")
-    .fill(
-      "B 頂端遮光沒有彎曲，A 與 C 仍彎曲；D 頂端外露也彎曲，支持頂端感光。",
+    await phone.reload();
+    assert(await phone.locator("#profileDialog").isVisible());
+    assert.equal(await phone.inputValue("#profileEmail"), "");
+    assert.equal(await phone.evaluate(() => state.profile), null);
+    assert.equal(await phone.evaluate(() => records().length), 1);
+    await login(phone, "李同學", "phone-student@example.com");
+    assert.equal(await phone.evaluate(() => records().length), 2);
+    // Full teacher demonstration must not change student records, events or exports.
+    const count = await p.evaluate(() => records().length);
+    await p.click("#teacherDemo");
+    await flow(p, false);
+    assert.equal(await p.evaluate(() => records().length), count);
+    assert.equal(await p.evaluate(() => state.events.length), 0);
+    await p.evaluate(() => flushSync());
+    await teacher.click("#refreshTeacher");
+    await teacher.waitForFunction(() => sharedRecords.length === 3);
+    assert(
+      await teacher.evaluate(() =>
+        sharedRecords.every(
+          (r) => r.profile.email !== "tzechingchan0605@gmail.com",
+        ),
+      ),
     );
-  await page.locator("#submitInvestigation").click();
-  assert.equal(await page.locator("#learningReveal").isVisible(), true);
-  assert.equal(await page.locator("#qTip").isDisabled(), true);
-  assert.match(
-    await page.locator("#originalHypothesis").innerText(),
-    /仍向光彎曲/,
-  );
-  assert.match(
-    await page.locator("#originalHypothesis").innerText(),
-    /不是感光部位/,
-  );
-  assert.equal(await page.locator("#downloadPDF").isDisabled(), true);
-  await page.locator("#saveReflection").click();
-  assert.equal(await page.locator("#downloadPDF").isDisabled(), true);
-  await page
-    .locator("#reflection")
-    .fill(
-      "原始假說不獲支持。B 沒有彎曲但 C 彎曲，顯示頂端感光；D 頂端外露仍彎曲。背光側生長素較多促進幼芽細胞伸長，彎曲發生在頂端以下。此實驗沒有直接量度生長素。",
+    await p.setViewportSize({ width: 390, height: 844 });
+    for (const n of [1, 2, 3, 4]) {
+      await p.evaluate((n) => phase(n), n);
+      assert(
+        await p.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+      );
+    }
+    await p.evaluate(() => phase(4));
+    await p
+      .locator("#extensionResults")
+      .screenshot({ path: "/tmp/vl3-extension-mobile.png" });
+    assert(
+      await p.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
     );
-  await page.locator("#saveReflection").click();
-  assert.equal(await page.locator("#reflection").isDisabled(), true);
-  assert.equal(await page.locator("#downloadPDF").isDisabled(), false);
-  await page.evaluate(() => {
-    window.print = () => {
-      window.printCalled = true;
-    };
-  });
-  await page.locator("#downloadPDF").click();
-  assert.equal(await page.evaluate(() => window.printCalled), true);
-  assert.match(await page.locator("#printReport").innerHTML(), /不是感光部位/);
-  const recordDownload = page.waitForEvent("download");
-  await page.locator("#downloadRecord").click();
-  await (await recordDownload).saveAs("/tmp/vl3-record.json");
-  const record = JSON.parse(await fs.readFile("/tmp/vl3-record.json", "utf8"))
-    .records[0];
-  assert(record.reflectionSubmittedAt);
-  assert.equal(record.initialDesign.form.hypothesisOutcome, "bend");
-  assert.equal(record.form.hypothesisOutcome, "straight");
-  await page.evaluate(() => flushSync());
-  await page.locator("#newSession").click();
-  await page.locator("#profileName").fill("教師");
-  await page.locator("#profileClass").fill("教師");
-  await page.locator("#profileEmail").fill("tzechingchan0605@gmail.com");
-  await page.locator("#profileForm button").click();
-  assert.equal(await page.locator("#teacherDialog").isVisible(), true);
-  await authenticate(page);
-  assert.match(await page.locator("#teacherRows").innerText(), /陳小明/);
-  const xlsx = page.waitForEvent("download");
-  await page.locator("#exportExcel").click();
-  await (await xlsx).saveAs("/tmp/vl3-records.xlsx");
-  // Teacher records are excluded; JSON is transferable to a fresh browser.
-  assert.equal(await page.evaluate(() => records().length), 1);
-  const p2 = await browser.newPage();
-  await p2.goto(URL);
-  await p2.locator("#profileName").fill("教師");
-  await p2.locator("#profileClass").fill("教師");
-  await p2.locator("#profileEmail").fill("tzechingchan0605@gmail.com");
-  await p2.locator("#profileForm button").click();
-  await authenticate(p2);
-  assert.match(await p2.locator("#teacherRows").innerText(), /陳小明/);
-  assert.equal(await p2.evaluate(() => records().length), 0);
-  await p2.locator("#importRecords").setInputFiles("/tmp/vl3-record.json");
-  await p2.waitForFunction(() =>
-    document.querySelector("#teacherRows").textContent.includes("陳小明"),
-  );
-  await p2.locator("#importRecords").setInputFiles("/tmp/vl3-record.json");
-  assert.equal(await p2.evaluate(() => sharedRecords.length), 1);
-  // A separate student's browser uploads without teacher login or manual transfer.
-  const student2 = await browser.newPage();
-  await student2.goto(URL);
-  await student2.locator("#profileName").fill("李同學");
-  await student2.locator("#profileClass").fill("S4B-09");
-  await student2.locator("#profileEmail").fill("phone-student@example.com");
-  await student2.locator("#profileForm button").click();
-  await student2.locator("#observation").fill("手機瀏覽器的作答會自動上傳。");
-  await student2.evaluate(() => flushSync());
-  await p2.locator("#refreshTeacher").click();
-  await p2.waitForFunction(() => sharedRecords.length === 2);
-  assert.match(await p2.locator("#teacherRows").innerText(), /李同學/);
-  const multiDownload = p2.waitForEvent("download");
-  await p2.locator("#exportExcel").click();
-  await (await multiDownload).saveAs("/tmp/vl3-multi.xlsx");
-  // Offline answers remain queued and appear after reconnection.
-  await student2.context().setOffline(true);
-  await student2.locator("#observation").fill("離線後再連線的手機作答。");
-  assert.equal(await student2.evaluate(() => flushSync()), false);
-  await student2.context().setOffline(false);
-  assert.equal(await student2.evaluate(() => flushSync()), true);
-  await p2.locator("#refreshTeacher").click();
-  await p2.waitForFunction(() =>
-    sharedRecords.some(
-      (r) =>
-        r.profile.name === "李同學" &&
-        r.form.observation === "離線後再連線的手機作答。",
-    ),
-  );
-  assert.equal(
-    await student2.evaluate(async () => (await fetch("/api/records")).status),
-    401,
-  );
-  await page.emulateMedia({ media: "print" });
-  await page.pdf({
-    path: "/tmp/vl3-report.pdf",
-    format: "A4",
-    printBackground: true,
-  });
-  await page.emulateMedia({ media: "screen" });
-  await page.locator("#closeTeacher").click();
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.evaluate(() => scrollTo(0, 0));
-  await page.screenshot({ path: "/tmp/vl3-mobile.png", fullPage: true });
-  assert.equal(
-    await page.evaluate(
-      () => document.documentElement.scrollWidth <= innerWidth,
-    ),
-    true,
-  );
-  assert.deepEqual(errors, []);
-  await browser.close();
-  console.log(
-    "PASS: gates, frozen original hypothesis, four trials, original observations, submission locks, reflection, PDF, XLSX, automatic cross-browser storage, protected teacher access, portable imports, mobile layout, no browser errors.",
-  );
+    await p.evaluate(() => phase(1));
+    await p.screenshot({ path: "/tmp/vl3-mobile.png", fullPage: true });
+    assert.deepEqual(errors, []);
+    console.log(
+      "PASS: full main + agar inquiry, neutral hypotheses, locked original predictions and first readings, growth/directions, adjustable protractor, bar-chart consistency, delayed teaching reveal, reflection/PDF, real XLSX, cloud browsers, offline retries, reload login, separate attempts, legacy data, complete teacher demo exclusion, mobile layout.",
+    );
+  } finally {
+    await browser.close();
+  }
 })().catch((e) => {
   console.error(e);
-  process.exit(1);
+  process.exitCode = 1;
 });

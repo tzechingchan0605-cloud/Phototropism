@@ -11,18 +11,20 @@ with ZipFile(path) as z:
         if name.endswith(('.xml','.rels')): ET.fromstring(z.read(name))
     assert any(n.startswith('xl/media/') for n in z.namelist())
 w=load_workbook(path)
-assert w.sheetnames==['學生探究答案','四組觀察紀錄','教師評分','評分準則','操作事件紀錄','原始與遞交快照','裝置設計圖']
+assert w.sheetnames==['學生探究答案','四組觀察紀錄','延伸量度與棒形圖','教師評分','評分準則','操作事件紀錄','原始與遞交快照','裝置設計圖']
 a=w['學生探究答案'];s=w['教師評分'];o=w['四組觀察紀錄']
 assert a['B2'].value=='陳小明'
 assert '仍向光彎曲' in a['F2'].value
-assert '不是感光部位' in a['G2'].value
+assert '被動生長' in a['G2'].value
 assert a['H2'].font.color.rgb=='FF00834A'
 assert a['E2'].font.color.rgb=='FF173E34'
+assert '不能確定頂端只負責感光' in a['Q2'].value
+assert o['D4'].value=='切去頂端' and '較少伸長' in o['G4'].value
 assert len({a[c+'2'].fill.fgColor.rgb for c in ['E','F','H','M','R','N','S']})>=6
-assert len(w['裝置設計圖']._images)==1
-assert o['E5'].value=='沒有明顯向光彎曲' and o['F5'].value=='仍向光彎曲'
-assert len(s.data_validations.dataValidation)==9
-assert len(s.conditional_formatting)==18
+assert len(w['裝置設計圖']._images)==2
+assert '沒有明顯彎曲' in o['E5'].value and '向左彎曲' in o['F5'].value
+assert len(s.data_validations.dataValidation)==10
+assert len(s.conditional_formatting)==19
 assert len(a.conditional_formatting)==7
 assert w.calculation.fullCalcOnLoad and w.calculation.forceFullCalc
 assert len(w['評分準則']['A'])>=19
@@ -60,11 +62,30 @@ s['E2']=None;assert colour_matches('E2')==[]
 s['E2']=2;assert colour_matches('E2')==[0]
 s['E2']=0;assert colour_matches('E2')==[1]
 s['E2']=1;assert colour_matches('E2')==[2]
-print('PASS: actual XLSX archive, XML, seven sheets, embedded image, original hypothesis, first observations, colours, nine manual fields, pending vs zero, six SPS totals, knowledge and overall formulas, conditional colours.')
+print('PASS: actual XLSX archive, XML, eight sheets, embedded design and chart, original hypothesis, first observations, colours, ten manual fields, pending vs zero, six SPS totals, knowledge and overall formulas, conditional colours.')
 
 # All students from isolated browsers belong to one teacher export.
 multi=load_workbook('/tmp/vl3-multi.xlsx')
 answers=multi['學生探究答案']
 assert {answers.cell(r,2).value for r in range(2,answers.max_row+1)}=={'陳小明','李同學'}
-assert len(multi['教師評分'].data_validations.dataValidation)==18
+assert len(multi['教師評分'].data_validations.dataValidation)==20
 print('PASS: one teacher workbook includes both isolated student browsers.')
+
+# Full extension answers, readings, charts, colours and immutable snapshots survive export.
+import json
+e=w['延伸量度與棒形圖']
+assert e['F4'].value==30 and e['I4'].value==35
+assert e['J4'].value=='向右彎曲' and e['J5'].value=='向左彎曲'
+assert e['M4'].value==35 and e['N4'].value=='向右彎曲'
+assert e['I4'].font.color.rgb=='FF00834A'
+assert a['Y2'].value=='向左彎曲'  # original extension prediction, not the revised right choice
+assert a['AI2'].value=='正向光性'
+chunks=w['原始與遞交快照']
+r=json.loads(''.join(chunks.cell(i,3).value for i in range(2,chunks.max_row+1)))
+assert r['extension']['initialPrediction']['prediction']=='left'
+assert r['extension']['firstReadings']['readings']['G']['angle']==30
+assert r['extension']['readings']['G']['angle']==35
+assert r['finalAnswers']['extension']['readings']['G']['angle']==35
+assert 'reflection_submitted' in [ev['type'] for ev in r['events']]
+assert len({r['id']})==1
+print('PASS: original agar prediction, first/final angles, directions, chart values, answer colours and full event/snapshot payload.')
