@@ -66,14 +66,14 @@
             <article class="vl3-card">
               <h3>你的初步觀察</h3>
               <label for="observation"
-                >試描述<strong>情景中的可觀察變化。</strong></label
+                ><strong>試描述情景中的可觀察變化。</strong></label
               ><textarea
                 id="observation"
                 maxlength="1000"
                 placeholder="我觀察到……"
               ></textarea>
-              <p class="notice">
-                先記錄觀察，再提出可測試的假說。此處不需要猜中機制。
+              <p class="observation-note muted">
+                <em>（此處只需記錄觀察，不用作解釋。）</em>
               </p>
             </article>
           </div>
@@ -82,84 +82,132 @@
           </div>
         </section>
         <section id="phase-2" class="phase">
-          <div class="phase-heading"><h2>02 · 設計探究</h2></div>
-          <article class="vl3-card">
-            <h3>完成你的假說</h3>
-            <p>
-              若胚芽鞘的
-              <select id="hypothesisPart" aria-label="假說部位">
-                <option value="">請選擇</option>
-                <option value="tip">頂端</option>
-                <option value="below">頂端以下位置</option>
-              </select>
-              被遮光，而其他部位仍然受光，胚芽鞘將會
-              <select id="hypothesisOutcome" aria-label="預期反應">
-                <option value="">請選擇</option>
-                <option value="bend">仍向光彎曲</option>
-                <option value="straight">沒有明顯向光彎曲</option></select
-              >。
-            </p>
-            <label for="reason">我的理由（必答）</label
-            ><textarea
-              id="reason"
-              maxlength="1500"
-              placeholder="說明你為甚麼作出這個預測……"
-            ></textarea>
-            <p class="muted">
-              預測沒有預設答案。第一次開始實驗前，系統會固定保存完整假說及理由；之後修訂也不會覆蓋原始版本。
-            </p>
-          </article>
-          <div class="vl3-grid">
-            <article class="vl3-card">
-              <h3>辨認實驗變量</h3>
+          <div class="phase-heading design-heading">
+            <span class="phase-badge">階段二</span>
+            <div>
+              <h2>設計探究</h2>
+              <p class="muted">
+                完成假設、公平測試及實驗裝置設計，然後開始實驗。
+              </p>
+            </div>
+          </div>
+          <div class="design-content">
+            <div class="research-question">
+              <p class="card-kicker">研究問題</p>
+              <h3>胚芽鞘的哪個部位感受單側光照，從而影響向光彎曲？</h3>
+            </div>
+            <article class="vl3-card design-card hypothesis-card">
+              <p class="card-kicker">01 · 假說建立器</p>
+              <h3>完成你的假說</h3>
+              <p class="hypothesis-sentence">
+                若胚芽鞘的
+                <select id="hypothesisPart" aria-label="假說部位">
+                  <option value="">請選擇</option>
+                  <option value="tip">頂端</option>
+                  <option value="below">頂端以下位置</option>
+                </select>
+                被遮光，而其他部位仍然受光，胚芽鞘將會
+                <select id="hypothesisOutcome" aria-label="預期反應">
+                  <option value="">請選擇</option>
+                  <option value="bend">仍向光彎曲</option>
+                  <option value="straight">沒有明顯向光彎曲</option></select
+                >。
+              </p>
+              <label for="reason" class="design-field-label"
+                >我的理由（必答；沒有固定答案）</label
+              ><textarea
+                id="reason"
+                maxlength="1500"
+                placeholder="請寫下你作出這項預測的理由……"
+              ></textarea>
+              <p class="hypothesis-save-note muted">
+                第一次開始實驗前，系統會固定保存完整原始假說及理由，供學習反思引用。
+              </p>
+            </article>
+            <article class="vl3-card design-card variables-card">
+              <p class="card-kicker">02 · 公平測試設計</p>
               <div id="variableChoices"></div>
             </article>
-            <article class="vl3-card">
-              <h3>實驗前提與公平比較</h3>
-              <p>選出你認為本實驗應採用的前提：</p>
+            <article class="vl3-card design-card assumptions-card">
+              <p class="card-kicker">03 · 實驗前提</p>
+              <h3>此探究的假設是什麼？</h3>
+              <p class="muted design-hint">
+                請選出所有適用的假設，可選多於一項。
+              </p>
               <div id="assumptions"></div>
-              <label for="controlPlan"
-                >你會如何設置對照，分辨遮光與罩子本身的影響？</label
-              ><textarea
+            </article>
+            <article class="vl3-card design-card control-card">
+              <p class="card-kicker">04 · 探究的對照組</p>
+              <h3>
+                <label for="controlPlan"
+                  >你認為此實驗需要對照組嗎？如需要，你會如何設計比較裝置？</label
+                >
+              </h3>
+              <p class="muted design-hint">
+                （提示：對照組主要功能是作為比較的基準，用來確認實驗中的改變是由於測試的變因（獨立變量）所引起，而不是其他外在因素的干擾。）
+              </p>
+              <textarea
                 id="controlPlan"
                 maxlength="1500"
-                placeholder="描述需要比較的組別及固定條件……"
+                aria-label="對照組設計"
               ></textarea>
             </article>
+            <article class="vl3-card design-card setup-card">
+              <p class="card-kicker">05 · 實驗裝置設計</p>
+              <h3>繪畫並標示你的實驗裝置</h3>
+              <p>試參考實驗變量，繪畫並標示你的實驗裝置。</p>
+              <p class="muted design-hint">
+                （提示：此實驗需要多少個裝置？實驗組和對照組分別是什麼？）
+              </p>
+              <div id="equipmentBank" class="equipment-bank"></div>
+              <p>可先繪圖或上載相片，然後按「儲存」。也可使用下方文字設計。</p>
+              <canvas
+                id="setupCanvas"
+                width="900"
+                height="300"
+                aria-label="實驗裝置繪圖區"
+              ></canvas>
+              <div class="drawing-tools">
+                <button
+                  id="pencilTool"
+                  type="button"
+                  data-drawing-tool="pencil"
+                  class="selected"
+                  aria-pressed="true"
+                >
+                  ✎ 鉛筆</button
+                ><button
+                  id="eraserTool"
+                  type="button"
+                  data-drawing-tool="eraser"
+                  aria-pressed="false"
+                >
+                  ⌫ 橡皮擦</button
+                ><button id="clearDrawing" type="button">清除</button
+                ><button id="saveDrawing" type="button">儲存</button
+                ><label
+                  class="upload-control"
+                  tabindex="0"
+                  role="button"
+                  for="setupPhoto"
+                  >上載相片<input
+                    id="setupPhoto"
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp"
+                /></label>
+              </div>
+              <label for="setupDescription" class="design-field-label"
+                >文字設計（可代替繪圖）：描述四組裝置、遮光方法及固定條件。</label
+              ><textarea id="setupDescription" maxlength="2500"></textarea
+              ><button id="saveTextSetup" class="secondary">
+                儲存文字設計
+              </button>
+              <p id="setupStatus" role="status"></p>
+            </article>
           </div>
-          <article class="vl3-card">
-            <h3>繪畫並標示你的實驗裝置</h3>
-            <p>
-              材料：同類及生長階段相近的胚芽鞘、單側光源、不透光罩、透明罩、不透光套筒。可設計不遮光、頂端不透光罩、頂端透明罩及頂端以下遮光四组。
-            </p>
-            <canvas
-              id="setupCanvas"
-              width="900"
-              height="300"
-              aria-label="實驗裝置繪圖區"
-            ></canvas>
-            <div class="vl3-actions">
-              <button id="clearDrawing" class="secondary">清除繪圖</button
-              ><button id="saveDrawing" class="secondary">儲存繪圖</button
-              ><label
-                >上載裝置圖
-                <input
-                  id="setupPhoto"
-                  type="file"
-                  accept="image/png,image/jpeg,image/webp"
-              /></label>
-            </div>
-            <label for="setupDescription"
-              >文字設計（可代替繪圖）：描述四組遮光方法、光源方向及固定條件。</label
-            ><textarea id="setupDescription" maxlength="2500"></textarea
-            ><button id="saveTextSetup" class="secondary">儲存文字設計</button>
-            <p id="setupStatus" role="status"></p>
-          </article>
-          <div class="vl3-actions">
+          <div class="vl3-actions design-navigation">
             <button class="secondary" data-back="1">← 返回情境</button
-            ><button id="toExperiment" class="primary">
-              確認設計並開始實驗 →
-            </button>
+            ><button id="toExperiment" class="primary">開始實驗 →</button>
           </div>
         </section>
         <section id="phase-3" class="phase">

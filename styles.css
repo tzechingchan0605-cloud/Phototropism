@@ -517,3 +517,257 @@ button {
     font-size: 12px;
   }
 }
+/* VL1's numbered, single-column design cards. */
+.observation-note {
+  font-size: 13px;
+  margin-top: 14px;
+}
+.design-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.design-heading h2 {
+  margin-bottom: 4px;
+}
+.design-heading p {
+  font-size: 13px;
+  margin-bottom: 0;
+}
+.phase-badge {
+  flex: none;
+  color: var(--teal);
+  border: 1px solid #bcded6;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.design-content {
+  max-width: 900px;
+  margin: 24px auto 0;
+}
+.research-question {
+  padding: 0 24px;
+  margin-bottom: 22px;
+}
+.research-question h3 {
+  font-size: 19px;
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+.design-card {
+  padding: 26px 24px 30px;
+  margin-bottom: 24px;
+  box-shadow: 0 14px 36px rgba(21, 51, 59, 0.055);
+}
+.design-card .card-kicker {
+  margin-bottom: 20px;
+  letter-spacing: 0.08em;
+}
+.design-card h3 {
+  font-size: 18px;
+  margin-bottom: 22px;
+}
+.design-card .hypothesis-sentence {
+  line-height: 2.4;
+  margin-bottom: 20px;
+}
+.design-card .hypothesis-sentence select {
+  border: 0;
+  border-bottom: 2px solid #56a99e;
+  border-radius: 3px;
+  background: #edf7f3;
+  color: var(--teal);
+  font-weight: 700;
+  padding: 3px 8px;
+}
+.design-card .design-field-label {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 700;
+  margin: 16px 0 6px;
+}
+.hypothesis-card #reason {
+  min-height: 60px;
+}
+.hypothesis-save-note {
+  font-size: 12px;
+  margin: 10px 0 0;
+}
+.design-hint {
+  font-size: 12px;
+  line-height: 1.8;
+  margin: 0 0 18px;
+}
+.design-card .variable-group {
+  border: 0;
+  border-bottom: 1px solid #e7efed;
+  border-radius: 0;
+  padding: 12px 0 18px;
+  margin: 20px 0 0;
+  min-width: 0;
+}
+.variable-group legend {
+  font-size: 14px;
+  padding: 0;
+}
+.variable-group legend span {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 400;
+}
+.variable-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.design-card .variable-pill {
+  position: relative;
+  display: inline-flex;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.variable-pill span {
+  display: block;
+  border: 1px solid #cde0df;
+  border-radius: 24px;
+  padding: 7px 11px;
+  pointer-events: none;
+}
+.variable-pill input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+.variable-pill input:checked + span {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: white;
+}
+.variable-pill input:focus-visible + span {
+  outline: 3px solid #e8a952;
+  outline-offset: 3px;
+}
+.variable-pill input:disabled + span {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.assumptions-card #assumptions label {
+  font-size: 14px;
+  margin: 12px 0;
+}
+.control-card h3 label {
+  font-size: inherit;
+  margin: 0;
+}
+.control-card textarea {
+  min-height: 100px;
+}
+.equipment-bank {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin: 18px 0;
+}
+.equipment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px;
+  border: 1px solid #dce9e7;
+  border-radius: 12px;
+  background: #f8fcfa;
+  text-align: center;
+}
+.equipment svg {
+  width: 100%;
+  max-width: 110px;
+  height: 110px;
+}
+.equipment span {
+  font-size: 12px;
+  font-weight: 600;
+  color: #4f7273;
+}
+.setup-card #setupCanvas {
+  height: auto;
+  aspect-ratio: 3;
+  border: 2px solid #badad4;
+  border-radius: 10px;
+}
+.drawing-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 18px;
+  align-items: center;
+}
+.drawing-tools button,
+.drawing-tools .upload-control {
+  margin: 0;
+  padding: 7px 12px;
+  border: 1px solid #cde0df;
+  border-radius: 8px;
+  background: white;
+  color: var(--teal);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 36px;
+}
+.drawing-tools .selected {
+  background: var(--teal);
+  color: white;
+  border-color: var(--teal);
+  box-shadow: 0 3px 9px #087b7820;
+}
+.upload-control input {
+  display: none;
+}
+.setup-card #setupDescription {
+  min-height: 95px;
+  margin-bottom: 12px;
+}
+.design-navigation {
+  justify-content: space-between;
+  margin-top: 38px;
+  margin-bottom: 28px;
+}
+@media (max-width: 600px) {
+  .design-card {
+    padding: 22px 18px;
+  }
+  .research-question {
+    padding: 0 8px;
+  }
+  .equipment-bank {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .equipment:last-child {
+    grid-column: 1/-1;
+  }
+  .equipment svg {
+    height: 85px;
+  }
+  .variable-group legend span {
+    display: block;
+  }
+  .design-card .hypothesis-sentence {
+    line-height: 2.7;
+  }
+  .phase-badge {
+    font-size: 12px;
+  }
+  .design-heading h2 {
+    font-size: 23px;
+  }
+}

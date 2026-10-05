@@ -252,13 +252,13 @@ function renderBench(p = 0) {
 }
 function renderVariables() {
   $("#variableChoices").innerHTML = [
-    ["iv", "獨立變量"],
-    ["dv", "因變量"],
-    ["cv", "控制變量"],
+    ["iv", "獨立變量", "主動改變的因素"],
+    ["dv", "因變量", "量度或觀察的結果"],
+    ["cv", "控制變量", "保持不變的因素"],
   ]
     .map(
-      ([key, label]) =>
-        `<fieldset><legend>${label}</legend>${VARIABLES.map((v, i) => `<label><input type="checkbox" data-variable="${key}" value="${i}"> ${v}</label>`).join("")}</fieldset>`,
+      ([key, label, description]) =>
+        `<fieldset class="variable-group"><legend>${label}<span>（${description}）</span></legend><div class="variable-pills">${VARIABLES.map((v, i) => `<label class="variable-pill"><input type="checkbox" data-variable="${key}" value="${i}"><span>${v}</span></label>`).join("")}</div></fieldset>`,
     )
     .join("");
   $$("[data-variable]").forEach(
@@ -364,6 +364,7 @@ function saveSetup(method, image = "") {
   $("#setupStatus").textContent = "裝置設計已儲存。";
   log("setup_saved", { method });
 }
+let drawingTool = "pencil";
 const canvas = $("#setupCanvas"),
   ctx = canvas.getContext("2d");
 function resetCanvas() {
@@ -373,7 +374,28 @@ function resetCanvas() {
   ctx.lineCap = "round";
   ctx.strokeStyle = "#15333b";
   drawMade = false;
+  selectDrawingTool("pencil");
 }
+function selectDrawingTool(tool) {
+  drawingTool = tool;
+  $$("[data-drawing-tool]").forEach((button) => {
+    const selected = button.dataset.drawingTool === tool;
+    button.classList.toggle("selected", selected);
+    button.setAttribute("aria-pressed", String(selected));
+  });
+}
+$$("[data-drawing-tool]").forEach(
+  (button) =>
+    (button.onclick = () => {
+      if (!state.submittedAt) selectDrawingTool(button.dataset.drawingTool);
+    }),
+);
+$(".upload-control").onkeydown = (e) => {
+  if (["Enter", " "].includes(e.key) && !state.submittedAt) {
+    e.preventDefault();
+    $("#setupPhoto").click();
+  }
+};
 function point(e) {
   const r = canvas.getBoundingClientRect();
   return [
@@ -385,6 +407,8 @@ canvas.onpointerdown = (e) => {
   if (state.submittedAt) return;
   canvas.setPointerCapture(e.pointerId);
   drawing = true;
+  ctx.strokeStyle = drawingTool === "eraser" ? "white" : "#15333b";
+  ctx.lineWidth = drawingTool === "eraser" ? 22 : 4;
   ctx.beginPath();
   ctx.moveTo(...point(e));
 };
@@ -781,6 +805,34 @@ $("#profileForm").onsubmit = (e) => {
     $("#teacherDialog").showModal();
   }
 };
+const materials = [
+  [
+    "胚芽鞘 × 4",
+    '<path d="M60 87V25" stroke="#65a772" stroke-width="9" stroke-linecap="round"/><rect x="36" y="84" width="48" height="10" rx="3" fill="#af7851"/><path d="M40 94L47 110H74L81 94" fill="#d6a878"/>',
+  ],
+  [
+    "單側光源 × 1",
+    '<path d="M70 22L32 8V78L70 58Z" fill="#f9d779" opacity=".35"/><rect x="70" y="20" width="15" height="40" rx="5" fill="#f3b946"/><path d="M78 61V104M60 105H97" stroke="#658087" stroke-width="4"/>',
+  ],
+  [
+    "不透光罩 × 1",
+    '<path d="M43 90V40Q60 14 77 40V90Z" fill="#344a50" stroke="#15333b" stroke-width="3"/>',
+  ],
+  [
+    "透明罩 × 1",
+    '<path d="M43 90V40Q60 14 77 40V90Z" fill="#c7e9f066" stroke="#6bb8c3" stroke-width="3"/><path d="M51 43V77" stroke="white" stroke-width="4"/>',
+  ],
+  [
+    "不透光套筒 × 1",
+    '<path d="M43 39V89Q60 100 77 89V39" fill="#344a50" stroke="#15333b" stroke-width="3"/><ellipse cx="60" cy="39" rx="17" ry="7" fill="#edf5ee" stroke="#15333b" stroke-width="3"/>',
+  ],
+];
+$("#equipmentBank").innerHTML = materials
+  .map(
+    ([label, shapes]) =>
+      `<div class="equipment"><svg viewBox="0 0 120 120" role="img" aria-label="${label}" xmlns="http://www.w3.org/2000/svg">${shapes}</svg><span>${label}</span></div>`,
+  )
+  .join("");
 $("#contextPlant").innerHTML = contextComparison();
 $("#mechanismDiagram").innerHTML =
   `<svg viewBox="0 0 340 330" role="img" aria-label="胚芽鞘頂端感光，背光側細胞伸長較多，頂端以下區域向右方光源彎曲"><rect x="15" y="12" width="310" height="306" rx="18" fill="#edf8f2"/><path d="M141 272C108 188 153 110 218 83" stroke="#63aa6e" stroke-width="30" fill="none"/><path d="M132 263C102 184 151 105 214 77" stroke="#d7ed91" stroke-width="5" fill="none"/><circle cx="219" cy="80" r="12" fill="#f3bc52"/><text x="163" y="49" font-size="15" fill="#15333b">頂端：感受光照</text><text x="23" y="150" font-size="13" fill="#15333b">背光側</text><text x="23" y="172" font-size="13" fill="#15333b">生長素較多</text><text x="23" y="194" font-size="13" fill="#15333b">細胞伸長較多</text><path d="M94 167L119 180" stroke="#658087" stroke-width="2"/><text x="196" y="226" font-size="13" fill="#15333b">頂端以下</text><text x="196" y="248" font-size="13" fill="#15333b">不均等伸長</text><path d="M188 231L149 220" stroke="#658087" stroke-width="2"/><text x="256" y="99" font-size="14" fill="#946c1a">☀ 光源</text><text x="87" y="302" font-size="13" fill="#658087">胚芽鞘機制示意 · 並非量度數據</text></svg>`;
