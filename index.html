@@ -83,11 +83,6 @@
               <p class="observation-note muted">
                 <em>（此處只需記錄觀察，不用作解釋。）</em>
               </p>
-              <label for="initialIdea"
-                ><strong
-                  >你的初步想法：你認為幼苗哪個部位感受光照？為甚麼？</strong
-                ></label
-              ><textarea id="initialIdea" maxlength="1500"></textarea>
             </article>
           </div>
           <div class="vl3-actions">
@@ -114,20 +109,18 @@
               <h3>完成你的假說</h3>
               <p class="hypothesis-sentence">
                 若幼芽
-                <input
-                  id="hypothesisPart"
-                  aria-label="假說部位"
-                  maxlength="80"
-                  placeholder="填寫部位"
-                />
-                被遮光，即使下部仍然受光，幼芽將會
+                <select id="hypothesisPart" aria-label="假說部位">
+                  <option value="">請選擇</option>
+                  <option value="頂端">頂端</option>
+                  <option value="頂端以下位置">頂端以下位置</option>
+                </select>
+                被遮光，而其他部位仍然受光，幼芽將會
                 <select id="hypothesisOutcome" aria-label="預期反應">
                   <option value="">請選擇</option>
                   <option value="bend">仍向光彎曲</option>
                   <option value="straight">沒有明顯向光彎曲</option></select
                 >。
               </p>
-              <p id="hypothesisWarning" class="muted" role="status"></p>
               <label for="reason" class="design-field-label"
                 >我的理由（必答；沒有固定答案）</label
               ><textarea

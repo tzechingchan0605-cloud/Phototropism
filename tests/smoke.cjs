@@ -26,17 +26,21 @@ async function flow(p, student = true) {
   await p.click("#toDesign");
   assert(await p.locator("#phase-1").isVisible());
   await p.fill("#observation", "窗邊幼苗下部直立，上部朝窗戶彎曲。");
-  await p.fill("#initialIdea", "我認為中部感受光，因為它開始彎曲。");
+  assert.equal(await p.locator("#initialIdea").count(), 0);
   await p.click("#toDesign");
+  assert(await p.locator("#phase-2").isVisible());
   assert.equal(await p.inputValue("#hypothesisPart"), "");
   assert.equal(await p.inputValue("#hypothesisOutcome"), "");
-  await p.fill("#hypothesisPart", "下部");
-  assert.match(await p.locator("#hypothesisWarning").innerText(), /請檢查/);
-  assert.doesNotMatch(
-    await p.locator("#hypothesisWarning").innerText(),
-    /頂端感光/,
+  assert.deepEqual(
+    await p.locator("#hypothesisPart option").allTextContents(),
+    ["請選擇", "頂端", "頂端以下位置"],
   );
-  await p.fill("#hypothesisPart", "頂端");
+  await p.selectOption("#hypothesisPart", "頂端以下位置");
+  assert.match(
+    await p.locator(".hypothesis-sentence").innerText(),
+    /而其他部位仍然受光/,
+  );
+  await p.selectOption("#hypothesisPart", "頂端");
   await p.selectOption("#hypothesisOutcome", "bend");
   await p.fill("#reason", "若上方只是被動生長，遮光後可能仍朝光彎曲。");
   await p.selectOption("#comparison", "AB");
@@ -64,6 +68,7 @@ async function flow(p, student = true) {
   assert(await p.locator("#phase-3").isVisible());
   const original = await p.evaluate(() => structuredClone(state.initialDesign));
   assert.match(original.hypothesisText, /頂端.*仍向光彎曲/);
+  assert.match(original.hypothesisText, /而其他部位仍然受光/);
   await p.click('[data-back="2"]');
   await p.selectOption("#hypothesisOutcome", "straight");
   await p.fill("#reason", "修訂：頂端可能感受光。");
@@ -264,6 +269,16 @@ async function flow(p, student = true) {
   assert.match(report, /參考說明/);
   assert.match(report, /✓/);
   assert.doesNotMatch(report, /整體分數|SPS 總分/);
+  assert.doesNotMatch(report, /初步想法/);
+  assert.match(
+    await p.evaluate(() =>
+      newReport({
+        ...state,
+        form: { ...state.form, initialIdea: "舊版初步想法" },
+      }),
+    ),
+    /舊版初步想法/,
+  );
   assert.equal(
     await p.evaluate(
       () =>

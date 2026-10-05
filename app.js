@@ -275,8 +275,13 @@ function phase(n) {
   log("phase_opened", { phase: n });
 }
 function hypothesis(form, version = state?.experimentVersion) {
-  if (version >= 3)
-    return `若幼芽${form.hypothesisPart || "【未填寫部位】"}被遮光，即使下部仍然受光，幼芽將會${OUTCOMES[form.hypothesisOutcome] || "【未選擇反應】"}。`;
+  if (version >= 3) {
+    // Preserve the sentence used by previous free-text investigations.
+    const condition = Object.hasOwn(form, "initialIdea")
+      ? "即使下部仍然受光"
+      : "而其他部位仍然受光";
+    return `若幼芽${form.hypothesisPart || "【未選擇部位】"}被遮光，${condition}，幼芽將會${OUTCOMES[form.hypothesisOutcome] || "【未選擇反應】"}。`;
+  }
   return `若胚芽鞘的${form.hypothesisPart === "tip" ? "頂端" : form.hypothesisPart === "below" ? "頂端以下位置" : "【未選擇部位】"}被遮光，而其他部位仍然受光，胚芽鞘將會${OUTCOMES[form.hypothesisOutcome] || "【未選擇反應】"}。`;
 }
 function seedling(id, progress = 0) {
@@ -583,17 +588,12 @@ FIELDS.forEach((f) =>
       $("#setupStatus").textContent = "文字設計已更新，請儲存。";
     }
     state.form[f] = $("#" + f).value;
-    if (f === "hypothesisPart")
-      $("#hypothesisWarning").textContent = /下|基|根|全|整/.test(state.form[f])
-        ? "請檢查部位與『下部仍然受光』是否一致，並確認句子能被你的比較測試。"
-        : "";
     log("answer_changed", { field: f, value: state.form[f] });
   }),
 );
 $("#toDesign").onclick = () => {
   readForm();
-  if (!state.form.observation.trim() || !state.form.initialIdea.trim())
-    return message("請先完成初步觀察及初步想法。");
+  if (!state.form.observation.trim()) return message("請先完成初步觀察。");
   state.unlocked = Math.max(state.unlocked, 2);
   phase(2);
   message("先提出你的預測，再設計公平的比較。");
@@ -942,7 +942,6 @@ function reset(profile) {
   lastActive = Date.now();
   timingVisible = !document.hidden;
   $("#setupPhoto").value = "";
-  $("#hypothesisWarning").textContent = "";
   $("#printReport").innerHTML = "";
   renderVariables();
   resetCanvas();
@@ -1335,7 +1334,8 @@ async function exportExcel() {
     ["總時間（秒）", "identity"],
   ];
   const extraFields = [
-    ["initialIdea", "初步想法", "observing"],
+    // Keep this historical export column so older answers and workbook layout survive.
+    ["initialIdea", "初步想法（舊版）", "observing"],
     ["comparison", "指定比較", "classifying"],
     ["qShade", "頂端遮光比較", "inferring"],
     ["qSites", "感光與彎曲位置", "inferring"],

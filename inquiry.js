@@ -30,7 +30,6 @@ const POSITIONS = {
   none: "沒有明顯彎曲",
 };
 const NEW_FIELDS = [
-  "initialIdea",
   "comparison",
   "qShade",
   "qSites",
@@ -499,7 +498,7 @@ function newReport(r) {
     ? extensionTableHTML(e.firstReadings.readings)
     : "未確認";
   return `<h1>VL3 · 幼芽為甚麼朝光生長？</h1><p>${esc(r.profile.classInfo)}｜${esc(r.profile.name)}｜${esc(r.profile.email)}</p><p>${esc(r.id)} · ${statusOf(r)}</p>
-  <section class="report-card"><h2>01 · 了解情境</h2><p>學校園藝小組發現，窗邊幼苗逐漸朝窗戶方向彎曲。大家知道植物會朝光源方向生長，但不知道植物哪個部位感受光照，以及甚麼令它彎曲。</p>${contextComparison()}${open("初步觀察", f.observation, "描述外形及生長方向的可觀察變化，不必先解釋機制。")}${open("初步想法", f.initialIdea, "提出部位及理由；初步想法不因與模型不同直接判錯。")}</section>
+  <section class="report-card"><h2>01 · 了解情境</h2><p>學校園藝小組發現，窗邊幼苗逐漸朝窗戶方向彎曲。大家知道植物會朝光源方向生長，但不知道植物哪個部位感受光照，以及甚麼令它彎曲。</p>${contextComparison()}${open("初步觀察", f.observation, "描述外形及生長方向的可觀察變化，不必先解釋機制。")}${f.initialIdea ? open("初步想法（舊版）", f.initialIdea, "保留舊版探究的原始回答；不因與模型不同直接判錯。") : ""}</section>
   <section class="report-card"><h2>02 · 設計主探究</h2>${open("原始假說", o?.hypothesisText || hypothesis(initial, 3), "可測試的部位、遮光處理及預期反應；預測不符不代表假說不合理。")}${open("原始理由", initial.reason, "說明為甚麼作出該預測。")}${open("最後假說", hypothesis(f, 3), "保留修訂後內容，原始答案不覆蓋。")}${open("指定比較", answerOption("comparison", initial.comparison), "A–B：頂端遮光；A–C：頂端是否存在；A–D：下部遮光。")}${["iv", "dv", "cv"].map((key, i) => open(["獨立變量", "因變量", "控制變量"][i], r.variables[key].map((n) => VARIABLES[n]).join("；"), ["按指定比較選擇處理因素。", "伸長及彎曲反應。", "種類、處理前大小與狀況、光照、溫度、供水及培養時間。"][i])).join("")}${open("探究假設", r.assumptions.map((id) => assumptionsFor(r).find((a) => a[0] === id)?.[1]).join("；"), "初始狀況相近；帽及套不限制生長；處理不造成明顯溫差。相同種類仍需控制大小。")}${open("對照設計", f.controlPlan, "保留 A 完整不遮蓋；按三項指定比較保持其他條件相同。")}${open("裝置設計", r.setup.description, "四組處理、單側光源及固定條件清楚；圖片與文字由教師評閱。")}${safeImage(r.setup.image) ? `<img src="${r.setup.image}" alt="學生實驗裝置設計">` : ""}</section>
   <section class="report-card"><h2>03 · 主探究記錄</h2><h3>首次確認</h3>${firstMain}<h3>最後記錄</h3>${tableHTML(r.observations, groupDefinitions(r))}${Object.keys(
     GROUPS,
