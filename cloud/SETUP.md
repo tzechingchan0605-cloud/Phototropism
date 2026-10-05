@@ -24,6 +24,19 @@
 6. After collector changes, edit the existing deployment and select **New version**. Saving the editor alone does not update a deployed web app. Keeping the deployment retains its URL.
 7. Teachers use the fixed teacher email plus the separate password. The frontend holds the password only in memory and clears it on logout. Student emails are self-entered, not Google-verified; the browser's Google login does not determine record ownership.
 
+## 教師登入未通過驗證 / Teacher login recovery
+
+「教師密碼不正確」不一定代表輸入有誤：舊版收集端亦以此訊息表示尚未建立密碼雜湊。新 Apps Script 專案不會繼承另一個專案的指令碼屬性或教師密碼；只新增 `SETUP_TEACHER_PASSWORD` 也不會立即套用它。
+
+1. 以教師帳戶開啟**目前 `/exec` 部署所屬的 VL3 Apps Script 專案**。在「部署 → 管理部署」核對網址與 VL3 的 `cloud-config.js` 相同；不要另建專案或更換試算表。
+2. 在「專案設定 → 指令碼屬性」新增或更新 `SETUP_TEACHER_PASSWORD`，填入你要使用的獨立教師密碼（至少 12 字元）。可以沿用你原本打算使用的密碼。保留 `SPREADSHEET_ID`；不用手動編輯 `TEACHER_PASSWORD_HASH`，亦不要提供密碼給他人。
+3. 按「儲存指令碼屬性」，返回編輯器，在函式選單選 `setupCollector`，按「執行」並完成授權。確認執行成功。它會更新雜湊、刪除暫存密碼屬性，**保留學生紀錄**。只儲存屬性而未執行此函式，登入仍使用原本密碼。
+4. 返回 VL3，按「登出教師帳戶」後用上述密碼重新登入。這是獨立收集端密碼，並非 Google 帳戶密碼。
+
+只更改密碼屬性並成功執行現有 `setupCollector`，**毋須重新部署**，既有部署即會使用更新後的屬性。若同時貼上新的 `Code.gs`，才需「部署 → 管理部署 → 編輯 → 新版本 → 部署」更新程式，保留原網址。新版會分辨未初始化、設定尚未套用及驗證未通過；不會繞過驗證或自動套用暫存密碼。網頁亦能為舊版「教師密碼不正確」回覆提供以上指引。
+
+The old “incorrect teacher password” response also covers an uninitialized password hash. A new Apps Script project does not inherit another project's properties. In the **same project that owns the current `/exec` URL**, keep `SPREADSHEET_ID`, set and save `SETUP_TEACHER_PASSWORD` to your chosen separate password (at least 12 characters), then run `setupCollector` as the teacher. Successful setup updates the hash and removes the temporary property without clearing student rows. Return to VL3, log out of the teacher dashboard and log in again. Do not share your password or manually edit its hash. Property updates take effect in existing deployments without redeploying; replacing `Code.gs` requires deploying a new version of the existing deployment. Pending passwords are never applied by public login requests.
+
 ## 備份、舊紀錄及限制 / Backups and migration
 
 - 每次探究有不同 ID 及寫入權限；同一電郵可保留多次探究。重試更新原紀錄，不新增副本；較舊版本不能覆蓋新作答。原始假說、第一次觀察及遞交快照固定保存。

@@ -801,6 +801,7 @@ async function teacherDashboard(password) {
   const generation = ++dashboardGeneration;
   $("#exportExcel").disabled = true;
   $("#importRecords").disabled = true;
+  $("#teacherAuthHelp").hidden = true;
   $("#teacherStatus").textContent = "正在讀取 VL3 全部雲端分頁……";
   try {
     const remote = await cloudSync.list(password);
@@ -835,8 +836,18 @@ async function teacherDashboard(password) {
     sharedRecords = [];
     $("#teacherRows").innerHTML = "";
     $("#teacherLogin").hidden = false;
+    const authError =
+      [
+        "TEACHER_AUTH_FAILED",
+        "TEACHER_PASSWORD_NOT_CONFIGURED",
+        "TEACHER_PASSWORD_SETUP_PENDING",
+      ].includes(e.code) || e.message === "教師密碼不正確";
+    $("#teacherAuthHelp").hidden = !authError;
     $("#teacherStatus").textContent =
-      "未取得完整全班紀錄，未匯出：" + e.message;
+      "未取得完整全班紀錄，未匯出：" +
+      (e.message === "教師密碼不正確"
+        ? "教師登入未通過驗證；此部署的密碼可能尚未設定，或與你預期不同。"
+        : e.message);
     return false;
   }
 }
@@ -867,6 +878,7 @@ $("#teacherLogout").onclick = () => {
   $("#exportExcel").disabled = true;
   $("#importRecords").disabled = true;
   $("#teacherStatus").textContent = "教師雲端讀取已登出。";
+  $("#teacherAuthHelp").hidden = true;
 };
 $("#importRecords").onchange = async (e) => {
   if (!teacher()) return;
@@ -958,6 +970,7 @@ $("#newSession").onclick = () => {
   $("#teacherRows").innerHTML = "";
   $("#teacherPassword").value = "";
   $("#teacherLogin").hidden = false;
+  $("#teacherAuthHelp").hidden = true;
   showLogin();
 };
 $("#profileDialog").addEventListener("cancel", (e) => e.preventDefault());

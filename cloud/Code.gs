@@ -49,6 +49,17 @@ function equalHash(a, b) {
   let result = 0; for (let i = 0; i < a.length; i++) result |= a.charCodeAt(i) ^ b.charCodeAt(i);
   return result === 0;
 }
+function requireTeacherAuth_(data, properties) {
+  const reject = (code, message) => {const error = Error(message); error.code = code; throw error;};
+  const storedHash = properties.getProperty('TEACHER_PASSWORD_HASH');
+  if (!/^[0-9a-f]{64}$/.test(storedHash || '')) reject('TEACHER_PASSWORD_NOT_CONFIGURED', '此收集端尚未完成教師密碼設定；請在此 Apps Script 專案設定 SETUP_TEACHER_PASSWORD，再執行 setupCollector。');
+  if (data.teacherEmail !== TEACHER || typeof data.password !== 'string' || !data.password.length) reject('TEACHER_AUTH_FAILED', '教師登入未通過驗證；請使用指定教師帳戶及此收集端的獨立教師密碼。');
+  if (equalHash(digest(data.password), storedHash)) return;
+  // A temporary property does not change authentication until the owner runs setup.
+  // Never apply a pending password through a public request.
+  if (properties.getProperty('SETUP_TEACHER_PASSWORD') != null) reject('TEACHER_PASSWORD_SETUP_PENDING', '此收集端有尚未套用的教師密碼設定；請在此 Apps Script 專案執行 setupCollector。');
+  reject('TEACHER_AUTH_FAILED', '教師登入未通過驗證；此部署的密碼設定可能與你預期不同。請在同一 Apps Script 專案重新設定獨立教師密碼。');
+}
 function output(value) {return ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON);}
 function doGet(event) {
   if (event?.parameter?.view === 'bridge') return bridgePage_(event.parameter);
@@ -88,7 +99,7 @@ function doPost(event) {
     const bookId = properties.getProperty('SPREADSHEET_ID');
     if (!bookId) throw Error('教師尚未完成收集端設定');
     if (!['save', 'list'].includes(data.action)) throw Error('不支援的操作');
-    if (data.action === 'list' && (data.teacherEmail !== TEACHER || typeof data.password !== 'string' || !equalHash(digest(data.password), properties.getProperty('TEACHER_PASSWORD_HASH')))) throw Error('教師密碼不正確');
+    if (data.action === 'list') requireTeacherAuth_(data, properties);
     const sheet = SpreadsheetApp.openById(bookId).getSheetByName(SHEET);
     if (!sheet) throw Error('找不到收集工作表');
     lock = LockService.getScriptLock(); lock.waitLock(20000);
@@ -138,7 +149,7 @@ function doPost(event) {
     // Every chunk has a literal json: prefix so no student text becomes a formula.
     range.setNumberFormat('@'); range.setValues([row]);
     return output({ok: true, id: r.id, savedAt: r.savedAt});
-  } catch (e) {return output({ok: false, error: e.message || '收集端錯誤'});}
+  } catch (e) {return output({ok: false, error: e.message || '收集端錯誤', ...(e.code ? {code: e.code} : {})});}
   finally {if (lock && lock.hasLock()) lock.releaseLock();}
 }
 

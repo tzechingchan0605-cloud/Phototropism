@@ -59,7 +59,11 @@ window.createCloudSync = function ({
     if (!enabled) throw Error("未設定 VL3 雲端收集網址");
     if (!bridge) bridge = createAppsScriptBridge(endpoint);
     const result = await bridge.send(body);
-    if (!result?.ok) throw Error(result?.error || "雲端未確認儲存");
+    if (!result?.ok) {
+      const error = Error(result?.error || "雲端未確認儲存");
+      error.code = result?.code;
+      throw error;
+    }
     return result;
   }
   function enqueue(record) {

@@ -120,7 +120,38 @@ assert(
     token: "b".repeat(72),
   }).ok,
 );
-assert(!call({ ...auth, password: "wrong" }).ok);
+assert.equal(call({ ...auth, password: "wrong" }).code, "TEACHER_AUTH_FAILED");
+assert.equal(
+  call({ ...auth, teacherEmail: "other@example.com" }).code,
+  "TEACHER_AUTH_FAILED",
+);
+const configuredHash = properties.TEACHER_PASSWORD_HASH;
+delete properties.TEACHER_PASSWORD_HASH;
+assert.equal(call(auth).code, "TEACHER_PASSWORD_NOT_CONFIGURED");
+properties.TEACHER_PASSWORD_HASH = "invalid-hash";
+assert.equal(call(auth).code, "TEACHER_PASSWORD_NOT_CONFIGURED");
+properties.TEACHER_PASSWORD_HASH = configuredHash;
+properties.SETUP_TEACHER_PASSWORD = "new-pending-teacher-password";
+assert(
+  call(auth).ok,
+  "Pending setup must not revoke the current working password",
+);
+const pendingAuth = call({
+  ...auth,
+  password: properties.SETUP_TEACHER_PASSWORD,
+});
+assert.equal(pendingAuth.code, "TEACHER_PASSWORD_SETUP_PENDING");
+assert.equal(properties.TEACHER_PASSWORD_HASH, configuredHash);
+assert.equal(
+  rows.length,
+  2,
+  "Authentication failures must preserve all records",
+);
+assert(
+  !JSON.stringify(pendingAuth).includes(properties.SETUP_TEACHER_PASSWORD),
+);
+assert(!JSON.stringify(pendingAuth).includes(configuredHash));
+delete properties.SETUP_TEACHER_PASSWORD;
 assert(
   !call({
     action: "save",
@@ -214,6 +245,7 @@ assert(
 rows.splice(1);
 let unavailable = false,
   mismatch = false,
+  legacyAuthError = false,
   failSecondPage = false,
   collectorPort;
 const collector = http.createServer((req, res) => {
@@ -253,6 +285,8 @@ const collector = http.createServer((req, res) => {
     req.on("end", () => {
       const data = JSON.parse(body);
       let result = sandbox.collectorBridge(data);
+      if (legacyAuthError && data.action === "list")
+        result = { ok: false, error: "教師密碼不正確" };
       if (mismatch && data.action === "save") result.id = "incorrect-id";
       if (failSecondPage && data.action === "list" && data.cursor > 0)
         result = { ok: false, error: "第二頁失敗" };
@@ -429,13 +463,48 @@ const server = http.createServer((req, res) => {
     await t.waitForFunction(() =>
       document
         .querySelector("#teacherStatus")
-        .textContent.includes("密碼不正確"),
+        .textContent.includes("教師登入未通過驗證"),
     );
+    assert(await t.locator("#teacherAuthHelp").isVisible());
+    assert(await t.locator("#exportExcel").isDisabled());
+    assert.equal(await t.locator("#teacherPassword").inputValue(), "");
+    legacyAuthError = true;
+    await t.fill("#teacherPassword", "test-teacher-password");
+    await t.click("#teacherLogin button");
+    await t.waitForFunction(() =>
+      document
+        .querySelector("#teacherStatus")
+        .textContent.includes("可能尚未設定"),
+    );
+    assert(await t.locator("#teacherAuthHelp").isVisible());
+    assert(await t.locator("#exportExcel").isDisabled());
+    legacyAuthError = false;
+    delete properties.TEACHER_PASSWORD_HASH;
+    await t.fill("#teacherPassword", "test-teacher-password");
+    await t.click("#teacherLogin button");
+    await t.waitForFunction(() =>
+      document
+        .querySelector("#teacherStatus")
+        .textContent.includes("尚未完成教師密碼設定"),
+    );
+    assert(await t.locator("#teacherAuthHelp").isVisible());
+    assert(await t.locator("#exportExcel").isDisabled());
+    properties.TEACHER_PASSWORD_HASH = configuredHash;
+    properties.SETUP_TEACHER_PASSWORD = "new-pending-teacher-password";
+    await t.fill("#teacherPassword", properties.SETUP_TEACHER_PASSWORD);
+    await t.click("#teacherLogin button");
+    await t.waitForFunction(() =>
+      document.querySelector("#teacherStatus").textContent.includes("尚未套用"),
+    );
+    assert(await t.locator("#teacherAuthHelp").isVisible());
+    assert(await t.locator("#exportExcel").isDisabled());
+    delete properties.SETUP_TEACHER_PASSWORD;
     await t.fill("#teacherPassword", "test-teacher-password");
     await t.click("#teacherLogin button");
     await t.waitForFunction(
       () => document.querySelector("#teacherLogin").hidden,
     );
+    assert(await t.locator("#teacherAuthHelp").isHidden());
     assert.equal(await t.evaluate(() => sharedRecords.length), rows.length - 1);
     assert.equal(
       await t.evaluate(() =>
