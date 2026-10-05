@@ -1,4 +1,8 @@
 "use strict";
 // Public VL3 collector address only. Never put passwords or spreadsheet IDs here.
-// Deploy cloud/Code.gs in a separate VL3 Apps Script project, then add its /exec URL.
-window.VL3_CLOUD_CONFIG = { endpoint: "", transport: "bridge" };
+// User-provided VL3 deployment. Live saving requires a genuine collector acknowledgement.
+window.VL3_CLOUD_CONFIG = {
+  endpoint:
+    "https://script.google.com/macros/s/AKfycbzF4V4QzOGidlgyhnAQRWBTRABfl9CTMTb7LoD5GLyRnx5nEDsl2EE1JEnXWV1Iu_d9vw/exec",
+  transport: "bridge",
+};

@@ -4,7 +4,7 @@
 
 ## 雲端收集設定
 
-完整可貼入 Apps Script 的程式：[cloud/Code.gs](cloud/Code.gs)。中文及英文設定與正式驗證步驟：[cloud/SETUP.md](cloud/SETUP.md)。目前 `cloud-config.js` 的 `endpoint` 留空，正式跨裝置收集仍需部署及接入 VL3 自己的 `/exec` 網址。
+完整可貼入 Apps Script 的程式：[cloud/Code.gs](cloud/Code.gs)。中文及英文設定與正式驗證步驟：[cloud/SETUP.md](cloud/SETUP.md)。`cloud-config.js` 已接入使用者提供的 VL3 `/exec` 網址，透過嵌入頁及 `google.script.run` 傳送紀錄。只有收到真正的探究 ID／版本儲存確認才顯示「已同步」。
 
 教師用 `tzechingchan0605@gmail.com` 和私人 Script Properties 設定的獨立密碼讀取全班資料。學生自行輸入電郵；手機或瀏覽器登入的 Google 帳戶不決定紀錄歸屬。學生電郵未經 Google 身分驗證。前端密碼只留於記憶體；教師示範不寫入學生紀錄。
 
@@ -46,4 +46,4 @@ npm test
 
 Python 檢查實際 Excel 的八頁、裝置與棒形圖圖片、樣式、十項人工評分欄、空白與零分及評分公式；公式以受控 evaluator 驗證，並未在桌面 Excel 執行。舊 SQLite API 另作相容測試。
 
-**雲端測試模擬 Google 服務；尚未完成正式 Google 部署及實體手機驗證。** 接入正式 `/exec` 後依設定文件另行驗證。
+**雲端測試模擬 Google 服務。** 使用者提供的正式 `/exec` 網址已接入；開發環境的網路代理拒絕 Google 連線（403），尚未驗證正式儲存、教師雲端匯出或實體手機。需依設定文件在正式網站檢查儲存確認，再以獨立教師密碼核對全部雲端紀錄及 Excel。

@@ -10,7 +10,7 @@
    - `SETUP_TEACHER_PASSWORD`：你自行設定、至少 12 字元的獨立教師密碼。不要使用 Google 帳戶密碼；不要把密碼放進程式碼、GitHub、前端或聊天。
 3. 選取 `setupCollector`，按「執行」，以教師帳戶授權。此函式不用 `SpreadsheetApp.getUi()`；建立／保留 VL3 工作表，保存密碼雜湊並刪除暫存的 `SETUP_TEACHER_PASSWORD`。重跑不清空紀錄。綁定專案可省略 `SPREADSHEET_ID`，但建議明確設定。
 4. 「部署 → 新增部署 → 網頁應用程式」：執行身分選「我」，誰可以存取選「所有人」。複製以 `/exec` 結尾的網址。若學校管理政策不容許「所有人」，需由管理員處理存取設定，否則手機或其他帳戶不能使用這個收集端。
-5. 將網址填入儲存庫的 `cloud-config.js` 的 `endpoint`，保持 `transport: "bridge"`，再發布前端。也可只把 `/exec` 網址交給本聊天接入；**不需要提供密碼或試算表 ID**。目前儲存庫的網址留空，尚未啟用正式雲端收集。
+5. 將網址填入儲存庫的 `cloud-config.js` 的 `endpoint`，保持 `transport: "bridge"`，再發布前端。也可只把 `/exec` 網址交給本聊天接入；**不需要提供密碼或試算表 ID**。目前已填入使用者提供的 VL3 部署網址；正式儲存仍須按下方步驟核對。
 6. 更新 `Code.gs` 後，使用「部署 → 管理部署 → 編輯 → 新版本 → 部署」更新原部署，保留同一網址。只儲存編輯器不會更新已部署版本。
 7. 教師在 VL3 輸入 `tzechingchan0605@gmail.com`，再輸入上述獨立密碼。密碼只保留於頁面記憶體；登出清除。學生自行填寫電郵，瀏覽器登入哪個 Google 帳戶不影響收集。這不是 Google 身分驗證；學生填寫的電郵並未經 Google 核實。
 
@@ -20,7 +20,7 @@
 2. In Project Settings → Script Properties, set `SPREADSHEET_ID` to the Sheet ID or URL and `SETUP_TEACHER_PASSWORD` to your own separate password of at least 12 characters. Do not put passwords in source code, GitHub, the frontend, or chat.
 3. Run `setupCollector` as the teacher and authorize it. Setup preserves existing rows, stores a password hash and deletes the temporary password property. No spreadsheet UI API is used. A bound project can infer its Sheet, but an explicit ID is recommended.
 4. Deploy → New deployment → Web app. Execute as **Me**, access **Anyone**. Copy the `/exec` URL. Organizational restrictions on anonymous web apps must be resolved before other accounts and phones can connect.
-5. Put that URL into `cloud-config.js` → `endpoint`, keep `transport: "bridge"`, and publish the frontend. You may send only the `/exec` URL in this chat for integration; no password or Sheet ID is needed. The checked-in endpoint is currently empty, so production cloud collection is not yet active.
+5. Put that URL into `cloud-config.js` → `endpoint`, keep `transport: "bridge"`, and publish the frontend. You may send only the `/exec` URL in this chat for integration; no password or Sheet ID is needed. The user-provided VL3 deployment URL is now configured. Verify live saving using the checks below.
 6. After collector changes, edit the existing deployment and select **New version**. Saving the editor alone does not update a deployed web app. Keeping the deployment retains its URL.
 7. Teachers use the fixed teacher email plus the separate password. The frontend holds the password only in memory and clears it on logout. Student emails are self-entered, not Google-verified; the browser's Google login does not determine record ownership.
 
@@ -36,7 +36,7 @@
 
 ## 正式部署驗證 / Live deployment verification
 
-`npm test` 使用真實前端與收集程式，模擬 Google 服務及嵌入 RPC，以獨立瀏覽器和手機尺寸驗證。這**不是正式 Google 部署或實體手機驗證**。完成部署後另行確認：
+`npm test` 使用真實前端與收集程式，模擬 Google 服務及嵌入 RPC，以獨立瀏覽器和手機尺寸驗證。這**不是正式 Google 部署或實體手機驗證**。目前已接入使用者提供的 `/exec`；本次開發環境的網路代理拒絕 Google 連線（403），尚未取得正式儲存確認。網址設定本身不代表儲存成功，亦無法據此判定部署權限有誤。請在正式網站另行確認：
 
 1. 用兩個獨立瀏覽器（其中一個手機）作答，待兩者均收到「已確認儲存」。同一學生電郵再開新探究，確認保留兩筆。
 2. 離線作答後重整、恢復連線並重試，確認不重複新增；核對圖片、原始及最後答案、反思、事件與用時。
