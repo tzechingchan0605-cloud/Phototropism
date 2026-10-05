@@ -462,3 +462,58 @@ button {
 #setupPhoto {
   font-size: 13px;
 }
+
+.context-comparison {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 64px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  margin: 20px 0 10px;
+}
+.context-frame {
+  margin: 0;
+  min-width: 0;
+  text-align: center;
+}
+.window-seedling {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.context-frame figcaption {
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+.context-transition {
+  color: var(--teal);
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+.context-transition span {
+  display: block;
+  margin-bottom: 8px;
+}
+.context-transition svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.context-timing-note {
+  font-size: 12px;
+  text-align: center;
+}
+@media (max-width: 480px) {
+  .context-comparison {
+    grid-template-columns: minmax(0, 1fr) 48px minmax(0, 1fr);
+    gap: 4px;
+  }
+  .context-transition {
+    font-size: 12px;
+  }
+  .context-frame figcaption {
+    font-size: 12px;
+  }
+}

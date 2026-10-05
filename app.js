@@ -209,6 +209,36 @@ function seedling(id, progress = 0, context = false) {
   }
   return `<svg class="seedling" viewBox="0 0 270 260" role="img" aria-label="${context ? "單側光照下幼芽向右彎曲" : `${id} 組：${GROUPS[id].label}，${progress === 1 ? (bent ? "向右方光源彎曲" : "保持直立") : "開始時直立"}`}" xmlns="http://www.w3.org/2000/svg"><path d="M235 46L157 27L157 145L235 100Z" fill="#f9d779" opacity=".2"/><rect x="232" y="45" width="17" height="55" rx="5" fill="#f3b946"/><path d="M236 100V222M219 223H253" stroke="#658087" stroke-width="5"/><text x="225" y="30" text-anchor="middle" fill="#9c731d" font-size="13">光源</text><path d="M221 69H203M208 64L203 69L208 74" stroke="#c28c1a" stroke-width="2" fill="none"/><path d="${stem}" fill="none" stroke="#59a16a" stroke-width="13" stroke-linecap="round"/><path d="${stem}" fill="none" stroke="#a1d38a" stroke-width="4" stroke-linecap="round"/>${cover}<rect x="83" y="205" width="95" height="16" rx="5" fill="#af7851"/><path d="M91 221L103 250H158L170 221" fill="#d6a878"/><text x="130" y="258" text-anchor="middle" fill="#658087" font-size="11">${context ? "生長後的典型反應" : "幼芽初始高度相同"}</text></svg>`;
 }
+// The opening scene uses window light and keeps the lower stem upright.
+function windowSeedling(after = false) {
+  const stem = after
+    ? "M100 207 L100 140 C100 110 123 89 156 78"
+    : "M100 207 L100 66";
+  const description = after
+    ? "6 小時後：幼芽下部保持直立，上部向右方的窗光彎曲"
+    : "開始時：幼芽直立，光從右方窗戶照入";
+  return `<svg class="window-seedling" viewBox="0 0 260 270" role="img" aria-label="${description}" xmlns="http://www.w3.org/2000/svg">
+    <rect x="5" y="5" width="250" height="255" rx="16" fill="#f4f8f1"/>
+    <path d="M210 65 L58 38 L58 181 L210 172 Z" fill="#f9d779" opacity=".24"/>
+    <rect x="205" y="45" width="43" height="132" rx="3" fill="#cfeef3" stroke="#7dadae" stroke-width="5"/>
+    <circle cx="231" cy="67" r="10" fill="#f6c45d"/>
+    <path d="M226 46V176M207 110H247" stroke="#7dadae" stroke-width="4"/>
+    <path d="M199 181H253" stroke="#87ada7" stroke-width="7" stroke-linecap="round"/>
+    <path d="M191 98H171M177 92L171 98L177 104" stroke="#c28c1a" stroke-width="2" fill="none"/>
+    <path data-stem="${after ? "after" : "before"}" d="${stem}" fill="none" stroke="#59a16a" stroke-width="13" stroke-linecap="round"/>
+    <path d="${stem}" fill="none" stroke="#a1d38a" stroke-width="4" stroke-linecap="round"/>
+    <path d="M28 249H248" stroke="#d5e1d5" stroke-width="2"/>
+    <rect x="60" y="205" width="80" height="14" rx="5" fill="#af7851"/>
+    <path d="M66 219L77 248H123L134 219" fill="#d6a878"/>
+  </svg>`;
+}
+function contextComparison() {
+  return `<div class="context-comparison">
+    <figure class="context-frame">${windowSeedling(false)}<figcaption>開始時：幼芽直立</figcaption></figure>
+    <div class="context-transition"><span>6 小時後</span><svg viewBox="0 0 64 26" aria-hidden="true"><path d="M3 13H57M45 3L57 13L45 23" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <figure class="context-frame">${windowSeedling(true)}<figcaption>生長後：上部向窗光彎曲</figcaption></figure>
+  </div><p class="context-timing-note muted">生長變化示意；6 小時為情境設定。</p>`;
+}
 function renderBench(p = 0) {
   $("#bench").innerHTML = Object.keys(GROUPS)
     .map(
@@ -753,7 +783,7 @@ $("#profileForm").onsubmit = (e) => {
     $("#teacherDialog").showModal();
   }
 };
-$("#contextPlant").innerHTML = seedling("A", 1, true);
+$("#contextPlant").innerHTML = contextComparison();
 $("#mechanismDiagram").innerHTML =
   `<svg viewBox="0 0 340 330" role="img" aria-label="幼芽頂端感光，背光側細胞伸長較多，頂端以下區域向右方光源彎曲"><rect x="15" y="12" width="310" height="306" rx="18" fill="#edf8f2"/><path d="M141 272C108 188 153 110 218 83" stroke="#63aa6e" stroke-width="30" fill="none"/><path d="M132 263C102 184 151 105 214 77" stroke="#d7ed91" stroke-width="5" fill="none"/><circle cx="219" cy="80" r="12" fill="#f3bc52"/><text x="163" y="49" font-size="15" fill="#15333b">頂端：感受光照</text><text x="23" y="150" font-size="13" fill="#15333b">背光側</text><text x="23" y="172" font-size="13" fill="#15333b">生長素較多</text><text x="23" y="194" font-size="13" fill="#15333b">細胞伸長較多</text><path d="M94 167L119 180" stroke="#658087" stroke-width="2"/><text x="196" y="226" font-size="13" fill="#15333b">頂端以下</text><text x="196" y="248" font-size="13" fill="#15333b">不均等伸長</text><path d="M188 231L149 220" stroke="#658087" stroke-width="2"/><text x="256" y="99" font-size="14" fill="#946c1a">☀ 光源</text><text x="87" y="302" font-size="13" fill="#658087">幼芽機制示意 · 並非量度數據</text></svg>`;
 document.addEventListener("visibilitychange", () => {
