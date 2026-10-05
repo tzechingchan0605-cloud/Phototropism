@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="zh-Hant-HK">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#087b78" />
+    <title>幼芽如何感受光？｜向光性探究實驗室</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="excel.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到探究內容</a>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#main"
+          ><span class="brand-mark">✦</span>探究實驗室</a
+        ><span class="module-label">S4 生物 · 模組 3</span>
+        <div class="student-chip">
+          <span id="studentName">同學</span
+          ><button id="teacherButton" hidden>教師儀表板</button
+          ><button id="newSession">開始新探究</button>
+        </div>
+      </header>
+      <main id="main">
+        <section class="hero">
+          <div>
+            <p class="eyebrow">IBL 虛擬實驗室 · 植物的感應</p>
+            <h1>
+              幼芽如何<span style="color: var(--teal)">感受光？</span><br /><em
+                >從遮光實驗探究向光性</em
+              >
+            </h1>
+            <p class="hero-copy">
+              改變遮光部位，觀察幼芽的反應，用證據檢驗你的想法。
+            </p>
+          </div>
+          <aside class="mission-card">
+            <strong>本節任務</strong>
+            <p>找出幼芽感受單側光照的部位，區分感光與彎曲生長。</p>
+          </aside>
+        </section>
+        <nav class="steps" aria-label="探究進度">
+          <button class="step active" data-phase="1">01 了解情境</button
+          ><button class="step" data-phase="2" disabled>02 設計探究</button
+          ><button class="step" data-phase="3" disabled>03 進行探究</button
+          ><button class="step" data-phase="4" disabled>04 分析與結論</button>
+        </nav>
+        <p id="syncStatus" class="muted" role="status" aria-live="polite">
+          作答將自動儲存到共用資料庫。
+        </p>
+        <p id="status" role="status" aria-live="polite"></p>
+        <section id="phase-1" class="phase active">
+          <div class="phase-heading"><h2>01 · 了解情境</h2></div>
+          <div class="vl3-grid">
+            <article class="vl3-card">
+              <p class="card-kicker">生活中的線索</p>
+              <h3>窗邊的幼芽，為甚麼會彎向光？</h3>
+              <div id="contextPlant"></div>
+              <p>
+                幼芽在單側光照下生長一段時間後，會朝光源方向彎曲。若只遮蔽某個部位，反應會改變嗎？
+              </p>
+              <p class="muted">
+                本模型以禾本科幼芽的胚芽鞘作示例，呈現經典遮光實驗的典型反應。
+              </p>
+            </article>
+            <article class="vl3-card">
+              <h3>你的初步觀察</h3>
+              <label for="observation"
+                >描述幼芽與光源的相對位置，以及你觀察到的變化。</label
+              ><textarea
+                id="observation"
+                maxlength="1000"
+                placeholder="我觀察到……"
+              ></textarea>
+              <p class="notice">
+                先記錄觀察，再提出可測試的假說。此處不需要猜中機制。
+              </p>
+            </article>
+          </div>
+          <div class="vl3-actions">
+            <button id="toDesign" class="primary">開始設計探究 →</button>
+          </div>
+        </section>
+        <section id="phase-2" class="phase">
+          <div class="phase-heading"><h2>02 · 設計探究</h2></div>
+          <article class="vl3-card">
+            <h3>完成你的假說</h3>
+            <p>
+              若幼芽的
+              <select id="hypothesisPart" aria-label="假說部位">
+                <option value="">請選擇</option>
+                <option value="tip">頂端</option>
+                <option value="below">頂端以下位置</option>
+              </select>
+              被遮光，而其他部位仍然受光，幼芽將會
+              <select id="hypothesisOutcome" aria-label="預期反應">
+                <option value="">請選擇</option>
+                <option value="bend">仍向光彎曲</option>
+                <option value="straight">沒有明顯向光彎曲</option></select
+              >。
+            </p>
+            <label for="reason">我的理由（必答）</label
+            ><textarea
+              id="reason"
+              maxlength="1500"
+              placeholder="說明你為甚麼作出這個預測……"
+            ></textarea>
+            <p class="muted">
+              預測沒有預設答案。第一次開始實驗前，系統會固定保存完整假說及理由；之後修訂也不會覆蓋原始版本。
+            </p>
+          </article>
+          <div class="vl3-grid">
+            <article class="vl3-card">
+              <h3>辨認實驗變量</h3>
+              <div id="variableChoices"></div>
+            </article>
+            <article class="vl3-card">
+              <h3>實驗前提與公平比較</h3>
+              <p>選出你認為本實驗應採用的前提：</p>
+              <div id="assumptions"></div>
+              <label for="controlPlan"
+                >你會如何設置對照，分辨遮光與罩子本身的影響？</label
+              ><textarea
+                id="controlPlan"
+                maxlength="1500"
+                placeholder="描述需要比較的組別及固定條件……"
+              ></textarea>
+            </article>
+          </div>
+          <article class="vl3-card">
+            <h3>繪畫並標示你的實驗裝置</h3>
+            <p>
+              材料：同類及生長階段相近的幼芽、單側光源、不透光罩、透明罩、不透光套筒。可設計不遮光、頂端不透光罩、頂端透明罩及頂端以下遮光四组。
+            </p>
+            <canvas
+              id="setupCanvas"
+              width="900"
+              height="300"
+              aria-label="實驗裝置繪圖區"
+            ></canvas>
+            <div class="vl3-actions">
+              <button id="clearDrawing" class="secondary">清除繪圖</button
+              ><button id="saveDrawing" class="secondary">儲存繪圖</button
+              ><label
+                >上載裝置圖
+                <input
+                  id="setupPhoto"
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+              /></label>
+            </div>
+            <label for="setupDescription"
+              >文字設計（可代替繪圖）：描述四組遮光方法、光源方向及固定條件。</label
+            ><textarea id="setupDescription" maxlength="2500"></textarea
+            ><button id="saveTextSetup" class="secondary">儲存文字設計</button>
+            <p id="setupStatus" role="status"></p>
+          </article>
+          <div class="vl3-actions">
+            <button class="secondary" data-back="1">← 返回情境</button
+            ><button id="toExperiment" class="primary">
+              確認設計並開始實驗 →
+            </button>
+          </div>
+        </section>
+        <section id="phase-3" class="phase">
+          <div class="phase-heading"><h2>03 · 進行探究與收集數據</h2></div>
+          <article class="vl3-card">
+            <h3>相同單側光照，四種處理</h3>
+            <p>
+              光源統一在右方；幼芽種類、初始高度、生長階段、光強度、照射時間、溫度及供水條件相同。頂端以下的套筒不遮蔽頂端，亦不限制彎曲生長。
+            </p>
+            <p class="notice">
+              動畫將生長過程加速，只表示典型反應；並非真實時間或量度數據。模型不模擬個體差異。
+            </p>
+            <div class="vl3-actions">
+              <button id="runExperiment" class="primary">▶ 進行四組實驗</button
+              ><span id="runStatus" aria-live="polite">等待開始</span>
+            </div>
+            <div id="bench" class="bench"></div>
+            <div class="vl3-actions">
+              <button id="recordData" class="primary" disabled>
+                確認並記錄觀察
+              </button>
+            </div>
+          </article>
+          <article class="vl3-card">
+            <h3>我的觀察紀錄</h3>
+            <div class="table-wrap">
+              <table class="vl3-table">
+                <thead>
+                  <tr>
+                    <th>組別</th>
+                    <th>處理</th>
+                    <th>學生記錄的反應</th>
+                  </tr>
+                </thead>
+                <tbody id="observationTable"></tbody>
+              </table>
+            </div>
+            <p class="muted">
+              系統保存你記錄的觀察。若再次實驗並修訂，亦會保留第一次觀察和操作紀錄。
+            </p>
+          </article>
+          <div class="vl3-actions">
+            <button class="secondary" data-back="2">← 返回設計</button
+            ><button id="toAnalysis" class="primary">分析我的數據 →</button>
+          </div>
+        </section>
+        <section id="phase-4" class="phase">
+          <div class="phase-heading"><h2>04 · 分析與結論</h2></div>
+          <article class="vl3-card" id="conclusionForm">
+            <h3>根據你的數據作結論</h3>
+            <div id="evidenceTable"></div>
+            <label
+              >1. 幼芽感受單側光照的主要部位是
+              <select id="qTip">
+                <option value="">請選擇</option>
+                <option value="tip">頂端</option>
+                <option value="below">頂端以下位置</option></select
+              >。</label
+            ><label
+              >2. 透明罩組與不透光罩組的比較支持哪個說法？<select id="qCap">
+                <option value="">請選擇</option>
+                <option value="light">頂端是否受光會影響向光彎曲。</option>
+                <option value="cap">只要頂端套有罩子，就不會向光彎曲。</option>
+              </select></label
+            ><label
+              >3. 當頂端以下位置遮光，頂端仍受光，幼芽
+              <select id="qBelow">
+                <option value="">請選擇</option>
+                <option value="bend">仍向光彎曲</option>
+                <option value="straight">沒有明顯向光彎曲</option></select
+              >。</label
+            ><label
+              >4. 本實驗的證據限制是甚麼？<select id="qLimit">
+                <option value="">請選擇</option>
+                <option value="indirect">
+                  遮光與彎曲比較提供部位作用的證據，但沒有直接量度生長素。
+                </option>
+                <option value="proof">
+                  看見彎曲已直接證明兩側生長素的濃度。
+                </option>
+              </select></label
+            ><label for="evidence"
+              >引用至少兩組的比較，說明數據如何支持你的結論。</label
+            ><textarea id="evidence" maxlength="2500"></textarea
+            ><button id="submitInvestigation" class="primary">
+              提交探究，查看學習重點
+            </button>
+          </article>
+          <div id="learningReveal" hidden>
+            <article class="vl3-card">
+              <p class="card-kicker">從證據走向解釋</p>
+              <h3>感光與生長，發生在不同位置</h3>
+              <div class="vl3-grid">
+                <div>
+                  <h4>頂端感受單側光照</h4>
+                  <p>
+                    不遮光及透明罩組向光彎曲；頂端不透光罩組沒有明顯向光彎曲。頂端以下遮光而頂端外露仍可彎曲。這些比較支持頂端在感光中起重要作用。
+                  </p>
+                  <h4>頂端以下區域產生彎曲</h4>
+                  <p>
+                    生長素在幼芽頂端產生並向下運輸。在單側光照下，背光側的生長素較多，促進幼芽背光側細胞伸長；兩側生長不均使幼芽朝光源彎曲。
+                  </p>
+                </div>
+                <div id="mechanismDiagram"></div>
+              </div>
+              <p class="notice">
+                生長素機制來自其他研究。本虛擬遮光實驗沒有測量生長素，不能單靠彎曲直接證明其濃度分布。此處描述幼芽；根對生長素的反應不同。
+              </p>
+            </article>
+            <article class="vl3-card">
+              <h3>回到你最初的想法</h3>
+              <div id="originalHypothesis" class="reflection-original"></div>
+              <label for="reflection"
+                >原始假說是否獲支持？引用你的組別觀察，並運用感光部位、生長部位和生長素修訂或完善理由。</label
+              ><textarea id="reflection" maxlength="3500"></textarea
+              ><button id="saveReflection" class="primary">
+                儲存並提交學習反思
+              </button>
+              <p id="reflectionStatus" aria-live="polite"></p>
+            </article>
+          </div>
+          <div class="vl3-actions">
+            <button class="secondary" data-back="3">← 返回觀察</button
+            ><button id="downloadPDF" class="primary" disabled>
+              列印／儲存學習紀錄 PDF
+            </button>
+          </div>
+        </section>
+      </main>
+      <footer>
+        <p class="muted">
+          VL3 ·
+          向光性｜作答會自動傳送至本網站共用資料庫，供教師查看；本瀏覽器保留備份及待傳紀錄。
+        </p>
+      </footer>
+    </div>
+    <dialog id="profileDialog" class="vl3-dialog">
+      <form id="profileForm">
+        <h2>開始你的探究</h2>
+        <p>
+          填寫學習者資料以建立紀錄。姓名、班別、電郵、作答及操作紀錄將儲存在本網站的共用資料庫，供教師查看。
+        </p>
+        <label
+          >姓名<input
+            id="profileName"
+            required
+            maxlength="40"
+            autocomplete="name" /></label
+        ><label
+          >班別及學號<input id="profileClass" required maxlength="30" /></label
+        ><label
+          >電郵地址<input
+            id="profileEmail"
+            type="email"
+            required
+            autocomplete="email" /></label
+        ><button type="submit" class="primary">進入實驗室 →</button>
+      </form>
+    </dialog>
+    <dialog id="teacherDialog" class="vl3-dialog">
+      <div class="vl3-actions">
+        <h2>學生學習紀錄</h2>
+        <button id="closeTeacher" class="secondary">關閉</button>
+      </div>
+      <p class="teacher-tag">
+        教師電郵：tzechingchan0605@gmail.com。以教師密碼登入後，查看所有裝置已同步至本網站的學生紀錄。
+      </p>
+      <p id="teacherStatus" role="status"></p>
+      <form id="teacherLogin">
+        <label
+          >教師密碼<input
+            id="teacherPassword"
+            type="password"
+            required
+            autocomplete="current-password" /></label
+        ><button type="submit" class="primary">登入共用紀錄</button>
+      </form>
+      <div class="vl3-actions">
+        <button id="refreshTeacher" class="secondary">重新讀取紀錄</button
+        ><button id="teacherLogout" class="secondary">登出教師帳戶</button
+        ><button id="exportExcel" class="primary" disabled>
+          下載 Excel 報告</button
+        ><button id="teacherDemo" class="secondary">進入示範探究</button
+        ><label
+          >匯入學生紀錄
+          <input
+            id="importRecords"
+            disabled
+            type="file"
+            accept="application/json,.json"
+            multiple
+        /></label>
+      </div>
+      <div class="table-wrap">
+        <table class="vl3-table">
+          <thead>
+            <tr>
+              <th>姓名</th>
+              <th>班別</th>
+              <th>狀態</th>
+              <th>紀錄</th>
+            </tr>
+          </thead>
+          <tbody id="teacherRows"></tbody>
+        </table>
+      </div>
+      <p id="importStatus" role="status"></p>
+    </dialog>
+    <section id="printReport"></section>
+  </body>
+</html>

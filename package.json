@@ -1,0 +1,13 @@
+{
+  "name": "vl3-phototropism",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Traditional Chinese inquiry-based phototropism virtual lab",
+  "scripts": {
+    "start": "python3 server.py",
+    "test": "python3 tests/run.py"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}
