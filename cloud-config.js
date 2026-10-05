@@ -3,6 +3,6 @@
 // User-provided VL3 deployment. Live saving requires a genuine collector acknowledgement.
 window.VL3_CLOUD_CONFIG = {
   endpoint:
-    "https://script.google.com/macros/s/AKfycbzF4V4QzOGidlgyhnAQRWBTRABfl9CTMTb7LoD5GLyRnx5nEDsl2EE1JEnXWV1Iu_d9vw/exec",
+    "https://script.google.com/macros/s/AKfycbxJZfgyCCc2jiGI3iKrpp66uZRlNo8MSimmigYJpzeQPPxR018kJdLd4hXbkDfu2S0A8g/exec",
   transport: "bridge",
 };
