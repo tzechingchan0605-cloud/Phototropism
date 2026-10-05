@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="theme-color" content="#087b78" />
-    <title>幼芽如何感受光？｜向光性探究實驗室</title>
+    <title>胚芽鞘如何感受光？｜向光性探究實驗室</title>
     <link rel="stylesheet" href="styles.css" />
     <script src="excel.js" defer></script>
     <script src="app.js" defer></script>
@@ -27,17 +27,16 @@
           <div>
             <p class="eyebrow">IBL 虛擬實驗室 · 植物的感應</p>
             <h1>
-              幼芽如何<span style="color: var(--teal)">感受光？</span><br /><em
-                >從遮光實驗探究向光性</em
-              >
+              胚芽鞘如何<span style="color: var(--teal)">感受光？</span
+              ><br /><em>從遮光實驗探究向光性</em>
             </h1>
             <p class="hero-copy">
-              改變遮光部位，觀察幼芽的反應，用證據檢驗你的想法。
+              改變遮光部位，觀察胚芽鞘的反應，用證據檢驗你的想法。
             </p>
           </div>
           <aside class="mission-card">
             <strong>本節任務</strong>
-            <p>找出幼芽感受單側光照的部位，區分感光與彎曲生長。</p>
+            <p>找出胚芽鞘感受單側光照的部位，區分感光與彎曲生長。</p>
           </aside>
         </section>
         <nav class="steps" aria-label="探究進度">
@@ -55,12 +54,14 @@
           <div class="vl3-grid">
             <article class="vl3-card">
               <p class="card-kicker">生活中的線索</p>
-              <h3>窗邊的幼芽，為甚麼會彎向光？</h3>
+              <h3>窗邊的胚芽鞘，為甚麼會彎向光？</h3>
+              <p class="muted">
+                胚芽鞘是禾本科植物幼苗中，包裹並保護幼嫩芽體的鞘狀構造。本實驗以胚芽鞘為觀察對象。
+              </p>
               <div id="contextPlant"></div>
               <p>
-                幼芽在單側光照下生長一段時間後，會朝光源方向彎曲。若只遮蔽某個部位，反應會改變嗎？
+                胚芽鞘在單側光照下生長一段時間後，會朝光源方向彎曲。若只遮蔽某個部位，反應會改變嗎？
               </p>
-              <p class="muted">本模型以禾本科幼芽的胚芽鞘作示例。</p>
             </article>
             <article class="vl3-card">
               <h3>你的初步觀察</h3>
@@ -85,13 +86,13 @@
           <article class="vl3-card">
             <h3>完成你的假說</h3>
             <p>
-              若幼芽的
+              若胚芽鞘的
               <select id="hypothesisPart" aria-label="假說部位">
                 <option value="">請選擇</option>
                 <option value="tip">頂端</option>
                 <option value="below">頂端以下位置</option>
               </select>
-              被遮光，而其他部位仍然受光，幼芽將會
+              被遮光，而其他部位仍然受光，胚芽鞘將會
               <select id="hypothesisOutcome" aria-label="預期反應">
                 <option value="">請選擇</option>
                 <option value="bend">仍向光彎曲</option>
@@ -129,7 +130,7 @@
           <article class="vl3-card">
             <h3>繪畫並標示你的實驗裝置</h3>
             <p>
-              材料：同類及生長階段相近的幼芽、單側光源、不透光罩、透明罩、不透光套筒。可設計不遮光、頂端不透光罩、頂端透明罩及頂端以下遮光四组。
+              材料：同類及生長階段相近的胚芽鞘、單側光源、不透光罩、透明罩、不透光套筒。可設計不遮光、頂端不透光罩、頂端透明罩及頂端以下遮光四组。
             </p>
             <canvas
               id="setupCanvas"
@@ -166,7 +167,7 @@
           <article class="vl3-card">
             <h3>相同單側光照，四種處理</h3>
             <p>
-              光源統一在右方；幼芽種類、初始高度、生長階段、光強度、照射時間、溫度及供水條件相同。頂端以下的套筒不遮蔽頂端，亦不限制彎曲生長。
+              光源統一在右方；胚芽鞘種類、初始高度、生長階段、光強度、照射時間、溫度及供水條件相同。頂端以下的套筒不遮蔽頂端，亦不限制彎曲生長。
             </p>
             <p class="notice">
               動畫將生長過程加速，只表示典型反應；並非真實時間或量度數據。模型不模擬個體差異。
@@ -211,7 +212,7 @@
             <h3>根據你的數據作結論</h3>
             <div id="evidenceTable"></div>
             <label
-              >1. 幼芽感受單側光照的主要部位是
+              >1. 胚芽鞘感受單側光照的主要部位是
               <select id="qTip">
                 <option value="">請選擇</option>
                 <option value="tip">頂端</option>
@@ -224,7 +225,7 @@
                 <option value="cap">只要頂端套有罩子，就不會向光彎曲。</option>
               </select></label
             ><label
-              >3. 當頂端以下位置遮光，頂端仍受光，幼芽
+              >3. 當頂端以下位置遮光，頂端仍受光，胚芽鞘
               <select id="qBelow">
                 <option value="">請選擇</option>
                 <option value="bend">仍向光彎曲</option>
@@ -259,13 +260,13 @@
                   </p>
                   <h4>頂端以下區域產生彎曲</h4>
                   <p>
-                    生長素在幼芽頂端產生並向下運輸。在單側光照下，背光側的生長素較多，促進幼芽背光側細胞伸長；兩側生長不均使幼芽朝光源彎曲。
+                    生長素在胚芽鞘頂端產生並向下運輸。在單側光照下，背光側的生長素較多，促進胚芽鞘背光側細胞伸長；兩側生長不均使胚芽鞘朝光源彎曲。
                   </p>
                 </div>
                 <div id="mechanismDiagram"></div>
               </div>
               <p class="notice">
-                生長素機制來自其他研究。本虛擬遮光實驗沒有測量生長素，不能單靠彎曲直接證明其濃度分布。此處描述幼芽；根對生長素的反應不同。
+                生長素機制來自其他研究。本虛擬遮光實驗沒有測量生長素，不能單靠彎曲直接證明其濃度分布。此處描述胚芽鞘；根對生長素的反應不同。
               </p>
             </article>
             <article class="vl3-card">

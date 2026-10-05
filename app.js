@@ -23,17 +23,17 @@ const GROUPS = {
 const OUTCOMES = { bend: "仍向光彎曲", straight: "沒有明顯向光彎曲" };
 const VARIABLES = [
   "遮光處理／部位",
-  "幼芽的彎曲反應",
+  "胚芽鞘的彎曲反應",
   "光源方向及光強度",
-  "幼芽種類、初始高度及生長階段",
+  "胚芽鞘種類、初始高度及生長階段",
   "照射時間",
   "溫度及供水條件",
 ];
 const EXPECTED = { iv: [0], dv: [1], cv: [2, 3, 4, 5] };
 const ASSUMPTIONS = [
-  ["similar", "幼芽種類、初始高度及生長階段相近。", true],
+  ["similar", "胚芽鞘種類、初始高度及生長階段相近。", true],
   ["light", "各组使用相同方向、強度及照射時間的單側光照。", true],
-  ["free", "罩子及套筒不限制幼芽生長，頂端以下遮光組的頂端仍外露。", true],
+  ["free", "罩子及套筒不限制胚芽鞘生長，頂端以下遮光組的頂端仍外露。", true],
   ["different", "各組可使用不同溫度及供水條件。", false],
 ];
 const FIELDS = [
@@ -191,7 +191,7 @@ function phase(n) {
   log("phase_opened", { phase: n });
 }
 function hypothesis(form) {
-  return `若幼芽的${form.hypothesisPart === "tip" ? "頂端" : form.hypothesisPart === "below" ? "頂端以下位置" : "【未選擇部位】"}被遮光，而其他部位仍然受光，幼芽將會${OUTCOMES[form.hypothesisOutcome] || "【未選擇反應】"}。`;
+  return `若胚芽鞘的${form.hypothesisPart === "tip" ? "頂端" : form.hypothesisPart === "below" ? "頂端以下位置" : "【未選擇部位】"}被遮光，而其他部位仍然受光，胚芽鞘將會${OUTCOMES[form.hypothesisOutcome] || "【未選擇反應】"}。`;
 }
 function seedling(id, progress = 0, context = false) {
   const bent = context || GROUPS[id]?.bend;
@@ -207,16 +207,14 @@ function seedling(id, progress = 0, context = false) {
       cover =
         '<path d="M117 166L117 124Q130 118 143 124L143 166Z" fill="#344a50" stroke="#15333b" stroke-width="2"/>';
   }
-  return `<svg class="seedling" viewBox="0 0 270 260" role="img" aria-label="${context ? "單側光照下幼芽向右彎曲" : `${id} 組：${GROUPS[id].label}，${progress === 1 ? (bent ? "向右方光源彎曲" : "保持直立") : "開始時直立"}`}" xmlns="http://www.w3.org/2000/svg"><path d="M235 46L157 27L157 145L235 100Z" fill="#f9d779" opacity=".2"/><rect x="232" y="45" width="17" height="55" rx="5" fill="#f3b946"/><path d="M236 100V222M219 223H253" stroke="#658087" stroke-width="5"/><text x="225" y="30" text-anchor="middle" fill="#9c731d" font-size="13">光源</text><path d="M221 69H203M208 64L203 69L208 74" stroke="#c28c1a" stroke-width="2" fill="none"/><path d="${stem}" fill="none" stroke="#59a16a" stroke-width="13" stroke-linecap="round"/><path d="${stem}" fill="none" stroke="#a1d38a" stroke-width="4" stroke-linecap="round"/>${cover}<rect x="83" y="205" width="95" height="16" rx="5" fill="#af7851"/><path d="M91 221L103 250H158L170 221" fill="#d6a878"/><text x="130" y="258" text-anchor="middle" fill="#658087" font-size="11">${context ? "生長後的典型反應" : "幼芽初始高度相同"}</text></svg>`;
+  return `<svg class="seedling" viewBox="0 0 270 260" role="img" aria-label="${context ? "單側光照下胚芽鞘向右彎曲" : `${id} 組：${GROUPS[id].label}，${progress === 1 ? (bent ? "向右方光源彎曲" : "保持直立") : "開始時直立"}`}" xmlns="http://www.w3.org/2000/svg"><path d="M235 46L157 27L157 145L235 100Z" fill="#f9d779" opacity=".2"/><rect x="232" y="45" width="17" height="55" rx="5" fill="#f3b946"/><path d="M236 100V222M219 223H253" stroke="#658087" stroke-width="5"/><text x="225" y="30" text-anchor="middle" fill="#9c731d" font-size="13">光源</text><path d="M221 69H203M208 64L203 69L208 74" stroke="#c28c1a" stroke-width="2" fill="none"/><path d="${stem}" fill="none" stroke="#59a16a" stroke-width="13" stroke-linecap="round"/><path d="${stem}" fill="none" stroke="#a1d38a" stroke-width="4" stroke-linecap="round"/>${cover}<rect x="83" y="205" width="95" height="16" rx="5" fill="#af7851"/><path d="M91 221L103 250H158L170 221" fill="#d6a878"/><text x="130" y="258" text-anchor="middle" fill="#658087" font-size="11">${context ? "生長後的典型反應" : "胚芽鞘初始高度相同"}</text></svg>`;
 }
 // The opening scene uses window light and keeps the lower stem upright.
 function windowSeedling(after = false) {
   const stem = after
     ? "M100 207 L100 140 C100 110 123 89 156 78"
     : "M100 207 L100 66";
-  const description = after
-    ? "窗邊幼芽：24小時後"
-    : "窗邊幼芽：開始時";
+  const description = after ? "窗邊胚芽鞘：24小時後" : "窗邊胚芽鞘：開始時";
   return `<svg class="window-seedling" viewBox="0 0 260 270" role="img" aria-label="${description}" xmlns="http://www.w3.org/2000/svg">
     <rect x="5" y="5" width="250" height="255" rx="16" fill="#f4f8f1"/>
     <path d="M210 65 L58 38 L58 181 L210 172 Z" fill="#f9d779" opacity=".24"/>
@@ -478,7 +476,7 @@ $("#toExperiment").onclick = () => {
   state.unlocked = Math.max(state.unlocked, 3);
   log("design_confirmed", { initialDesign: state.initialDesign });
   phase(3);
-  message("原始假說及理由已固定保存。請觀察四組幼芽。");
+  message("原始假說及理由已固定保存。請觀察四組胚芽鞘。");
 };
 $("#runExperiment").onclick = () => {
   if (running || state.submittedAt) return;
@@ -580,7 +578,7 @@ function report(r) {
     original = r.initialDesign?.form;
   const answer = (title, value) =>
     `<div class="report-block"><strong>${esc(title)}</strong><p style="white-space:pre-wrap">${esc(value || "未回答")}</p></div>`;
-  return `<h1>VL3 · 幼芽的向光性</h1><p>${esc(r.profile.name)}｜${esc(r.profile.classInfo)}｜${esc(r.profile.email)}</p><p>紀錄 ${esc(r.id)} · ${statusOf(r)}</p><h2>01 了解情境</h2>${answer("初步觀察", f.observation)}<h2>02 設計探究</h2>${answer("第一次實驗前固定保存的原始假說", original ? r.initialDesign.hypothesisText || hypothesis(original) : "尚未開始實驗")}${answer("原始理由", original?.reason)}${answer("目前假說", hypothesis(f))}${answer("目前理由", f.reason)}${["iv", "dv", "cv"].map((g, i) => answer(["獨立變量", "因變量", "控制變量"][i], r.variables[g].map((n) => VARIABLES[n]).join("；"))).join("")}${answer("實驗前提", r.assumptions.map((id) => ASSUMPTIONS.find((a) => a[0] === id)?.[1]).join("；"))}${answer("對照組設計", f.controlPlan)}${answer("裝置文字設計", r.setup.description)}${safeImage(r.setup.image) ? `<img src="${r.setup.image}" alt="學生裝置設計">` : ""}<h2>03 觀察紀錄</h2>${tableHTML(r.observations)}<h2>04 分析與反思</h2>${answer("感光部位", f.qTip === "tip" ? "頂端" : f.qTip === "below" ? "頂端以下位置" : "")}${answer("罩子比較", f.qCap === "light" ? "頂端是否受光會影響向光彎曲。" : f.qCap === "cap" ? "只要頂端套有罩子，就不會向光彎曲。" : "")}${answer("頂端以下位置遮光的反應", OUTCOMES[f.qBelow])}${answer("證據限制", f.qLimit === "indirect" ? "没有直接量度生長素。" : f.qLimit === "proof" ? "彎曲直接證明生長素濃度。" : "")}${answer("我的數據解釋", f.evidence)}${answer("學習反思", f.reflection)}<p>實驗模型：四組相同單側光照；動畫是典型反應示意，並非真實量度。紀錄只存於本機。</p>`;
+  return `<h1>VL3 · 胚芽鞘的向光性</h1><p>${esc(r.profile.name)}｜${esc(r.profile.classInfo)}｜${esc(r.profile.email)}</p><p>紀錄 ${esc(r.id)} · ${statusOf(r)}</p><h2>01 了解情境</h2>${answer("初步觀察", f.observation)}<h2>02 設計探究</h2>${answer("第一次實驗前固定保存的原始假說", original ? r.initialDesign.hypothesisText || hypothesis(original) : "尚未開始實驗")}${answer("原始理由", original?.reason)}${answer("目前假說", hypothesis(f))}${answer("目前理由", f.reason)}${["iv", "dv", "cv"].map((g, i) => answer(["獨立變量", "因變量", "控制變量"][i], r.variables[g].map((n) => VARIABLES[n]).join("；"))).join("")}${answer("實驗前提", r.assumptions.map((id) => ASSUMPTIONS.find((a) => a[0] === id)?.[1]).join("；"))}${answer("對照組設計", f.controlPlan)}${answer("裝置文字設計", r.setup.description)}${safeImage(r.setup.image) ? `<img src="${r.setup.image}" alt="學生裝置設計">` : ""}<h2>03 觀察紀錄</h2>${tableHTML(r.observations)}<h2>04 分析與反思</h2>${answer("感光部位", f.qTip === "tip" ? "頂端" : f.qTip === "below" ? "頂端以下位置" : "")}${answer("罩子比較", f.qCap === "light" ? "頂端是否受光會影響向光彎曲。" : f.qCap === "cap" ? "只要頂端套有罩子，就不會向光彎曲。" : "")}${answer("頂端以下位置遮光的反應", OUTCOMES[f.qBelow])}${answer("證據限制", f.qLimit === "indirect" ? "没有直接量度生長素。" : f.qLimit === "proof" ? "彎曲直接證明生長素濃度。" : "")}${answer("我的數據解釋", f.evidence)}${answer("學習反思", f.reflection)}<p>實驗模型：四組相同單側光照；動畫是典型反應示意，並非真實量度。紀錄只存於本機。</p>`;
 }
 function printRecord(r) {
   $("#printReport").innerHTML = report(r);
@@ -785,7 +783,7 @@ $("#profileForm").onsubmit = (e) => {
 };
 $("#contextPlant").innerHTML = contextComparison();
 $("#mechanismDiagram").innerHTML =
-  `<svg viewBox="0 0 340 330" role="img" aria-label="幼芽頂端感光，背光側細胞伸長較多，頂端以下區域向右方光源彎曲"><rect x="15" y="12" width="310" height="306" rx="18" fill="#edf8f2"/><path d="M141 272C108 188 153 110 218 83" stroke="#63aa6e" stroke-width="30" fill="none"/><path d="M132 263C102 184 151 105 214 77" stroke="#d7ed91" stroke-width="5" fill="none"/><circle cx="219" cy="80" r="12" fill="#f3bc52"/><text x="163" y="49" font-size="15" fill="#15333b">頂端：感受光照</text><text x="23" y="150" font-size="13" fill="#15333b">背光側</text><text x="23" y="172" font-size="13" fill="#15333b">生長素較多</text><text x="23" y="194" font-size="13" fill="#15333b">細胞伸長較多</text><path d="M94 167L119 180" stroke="#658087" stroke-width="2"/><text x="196" y="226" font-size="13" fill="#15333b">頂端以下</text><text x="196" y="248" font-size="13" fill="#15333b">不均等伸長</text><path d="M188 231L149 220" stroke="#658087" stroke-width="2"/><text x="256" y="99" font-size="14" fill="#946c1a">☀ 光源</text><text x="87" y="302" font-size="13" fill="#658087">幼芽機制示意 · 並非量度數據</text></svg>`;
+  `<svg viewBox="0 0 340 330" role="img" aria-label="胚芽鞘頂端感光，背光側細胞伸長較多，頂端以下區域向右方光源彎曲"><rect x="15" y="12" width="310" height="306" rx="18" fill="#edf8f2"/><path d="M141 272C108 188 153 110 218 83" stroke="#63aa6e" stroke-width="30" fill="none"/><path d="M132 263C102 184 151 105 214 77" stroke="#d7ed91" stroke-width="5" fill="none"/><circle cx="219" cy="80" r="12" fill="#f3bc52"/><text x="163" y="49" font-size="15" fill="#15333b">頂端：感受光照</text><text x="23" y="150" font-size="13" fill="#15333b">背光側</text><text x="23" y="172" font-size="13" fill="#15333b">生長素較多</text><text x="23" y="194" font-size="13" fill="#15333b">細胞伸長較多</text><path d="M94 167L119 180" stroke="#658087" stroke-width="2"/><text x="196" y="226" font-size="13" fill="#15333b">頂端以下</text><text x="196" y="248" font-size="13" fill="#15333b">不均等伸長</text><path d="M188 231L149 220" stroke="#658087" stroke-width="2"/><text x="256" y="99" font-size="14" fill="#946c1a">☀ 光源</text><text x="87" y="302" font-size="13" fill="#658087">胚芽鞘機制示意 · 並非量度數據</text></svg>`;
 document.addEventListener("visibilitychange", () => {
   accountTime();
   lastActive = Date.now();
@@ -948,7 +946,7 @@ function scoringWorkbook(all) {
     [
       "初步觀察",
       2,
-      "2：準確描述幼芽與單側光源及彎曲；1：部分描述；0：沒有相關描述。",
+      "2：準確描述胚芽鞘與單側光源及彎曲；1：部分描述；0：沒有相關描述。",
     ],
     ["四組反應", 2, "每組與模型典型反應一致得 0.5；不覆蓋學生的原始觀察。"],
     ["變量分類", 4, "獨立及因變量各 1；控制變量完整選對得 2，錯選或漏選得 0。"],
@@ -986,7 +984,7 @@ function scoringWorkbook(all) {
     [
       "生長素機制",
       2,
-      "2：背光側生長素較多、促進幼芽細胞伸長，導致向光彎曲；1：部分正確；0：未顯示理解。",
+      "2：背光側生長素較多、促進胚芽鞘細胞伸長，導致向光彎曲；1：部分正確；0：未顯示理解。",
     ],
     [
       "依證據修訂與限制",
