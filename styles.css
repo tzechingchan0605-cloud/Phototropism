@@ -78,6 +78,30 @@ legend {
   margin: auto;
   padding: 0 32px;
 }
+.language-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+[data-language-switch] {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+html[lang="en"] .hypothesis-sentence {
+  line-height: 2.7;
+}
+html[lang="en"] .specimen h3 {
+  min-height: 3em;
+}
+html[lang="en"] .equipment span {
+  overflow-wrap: anywhere;
+}
+@media print {
+  [data-language-switch],
+  .language-row {
+    display: none !important;
+  }
+}
 .topbar {
   min-height: 80px;
   display: flex;
@@ -113,6 +137,9 @@ legend {
   align-items: center;
   gap: 10px;
   font-size: 13px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  min-width: 0;
 }
 .student-chip button {
   padding: 7px 10px;

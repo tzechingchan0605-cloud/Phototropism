@@ -7,6 +7,8 @@
     <title>幼芽為甚麼朝光生長？｜IBL-VL3</title>
     <link rel="stylesheet" href="styles.css" />
     <script src="excel.js" defer></script>
+    <script src="i18n-strings.js" defer></script>
+    <script src="i18n.js" defer></script>
     <script src="cloud-config.js" defer></script>
     <script src="cloud-bridge.js" defer></script>
     <script src="cloud-sync.js" defer></script>
@@ -24,6 +26,14 @@
           <span id="studentName">同學</span
           ><button id="teacherButton" hidden>教師儀表板</button
           ><button id="newSession">開始新探究</button>
+          <button
+            type="button"
+            class="secondary"
+            data-language-switch
+            aria-label="語言切換"
+          >
+            語言：CMI / EMI
+          </button>
         </div>
       </header>
       <main id="main">
@@ -402,6 +412,16 @@
       </footer>
     </div>
     <dialog id="profileDialog" class="vl3-dialog">
+      <div class="language-row">
+        <button
+          type="button"
+          class="secondary"
+          data-language-switch
+          aria-label="語言切換"
+        >
+          語言：CMI / EMI
+        </button>
+      </div>
       <p id="loginCloudStatus" role="status" aria-live="polite"></p>
       <button id="loginRetryCloud" class="secondary" type="button">
         重試同步／重試同步舊紀錄
@@ -431,6 +451,16 @@
       </form>
     </dialog>
     <dialog id="teacherDialog" class="vl3-dialog">
+      <div class="language-row">
+        <button
+          type="button"
+          class="secondary"
+          data-language-switch
+          aria-label="語言切換"
+        >
+          語言：CMI / EMI
+        </button>
+      </div>
       <div class="vl3-actions">
         <h2>學生學習紀錄</h2>
         <button id="closeTeacher" class="secondary">關閉</button>

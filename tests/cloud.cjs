@@ -339,8 +339,33 @@ const server = http.createServer((req, res) => {
   const base = `http://127.0.0.1:${server.address().port}`;
   const passwordFile = path.join(temp, "test-password");
   await fsp.writeFile(passwordFile, "test-teacher-password", { mode: 0o600 });
+  async function languageTests() {
+    await new Promise((resolve, reject) =>
+      execFile(
+        process.execPath,
+        ["tests/language.cjs"],
+        {
+          env: {
+            ...process.env,
+            LAB_URL: base,
+            VL3_TEST_PASSWORD_FILE: passwordFile,
+          },
+          timeout: 180000,
+        },
+        (error, stdout, stderr) => {
+          process.stdout.write(stdout);
+          process.stderr.write(stderr);
+          error ? reject(error) : resolve();
+        },
+      ),
+    );
+  }
   let browser;
   try {
+    if (process.env.VL3_LANGUAGE_ONLY === "1") {
+      await languageTests();
+      return;
+    }
     // Existing full lab workflow now runs through the actual nested Apps Script bridge.
     await new Promise((resolve, reject) =>
       execFile(
@@ -556,6 +581,9 @@ const server = http.createServer((req, res) => {
     console.log(
       "PASS (SIMULATED): actual collector + nested google.script.run bridge; CORS fetch fails; real lab workflow; separate browsers; same-email attempts; offline reload/retry; true ID/version acknowledgements; stale ownership protection; pagination; password-only reads; teacher exclusion; corrupt backups retained; incomplete cloud export blocked.",
     );
+    await browser.close();
+    browser = null;
+    await languageTests();
   } finally {
     if (browser) await browser.close();
     await new Promise((r) => server.close(r));
