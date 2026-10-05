@@ -2,6 +2,12 @@
 // Only system text belongs here. Student text is never a translation key.
 window.VL3_ENGLISH = Object.fromEntries(
   String.raw`
+請分類本探究的變量。A–B、A–C、A–D 分別比較頂端遮光、頂端是否存在及下部遮光；每項比較保持其他條件相同。	Sort the variables in this inquiry. A–B compares blocking light at the tip; A–C compares whether the tip is present; A–D compares blocking light below the tip. Keep other conditions the same within each comparison.
+提示：假設是指在沒有直接證據或未經證實的情況下，為了進行探究而先行設定為「正確」的預設條件。	Hint: An assumption is a condition we treat as true to carry out an inquiry, even though it has not been proved or supported by direct evidence.
+比較遮光處理／部位或頂端是否存在。	Compare the light-blocking treatment / part, or whether the tip is present.
+指定比較（舊版）	Chosen comparison (earlier version)
+沒有明顯伸長，沒有明顯彎曲	No clear elongation or bending
+C 在本教學模型中不伸長；切頂後不一定完全停止生長，實際結果受植物狀況及條件影響。	C does not elongate in this teaching model. Removing the tip does not always stop growth completely; actual results depend on plant condition and growing conditions.
 幼芽為甚麼朝光生長？｜IBL-VL3	Why do young shoots grow towards light? | IBL-VL3
 跳到探究內容	Skip to the inquiry
 探究實驗室	Inquiry lab
@@ -23,7 +29,7 @@ IBL 虛擬實驗室 · 植物的感應	IBL virtual lab · Plant responses
 01 · 了解情境	01 · Observe the situation
 生活中的線索	Clues from everyday life
 窗邊的胚芽鞘，為甚麼會彎向光？	Why do coleoptiles near a window bend towards light?
-本實驗使用燕麥胚芽鞘：包裹並保護幼芽的鞘狀構造，外形較直，方便觀察。下文的幼芽以胚芽鞘作模型。	This experiment uses oat coleoptiles. A coleoptile is a sheath that covers and protects a young shoot. Its fairly straight shape makes changes easy to observe. Here, coleoptiles are used as a model of young shoots.
+本實驗使用燕麥胚芽鞘：包裹並保護內部嫩葉的鞘狀構造，外形較直，方便觀察。	This experiment uses oat coleoptiles. A coleoptile is a sheath that covers and protects the young leaves inside. Its fairly straight shape makes changes easy to observe.
 學校園藝小組發現，窗邊幼苗逐漸朝窗戶方向彎曲。大家知道植物會朝光源方向生長，但不知道植物哪個部位感受光照，以及甚麼令它彎曲。你能透過實驗找出線索嗎？	The school gardening club notices that seedlings near a window gradually bend towards it. They know that plants grow towards light, but they do not know which part senses light or what makes the plant bend. Can you find clues through experiments?
 學校園藝小組發現，窗邊幼苗逐漸朝窗戶方向彎曲。大家知道植物會朝光源方向生長，但不知道植物哪個部位感受光照，以及甚麼令它彎曲。	The school gardening club notices that seedlings near a window gradually bend towards it. They know that plants grow towards light, but they do not know which part senses light or what makes the plant bend.
 你的初步觀察	Your first observations
@@ -35,11 +41,11 @@ IBL 虛擬實驗室 · 植物的感應	IBL virtual lab · Plant responses
 設計探究	Plan the inquiry
 完成假設、公平測試及實驗裝置設計，然後開始實驗。	Complete your hypothesis, fair test and experiment setup. Then start the experiment.
 研究問題	Research question
-幼芽哪個部位感受單側光照，並影響它的生長方向？	Which part of a young shoot senses light from one side and affects its growth direction?
+胚芽鞘哪個部位感受單側光照，並影響它的生長方向？	Which part of a coleoptile senses light from one side and affects its growth direction?
 01 · 假說建立器	01 · Build a hypothesis
 完成你的假說	Complete your hypothesis
-若幼芽	If the young shoot's
-被遮光，而其他部位仍然受光，幼芽將會	is covered to block light while the other parts still receive light, it will
+若胚芽鞘	If the coleoptile's
+被遮光，而其他部位仍然受光，胚芽鞘將會	is covered to block light while the other parts still receive light, it will
 假說部位	Part in your hypothesis
 預期反應	Predicted response
 請選擇	Please choose
@@ -68,7 +74,7 @@ A 與 D：下部遮光處理	A and D: blocking light below the tip
 （主動改變的因素）	(the factor changed on purpose)
 （量度或觀察的結果）	(the result measured or observed)
 （保持不變的因素）	(the factors kept the same)
-遮光處理／部位或頂端是否存在（依指定比較）	Light-blocking treatment / part, or whether the tip is present (for your chosen comparison)
+遮光處理／部位或頂端是否存在	Light-blocking treatment / part, or whether the tip is present
 胚芽鞘的伸長及彎曲反應	Coleoptile elongation and bending
 光源方向及光強度	Light direction and intensity
 胚芽鞘種類、初始高度及生長階段	Coleoptile type, starting height and growth stage
@@ -77,12 +83,12 @@ A 與 D：下部遮光處理	A and D: blocking light below the tip
 03 · 實驗前提	03 · Experiment assumptions
 此探究的假設是什麼？	What assumptions does this inquiry make?
 請選出所有適用的假設，可選多於一項。	Choose all suitable assumptions. You may choose more than one.
-各幼芽的初始生長狀況相近。	The young shoots start in similar growth conditions.
-遮光帽及遮光套不限制幼芽伸長或彎曲。	The light-blocking cap and sleeve do not limit elongation or bending.
+各胚芽鞘的初始生長狀況相近。	The coleoptiles start in similar growth conditions.
+遮光帽及遮光套不限制胚芽鞘伸長或彎曲。	The light-blocking cap and sleeve do not limit elongation or bending.
 各處理不會令裝置溫度明顯不同。	The treatments do not cause clear temperature differences between setups.
 植物種類相同便毋須控制初始大小。	If the plants are the same type, their starting size does not need to be controlled.
 04 · 探究的對照組	04 · The control group
-若想判斷不同處理是否影響幼芽的生長方向，你會保留甚麼未經處理的裝置作比較？哪些條件需要保持相同？	To find out whether the treatments affect growth direction, which untreated setup would you keep for comparison? Which conditions should stay the same?
+若想判斷不同處理是否影響胚芽鞘的生長方向，你會保留甚麼未經處理的裝置作比較？哪些條件需要保持相同？	To find out whether the treatments affect growth direction, which untreated setup would you keep for comparison? Which conditions should stay the same?
 （提示：對照組主要功能是作為比較的基準，用來確認實驗中的改變是由於測試的變因（獨立變量）所引起，而不是其他外在因素的干擾。）	(Hint: The control group provides a starting point for comparison. It helps you check whether a change is caused by the independent variable rather than other factors.)
 對照組設計	Control group plan
 05 · 實驗裝置設計	05 · Experiment setup
@@ -156,7 +162,7 @@ A 與 D：下部遮光處理	A and D: blocking light below the tip
 必定是同一部位。	They must be the same part.
 6. 本實驗的證據限制是甚麼？	6. What are the limits of the evidence from this experiment?
 切頂也移除其他組織並造成傷口；遮光比較須假設溫度及機械限制受到控制，不能確定頂端只負責感光。	Removing the tip also removes other tissues and causes a wound. Light-blocking comparisons assume that temperature and physical limits are controlled. They cannot show that sensing light is the tip's only role.
-只要切頂組不彎曲，就能確定頂端只負責感光。	If the shoot with its tip removed does not bend, we can be sure that the tip only senses light.
+只要切頂組不彎曲，就能確定頂端只負責感光。	If the coleoptile with its tip removed does not bend, we can be sure that the tip only senses light.
 引用至少兩組的比較，說明數據如何支持你的推論。	Compare at least two setups. Explain how the data support your conclusion.
 繼續延伸探究 →	Continue to the extension →
 完成主探究及延伸的記錄與分析後，遞交並鎖定答案，才開放學習重點。	Complete the records and analysis for both inquiries, then submit and lock your answers to open the learning points.
@@ -166,7 +172,7 @@ A 與 D：下部遮光處理	A and D: blocking light below the tip
 植物因光照方向而產生的定向生長反應稱為「向光性」；朝光源生長屬於「正向光性」。	Phototropism is directional growth in response to the direction of light. Growth towards light is positive phototropism.
 在這個燕麥胚芽鞘模型中，頂端參與感受單側光照；切頂比較也涉及傷口及生長訊號，不能獨自確定頂端只負責感光。	In this oat coleoptile model, the tip helps sense light from one side. Removing the tip also affects growth signals and causes a wound, so this comparison alone cannot show that sensing light is the tip's only role.
 生長素是影響植物生長的激素。頂端可產生能向下傳遞的生長促進作用。	Auxin is a hormone that affects plant growth. The tip can produce a growth-promoting effect that passes downwards.
-單側光照下，背光側生長素較多，該側細胞伸長較多，使幼芽向光彎曲；感光部位與彎曲部位可不同。	With light from one side, more auxin is found on the shaded side. Cells on that side elongate more, making the shoot bend towards light. The part that senses light may differ from the part that bends.
+單側光照下，背光側生長素較多，該側細胞伸長較多，使胚芽鞘向光彎曲；感光部位與彎曲部位可不同。	With light from one side, more auxin is found on the shaded side. Cells on that side elongate more, making the coleoptile bend towards light. The part that senses light may differ from the part that bends.
 瓊脂實驗支持可轉移的生長促進作用及不均勻生長，但沒有直接鑑定物質，也沒有量度單側光照下的生長素分布。生長素的鑑定及分布由其他研究支持。本活動全部動畫、培養時間及角度為教學模擬。	The agar experiments support a growth-promoting effect that can be transferred, and unequal growth. They do not identify the substance or measure auxin distribution under light from one side. Other research supports the identification and distribution of auxin. All animations, growing times and angles here are teaching simulations.
 學習檢核：朝光源方向生長稱為	Learning check: Growth towards a light source is called
 正向光性	Positive phototropism
@@ -201,24 +207,24 @@ VL3 · 植物朝光生長｜作答會自動傳送至 VL3 Google 收集端，供�
 紀錄	Record
 04 · 延伸探究	04 · Extension inquiry
 頂端如何影響下方的生長？	How does the tip affect growth below it?
-你的結果顯示，頂端可能影響下方的生長。但頂端如何把這種影響傳到下方？研究員準備了曾接觸頂端的瓊脂，讓你進一步探究。	Your results suggest that the tip may affect growth below it. But how does this effect pass downwards? Researchers have prepared agar that has touched shoot tips for you to investigate further.
+你的結果顯示，頂端可能影響下方的生長。但頂端如何把這種影響傳到下方？研究員準備了曾接觸頂端的瓊脂，讓你進一步探究。	Your results suggest that the tip may affect growth below it. But how does this effect pass downwards? Researchers have prepared agar that has touched coleoptile tips for you to investigate further.
 兩種瓊脂外觀相同。	The two types of agar look the same.
 空白瓊脂	Blank agar
-未接觸幼芽頂端；	has not touched a shoot tip;
+未接觸胚芽鞘頂端；	has not touched a coleoptile tip;
 處理瓊脂	Treated agar
-曾與幼芽頂端接觸。瓊脂可讓一些物質進入及通過。	has touched shoot tips. Some substances can enter and pass through agar.
-把處理瓊脂放在切頂幼芽左側，你預測它會怎樣生長？	Predict how a shoot with its tip removed will grow if treated agar is placed on its left side.
+曾與胚芽鞘頂端接觸。瓊脂可讓一些物質進入及通過。	has touched coleoptile tips. Some substances can enter and pass through agar.
+把處理瓊脂放在切頂胚芽鞘左側，你預測它會怎樣生長？	Predict how a coleoptile with its tip removed will grow if treated agar is placed on its left side.
 保持較直	Stays fairly straight
 我的理由	My reason
 E 與 F 的公平比較：需要保持哪些條件相同？	Fair comparison of E and F: Which conditions should stay the same?
-E 與 F 均放中央，比較瓊脂是否曾接觸頂端；F、G、H 使用同一種處理瓊脂，比較放置位置。延伸毋須重做變量分類或繪圖。首次開始時固定保存原始預測及理由。	E and F both have agar in the centre, to compare whether it has touched shoot tips. F, G and H use the same treated agar, to compare its position. You do not need to sort variables or draw a setup again. Your original prediction and reason are saved when you first start.
+E 與 F 均放中央，比較瓊脂是否曾接觸頂端；F、G、H 使用同一種處理瓊脂，比較放置位置。延伸毋須重做變量分類或繪圖。首次開始時固定保存原始預測及理由。	E and F both have agar in the centre, to compare whether it has touched coleoptile tips. F, G and H use the same treated agar, to compare its position. You do not need to sort variables or draw a setup again. Your original prediction and reason are saved when you first start.
 進行延伸培養（模擬 24 小時）	Run the extension (24-hour simulation)
 等待預測及公平比較	Waiting for your prediction and fair comparison
 量度方法示例	How to measure: an example
-這是獨立示例，不是裝置讀數。以鉛直線為 0°，移動量角器的指針，對齊幼芽頂端的方向。角度記錄大小；左右方向另選。不能把彎曲後的鉛直高度差當作伸長量。	This is a separate example, not a setup reading. Use the vertical line as 0°. Move the protractor pointer to match the direction of the shoot tip. Record the size of the angle and choose left or right separately. Do not use a change in vertical height to measure elongation in a bent shoot.
+這是獨立示例，不是裝置讀數。以鉛直線為 0°，移動量角器的指針，對齊胚芽鞘頂端的方向。角度記錄大小；左右方向另選。不能把彎曲後的鉛直高度差當作伸長量。	This is a separate example, not a setup reading. Use the vertical line as 0°. Move the protractor pointer to match the direction of the coleoptile tip. Record the size of the angle and choose left or right separately. Do not use a change in vertical height to measure elongation in a bent shoot.
 示例偏離鉛直線 20°。各裝置的量角器要由你自行調整。	The example is 20° from vertical. Adjust each setup's protractor yourself.
 黑暗中的四個延伸裝置	Four extension setups in darkness
-所有胚芽鞘均切去頂端，初始大小相近，置於黑暗；瓊脂大小、培養時間、溫度及供水相同。初始與培養後可切換查看。套上瓊脂不代表機械壓住幼芽。	All coleoptiles have their tips removed, start at a similar size and are kept in darkness. Agar size, growing time, temperature and water supply are the same. You can view them before and after growth. Placing agar on a shoot does not physically hold it down.
+所有胚芽鞘均切去頂端，初始大小相近，置於黑暗；瓊脂大小、培養時間、溫度及供水相同。初始與培養後可切換查看。套上瓊脂不代表機械壓住胚芽鞘。	All coleoptiles have their tips removed, start at a similar size and are kept in darkness. Agar size, growing time, temperature and water supply are the same. You can view them before and after growth. Placing agar on a coleoptile does not physically hold it down.
 培養時間、逐漸生長動畫及角度均為教學模擬，不是真實量度或精確實驗常數。	Growing time, gradual growth animations and angles are teaching simulations, not real measurements or exact experimental constants.
 查看狀態	View
 目前培養狀態	Current growth state
@@ -239,7 +245,7 @@ X 軸是 E、F、G、H；Y 軸是最終偏離鉛直方向的角度（°）。填
 哪側伸長較多，就向哪側彎曲。	It bends towards the side that elongates more.
 4. 黑暗下仍可彎曲提供甚麼線索？	4. What clue does bending in darkness provide?
 彎曲可由不均勻生長造成，並非一定要直接受光才發生。	Unequal growth can cause bending. Direct light is not always needed for bending to occur.
-黑暗下的彎曲必定是光直接推動幼芽。	Bending in darkness must be caused by light directly pushing the shoot.
+黑暗下的彎曲必定是光直接推動胚芽鞘。	Bending in darkness must be caused by light directly pushing the coleoptile.
 5. 延伸結果的證據限制是甚麼？	5. What are the limits of the evidence from the extension?
 只能支持可轉移的生長促進作用，不能單獨確定物質身分，也沒有直接量得光照下的分布。	It supports a growth-promoting effect that can be transferred. It cannot identify the substance on its own and does not directly measure its distribution under light.
 可以單靠瓊脂結果確定物質身分及光照下的分布。	The agar results alone can identify the substance and its distribution under light.
@@ -277,7 +283,7 @@ X 軸是 E、F、G、H；Y 軸是最終偏離鉛直方向的角度（°）。填
 頂端感光 → 生長訊號向下傳遞	Tip senses light → growth signal passes down
 左側伸長較多	Left side grows longer
 兩側生長不均 → 向伸長較少的一側彎曲	Unequal growth → bends towards the side that grows less
-左側光照時右側背光側伸長較多而向左彎曲；處理瓊脂放左側時左側伸長較多而向右彎曲	With light from the left, the shaded right side elongates more and the shoot bends left. With treated agar on the left, the left side elongates more and the shoot bends right.
+左側光照時右側背光側伸長較多而向左彎曲；處理瓊脂放左側時左側伸長較多而向右彎曲	With light from the left, the shaded right side elongates more and the coleoptile bends left. With treated agar on the left, the left side elongates more and the coleoptile bends right.
 24小時後	After 24 hours
 開始時	Before growth
 生長變化示意；24小時為情境設定。	Illustration of growth changes; 24 hours is the time chosen for this situation.
@@ -332,11 +338,11 @@ C 的伸長減少是本模型設定；切頂後不一定完全停止生長。	Re
 以 A–B、A–C、A–D 的具體比較支持推論，留意傷口、溫度及機械限制。	Use specific A–B, A–C and A–D comparisons to support your conclusion. Consider wounds, temperature and physical limits.
 處理瓊脂放左側，模型中左側伸長較多而向右彎曲；原始預測由教師按可測試性評閱。	With treated agar on the left, the model shows more elongation on the left and bending to the right. The teacher reviews whether the original prediction is testable.
 合理理由不因結果不符直接判錯。	A reasonable explanation is not marked wrong just because the result differs.
-E–F 均放中央，保持瓊脂大小、幼芽初始大小及狀況、黑暗、溫度、供水及時間相同。	E and F both have agar in the centre. Keep agar size, starting shoot size and condition, darkness, temperature, water supply and time the same.
+E–F 均放中央，保持瓊脂大小、胚芽鞘初始大小及狀況、黑暗、溫度、供水及時間相同。	E and F both have agar in the centre. Keep agar size, starting coleoptile size and condition, darkness, temperature, water supply and time the same.
 圖表以學生本身讀數核對；量度準確性另與模型比較。不用鉛直高度差推算伸長量。	Check the chart against the student's own readings. Check measurement accuracy against the model separately. Do not use vertical height differences to work out elongation.
 E–F 支持可轉移的生長促進作用；G–H 支持作用位置影響彎曲方向。	E–F supports a growth-promoting effect that can be transferred. G–H supports the idea that its position affects bending direction.
 可把空白瓊脂放左側及右側，以排除單側放置本身的影響。	Place blank agar on the left and on the right to rule out effects caused simply by placing it on one side.
-向光性是因光照方向而產生的定向生長；朝光源屬正向光性。頂端參與感光，生長素是影響植物生長的激素。背光側生長素較多、細胞伸長較多，使幼芽朝光彎曲。	Phototropism is directional growth in response to light direction. Growth towards light is positive phototropism. The tip helps sense light. Auxin is a hormone that affects plant growth. More auxin on the shaded side causes more cell elongation there, so the shoot bends towards light.
+向光性是因光照方向而產生的定向生長；朝光源屬正向光性。頂端參與感光，生長素是影響植物生長的激素。背光側生長素較多、細胞伸長較多，使胚芽鞘朝光彎曲。	Phototropism is directional growth in response to light direction. Growth towards light is positive phototropism. The tip helps sense light. Auxin is a hormone that affects plant growth. More auxin on the shaded side causes more cell elongation there, so the coleoptile bends towards light.
 本模型未直接鑑定瓊脂內的物質或量得單側光下的生長素分布；名稱及機制由其他研究支持。	This model does not directly identify the substance in the agar or measure auxin distribution under light from one side. Other research supports the names and mechanisms.
 引用主探究及延伸各一項比較，修訂兩次原始預測，連結感光、生長訊號與不均勻伸長。由教師評閱，不自動判錯。	Use one comparison from each inquiry to revise the two original predictions. Link light sensing, growth signals and unequal elongation. The teacher reviews this; it is not automatically marked wrong.
 描述外形及生長方向的可觀察變化，不必先解釋機制。	Describe observable changes in shape and growth direction. You do not need to explain the mechanism first.

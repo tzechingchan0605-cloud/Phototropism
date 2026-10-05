@@ -30,7 +30,6 @@ const POSITIONS = {
   none: "沒有明顯彎曲",
 };
 const NEW_FIELDS = [
-  "comparison",
   "qShade",
   "qSites",
   "extPrediction",
@@ -66,9 +65,14 @@ let extensionRunning = false,
 function newExperiment(r) {
   return r.experimentVersion >= 3;
 }
-function mainModel(id) {
+function mainModel(id, record = state) {
   return {
-    growth: id === "C" ? "reduced" : "clear",
+    growth:
+      id === "C"
+        ? record.experimentVersion >= 4
+          ? "none"
+          : "reduced"
+        : "clear",
     direction: ["A", "D"].includes(id) ? "left" : "straight",
     position: ["A", "D"].includes(id) ? "upper" : "none",
   };
@@ -102,7 +106,7 @@ function mainObservationScore(r) {
       (sum, id) =>
         sum +
         ["growth", "direction", "position"].filter(
-          (k) => r.observations[id]?.[k] === mainModel(id)[k],
+          (k) => r.observations[id]?.[k] === mainModel(id, r)[k],
         ).length,
       0,
     ) / 6
@@ -125,20 +129,20 @@ function initExtension() {
   document.querySelector("#extensionSection").innerHTML = `
     <article class="vl3-card"><p class="card-kicker">04 · 延伸探究</p><h3>頂端如何影響下方的生長？</h3>
     <p>你的結果顯示，頂端可能影響下方的生長。但頂端如何把這種影響傳到下方？研究員準備了曾接觸頂端的瓊脂，讓你進一步探究。</p>
-    <p>兩種瓊脂外觀相同。<strong>空白瓊脂</strong>未接觸幼芽頂端；<strong>處理瓊脂</strong>曾與幼芽頂端接觸。瓊脂可讓一些物質進入及通過。</p>
-    ${selectHTML("extPrediction", { left: "向左彎曲", right: "向右彎曲", straight: "保持較直" }, "", "把處理瓊脂放在切頂幼芽左側，你預測它會怎樣生長？")}
+    <p>兩種瓊脂外觀相同。<strong>空白瓊脂</strong>未接觸胚芽鞘頂端；<strong>處理瓊脂</strong>曾與胚芽鞘頂端接觸。瓊脂可讓一些物質進入及通過。</p>
+    ${selectHTML("extPrediction", { left: "向左彎曲", right: "向右彎曲", straight: "保持較直" }, "", "把處理瓊脂放在切頂胚芽鞘左側，你預測它會怎樣生長？")}
     <label for="extReason">我的理由</label><textarea id="extReason" maxlength="1500"></textarea>
     <label for="extFair">E 與 F 的公平比較：需要保持哪些條件相同？</label><textarea id="extFair" maxlength="1500"></textarea>
     <p class="muted">E 與 F 均放中央，比較瓊脂是否曾接觸頂端；F、G、H 使用同一種處理瓊脂，比較放置位置。延伸毋須重做變量分類或繪圖。首次開始時固定保存原始預測及理由。</p>
     <button id="runExtension" class="primary">進行延伸培養（模擬 24 小時）</button><p id="extensionStatus" role="status">等待預測及公平比較</p></article>
-    <article class="vl3-card"><h3>量度方法示例</h3><p>這是獨立示例，不是裝置讀數。以鉛直線為 0°，移動量角器的指針，對齊幼芽頂端的方向。角度記錄大小；左右方向另選。不能把彎曲後的鉛直高度差當作伸長量。</p><div id="angleExample"></div><p class="muted">示例偏離鉛直線 20°。各裝置的量角器要由你自行調整。</p></article>
-    <article class="vl3-card" id="extensionResults"><h3>黑暗中的四個延伸裝置</h3><p>所有胚芽鞘均切去頂端，初始大小相近，置於黑暗；瓊脂大小、培養時間、溫度及供水相同。初始與培養後可切換查看。套上瓊脂不代表機械壓住幼芽。</p><p class="notice">培養時間、逐漸生長動畫及角度均為教學模擬，不是真實量度或精確實驗常數。</p><label>查看狀態<select id="extensionView"><option value="after">目前培養狀態</option><option value="before">培養開始時</option></select></label><div id="extensionBench" class="bench"></div><button id="confirmExtension" class="primary">確認延伸觀察及讀數</button><div id="extensionTable"></div></article>
+    <article class="vl3-card"><h3>量度方法示例</h3><p>這是獨立示例，不是裝置讀數。以鉛直線為 0°，移動量角器的指針，對齊胚芽鞘頂端的方向。角度記錄大小；左右方向另選。不能把彎曲後的鉛直高度差當作伸長量。</p><div id="angleExample"></div><p class="muted">示例偏離鉛直線 20°。各裝置的量角器要由你自行調整。</p></article>
+    <article class="vl3-card" id="extensionResults"><h3>黑暗中的四個延伸裝置</h3><p>所有胚芽鞘均切去頂端，初始大小相近，置於黑暗；瓊脂大小、培養時間、溫度及供水相同。初始與培養後可切換查看。套上瓊脂不代表機械壓住胚芽鞘。</p><p class="notice">培養時間、逐漸生長動畫及角度均為教學模擬，不是真實量度或精確實驗常數。</p><label>查看狀態<select id="extensionView"><option value="after">目前培養狀態</option><option value="before">培養開始時</option></select></label><div id="extensionBench" class="bench"></div><button id="confirmExtension" class="primary">確認延伸觀察及讀數</button><div id="extensionTable"></div></article>
     <article class="vl3-card"><h3>根據你的讀數製作棒形圖</h3><p>X 軸是 E、F、G、H；Y 軸是最終偏離鉛直方向的角度（°）。填入每條棒的角度及方向。類別處理不連成連續曲線。</p><div id="graphInputs" class="graph-inputs"></div><button id="saveGraph" class="secondary">繪製並確認棒形圖</button><div id="barChart"></div></article>
     <article class="vl3-card" id="extensionAnalysis"><h3>分析延伸比較</h3>
     ${selectHTML("extEF", { transfer: "頂端可能產生可轉移的生長促進作用。", agar: "所有瓊脂都會產生相同的生長促進作用。" }, "", "1. E 與 F 的比較支持甚麼？")}
     ${selectHTML("extPosition", { position: "生長作用的位置影響彎曲方向。", noEffect: "放置位置不影響彎曲方向。" }, "", "2. F、G、H 的比較支持甚麼？")}
     ${selectHTML("extSides", { opposite: "左側伸長較多向右彎曲；右側伸長較多向左彎曲。", same: "哪側伸長較多，就向哪側彎曲。" }, "", "3. 兩側伸長差異與彎曲方向有甚麼關係？")}
-    ${selectHTML("extDark", { unequal: "彎曲可由不均勻生長造成，並非一定要直接受光才發生。", light: "黑暗下的彎曲必定是光直接推動幼芽。" }, "", "4. 黑暗下仍可彎曲提供甚麼線索？")}
+    ${selectHTML("extDark", { unequal: "彎曲可由不均勻生長造成，並非一定要直接受光才發生。", light: "黑暗下的彎曲必定是光直接推動胚芽鞘。" }, "", "4. 黑暗下仍可彎曲提供甚麼線索？")}
     ${selectHTML("extLimit", { limited: "只能支持可轉移的生長促進作用，不能單獨確定物質身分，也沒有直接量得光照下的分布。", proof: "可以單靠瓊脂結果確定物質身分及光照下的分布。" }, "", "5. 延伸結果的證據限制是甚麼？")}
     <label for="extEvidence">引用 E–F 及 G–H 的比較，說明你的推論。</label><textarea id="extEvidence" maxlength="2500"></textarea>
     <label for="extControl">選答：若想排除瓊脂放在一側本身的影響，應額外設計甚麼對照？</label><textarea id="extControl" maxlength="1500"></textarea></article>`;
@@ -156,7 +160,10 @@ function initExtension() {
       !Object.keys(MAIN_ANSWERS).every((k) => state.form[k]) ||
       !state.form.evidence.trim()
     )
-      return message("請先完成主探究的六項推論及數據解釋。");
+      return remind(
+        "請先完成主探究的六項推論及數據解釋。",
+        firstEmptyField([...Object.keys(MAIN_ANSWERS), "evidence"]),
+      );
     state.extension.unlocked = true;
     if (!state.firstMainAnalysis)
       state.firstMainAnalysis = {
@@ -293,7 +300,10 @@ function runExtension() {
       state.form[k].trim(),
     )
   )
-    return message("請完成延伸預測、理由及公平比較。");
+    return remind(
+      "請完成延伸預測、理由及公平比較。",
+      firstEmptyField(["extPrediction", "extReason", "extFair"]),
+    );
   if (!state.extension.initialPrediction)
     state.extension.initialPrediction = {
       at: new Date().toISOString(),
@@ -355,15 +365,23 @@ function confirmExtension() {
       },
     ]),
   );
-  if (
-    EXT_IDS.some(
-      (id) =>
-        !validAngle(readings[id].angle) ||
-        !GROWTH[readings[id].growth] ||
-        !DIRECTIONS[readings[id].direction],
-    )
-  )
-    return message("請完成四組伸長、角度（0–90°）及方向。");
+  const incomplete = EXT_IDS.find(
+    (id) =>
+      !validAngle(readings[id].angle) ||
+      !GROWTH[readings[id].growth] ||
+      !DIRECTIONS[readings[id].direction],
+  );
+  if (incomplete) {
+    const field = !validAngle(readings[incomplete].angle)
+      ? "angle"
+      : !GROWTH[readings[incomplete].growth]
+        ? "growth"
+        : "direction";
+    return remind(
+      "請完成四組伸長、角度（0–90°）及方向。",
+      `#ext-${field}-${incomplete}`,
+    );
+  }
   EXT_IDS.forEach((id) => (readings[id].angle = Number(readings[id].angle)));
   if (!state.extension.firstReadings)
     state.extension.firstReadings = {
@@ -396,7 +414,7 @@ function barChartSVG(points) {
 function saveGraph() {
   if (state.submittedAt) return;
   if (!EXT_IDS.every((id) => state.extension.readings[id]))
-    return message("請先確認全部延伸讀數。");
+    return remind("請先確認全部延伸讀數。", "#confirmExtension");
   const points = Object.fromEntries(
     EXT_IDS.map((id) => [
       id,
@@ -406,13 +424,16 @@ function saveGraph() {
       },
     ]),
   );
-  if (
-    EXT_IDS.some(
-      (id) =>
-        !validAngle(points[id].angle) || !DIRECTIONS[points[id].direction],
-    )
-  )
-    return message("請填寫四條棒的角度及方向。");
+  const incomplete = EXT_IDS.find(
+    (id) => !validAngle(points[id].angle) || !DIRECTIONS[points[id].direction],
+  );
+  if (incomplete) {
+    const field = !validAngle(points[incomplete].angle) ? "angle" : "direction";
+    return remind(
+      "請填寫四條棒的角度及方向。",
+      `#graph-${field}-${incomplete}`,
+    );
+  }
   EXT_IDS.forEach((id) => (points[id].angle = Number(points[id].angle)));
   state.extension.graph = points;
   state.extension.graphSaved = true;
@@ -459,6 +480,16 @@ function mechanismSVG() {
   <text x="618" y="35" text-anchor="middle" font-size="17">2 · 黑暗：處理瓊脂放左側</text><path d="M619 310L619 240C619 196 654 150 688 131" fill="none" stroke="#65a772" stroke-width="26"/><path d="M609 306L609 240C608 191 650 143 682 122" fill="none" stroke="#d5e989" stroke-width="5"/><rect x="666" y="110" width="25" height="12" fill="#b5e4e6" stroke="#7dabad"/><text x="450" y="94" font-size="14">處理瓊脂</text><path d="M525 98L672 112" stroke="#526d71"/><text x="444" y="159" font-size="14">左側伸長較多</text><path d="M550 167L633 181" stroke="#526d71"/><text x="677" y="210" font-size="14">向右彎曲</text><text x="445" y="348" font-size="13">兩側生長不均 → 向伸長較少的一側彎曲</text></svg>`;
 }
 function answerOption(id, value) {
+  if (id === "comparison")
+    return (
+      {
+        AB: "A 與 B：頂端遮光處理",
+        AC: "A 與 C：頂端是否存在",
+        AD: "A 與 D：下部遮光處理",
+      }[value] ||
+      value ||
+      "未回答"
+    );
   const option = document
     .querySelector("#" + id)
     ?.querySelector(`option[value="${CSS.escape(value || "")}"]`);
@@ -519,12 +550,12 @@ function newReport(r) {
     : "未確認";
   return `<h1>VL3 · 幼芽為甚麼朝光生長？</h1><p data-student-text>${esc(r.profile.classInfo)}｜${esc(r.profile.name)}｜${esc(r.profile.email)}</p><p>${esc(r.id)} · ${statusOf(r)}</p>
   <section class="report-card"><h2>01 · 了解情境</h2><p>學校園藝小組發現，窗邊幼苗逐漸朝窗戶方向彎曲。大家知道植物會朝光源方向生長，但不知道植物哪個部位感受光照，以及甚麼令它彎曲。</p>${contextComparison()}${open("初步觀察", f.observation, "描述外形及生長方向的可觀察變化，不必先解釋機制。")}${f.initialIdea ? open("初步想法（舊版）", f.initialIdea, "保留舊版探究的原始回答；不因與模型不同直接判錯。") : ""}</section>
-  <section class="report-card"><h2>02 · 設計主探究</h2>${open("原始假說", o?.hypothesisText || hypothesis(initial, 3), "可測試的部位、遮光處理及預期反應；預測不符不代表假說不合理。")}${open("原始理由", initial.reason, "說明為甚麼作出該預測。")}${open("最後假說", hypothesis(f, 3), "保留修訂後內容，原始答案不覆蓋。")}${open("指定比較", answerOption("comparison", initial.comparison), "A–B：頂端遮光；A–C：頂端是否存在；A–D：下部遮光。")}${["iv", "dv", "cv"].map((key, i) => open(["獨立變量", "因變量", "控制變量"][i], r.variables[key].map((n) => VARIABLES[n]).join("；"), ["按指定比較選擇處理因素。", "伸長及彎曲反應。", "種類、處理前大小與狀況、光照、溫度、供水及培養時間。"][i])).join("")}${open("探究假設", r.assumptions.map((id) => assumptionsFor(r).find((a) => a[0] === id)?.[1]).join("；"), "初始狀況相近；帽及套不限制生長；處理不造成明顯溫差。相同種類仍需控制大小。")}${open("對照設計", f.controlPlan, "保留 A 完整不遮蓋；按三項指定比較保持其他條件相同。")}${open("裝置設計", r.setup.description, "四組處理、單側光源及固定條件清楚；圖片與文字由教師評閱。")}${safeImage(r.setup.image) ? `<img src="${r.setup.image}" alt="學生實驗裝置設計">` : ""}</section>
+  <section class="report-card"><h2>02 · 設計主探究</h2>${open("原始假說", o?.hypothesisText || hypothesis(initial, 3), "可測試的部位、遮光處理及預期反應；預測不符不代表假說不合理。")}${open("原始理由", initial.reason, "說明為甚麼作出該預測。")}${open("最後假說", hypothesis(f, 3), "保留修訂後內容，原始答案不覆蓋。")}${initial.comparison ? open("指定比較（舊版）", answerOption("comparison", initial.comparison), "A–B：頂端遮光；A–C：頂端是否存在；A–D：下部遮光。") : ""}${["iv", "dv", "cv"].map((key, i) => open(["獨立變量", "因變量", "控制變量"][i], r.variables[key].map((n) => VARIABLES[n]).join("；"), ["比較遮光處理／部位或頂端是否存在。", "伸長及彎曲反應。", "種類、處理前大小與狀況、光照、溫度、供水及培養時間。"][i])).join("")}${open("探究假設", r.assumptions.map((id) => assumptionsFor(r).find((a) => a[0] === id)?.[1]).join("；"), "初始狀況相近；帽及套不限制生長；處理不造成明顯溫差。相同種類仍需控制大小。")}${open("對照設計", f.controlPlan, "保留 A 完整不遮蓋；按三項指定比較保持其他條件相同。")}${open("裝置設計", r.setup.description, "四組處理、單側光源及固定條件清楚；圖片與文字由教師評閱。")}${safeImage(r.setup.image) ? `<img src="${r.setup.image}" alt="學生實驗裝置設計">` : ""}</section>
   <section class="report-card"><h2>03 · 主探究記錄</h2><h3>首次確認</h3>${firstMain}<h3>最後記錄</h3>${tableHTML(r.observations, groupDefinitions(r))}${Object.keys(
     GROUPS,
   )
     .map((id) => {
-      const expected = mainModel(id),
+      const expected = mainModel(id, r),
         obs = r.observations[id];
       return reportAnswer(
         id + " " + GROUPS[id].label,
@@ -539,11 +570,11 @@ function newReport(r) {
     })
     .join(
       "",
-    )}<p class="report-reference">C 的伸長減少是本模型設定；切頂後不一定完全停止生長。</p></section>
+    )}<p class="report-reference">${r.experimentVersion >= 4 ? "C 在本教學模型中不伸長；切頂後不一定完全停止生長，實際結果受植物狀況及條件影響。" : "C 的伸長減少是本模型設定；切頂後不一定完全停止生長。"}</p></section>
   <section class="report-card"><h2>04 · 主探究分析</h2>${questions(MAIN_ANSWERS)}${open("數據推論", f.evidence, "以 A–B、A–C、A–D 的具體比較支持推論，留意傷口、溫度及機械限制。")}</section>
-  <section class="report-card"><h2>04 · 延伸預測與觀察</h2>${open("原始預測", DIRECTIONS[e.initialPrediction?.prediction], "處理瓊脂放左側，模型中左側伸長較多而向右彎曲；原始預測由教師按可測試性評閱。")}${open("原始理由", e.initialPrediction?.reason, "合理理由不因結果不符直接判錯。")}${open("公平比較", f.extFair, "E–F 均放中央，保持瓊脂大小、幼芽初始大小及狀況、黑暗、溫度、供水及時間相同。")}<h3>首次確認讀數</h3>${firstExt}<h3>最後讀數</h3>${extensionTableHTML(e.readings)}${EXT_IDS.map((id) => reportAnswer(id + " 最終角度", e.readings[id]?.angle === undefined ? "" : e.readings[id].angle + "°", EXT_MODEL[id].angle + "°（教學模型；±3°）", e.readings[id] ? Math.abs(e.readings[id].angle - EXT_MODEL[id].angle) <= 3 : null)).join("")}<h3>學生棒形圖</h3>${Object.keys(e.graph).length ? barChartSVG(e.graph) : "未確認"}<p class="report-reference">圖表以學生本身讀數核對；量度準確性另與模型比較。不用鉛直高度差推算伸長量。</p></section>
+  <section class="report-card"><h2>04 · 延伸預測與觀察</h2>${open("原始預測", DIRECTIONS[e.initialPrediction?.prediction], "處理瓊脂放左側，模型中左側伸長較多而向右彎曲；原始預測由教師按可測試性評閱。")}${open("原始理由", e.initialPrediction?.reason, "合理理由不因結果不符直接判錯。")}${open("公平比較", f.extFair, "E–F 均放中央，保持瓊脂大小、胚芽鞘初始大小及狀況、黑暗、溫度、供水及時間相同。")}<h3>首次確認讀數</h3>${firstExt}<h3>最後讀數</h3>${extensionTableHTML(e.readings)}${EXT_IDS.map((id) => reportAnswer(id + " 最終角度", e.readings[id]?.angle === undefined ? "" : e.readings[id].angle + "°", EXT_MODEL[id].angle + "°（教學模型；±3°）", e.readings[id] ? Math.abs(e.readings[id].angle - EXT_MODEL[id].angle) <= 3 : null)).join("")}<h3>學生棒形圖</h3>${Object.keys(e.graph).length ? barChartSVG(e.graph) : "未確認"}<p class="report-reference">圖表以學生本身讀數核對；量度準確性另與模型比較。不用鉛直高度差推算伸長量。</p></section>
   <section class="report-card"><h2>04 · 延伸分析</h2>${questions(EXT_ANSWERS)}${open("延伸證據", f.extEvidence, "E–F 支持可轉移的生長促進作用；G–H 支持作用位置影響彎曲方向。")}${open("額外對照（選答）", f.extControl, "可把空白瓊脂放左側及右側，以排除單側放置本身的影響。")}</section>
-  ${r.submittedAt ? `<section class="report-card"><h2>學習重點</h2><p>向光性是因光照方向而產生的定向生長；朝光源屬正向光性。頂端參與感光，生長素是影響植物生長的激素。背光側生長素較多、細胞伸長較多，使幼芽朝光彎曲。</p>${mechanismSVG()}<p class="report-reference">本模型未直接鑑定瓊脂內的物質或量得單側光下的生長素分布；名稱及機制由其他研究支持。</p>${reportAnswer("名稱檢核", answerOption("knowledgeName", f.knowledgeName), "正向光性", f.knowledgeName ? f.knowledgeName === "positive" : null)}</section>` : ""}
+  ${r.submittedAt ? `<section class="report-card"><h2>學習重點</h2><p>向光性是因光照方向而產生的定向生長；朝光源屬正向光性。頂端參與感光，生長素是影響植物生長的激素。背光側生長素較多、細胞伸長較多，使胚芽鞘朝光彎曲。</p>${mechanismSVG()}<p class="report-reference">本模型未直接鑑定瓊脂內的物質或量得單側光下的生長素分布；名稱及機制由其他研究支持。</p>${reportAnswer("名稱檢核", answerOption("knowledgeName", f.knowledgeName), "正向光性", f.knowledgeName ? f.knowledgeName === "positive" : null)}</section>` : ""}
   <section class="report-card"><h2>學習反思</h2>${open("實際反思", f.reflection, "引用主探究及延伸各一項比較，修訂兩次原始預測，連結感光、生長訊號與不均勻伸長。由教師評閱，不自動判錯。")}</section><p class="report-reference">動畫、24 小時及角度為教學模擬。學生報告不顯示分數。</p>`;
 }
 function graphScore(r) {

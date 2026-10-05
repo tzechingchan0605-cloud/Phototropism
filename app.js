@@ -68,7 +68,7 @@ function comparisonText(record) {
 }
 const OUTCOMES = { bend: "仍向光彎曲", straight: "沒有明顯向光彎曲" };
 const VARIABLES = [
-  "遮光處理／部位或頂端是否存在（依指定比較）",
+  "遮光處理／部位或頂端是否存在",
   "胚芽鞘的伸長及彎曲反應",
   "光源方向及光強度",
   "胚芽鞘種類、初始高度及生長階段",
@@ -85,8 +85,8 @@ const LEGACY_ASSUMPTIONS = [
   ["light", "各組使用相同方向、強度及照射時間的單側光照。", true],
 ];
 const ASSUMPTIONS = [
-  ["similar", "各幼芽的初始生長狀況相近。", true],
-  ["free", "遮光帽及遮光套不限制幼芽伸長或彎曲。", true],
+  ["similar", "各胚芽鞘的初始生長狀況相近。", true],
+  ["free", "遮光帽及遮光套不限制胚芽鞘伸長或彎曲。", true],
   ["temperature", "各處理不會令裝置溫度明顯不同。", true],
   ["size", "植物種類相同便毋須控制初始大小。", false],
 ];
@@ -125,11 +125,12 @@ let sharedRecords = [],
   dashboardGeneration = 0;
 const storageErrors = new Set();
 let cloudSync;
+let toastTimer;
 function fresh(profile = null) {
   return {
     moduleId: MODULE_ID,
     schemaVersion: 1,
-    experimentVersion: 3,
+    experimentVersion: 4,
     id: crypto.randomUUID(),
     profile,
     createdAt: new Date().toISOString(),
@@ -166,6 +167,27 @@ function teacher() {
 }
 function message(text) {
   $("#status").textContent = text;
+  const toast = $("#toast");
+  toast.textContent = text;
+  toast.classList.toggle("show", !!text);
+  clearTimeout(toastTimer);
+  if (text) toastTimer = setTimeout(() => toast.classList.remove("show"), 6500);
+}
+function firstEmptyField(ids) {
+  const id = ids.find((id) => !$("#" + id).value.trim());
+  return id ? "#" + id : null;
+}
+function remind(text, selector) {
+  message(text);
+  const target = selector && $(selector);
+  if (!target) return;
+  target.scrollIntoView({ block: "center", behavior: scrollBehavior() });
+  const control = target.matches("input,textarea,select,button")
+    ? target
+    : target.querySelector(
+        "input:not(:disabled),textarea:not(:disabled),select:not(:disabled),button:not(:disabled)",
+      );
+  control?.focus({ preventScroll: true });
 }
 function readJSON(key, fallback) {
   try {
@@ -280,7 +302,7 @@ function hypothesis(form, version = state?.experimentVersion) {
     const condition = Object.hasOwn(form, "initialIdea")
       ? "即使下部仍然受光"
       : "而其他部位仍然受光";
-    return `若幼芽${form.hypothesisPart || "【未選擇部位】"}被遮光，${condition}，幼芽將會${OUTCOMES[form.hypothesisOutcome] || "【未選擇反應】"}。`;
+    return `若胚芽鞘${form.hypothesisPart || "【未選擇部位】"}被遮光，${condition}，胚芽鞘將會${OUTCOMES[form.hypothesisOutcome] || "【未選擇反應】"}。`;
   }
   return `若胚芽鞘的${form.hypothesisPart === "tip" ? "頂端" : form.hypothesisPart === "below" ? "頂端以下位置" : "【未選擇部位】"}被遮光，而其他部位仍然受光，胚芽鞘將會${OUTCOMES[form.hypothesisOutcome] || "【未選擇反應】"}。`;
 }
@@ -289,7 +311,7 @@ function seedling(id, progress = 0) {
   const bent = GROUPS[id].bend;
   // An intact tip supports elongation; the decapitated model has no obvious elongation.
   const tipX = 130 + (bent ? 55 * p : 0);
-  const tipY = id === "C" ? 130 - 8 * p : 110 - 32 * p;
+  const tipY = id === "C" ? 130 : 110 - 32 * p;
   const jointY = 158 - (bent ? 8 * p : 0);
   const stem = `M130 207 L130 ${jointY} C130 ${jointY - 34} ${130 + (bent ? 15 * p : 0)} ${tipY + 17} ${tipX} ${tipY}`;
   let cover = "";
@@ -303,7 +325,7 @@ function seedling(id, progress = 0) {
     const sleeve = `M130 205 L130 ${jointY} C130 ${jointY - 31} ${130 + 12 * p} ${endY + 14} ${endX} ${endY}`;
     cover = `<path data-sleeve="true" d="${sleeve}" fill="none" stroke="#15333b" stroke-width="26" stroke-linecap="butt"/><path d="${sleeve}" fill="none" stroke="#344a50" stroke-width="22" stroke-linecap="butt"/>`;
   }
-  const description = `${id} 組：${GROUPS[id].label}，${p === 1 ? (id === "C" ? "較少伸長，沒有明顯彎曲" : bent ? "下部保持直立，上部向光彎曲並伸長" : "保持直立並伸長") : "開始時"}`;
+  const description = `${id} 組：${GROUPS[id].label}，${p === 1 ? (id === "C" ? "沒有明顯伸長，沒有明顯彎曲" : bent ? "下部保持直立，上部向光彎曲並伸長" : "保持直立並伸長") : "開始時"}`;
   return `<svg class="seedling" viewBox="0 0 270 260" role="img" aria-label="${description}" xmlns="http://www.w3.org/2000/svg">
     <g transform="translate(270 0) scale(-1 1)"><path d="M235 46L157 27L157 145L235 100Z" fill="#f9d779" opacity=".2"/><rect x="232" y="45" width="17" height="55" rx="5" fill="#f3b946"/><path d="M236 100V222M219 223H253" stroke="#658087" stroke-width="5"/><path d="M221 69H203M208 64L203 69L208 74" stroke="#c28c1a" stroke-width="2" fill="none"/>
     <path data-stem="${id}" d="${stem}" fill="none" stroke="#59a16a" stroke-width="13" stroke-linecap="${id === "C" ? "butt" : "round"}"/><path d="${stem}" fill="none" stroke="#a1d38a" stroke-width="4" stroke-linecap="${id === "C" ? "butt" : "round"}"/>${cover}</g><text x="40" y="30" text-anchor="middle" fill="#9c731d" font-size="13">光源</text>
@@ -314,7 +336,7 @@ function seedling(id, progress = 0) {
 function windowSeedling(after = false) {
   const stem = after
     ? "M100 207 L100 140 C100 110 123 89 156 78"
-    : "M100 207 L100 66";
+    : "M100 207 L100 90";
   const description = after ? "窗邊胚芽鞘：24小時後" : "窗邊胚芽鞘：開始時";
   return `<svg class="window-seedling" viewBox="0 0 260 270" role="img" aria-label="${description}" xmlns="http://www.w3.org/2000/svg">
     <rect x="5" y="5" width="250" height="255" rx="16" fill="#f4f8f1"/>
@@ -406,7 +428,6 @@ function designMissing() {
     !state.form.reason.trim()
   )
     missing.push("假說部位、預期反應及理由");
-  if (!state.form.comparison) missing.push("指定比較");
   if (!["iv", "dv", "cv"].every((k) => state.variables[k].length))
     missing.push("三類變量");
   if (!state.assumptions.length) missing.push("實驗前提");
@@ -544,12 +565,13 @@ $("#clearDrawing").onclick = () => {
   log("setup_cleared");
 };
 $("#saveDrawing").onclick = () => {
-  if (!drawMade) return message("請先繪畫裝置，或改用文字設計。");
+  if (!drawMade)
+    return remind("請先繪畫裝置，或改用文字設計。", "#setupCanvas");
   saveSetup("drawing", canvas.toDataURL("image/png"));
 };
 $("#saveTextSetup").onclick = () => {
   if (!$("#setupDescription").value.trim())
-    return message("請先描述你的裝置設計。");
+    return remind("請先描述你的裝置設計。", "#setupDescription");
   saveSetup("text");
 };
 $("#setupPhoto").onchange = async (e) => {
@@ -593,14 +615,25 @@ FIELDS.forEach((f) =>
 );
 $("#toDesign").onclick = () => {
   readForm();
-  if (!state.form.observation.trim()) return message("請先完成初步觀察。");
+  if (!state.form.observation.trim())
+    return remind("請先完成初步觀察。", "#observation");
   state.unlocked = Math.max(state.unlocked, 2);
   phase(2);
   message("先提出你的預測，再設計公平的比較。");
 };
 $("#toExperiment").onclick = () => {
   const missing = designMissing();
-  if (missing.length) return message("請完成：" + missing.join("、"));
+  if (missing.length) {
+    const target =
+      firstEmptyField(["hypothesisPart", "hypothesisOutcome", "reason"]) ||
+      ["iv", "dv", "cv"]
+        .filter((key) => !state.variables[key].length)
+        .map((key) => `[data-variable="${key}"]`)[0] ||
+      (!state.assumptions.length && "#assumptions") ||
+      (!state.form.controlPlan.trim() && "#controlPlan") ||
+      ".setup-card";
+    return remind("請完成：" + missing.join("、"), target);
+  }
   if (!state.initialDesign)
     state.initialDesign = {
       at: new Date().toISOString(),
@@ -658,7 +691,16 @@ $("#recordData").onclick = () => {
     ]),
   );
   if (Object.values(obs).some((v) => !mainObservationComplete(v)))
-    return message("請先選擇四組的伸長、彎曲方向及位置。");
+    return remind(
+      "請先選擇四組的伸長、彎曲方向及位置。",
+      firstEmptyField(
+        Object.keys(GROUPS).flatMap((id) => [
+          "growth-" + id,
+          "obs-" + id,
+          "position-" + id,
+        ]),
+      ),
+    );
   if (!state.firstObservations) {
     state.firstObservations = clone(obs);
     state.firstObservationsAt = new Date().toISOString();
@@ -674,7 +716,10 @@ $("#toAnalysis").onclick = () => {
       mainObservationComplete(state.observations[id]),
     )
   )
-    return message("請先記錄全部四組的觀察。");
+    return remind(
+      "請先記錄全部四組的觀察。",
+      hasRun ? "#recordData" : "#runExperiment",
+    );
   state.unlocked = 4;
   phase(4);
   message("請引用你記錄的組別比較，完成結論。");
@@ -685,9 +730,24 @@ $("#submitInvestigation").onclick = () => {
     !Object.keys(MAIN_ANSWERS).every((k) => state.form[k]) ||
     !state.form.evidence.trim()
   )
-    return message("請完成主探究六項推論及數據解釋。");
+    return remind(
+      "請完成主探究六項推論及數據解釋。",
+      firstEmptyField([...Object.keys(MAIN_ANSWERS), "evidence"]),
+    );
   const missing = extensionMissing();
-  if (missing.length) return message("請完成：" + missing.join("、"));
+  if (missing.length) {
+    const target = !state.extension.unlocked
+      ? "#toExtension"
+      : !state.extension.initialPrediction
+        ? firstEmptyField(["extPrediction", "extReason", "extFair"]) ||
+          "#runExtension"
+        : !EXT_IDS.every((id) => state.extension.readings[id])
+          ? "#extensionResults"
+          : !state.extension.graphSaved
+            ? "#saveGraph"
+            : firstEmptyField([...Object.keys(EXT_ANSWERS), "extEvidence"]);
+    return remind("請完成：" + missing.join("、"), target);
+  }
   if (running || extensionRunning) return message("請等待實驗完成。");
   if (state.submittedAt) return;
   if (
@@ -716,7 +776,10 @@ $("#submitInvestigation").onclick = () => {
 $("#saveReflection").onclick = () => {
   if (!state.submittedAt || state.reflectionSubmittedAt) return;
   if (!$("#reflection").value.trim() || !$("#knowledgeName").value)
-    return message("請完成學習檢核及反思。");
+    return remind(
+      "請完成學習檢核及反思。",
+      firstEmptyField(["knowledgeName", "reflection"]),
+    );
   state.form.reflection = $("#reflection").value;
   state.reflectionSubmittedAt = new Date().toISOString();
   log("reflection_submitted", { reflection: state.form.reflection });
@@ -1021,10 +1084,6 @@ const materials = [
   [
     "下部遮光套 × 1",
     '<path d="M43 18V103Q60 114 77 103V18" fill="#344a50" stroke="#15333b" stroke-width="3"/><ellipse cx="60" cy="18" rx="17" ry="7" fill="#edf5ee" stroke="#15333b" stroke-width="3"/>',
-  ],
-  [
-    "培養容器 × 4",
-    '<rect x="30" y="35" width="60" height="62" rx="7" fill="#e8f2f1" stroke="#658087"/><path d="M32 68H88V93H32Z" fill="#d6a878"/>',
   ],
   [
     "計時工具 × 1",
@@ -1347,7 +1406,7 @@ async function exportExcel() {
   const extraFields = [
     // Keep this historical export column so older answers and workbook layout survive.
     ["initialIdea", "初步想法（舊版）", "observing"],
-    ["comparison", "指定比較", "classifying"],
+    ["comparison", "指定比較（舊版）", "classifying"],
     ["qShade", "頂端遮光比較", "inferring"],
     ["qSites", "感光與彎曲位置", "inferring"],
     ["extPrediction", "延伸原始預測", "designing"],
@@ -1499,7 +1558,7 @@ async function exportExcel() {
     );
     Object.entries(groupDefinitions(r)).forEach(([id, g]) => {
       const outcome = g.bend ? "bend" : "straight";
-      const expected = newExperiment(r) ? mainModel(id) : outcome;
+      const expected = newExperiment(r) ? mainModel(id, r) : outcome;
       const correct = r.observations[id]
         ? newExperiment(r)
           ? ["growth", "direction", "position"].every(
@@ -1620,7 +1679,7 @@ async function exportExcel() {
       ],
       images,
     ),
-    "VL3_幼芽朝光生長_全班學習紀錄.xlsx",
+    "VL3_胚芽鞘朝光生長_全班學習紀錄.xlsx",
   );
 }
 $("#exportExcel").onclick = exportExcel;

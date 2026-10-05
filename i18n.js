@@ -72,7 +72,7 @@ window.VL3Language = (() => {
       return `Setup ${match[1]}: ${english(match[2])}, ${english(match[3])}`;
     if (
       (match =
-        /^若幼芽(.+)被遮光，(而其他部位仍然受光|即使下部仍然受光)，幼芽將會(.+)。$/.exec(
+        /^若(?:胚芽鞘|幼芽)(.+)被遮光，(而其他部位仍然受光|即使下部仍然受光)，(?:胚芽鞘|幼芽)將會(.+)。$/.exec(
           source,
         ))
     ) {
@@ -84,7 +84,7 @@ window.VL3Language = (() => {
       ].includes(match[1])
         ? english(match[1]).toLowerCase()
         : match[1];
-      return `If the young shoot's ${part} is covered to block light, ${match[2].startsWith("而") ? "while the other parts still receive light" : "even if the lower part still receives light"}, it will ${english(match[3])}.`;
+      return `If the coleoptile's ${part} is covered to block light, ${match[2].startsWith("而") ? "while the other parts still receive light" : "even if the lower part still receives light"}, it will ${english(match[3])}.`;
     }
     if (
       (match =

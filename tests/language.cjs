@@ -207,7 +207,7 @@ async function saveExcel(page, target) {
     await page.selectOption("#hypothesisPart", "頂端以下位置");
     await page.selectOption("#hypothesisOutcome", "bend");
     await page.fill("#reason", "光源");
-    await page.selectOption("#comparison", "AD");
+    assert.equal(await page.locator("#comparison").count(), 0);
     for (const [key, values] of Object.entries({
       iv: [0],
       dv: [1],
@@ -268,10 +268,7 @@ async function saveExcel(page, target) {
     await page.waitForFunction(() => hasRun);
     await page.emulateMedia({ reducedMotion: "reduce" });
     for (const id of ["A", "B", "C", "D"]) {
-      await page.selectOption(
-        `#growth-${id}`,
-        id === "C" ? "reduced" : "clear",
-      );
+      await page.selectOption(`#growth-${id}`, id === "C" ? "none" : "clear");
       await page.selectOption(
         `#obs-${id}`,
         ["A", "D"].includes(id) ? "left" : "straight",

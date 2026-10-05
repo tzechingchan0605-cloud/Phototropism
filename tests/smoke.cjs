@@ -21,9 +21,38 @@ async function authenticate(p) {
   await p.click("#teacherLogin button");
   await p.waitForFunction(() => document.querySelector("#teacherLogin").hidden);
 }
+async function reminder(p, button, text, focusId) {
+  await p.click(button);
+  assert(await p.locator("#toast.show").isVisible());
+  assert.match(await p.locator("#toast").innerText(), text);
+  if (focusId)
+    assert.equal(await p.evaluate(() => document.activeElement.id), focusId);
+}
 async function flow(p, student = true) {
   assert.doesNotMatch(await p.locator("main").innerText(), /向光性|生長素/);
-  await p.click("#toDesign");
+  assert.equal(
+    (await p.locator("h1").innerText()).replace(/\s/g, ""),
+    "幼芽為甚麼朝光生長？",
+  );
+  assert.doesNotMatch(
+    await p
+      .locator("#phase-1,#phase-2,#phase-3,#phase-4")
+      .allTextContents()
+      .then((texts) => texts.join("")),
+    /幼芽/,
+  );
+  const contextLengths = await p.evaluate(() =>
+    ["before", "after"].map((id) =>
+      document
+        .querySelector(`#contextPlant [data-stem="${id}"]`)
+        .getTotalLength(),
+    ),
+  );
+  assert(
+    contextLengths[0] < contextLengths[1],
+    "The initial coleoptile must be shorter than the grown one",
+  );
+  await reminder(p, "#toDesign", /請先完成初步觀察/, "observation");
   assert(await p.locator("#phase-1").isVisible());
   await p.fill("#observation", "窗邊幼苗下部直立，上部朝窗戶彎曲。");
   assert.equal(await p.locator("#initialIdea").count(), 0);
@@ -31,6 +60,25 @@ async function flow(p, student = true) {
   assert(await p.locator("#phase-2").isVisible());
   assert.equal(await p.inputValue("#hypothesisPart"), "");
   assert.equal(await p.inputValue("#hypothesisOutcome"), "");
+  const hint = p.locator("#assumptionDefinition");
+  assert.equal(
+    await hint.innerText(),
+    "提示：假設是指在沒有直接證據或未經證實的情況下，為了進行探究而先行設定為「正確」的預設條件。",
+  );
+  assert(
+    await hint.evaluate(
+      (el) =>
+        parseFloat(getComputedStyle(el).fontSize) <
+        parseFloat(getComputedStyle(el.previousElementSibling).fontSize),
+    ),
+  );
+  await reminder(
+    p,
+    "#toExperiment",
+    /假說部位、預期反應及理由/,
+    "hypothesisPart",
+  );
+  assert.equal(await p.evaluate(() => state.initialDesign), null);
   assert.deepEqual(
     await p.locator("#hypothesisPart option").allTextContents(),
     ["請選擇", "頂端", "頂端以下位置"],
@@ -43,12 +91,15 @@ async function flow(p, student = true) {
   await p.selectOption("#hypothesisPart", "頂端");
   await p.selectOption("#hypothesisOutcome", "bend");
   await p.fill("#reason", "若上方只是被動生長，遮光後可能仍朝光彎曲。");
-  await p.selectOption("#comparison", "AB");
+  assert.equal(await p.locator("#comparison").count(), 0);
+  await reminder(p, "#toExperiment", /三類變量/);
   for (const [g, ids] of Object.entries({ iv: [0], dv: [1], cv: [2, 3, 4, 5] }))
     for (const id of ids)
       await p.locator(`[data-variable=${g}][value="${id}"]`).check();
+  await reminder(p, "#toExperiment", /實驗前提/);
   for (const id of ["similar", "free", "temperature"])
     await p.locator(`[data-assumption=${id}]`).check();
+  await reminder(p, "#toExperiment", /對照組設計/, "controlPlan");
   await p.fill(
     "#controlPlan",
     "保留A完整不遮蓋；每項比較保持光照、時間、供水、溫度、種類及處理前大小相近。",
@@ -57,6 +108,7 @@ async function flow(p, student = true) {
     "#setupDescription",
     "A完整 B不透光帽 C剪去頂端 D下部長遮光套；左側光照，帽及套留足空間。",
   );
+  await reminder(p, "#toExperiment", /已儲存的裝置設計/);
   await p.click("#saveTextSetup");
   const b = await p.locator("#setupCanvas").boundingBox();
   await p.mouse.move(b.x + 20, b.y + 30);
@@ -90,13 +142,32 @@ async function flow(p, student = true) {
   assert.match(after.A, /M130 207 L130 150/);
   assert.match(after.A, /translate\(270 0\) scale\(-1 1\)/);
   assert.match(after.C, /data-cut-surface/);
-  assert.match(after.C, /130 122/);
+  assert.match(after.C, /130 130/);
+  const cutPaths = await p.evaluate(() =>
+    [0, 0.5, 1].map((progress) => {
+      const svg = new DOMParser().parseFromString(
+        seedling("C", progress),
+        "image/svg+xml",
+      );
+      return svg.querySelector('[data-stem="C"]').getAttribute("d");
+    }),
+  );
+  assert(
+    cutPaths.every((path) => path === cutPaths[0]),
+    "C must stay the same length throughout the animation",
+  );
   assert.match(after.D, /data-sleeve/);
   assert.match(await p.locator("#equipmentBank").innerText(), /剪刀/);
-  assert.match(await p.locator("#equipmentBank").innerText(), /培養容器 × 4/);
+  assert.doesNotMatch(
+    await p.locator("#equipmentBank").innerText(),
+    /培養容器/,
+  );
   assert.match(await p.locator("#equipmentBank").innerText(), /計時工具/);
+  assert.equal(await p.locator("#equipmentBank .equipment").count(), 6);
+  await reminder(p, "#recordData", /四組的伸長、彎曲方向及位置/, "growth-A");
+  assert.equal(await p.evaluate(() => state.firstObservations), null);
   for (const id of ["A", "B", "C", "D"]) {
-    await p.selectOption("#growth-" + id, id === "C" ? "reduced" : "clear");
+    await p.selectOption("#growth-" + id, id === "C" ? "none" : "clear");
     await p.selectOption(
       "#obs-" + id,
       ["A", "D"].includes(id) ? "left" : "straight",
@@ -118,6 +189,7 @@ async function flow(p, student = true) {
   if (student)
     await p.screenshot({ path: "/tmp/vl3-experiment.png", fullPage: true });
   await p.click("#toAnalysis");
+  await reminder(p, "#toExtension", /六項推論及數據解釋/, "qTip");
   assert(await p.locator("#learningReveal").isHidden());
   await p.click("#toExtension");
   assert(await p.locator("#extensionSection").isHidden());
@@ -132,7 +204,7 @@ async function flow(p, student = true) {
     await p.selectOption("#" + id, v);
   await p.fill(
     "#evidence",
-    "A–B：B仍伸長但不明顯朝光彎曲；A–C：C較少伸長且未彎曲；A–D：D下部遮光仍朝光彎曲。",
+    "A–B：B仍伸長但不明顯朝光彎曲；A–C：C沒有明顯伸長且未彎曲；A–D：D下部遮光仍朝光彎曲。",
   );
   assert.doesNotMatch(
     await p.locator("#conclusionForm").innerText(),
@@ -142,7 +214,12 @@ async function flow(p, student = true) {
   assert(await p.locator("#learningReveal").isHidden());
   await p.click("#toExtension");
   assert(await p.locator("#extensionSection").isVisible());
-  await p.click("#runExtension");
+  await reminder(
+    p,
+    "#runExtension",
+    /延伸預測、理由及公平比較/,
+    "extPrediction",
+  );
   assert.equal(await p.evaluate(() => extensionHasRun), false);
   await p.selectOption("#extPrediction", "left");
   await p.fill("#extReason", "我預測接觸瓊脂的一側會向該側生長。");
@@ -164,6 +241,8 @@ async function flow(p, student = true) {
     await p.evaluate(() => state.extension.initialPrediction),
     extOriginal,
   );
+  await reminder(p, "#confirmExtension", /四組伸長、角度/, "ext-angle-E");
+  assert.equal(await p.evaluate(() => state.extension.firstReadings), null);
   for (const id of ["E", "F", "G", "H"]) {
     const angle = id === "G" ? 30 : id === "H" ? -35 : 0;
     await p.locator("#ruler-" + id).fill(String(angle));
@@ -179,6 +258,7 @@ async function flow(p, student = true) {
     );
   }
   await p.click("#confirmExtension");
+  await reminder(p, "#saveGraph", /四條棒的角度及方向/, "graph-angle-E");
   assert.equal(
     await p.evaluate(() => state.extension.firstReadings.readings.G.angle),
     30,
@@ -213,6 +293,7 @@ async function flow(p, student = true) {
       .screenshot({ path: "/tmp/vl3-extension.png" });
     await p.locator("#barChart").screenshot({ path: "/tmp/vl3-chart.png" });
   }
+  await reminder(p, "#submitInvestigation", /延伸分析及證據/, "extEF");
   for (const [id, v] of Object.entries({
     extEF: "transfer",
     extPosition: "position",
@@ -240,9 +321,10 @@ async function flow(p, student = true) {
     /仍向光彎曲/,
   );
   assert(await p.locator("#downloadPDF").isDisabled());
-  await p.click("#saveReflection");
+  await reminder(p, "#saveReflection", /學習檢核及反思/, "knowledgeName");
   assert(await p.locator("#downloadPDF").isDisabled());
   await p.selectOption("#knowledgeName", "positive");
+  await reminder(p, "#saveReflection", /學習檢核及反思/, "reflection");
   await p.fill(
     "#reflection",
     "主探究原始假說需要修訂：A與B表明頂端遮光後仍伸長但沒有明顯朝光彎曲，支持頂端感光。延伸原預測方向不符：G與H顯示左側伸長較多向右彎曲。生長素是生長激素，頂端的生長訊號可向下傳遞；光照下右側背光側細胞伸長較多使幼芽向左彎曲，屬正向光性。這些實驗沒有直接鑑定物質或測量光照下分布。",
@@ -360,6 +442,27 @@ async function flow(p, student = true) {
       label: "頂端透明罩",
       score: 2,
       report: true,
+    });
+    const version3 = await p.evaluate(() => {
+      const r = structuredClone(records()[0]);
+      r.experimentVersion = 3;
+      r.form.comparison = "AB";
+      r.initialDesign.form.comparison = "AB";
+      r.observations.C.growth = "reduced";
+      return {
+        valid: valid(r),
+        growth: mainModel("C", r).growth,
+        score: mainObservationScore(r),
+        oldComparison: newReport(r).includes("A 與 B：頂端遮光處理"),
+        oldModel: newReport(r).includes("C 的伸長減少是本模型設定"),
+      };
+    });
+    assert.deepEqual(version3, {
+      valid: true,
+      growth: "reduced",
+      score: 2,
+      oldComparison: true,
+      oldModel: true,
     });
     const teacher = await browser.newPage();
     teacher.on("dialog", (d) => d.accept());

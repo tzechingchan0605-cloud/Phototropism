@@ -72,7 +72,7 @@
               <p class="card-kicker">生活中的線索</p>
               <h3>窗邊的胚芽鞘，為甚麼會彎向光？</h3>
               <p class="muted">
-                本實驗使用燕麥胚芽鞘：包裹並保護幼芽的鞘狀構造，外形較直，方便觀察。下文的幼芽以胚芽鞘作模型。
+                本實驗使用燕麥胚芽鞘：包裹並保護內部嫩葉的鞘狀構造，外形較直，方便觀察。
               </p>
               <div id="contextPlant"></div>
               <p>
@@ -112,19 +112,19 @@
           <div class="design-content">
             <div class="research-question">
               <p class="card-kicker">研究問題</p>
-              <h3>幼芽哪個部位感受單側光照，並影響它的生長方向？</h3>
+              <h3>胚芽鞘哪個部位感受單側光照，並影響它的生長方向？</h3>
             </div>
             <article class="vl3-card design-card hypothesis-card">
               <p class="card-kicker">01 · 假說建立器</p>
               <h3>完成你的假說</h3>
               <p class="hypothesis-sentence">
-                若幼芽
+                若胚芽鞘
                 <select id="hypothesisPart" aria-label="假說部位">
                   <option value="">請選擇</option>
                   <option value="頂端">頂端</option>
                   <option value="頂端以下位置">頂端以下位置</option>
                 </select>
-                被遮光，而其他部位仍然受光，幼芽將會
+                被遮光，而其他部位仍然受光，胚芽鞘將會
                 <select id="hypothesisOutcome" aria-label="預期反應">
                   <option value="">請選擇</option>
                   <option value="bend">仍向光彎曲</option>
@@ -145,21 +145,17 @@
             <article class="vl3-card design-card variables-card">
               <p class="card-kicker">02 · 公平測試設計</p>
               <p>
-                先選擇一項指定比較，再分類該比較的變量。三項比較測試的因素不同，不能視為四組只改變同一因素。
+                請分類本探究的變量。A–B、A–C、A–D
+                分別比較頂端遮光、頂端是否存在及下部遮光；每項比較保持其他條件相同。
               </p>
-              <label for="comparison"
-                >指定比較<select id="comparison">
-                  <option value="">請選擇</option>
-                  <option value="AB">A 與 B：頂端遮光處理</option>
-                  <option value="AC">A 與 C：頂端是否存在</option>
-                  <option value="AD">A 與 D：下部遮光處理</option>
-                </select></label
-              >
               <div id="variableChoices"></div>
             </article>
             <article class="vl3-card design-card assumptions-card">
               <p class="card-kicker">03 · 實驗前提</p>
               <h3>此探究的假設是什麼？</h3>
+              <p class="muted design-hint" id="assumptionDefinition">
+                提示：假設是指在沒有直接證據或未經證實的情況下，為了進行探究而先行設定為「正確」的預設條件。
+              </p>
               <p class="muted design-hint">
                 請選出所有適用的假設，可選多於一項。
               </p>
@@ -169,7 +165,7 @@
               <p class="card-kicker">04 · 探究的對照組</p>
               <h3>
                 <label for="controlPlan"
-                  >若想判斷不同處理是否影響幼芽的生長方向，你會保留甚麼未經處理的裝置作比較？哪些條件需要保持相同？</label
+                  >若想判斷不同處理是否影響胚芽鞘的生長方向，你會保留甚麼未經處理的裝置作比較？哪些條件需要保持相同？</label
                 >
               </h3>
               <p class="muted design-hint">
@@ -367,7 +363,7 @@
                   生長素是影響植物生長的激素。頂端可產生能向下傳遞的生長促進作用。
                 </li>
                 <li>
-                  單側光照下，背光側生長素較多，該側細胞伸長較多，使幼芽向光彎曲；感光部位與彎曲部位可不同。
+                  單側光照下，背光側生長素較多，該側細胞伸長較多，使胚芽鞘向光彎曲；感光部位與彎曲部位可不同。
                 </li>
               </ol>
               <div id="mechanismDiagram"></div>
@@ -521,6 +517,7 @@
       </div>
       <p id="importStatus" role="status"></p>
     </dialog>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <section id="printReport"></section>
   </body>
 </html>

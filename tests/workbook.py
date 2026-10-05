@@ -19,7 +19,7 @@ assert '被動生長' in a['G2'].value
 assert a['H2'].font.color.rgb=='FF00834A'
 assert a['E2'].font.color.rgb=='FF173E34'
 assert '不能確定頂端只負責感光' in a['Q2'].value
-assert o['D4'].value=='切去頂端' and '較少伸長' in o['G4'].value
+assert o['D4'].value=='切去頂端' and '沒有明顯伸長' in o['G4'].value
 assert len({a[c+'2'].fill.fgColor.rgb for c in ['E','F','H','M','R','N','S']})>=6
 assert len(w['裝置設計圖']._images)==2
 assert '沒有明顯彎曲' in o['E5'].value and '向左彎曲' in o['F5'].value
