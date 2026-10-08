@@ -43,7 +43,8 @@ assert a['AK2'].value=='我預測沒有頂端也可同樣延長。'
 assert a['AL2'].value in (None, '')
 assert a['AM2'].value in (None, '')
 assert '物質 X' in a['AN2'].value and '向下傳遞' in a['AN2'].value
-assert a['AO2'].value=='A有明顯延長及向光彎曲，C沒有明顯延長或彎曲；頂端可能提供促進下方生長的物質X，但傷口也是限制。'
+assert a['AO2'].value in (None, '')
+assert a['R2'].value in (None, '')
 assert a['AJ2'].font.color.rgb==a['AK2'].font.color.rgb=='FF173E34'
 assert a['AN2'].font.color.rgb=='FF00834A'
 assert w.calculation.fullCalcOnLoad and w.calculation.forceFullCalc
@@ -112,7 +113,7 @@ assert a['Y2'].value=='向左彎曲'  # original extension prediction, not the r
 assert a['AI2'].value=='正向光性'
 chunks=w['原始與遞交快照']
 r=json.loads(''.join(chunks.cell(i,3).value for i in range(2,chunks.max_row+1)))
-assert r['experimentVersion']==9
+assert r['experimentVersion']==10
 assert list(r['observations'])==list(r['firstObservations'])==['A','B','D']
 assert r['firstObservations']['D']['direction']=='straight'
 assert r['observations']['D']['direction']=='left'
@@ -125,13 +126,13 @@ assert r['form']['tipPrediction']=='less'
 assert r['form']['tipReason']=='修訂：頂端可能提供生長訊號。'
 assert tip['firstObservations']['observations']==tip['observations']=={'A':{'growth':'clear'},'C':{'growth':'none'}}
 assert tip['firstAnalysis']['answers']=={'qCap':'tipRole','substancePrediction':'possible'}
-assert tip['firstAnalysis']['evidence']=='A有明顯延長及向光彎曲，C沒有明顯延長或彎曲；頂端可能提供促進下方生長的物質X，但傷口也是限制。'
-assert r['form']['tipEvidence']==tip['firstAnalysis']['evidence']
+assert 'evidence' not in tip['firstAnalysis']
+assert 'tipEvidence' not in r['form']
 assert r['finalAnswers']['tipInquiry']==tip
 assert r['finalAnswers']['observations']==r['observations']
 assert r['finalAnswers']['form']['tipPrediction']=='less'
 assert r['finalAnswers']['form']['tipReason']==r['form']['tipReason']
-assert r['finalAnswers']['form']['tipEvidence']==tip['firstAnalysis']['evidence']
+assert 'tipEvidence' not in r['finalAnswers']['form']
 assert r['extension']['initialPrediction']['prediction']=='left'
 assert r['extension']['firstReadings']['readings']['G']['angle']==30
 assert r['extension']['readings']['G']['angle']==35

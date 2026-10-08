@@ -19,7 +19,7 @@ headers = {cell.value:cell.column - 1 for cell in answers[1]}
 assert [cell.value for cell in answers[1]][35:] == ['延伸一原始預測','延伸一原始理由','延伸一公平比較','延伸一證據限制','物質 X 待測想法','延伸一數據解釋']
 for header, expected in [('姓名','光源'),('班別','學生棒形圖'),('初步觀察','我觀察到……'),('原始理由','光源'),('對照組設計','向左彎曲'),('裝置文字設計','學生實驗裝置設計'),('學習反思','我的理由')]:
     assert row[headers[header]].value == expected, header
-for header,expected in [('延伸一原始預測','延長表現相近'),('延伸一原始理由','頂端原文'),('延伸一數據解釋','物質X原文')]:
+for header,expected in [('延伸一原始預測','延長表現相近'),('延伸一原始理由','頂端原文')]:
     assert row[headers[header]].value == expected, header
 assert row[headers['延伸一證據限制']].value in (None, '')
 assert row[headers['延伸一公平比較']].value in (None, '')
@@ -37,14 +37,16 @@ assert [row[7].value for row in student_rows] == ['主探究']*3+['延伸一']*2
 chunks = w['原始與遞交快照']
 record_id = row[headers['紀錄識別碼']].value
 record = json.loads(''.join(part[2].value for part in chunks.iter_rows(min_row=2) if part[0].value == record_id))
-assert record['experimentVersion'] == 9
+assert record['experimentVersion'] == 10
 assert list(record['observations']) == ['A','B','D']
 tip = record['tipInquiry']
 assert tip['initialPrediction']['prediction'] == 'same'
 assert record['form']['tipPrediction'] == 'less'
 assert tip['initialPrediction']['reason'] == record['form']['tipReason'] == '頂端原文'
 assert 'fair' not in tip['initialPrediction'] and 'tipFair' not in record['form']
-assert tip['firstAnalysis']['evidence'] == record['form']['tipEvidence'] == '物質X原文'
+assert 'evidence' not in tip['firstAnalysis'] and 'tipEvidence' not in record['form']
+assert row[headers['數據解釋']].value in (None, '')
+assert row[headers['延伸一數據解釋']].value in (None, '')
 assert record['finalAnswers']['tipInquiry'] == tip
 assert tip['firstObservations']['observations'] == tip['observations'] == {'A':{'growth':'clear'},'C':{'growth':'none'}}
 texts = {}
@@ -57,7 +59,7 @@ assert 'Why do young shoots grow towards light?' in texts['emi']
 assert '參考答案' in texts['cmi'] and '學習反思' in texts['cmi']
 for language,text in texts.items():
     compact = ''.join(text.split())
-    for answer in ['光源','學生棒形圖','學生實驗裝置設計','向右彎曲','我的理由','頂端原文','物質X原文']:
+    for answer in ['光源','學生棒形圖','學生實驗裝置設計','向右彎曲','我的理由','頂端原文']:
         assert answer in compact, (language,answer)
 assert 'SPS' not in texts['emi']
 print('PASS: actual Chinese/English PDFs preserve main/tip/agar student text and translate references; all XLSX parts, stage observations, tip snapshots, Chinese answers, formulas and images are identical.')

@@ -124,7 +124,6 @@ const FIELDS = [
   "qTip",
   "qCap",
   "qBelow",
-  "evidence",
   "reflection",
   ...NEW_FIELDS,
   ...TIP_FIELDS,
@@ -154,7 +153,7 @@ function fresh(profile = null) {
   return {
     moduleId: MODULE_ID,
     schemaVersion: 1,
-    experimentVersion: 9,
+    experimentVersion: 10,
     id: crypto.randomUUID(),
     profile,
     createdAt: new Date().toISOString(),
@@ -758,12 +757,11 @@ $("#toAnalysis").onclick = () => {
 $("#submitInvestigation").onclick = () => {
   readForm();
   if (
-    !Object.keys(MAIN_ANSWERS).every((k) => state.form[k]) ||
-    !state.form.evidence.trim()
+    !Object.keys(MAIN_ANSWERS).every((k) => state.form[k])
   )
     return remind(
-      "請完成主探究三項推論及觀察解釋。",
-      firstEmptyField([...Object.keys(MAIN_ANSWERS), "evidence"]),
+      "請完成主探究三項推論。",
+      firstEmptyField(Object.keys(MAIN_ANSWERS)),
     );
   const tipIncomplete = tipMissing();
   if (tipIncomplete.length)
@@ -1546,10 +1544,11 @@ async function exportExcel() {
         newExperiment(r) ? answerOption("qCap", f.qCap, r) : comparisonText(r),
         OUTCOMES[f.qBelow] || "",
         limitationText(r),
-        f.evidence,
+        f.evidence || "",
         f.reflection,
         Math.round(Object.values(r.phaseDurations).reduce((a, b) => a + b, 0)),
         ...extraFields.map(([id]) => {
+          if (id === "tipEvidence") return f.tipEvidence || "";
           if (["tipFair", "tipLimit"].includes(id))
             return f[id] ? answerOption(id, f[id], r) : "";
           if (["extDark", "extLimit", "extEvidence", "extControl"].includes(id))

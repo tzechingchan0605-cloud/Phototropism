@@ -120,7 +120,7 @@ async function flow(p, student = true) {
   await p.click("#saveDrawing");
   await p.click("#toExperiment");
   assert(await p.locator("#phase-3").isVisible());
-  assert.equal(await p.evaluate(() => state.experimentVersion), 9);
+  assert.equal(await p.evaluate(() => state.experimentVersion), 10);
   assert.deepEqual(await p.evaluate(() => MAIN_IDS), ["A", "B", "D"]);
   assert.equal(await p.locator("#bench .specimen").count(), 3);
   assert.equal(await p.locator("#growth-C").count(), 0);
@@ -187,7 +187,7 @@ async function flow(p, student = true) {
   if (student)
     await p.screenshot({ path: "/tmp/vl3-experiment.png", fullPage: true });
   await p.click("#toAnalysis");
-  await reminder(p, "#toExtension", /三項推論及觀察解釋/, "qTip");
+  await reminder(p, "#toExtension", /三項推論/, "qTip");
   assert(await p.locator("#learningReveal").isHidden());
   await p.click("#toExtension");
   assert(await p.locator("#tipSection").isHidden());
@@ -198,10 +198,7 @@ async function flow(p, student = true) {
     qBelow: "bend",
   }))
     await p.selectOption("#" + id, v);
-  await p.fill(
-    "#evidence",
-    "A–B：B仍延長但不明顯向光彎曲；A–D：D下部遮光仍向光彎曲。",
-  );
+  assert.equal(await p.locator("#evidence").count(), 0);
   assert.doesNotMatch(
     await p.locator("#conclusionForm").innerText(),
     /生長素|向光性/,
@@ -230,6 +227,7 @@ async function flow(p, student = true) {
   await p.emulateMedia({ reducedMotion: "no-preference" });
   await p.click("#runTipExperiment");
   assert(await p.locator("#confirmTipObservations").isDisabled());
+  await p.waitForFunction(() => Math.abs(document.querySelector("#tipResults").getBoundingClientRect().top) < 5);
   await p.waitForFunction(() => tipHasRun);
   await p.emulateMedia({ reducedMotion: "reduce" });
   const tipOriginal = await p.evaluate(() =>
@@ -275,10 +273,7 @@ async function flow(p, student = true) {
     substancePrediction: "possible",
   }))
     await p.selectOption(`#${id}`, value);
-  await p.fill(
-    "#tipEvidence",
-    "A有明顯延長及向光彎曲，C沒有明顯延長或彎曲；頂端可能提供促進下方生長的物質X，但傷口也是限制。",
-  );
+  assert.equal(await p.locator("#tipEvidence").count(), 0);
   assert.doesNotMatch(await p.locator("main").innerText(), /生長素|向光性/);
   await reminder(p, "#submitInvestigation", /延伸/, "toAgar");
   assert(await p.locator("#learningReveal").isHidden());

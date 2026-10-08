@@ -86,7 +86,7 @@ A 與 C：初始及培養後的比較	A and C: compare before and after growth
 延伸一觀察已保存。請分析頂端與延長的關係。	Extension 1 observations saved. Analyse the link between the tip and elongation.
 延伸一預測及實驗	Extension 1 prediction and experiment
 A 與 C 的已確認觀察	Confirmed observations of A and C
-延伸一分析及證據	Extension 1 analysis and evidence
+延伸一分析	Extension 1 analysis
 04 · 延伸探究一：頂端與延長	04 · Extension 1: the tip and elongation
 延伸一原始預測	Original extension 1 prediction
 延伸一原始理由	Original extension 1 reason
@@ -661,8 +661,8 @@ D 在本教學模型中不延長；切頂後不一定完全停止生長，實際
 沒有明顯向光彎曲。	No clear bending towards the light.
 比較 A、B、C 的彎曲方向：遮住頂端和遮住下部，結果有甚麼不同？這些結果顯示哪個部位可能感受光？	Compare the bending directions of A, B and C. How do the results differ when the tip or the lower part is covered? Which part do these results suggest senses light?
 請先選擇三組的彎曲方向。	Choose the bending direction for all three setups first.
-請先完成主探究的三項推論及觀察解釋。	Complete the three main inquiry conclusions and explain your observations first.
-請完成主探究三項推論及觀察解釋。	Complete the three main inquiry conclusions and explain your observations.
+請先完成主探究的三項推論。	Complete the three main inquiry conclusions first.
+請完成主探究三項推論。	Complete the three main inquiry conclusions.
 文字設計（可代替繪圖）：描述 A、B、C 三組裝置、遮光方法及固定條件。	Written plan (may replace a drawing): describe setups A, B and C, how light is blocked and the conditions kept the same.
 描述 A、B、C 三組裝置及固定條件……	Describe setups A, B and C and the fixed conditions…
 對照設計參考：主探究三組頂端均完整，A–B 比較頂端遮光，A–C 比較下部遮光，只改變遮光處理。延伸一A–D只比較頂端是否存在，留意傷口影響。延伸二E–F只比較瓊脂是否曾接觸頂端，位置同在中央；F–G–H只比較處理瓊脂放置位置。每項比較保持其他條件相同。	Reference control plan: all three main setups keep their tips. A–B compares blocking light at the tip; A–C compares blocking light below the tip. Change only the light-blocking treatment. Extension 1 A–D changes only whether the tip is present; consider the wound caused by removing the tip. Extension 2 E–F changes only whether the agar has touched a tip, with both blocks in the centre. F–G–H changes only the position of the treated agar. Keep other conditions the same within each comparison.
@@ -672,7 +672,7 @@ A、B、C 三組遮光處理、單側光源及固定條件清楚；圖片與文�
 胚芽鞘的彎曲方向	The coleoptile’s bending direction
 彎曲方向。	Bending direction.
 胚芽鞘的彎曲反應	The coleoptile’s bending response
-透過遮光比較實驗，我們找到了植物的感光部位，但試想想頂端是否還有其他作用？這次加入新裝置，只改變「頂端是否存在」，比較完整的 A 與切去頂端的 D。	The light-blocking comparisons helped us find the part of the plant that senses light. Could the tip have another role? Add a new setup and change only whether the tip is present: compare intact A with D, whose tip has been removed.
+透過遮光比較實驗，我們確認了植物的感光部位，但試想想頂端是否還有其他作用？這次加入新裝置，只改變「頂端是否存在」，比較完整的 A 與切去頂端的 D。	The light-blocking comparisons helped us confirm the part of the plant that senses light. Could the tip have another role? Add a new setup and change only whether the tip is present: compare intact A with D, whose tip has been removed.
 頂端的存在亦影響胚芽鞘的生長／延長。	The presence of the tip also affects the coleoptile’s growth / elongation.
 頂端的存在不影響胚芽鞘的生長／延長。	The presence of the tip does not affect the coleoptile’s growth / elongation.
 1. A 與 D 的延長比較支持甚麼？	1. What does comparing elongation in A and D support?

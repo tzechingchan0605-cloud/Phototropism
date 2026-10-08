@@ -5,7 +5,6 @@ const TIP_FIELDS = [
   "tipPrediction",
   "tipReason",
   "substancePrediction",
-  "tipEvidence",
 ];
 const TIP_PREDICTIONS = {
   less: "沒有明顯延長",
@@ -64,7 +63,7 @@ function tipTableHTML(observations = {}, record) {
 function initTipInquiry() {
   $("#tipSection").innerHTML = `
   <article class="vl3-card"><p class="card-kicker">04 · 延伸探究一</p><h3>頂端除了感受光照，是否也影響延長？</h3>
-  <p>透過遮光比較實驗，我們找到了植物的感光部位，但試想想頂端是否還有其他作用？這次加入新裝置，只改變「頂端是否存在」，比較完整的 A 與切去頂端的 D。</p>
+  <p>透過遮光比較實驗，我們確認了植物的感光部位，但試想想頂端是否還有其他作用？這次加入新裝置，只改變「頂端是否存在」，比較完整的 A 與切去頂端的 D。</p>
   ${selectHTML("tipPrediction", TIP_PREDICTIONS, "", "切去頂端後，與完整胚芽鞘相比，你預測延長表現如何？")}
   <label for="tipReason">我的理由</label><textarea id="tipReason" maxlength="1500"></textarea>
   <p class="muted">第一次開始前，固定保存延伸一的原始預測及理由。動畫及 24 小時均為教學模擬。</p>
@@ -75,7 +74,6 @@ function initTipInquiry() {
   <article class="vl3-card" id="tipAnalysis"><h3>頂端與延長：從比較提出新問題</h3>
   ${selectHTML("qCap", { tipRole: "頂端的存在亦影響胚芽鞘的生長／延長。", noEffect: "頂端的存在不影響胚芽鞘的生長／延長。" }, "", "1. A 與 D 的延長比較支持甚麼？")}
   ${selectHTML("substancePrediction", { possible: "頂端可能產生能向下傳遞的物質 X，促進下方延長；這個想法仍需測試。", proof: "單靠切頂結果，已能確定物質 X 的身分和作用方式。" }, "", "2. 哪個想法值得下一步測試？")}
-  <label for="tipEvidence">比較 A 和 D 是否有延長，說明頂端的存在是否影響胚芽鞘的生長／延長。</label><textarea id="tipEvidence" maxlength="2500"></textarea>
   <button id="toAgar" class="primary">測試物質 X：繼續延伸探究二 →</button></article>`;
   $("#runTipExperiment").onclick = runTipExperiment;
   $("#confirmTipObservations").onclick = confirmTipObservations;
@@ -94,7 +92,6 @@ function initTipInquiry() {
         answers: Object.fromEntries(
           Object.keys(TIP_ANSWERS).map((key) => [key, state.form[key]]),
         ),
-        evidence: state.form.tipEvidence,
       };
     state.extension.unlocked = true;
     $("#extensionSection").hidden = false;
@@ -172,6 +169,7 @@ function runTipExperiment() {
     initialPrediction: state.tipInquiry.initialPrediction,
   });
   applyLock();
+  $("#tipResults").scrollIntoView({ block: "start", behavior: scrollBehavior() });
   function frame(now) {
     if (generation !== tipGeneration) return;
     const progress = Math.min(1, (now - start) / duration);
@@ -229,8 +227,8 @@ function tipMissing() {
     )
   )
     missing.push("A 與 D 的已確認觀察");
-  if (firstEmptyField([...Object.keys(TIP_ANSWERS), "tipEvidence"]))
-    missing.push("延伸一分析及證據");
+  if (firstEmptyField(Object.keys(TIP_ANSWERS)))
+    missing.push("延伸一分析");
   return missing;
 }
 function tipReminderTarget() {
@@ -246,7 +244,7 @@ function tipReminderTarget() {
     )
   )
     return "#confirmTipObservations";
-  return firstEmptyField([...Object.keys(TIP_ANSWERS), "tipEvidence"]);
+  return firstEmptyField(Object.keys(TIP_ANSWERS));
 }
 function lockTipInquiry() {
   const locked = !!state.submittedAt;
@@ -286,6 +284,6 @@ function tipReportHTML(record) {
       ),
     )
     .join("")}
-  ${open("延伸一證據解釋", record.form.tipEvidence, `A–${sampleName("C", record)} 支持頂端參與正常延長；切頂造成傷口，仍不能直接確定物質 X 或作用機制。`)}
+  ${record.experimentVersion < 10 ? open("延伸一證據解釋", record.form.tipEvidence, `A–${sampleName("C", record)} 支持頂端參與正常延長；切頂造成傷口，仍不能直接確定物質 X 或作用機制。`) : ""}
   </section>`;
 }
