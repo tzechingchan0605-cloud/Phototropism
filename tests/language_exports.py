@@ -38,7 +38,7 @@ assert [row[7].value for row in student_rows] == ['主探究']*3+['延伸一']*2
 chunks = w['原始與遞交快照']
 record_id = row[headers['紀錄識別碼']].value
 record = json.loads(''.join(part[2].value for part in chunks.iter_rows(min_row=2) if part[0].value == record_id))
-assert record['experimentVersion'] == 13
+assert record['experimentVersion'] == 14
 assert list(record['observations']) == ['A','B','D']
 tip = record['tipInquiry']
 assert tip['initialPrediction']['prediction'] == 'same'

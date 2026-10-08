@@ -153,7 +153,7 @@ function fresh(profile = null) {
   return {
     moduleId: MODULE_ID,
     schemaVersion: 1,
-    experimentVersion: 13,
+    experimentVersion: 14,
     id: crypto.randomUUID(),
     profile,
     createdAt: new Date().toISOString(),
@@ -274,13 +274,11 @@ function accountTime() {
 }
 function readForm() {
   if (!state.submittedAt)
-    FIELDS.filter((f) => !["reflection", "knowledgeName"].includes(f)).forEach(
+    FIELDS.filter((f) => f !== "reflection").forEach(
       (f) => (state.form[f] = $("#" + f).value),
     );
   if (!state.reflectionSubmittedAt)
     state.form.reflection = $("#reflection").value;
-  if (state.submittedAt && !state.reflectionSubmittedAt)
-    state.form.knowledgeName = $("#knowledgeName").value;
 }
 function save() {
   if (!state?.profile || teacher()) return;
@@ -514,7 +512,7 @@ function applyLock() {
   if (locked) {
     const original = state.initialDesign.form;
     $("#originalHypothesis").innerHTML =
-      `<strong>你的主探究原始假說</strong><p${Object.hasOwn(original, "initialIdea") ? " data-student-text" : ""}>${esc(state.initialDesign.hypothesisText || hypothesis(original))}</p><p><span>原始理由：</span><span data-student-text>${esc(original.reason)}</span></p><strong>你的延伸一原始預測</strong><p>${esc(TIP_PREDICTIONS[state.tipInquiry.initialPrediction?.prediction] || "")}</p><p><span>原始理由：</span><span data-student-text>${esc(state.tipInquiry.initialPrediction?.reason || "")}</span></p><strong>你的延伸二原始預測</strong><p>${esc(DIRECTIONS[state.extension.initialPrediction?.prediction] || "")}</p><p><span>原始理由：</span><span data-student-text>${esc(state.extension.initialPrediction?.reason || "")}</span></p>`;
+      `<strong>你的主探究原始假說</strong><p${Object.hasOwn(original, "initialIdea") ? " data-student-text" : ""}>${esc(state.initialDesign.hypothesisText || hypothesis(original))}</p><p><span>原始理由：</span><span data-student-text>${esc(original.reason)}</span></p><strong>你的延伸一原始預測</strong><p><span>切去頂端的 D 與完整的 A 相比，預測：</span><span>${esc(TIP_PREDICTIONS[state.tipInquiry.initialPrediction?.prediction] || "")}</span></p><p><span>原始理由：</span><span data-student-text>${esc(state.tipInquiry.initialPrediction?.reason || "")}</span></p><strong>你的延伸二原始預測</strong><p><span>處理瓊脂放在切頂胚芽鞘左側（G），預測：</span><span>${esc(DIRECTIONS[state.extension.initialPrediction?.prediction] || "")}</span></p><p><span>原始理由：</span><span data-student-text>${esc(state.extension.initialPrediction?.reason || "")}</span></p>`;
   }
 }
 function saveSetup(method, image = "") {
@@ -638,7 +636,7 @@ initExtension();
 FIELDS.forEach((f) =>
   $("#" + f).addEventListener("input", () => {
     if (
-      (state.submittedAt && !["reflection", "knowledgeName"].includes(f)) ||
+      (state.submittedAt && f !== "reflection") ||
       (state.reflectionSubmittedAt && f === "reflection")
     )
       return;
@@ -814,10 +812,10 @@ $("#submitInvestigation").onclick = () => {
 };
 $("#saveReflection").onclick = () => {
   if (!state.submittedAt || state.reflectionSubmittedAt) return;
-  if (!$("#reflection").value.trim() || !$("#knowledgeName").value)
+  if (!$("#reflection").value.trim())
     return remind(
-      "請完成學習檢核及反思。",
-      firstEmptyField(["knowledgeName", "reflection"]),
+      "請完成學習反思。",
+      firstEmptyField(["reflection"]),
     );
   state.form.reflection = $("#reflection").value;
   state.reflectionSubmittedAt = new Date().toISOString();
@@ -1138,8 +1136,6 @@ $("#equipmentBank").innerHTML = materials
   .join("");
 $("#contextPlant").innerHTML = contextComparison();
 $("#mechanismDiagram").innerHTML = mechanismSVG();
-$("#referenceDesign").innerHTML =
-  "對照設計參考：主探究三組頂端均完整，A–B 比較頂端遮光，A–C 比較下部遮光，只改變遮光處理。延伸一A–D只比較頂端是否存在，留意傷口影響。延伸二E–F只比較瓊脂是否曾接觸頂端，位置同在中央；F–G–H只比較處理瓊脂放置位置。每項比較保持其他條件相同。";
 document.addEventListener("visibilitychange", () => {
   accountTime();
   timingVisible = !document.hidden;
@@ -1378,7 +1374,7 @@ function scoringWorkbook(all) {
     [
       "名稱及感光部位",
       2,
-      "教師：正確運用向光性／正向光性名稱及頂端感光各1；綜合學習檢核與反思。",
+      "教師：正確運用向光性／正向光性名稱及頂端感光各1；綜合探究答案與反思。",
     ],
     [
       "感光與生長部位",
@@ -1550,6 +1546,7 @@ async function exportExcel() {
         f.reflection,
         Math.round(Object.values(r.phaseDurations).reduce((a, b) => a + b, 0)),
         ...extraFields.map(([id]) => {
+          if (id === "knowledgeName") return f[id] ? ({ positive: "正向光性", negative: "負向光性" }[f[id]] || "") : "";
           if (id === "tipEvidence") return f.tipEvidence || "";
           if (id === "extLightInference") return f.extLightInference || "";
           if (id === "substancePrediction") return f[id] ? answerOption(id, f[id], r) : "";

@@ -120,7 +120,7 @@ async function flow(p, student = true) {
   await p.click("#saveDrawing");
   await p.click("#toExperiment");
   assert(await p.locator("#phase-3").isVisible());
-  assert.equal(await p.evaluate(() => state.experimentVersion), 13);
+  assert.equal(await p.evaluate(() => state.experimentVersion), 14);
   assert.deepEqual(await p.evaluate(() => MAIN_IDS), ["A", "B", "D"]);
   assert.equal(await p.locator("#bench .specimen").count(), 3);
   assert.equal(await p.locator("#growth-C").count(), 0);
@@ -379,17 +379,15 @@ async function flow(p, student = true) {
     /沒有頂端也可同樣延長/,
   );
   assert(await p.locator("#downloadPDF").isDisabled());
-  await reminder(p, "#saveReflection", /學習檢核及反思/, "knowledgeName");
+  assert.equal(await p.locator("#knowledgeName,#referenceDesign").count(), 0);
   assert(await p.locator("#downloadPDF").isDisabled());
-  await p.selectOption("#knowledgeName", "positive");
-  await reminder(p, "#saveReflection", /學習檢核及反思/, "reflection");
+  await reminder(p, "#saveReflection", /學習反思/, "reflection");
   await p.fill(
     "#reflection",
     "主探究原始假說需要修訂：A與B表明頂端遮光後仍延長但沒有明顯向光彎曲，支持頂端感光。延伸1原預測需要修訂：A延長而C沒有明顯延長，頂端可能產生促進生長的物質X。延伸2原預測方向不符：G與H顯示左側延長較多向右彎曲。生長素是生長激素，頂端的生長訊號可向下傳遞；光照下右側背光側細胞延長較多使幼芽向左彎曲，屬正向光性。這些實驗沒有直接鑑定物質或測量光照下分布。",
   );
   await p.click("#saveReflection");
   assert(await p.locator("#reflection").isDisabled());
-  assert(await p.locator("#knowledgeName").isDisabled());
   assert(await p.locator("#downloadPDF").isEnabled());
   await p.evaluate(() => {
     window.print = () => {

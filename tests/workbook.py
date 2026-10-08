@@ -111,10 +111,10 @@ assert e['J4'].value=='向右彎曲' and e['J5'].value=='向左彎曲'
 assert e['M4'].value in (None, '') and e['N4'].value in (None, '')
 assert e['I4'].font.color.rgb=='FF00834A'
 assert a['Y2'].value=='向左彎曲'  # original extension prediction, not the revised right choice
-assert a['AI2'].value=='正向光性'
+assert a['AI2'].value in (None, '')
 chunks=w['原始與遞交快照']
 r=json.loads(''.join(chunks.cell(i,3).value for i in range(2,chunks.max_row+1)))
-assert r['experimentVersion']==13
+assert r['experimentVersion']==14
 assert list(r['observations'])==list(r['firstObservations'])==['A','B','D']
 assert r['firstObservations']['D']['direction']=='straight'
 assert r['observations']['D']['direction']=='left'

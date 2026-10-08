@@ -372,7 +372,16 @@ X 軸是 E、F、G、H；Y 軸是最終偏離鉛直方向的角度（°）。填
 延伸裝置	Extension setup
 最終偏離鉛直方向的角度（°）	Final angle from vertical (°)
 學生製作的棒形圖：延伸裝置E至H的最終偏離鉛直角度及方向	Student bar chart: final angles from vertical and directions for extension setups E to H
+切去頂端的 D 與完整的 A 相比，預測：	Prediction for D with its tip removed, compared with intact A:
+處理瓊脂放在切頂胚芽鞘左側（G），預測：	Prediction with treated agar on the left of a coleoptile with its tip removed (G):
 1 · 左側光照	1 · Light from the left
+2 · 左側光照：細胞放大	2 · Light from the left: enlarged cells
+左側＝向光側	Left = lit side
+細胞延長較少	Cells elongate less
+紅點＝生長素	Red dots = auxin
+背光側延長較多 → 向左彎曲	More elongation on the shaded side → bends left
+細胞與生長素分布為示意	Cells and auxin distribution are schematic
+左側光照下，完整頂端的胚芽鞘背光側生長素較多；放大圖顯示背光側細胞延長較多，使胚芽鞘向光彎曲。	With light from the left, an intact coleoptile has more auxin on its shaded side. The enlarged view shows greater cell elongation on the shaded side, causing the coleoptile to bend towards the light.
 2 · 黑暗：處理瓊脂放左側	2 · Darkness: treated agar on the left
 光源	Light
 右側＝背光側	Right = shaded side
@@ -479,7 +488,7 @@ E–F 支持可轉移的生長促進作用；G–H 支持作用位置影響彎�
 請等待實驗完成。	Wait for the experiment to finish.
 遞交後主探究及延伸答案不能修改；仍可填寫反思。確定遞交？	After submission, your main and extension inquiry answers cannot be changed. You can still write your reflection. Submit now?
 探究答案已鎖定。請閱讀學習重點，然後回顧原始假說。	Your inquiry answers are locked. Read the learning points, then revisit your original hypothesis.
-請完成學習檢核及反思。	Complete the learning check and reflection.
+請完成學習反思。	Complete your learning reflection.
 反思已提交。請保存 PDF 或下載紀錄交給教師。	Reflection submitted. Save your PDF or download the record for your teacher.
 下載學習紀錄（供教師匯入）	Download the learning record (for teacher import)
 正在讀取 VL3 全部雲端分頁……	Reading all VL3 cloud pages…
