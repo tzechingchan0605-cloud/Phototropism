@@ -23,7 +23,7 @@ for header,expected in [('延伸一原始預測','延長表現相近'),('延伸�
     assert row[headers[header]].value == expected, header
 assert row[headers['延伸一證據限制']].value in (None, '')
 assert row[headers['延伸一公平比較']].value in (None, '')
-assert '物質 X' in row[headers['物質 X 待測想法']].value
+assert row[headers['物質 X 待測想法']].value in (None, '')
 assert '頂端以下位置' in row[headers['原始假說']].value
 assert '而其他部位仍然受光' in row[headers['原始假說']].value
 assert w.calculation.fullCalcOnLoad
@@ -37,7 +37,7 @@ assert [row[7].value for row in student_rows] == ['主探究']*3+['延伸一']*2
 chunks = w['原始與遞交快照']
 record_id = row[headers['紀錄識別碼']].value
 record = json.loads(''.join(part[2].value for part in chunks.iter_rows(min_row=2) if part[0].value == record_id))
-assert record['experimentVersion'] == 10
+assert record['experimentVersion'] == 11
 assert list(record['observations']) == ['A','B','D']
 tip = record['tipInquiry']
 assert tip['initialPrediction']['prediction'] == 'same'

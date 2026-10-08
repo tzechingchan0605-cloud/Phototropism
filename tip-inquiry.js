@@ -4,7 +4,6 @@ const TIP_IDS = ["A", "C"];
 const TIP_FIELDS = [
   "tipPrediction",
   "tipReason",
-  "substancePrediction",
 ];
 const TIP_PREDICTIONS = {
   less: "沒有明顯延長",
@@ -16,13 +15,15 @@ const PREVIOUS_TIP_ANSWERS = {
   tipLimit: "limited",
   substancePrediction: "possible",
 };
-const TIP_ANSWERS = { qCap: "tipRole", substancePrediction: "possible" };
+const VERSION7_TIP_ANSWERS = { qCap: "tipRole", substancePrediction: "possible" };
+const TIP_ANSWERS = { qCap: "tipRole" };
 const TIP_GROWTH = { clear: "有", none: "沒有" };
 function tipObservationFields(record) {
   return record.experimentVersion >= 7 ? ["growth"] : ["growth", "direction"];
 }
 function tipAnswersFor(record) {
-  return record.experimentVersion >= 7 ? TIP_ANSWERS : PREVIOUS_TIP_ANSWERS;
+  if (record.experimentVersion >= 11) return TIP_ANSWERS;
+  return record.experimentVersion >= 7 ? VERSION7_TIP_ANSWERS : PREVIOUS_TIP_ANSWERS;
 }
 let tipRunning = false,
   tipHasRun = false,
@@ -73,7 +74,6 @@ function initTipInquiry() {
   <div id="tipBench" class="bench tip-bench"></div><button id="confirmTipObservations" class="primary">確認延伸一觀察</button><div id="tipObservationTable"></div></article>
   <article class="vl3-card" id="tipAnalysis"><h3>頂端與延長：從比較提出新問題</h3>
   ${selectHTML("qCap", { tipRole: "頂端的存在亦影響胚芽鞘的生長／延長。", noEffect: "頂端的存在不影響胚芽鞘的生長／延長。" }, "", "1. A 與 D 的延長比較支持甚麼？")}
-  ${selectHTML("substancePrediction", { possible: "頂端可能產生能向下傳遞的物質 X，促進下方延長；這個想法仍需測試。", proof: "單靠切頂結果，已能確定物質 X 的身分和作用方式。" }, "", "2. 哪個想法值得下一步測試？")}
   <button id="toAgar" class="primary">測試物質 X：繼續延伸探究二 →</button></article>`;
   $("#runTipExperiment").onclick = runTipExperiment;
   $("#confirmTipObservations").onclick = confirmTipObservations;

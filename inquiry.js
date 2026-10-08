@@ -157,7 +157,8 @@ function selectHTML(id, values, value = "", label = "") {
 function initExtension() {
   document.querySelector("#extensionSection").innerHTML = `
     <article class="vl3-card"><p class="card-kicker">04 · 延伸探究二</p><h3>物質 X 能否傳遞生長作用？位置如何影響彎曲？</h3>
-    <p>延伸一提供頂端參與延長的線索。我們提出一個待測試的想法：頂端可能產生「物質 X」，把生長作用傳到下方。研究員準備了曾接觸頂端的瓊脂，讓你測試這種作用能否傳遞，以及作用位置如何影響彎曲。</p>
+    <p id="agarTransition" class="notice">頂端可能產生能向下傳遞的物質 X，促進下方延長；這個想法仍需測試。</p>
+    <p>研究員準備了曾接觸頂端的瓊脂，讓你測試這種作用能否傳遞，以及作用位置如何影響彎曲。</p>
     <p>延伸二材料：切去頂端的燕麥胚芽鞘 × 4、培養容器 × 4、空白瓊脂 × 1、處理瓊脂 × 3、計時工具 × 1。</p>
     <p>兩種瓊脂外觀相同。<strong>空白瓊脂</strong>未接觸胚芽鞘頂端；<strong>處理瓊脂</strong>曾與胚芽鞘頂端接觸。瓊脂可讓一些物質進入及通過。</p>
     ${selectHTML("extPrediction", { left: "向左彎曲", right: "向右彎曲", straight: "保持較直" }, "", "把處理瓊脂放在切頂胚芽鞘左側，你預測它會怎樣生長？")}
@@ -481,6 +482,7 @@ const PREVIOUS_MAIN_QUESTIONS = {
   qLimit: "6. 本實驗的證據限制是甚麼？",
 };
 function questionText(id, record) {
+  if (id === "substancePrediction") return "2. 哪個想法值得下一步測試？";
   if (id === "extDark") return "4. 黑暗下仍可彎曲提供甚麼線索？";
   if (id === "extLimit") return "5. 延伸結果的證據限制是甚麼？";
   if (record.experimentVersion === 5 && VERSION5_MAIN_QUESTIONS[id]) return VERSION5_MAIN_QUESTIONS[id];
@@ -493,6 +495,7 @@ function questionText(id, record) {
   );
 }
 function answerOption(id, value, record) {
+  if (id === "substancePrediction") return { possible: "頂端可能產生能向下傳遞的物質 X，促進下方延長；這個想法仍需測試。", proof: "單靠切頂結果，已能確定物質 X 的身分和作用方式。" }[value] || "";
   if (["extEvidence", "extControl"].includes(id)) return value || "";
   if (id === "extDark") return { unequal: "彎曲可由不均勻生長造成，並非一定要直接受光才發生。", light: "黑暗下的彎曲必定是光直接推動胚芽鞘。" }[value] || "";
   if (id === "extLimit") return { limited: "只能支持可轉移的生長促進作用，不能單獨確定物質身分，也沒有直接量得光照下的分布。", proof: "可以單靠瓊脂結果確定物質身分及光照下的分布。" }[value] || "";

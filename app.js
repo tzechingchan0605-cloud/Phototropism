@@ -153,7 +153,7 @@ function fresh(profile = null) {
   return {
     moduleId: MODULE_ID,
     schemaVersion: 1,
-    experimentVersion: 10,
+    experimentVersion: 11,
     id: crypto.randomUUID(),
     profile,
     createdAt: new Date().toISOString(),
@@ -1549,6 +1549,7 @@ async function exportExcel() {
         Math.round(Object.values(r.phaseDurations).reduce((a, b) => a + b, 0)),
         ...extraFields.map(([id]) => {
           if (id === "tipEvidence") return f.tipEvidence || "";
+          if (id === "substancePrediction") return f[id] ? answerOption(id, f[id], r) : "";
           if (["tipFair", "tipLimit"].includes(id))
             return f[id] ? answerOption(id, f[id], r) : "";
           if (["extDark", "extLimit", "extEvidence", "extControl"].includes(id))

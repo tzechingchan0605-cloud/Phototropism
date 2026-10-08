@@ -42,11 +42,11 @@ assert a['AJ2'].value=='延長表現相近'
 assert a['AK2'].value=='我預測沒有頂端也可同樣延長。'
 assert a['AL2'].value in (None, '')
 assert a['AM2'].value in (None, '')
-assert '物質 X' in a['AN2'].value and '向下傳遞' in a['AN2'].value
+assert a['AN2'].value in (None, '')
 assert a['AO2'].value in (None, '')
 assert a['R2'].value in (None, '')
 assert a['AJ2'].font.color.rgb==a['AK2'].font.color.rgb=='FF173E34'
-assert a['AN2'].font.color.rgb=='FF00834A'
+assert a['AN2'].font.color.rgb=='FF173E34'
 assert w.calculation.fullCalcOnLoad and w.calculation.forceFullCalc
 assert len(w['評分準則']['A'])>=19
 manual=[str(v.sqref).split(':')[0] for v in s.data_validations.dataValidation]
@@ -113,7 +113,7 @@ assert a['Y2'].value=='向左彎曲'  # original extension prediction, not the r
 assert a['AI2'].value=='正向光性'
 chunks=w['原始與遞交快照']
 r=json.loads(''.join(chunks.cell(i,3).value for i in range(2,chunks.max_row+1)))
-assert r['experimentVersion']==10
+assert r['experimentVersion']==11
 assert list(r['observations'])==list(r['firstObservations'])==['A','B','D']
 assert r['firstObservations']['D']['direction']=='straight'
 assert r['observations']['D']['direction']=='left'
@@ -125,7 +125,7 @@ assert 'fair' not in tip['initialPrediction']
 assert r['form']['tipPrediction']=='less'
 assert r['form']['tipReason']=='修訂：頂端可能提供生長訊號。'
 assert tip['firstObservations']['observations']==tip['observations']=={'A':{'growth':'clear'},'C':{'growth':'none'}}
-assert tip['firstAnalysis']['answers']=={'qCap':'tipRole','substancePrediction':'possible'}
+assert tip['firstAnalysis']['answers']=={'qCap':'tipRole'}
 assert 'evidence' not in tip['firstAnalysis']
 assert 'tipEvidence' not in r['form']
 assert r['finalAnswers']['tipInquiry']==tip

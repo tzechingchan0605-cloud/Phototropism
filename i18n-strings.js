@@ -682,6 +682,7 @@ A、B、C 三組遮光處理、單側光源及固定條件清楚；圖片與文�
 請完成 A 與 D 的延長表現觀察。	Complete your observations of elongation in A and D.
 比較 A 和 D 是否有延長，說明頂端的存在是否影響胚芽鞘的生長／延長。	Compare whether A and D elongate, and explain whether the presence of the tip affects the coleoptile’s growth / elongation.
 請完成四組角度（0–90°）及方向。	Complete the angles (0–90°) and directions for all four setups.
+研究員準備了曾接觸頂端的瓊脂，讓你測試這種作用能否傳遞，以及作用位置如何影響彎曲。	Researchers prepared agar that had touched the tip so you can test whether this effect can be transferred and how its position affects bending.
 延伸分析	Extension analysis
 `
     .trim()

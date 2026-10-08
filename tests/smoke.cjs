@@ -120,7 +120,7 @@ async function flow(p, student = true) {
   await p.click("#saveDrawing");
   await p.click("#toExperiment");
   assert(await p.locator("#phase-3").isVisible());
-  assert.equal(await p.evaluate(() => state.experimentVersion), 10);
+  assert.equal(await p.evaluate(() => state.experimentVersion), 11);
   assert.deepEqual(await p.evaluate(() => MAIN_IDS), ["A", "B", "D"]);
   assert.equal(await p.locator("#bench .specimen").count(), 3);
   assert.equal(await p.locator("#growth-C").count(), 0);
@@ -270,14 +270,15 @@ async function flow(p, student = true) {
   assert(await p.locator("#extensionSection").isHidden());
   for (const [id, value] of Object.entries({
     qCap: "tipRole",
-    substancePrediction: "possible",
   }))
     await p.selectOption(`#${id}`, value);
-  assert.equal(await p.locator("#tipEvidence").count(), 0);
+  assert.equal(await p.locator("#tipEvidence,#substancePrediction").count(), 0);
   assert.doesNotMatch(await p.locator("main").innerText(), /生長素|向光性/);
   await reminder(p, "#submitInvestigation", /延伸/, "toAgar");
   assert(await p.locator("#learningReveal").isHidden());
   await p.click("#toAgar");
+  assert(await p.locator("#agarTransition").isVisible());
+  assert.equal(await p.locator("#agarTransition").innerText(), "頂端可能產生能向下傳遞的物質 X，促進下方延長；這個想法仍需測試。");
   const firstTipAnalysis = await p.evaluate(() =>
     structuredClone(state.tipInquiry.firstAnalysis),
   );
