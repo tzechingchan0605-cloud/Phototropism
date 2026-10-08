@@ -120,7 +120,7 @@ async function flow(p, student = true) {
   await p.click("#saveDrawing");
   await p.click("#toExperiment");
   assert(await p.locator("#phase-3").isVisible());
-  assert.equal(await p.evaluate(() => state.experimentVersion), 7);
+  assert.equal(await p.evaluate(() => state.experimentVersion), 8);
   assert.deepEqual(await p.evaluate(() => MAIN_IDS), ["A", "B", "D"]);
   assert.equal(await p.locator("#bench .specimen").count(), 3);
   assert.equal(await p.locator("#growth-C").count(), 0);
@@ -319,7 +319,7 @@ async function flow(p, student = true) {
     await p.evaluate(() => state.extension.initialPrediction),
     extOriginal,
   );
-  await reminder(p, "#confirmExtension", /四組延長、角度/, "ext-angle-E");
+  await reminder(p, "#confirmExtension", /四組角度/, "ext-angle-E");
   assert.equal(await p.evaluate(() => state.extension.firstReadings), null);
   for (const id of ["E", "F", "G", "H"]) {
     const angle = id === "G" ? 30 : id === "H" ? -35 : 0;
@@ -329,7 +329,6 @@ async function flow(p, student = true) {
       await p.inputValue("#ext-angle-" + id),
       String(Math.abs(angle)),
     );
-    await p.selectOption("#ext-growth-" + id, id === "E" ? "reduced" : "clear");
     await p.selectOption(
       "#ext-direction-" + id,
       id === "G" ? "right" : id === "H" ? "left" : "straight",

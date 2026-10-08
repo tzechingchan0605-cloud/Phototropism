@@ -154,7 +154,7 @@ function fresh(profile = null) {
   return {
     moduleId: MODULE_ID,
     schemaVersion: 1,
-    experimentVersion: 7,
+    experimentVersion: 8,
     id: crypto.randomUUID(),
     profile,
     createdAt: new Date().toISOString(),
@@ -1697,7 +1697,7 @@ async function exportExcel() {
           excelCell(
             GROWTH[final?.growth] || "",
             "observing",
-            final ? final.growth === model.growth : null,
+            final?.growth ? final.growth === model.growth : null,
           ),
           excelCell(
             final?.angle ?? "",

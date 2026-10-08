@@ -680,6 +680,7 @@ A、B、C 三組遮光處理、單側光源及固定條件清楚；圖片與文�
 請完成延伸一預測及理由。	Complete your extension 1 prediction and reason.
 請完成 A 與 D 的延長表現觀察。	Complete your observations of elongation in A and D.
 比較 A 和 D 是否有延長，說明頂端的存在是否影響胚芽鞘的生長／延長。	Compare whether A and D elongate, and explain whether the presence of the tip affects the coleoptile’s growth / elongation.
+請完成四組角度（0–90°）及方向。	Complete the angles (0–90°) and directions for all four setups.
 `
     .trim()
     .split("\n")

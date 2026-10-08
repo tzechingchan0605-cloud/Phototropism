@@ -237,7 +237,7 @@ function extensionPlant(id, p = 0, ruler = 0, tool = true) {
   <rect x="${x + offset - 12}" y="${y - 10}" width="24" height="10" rx="2" fill="#b5e4e6" stroke="#7dabad"/><path d="M118 235H182L172 267H128Z" fill="#d6a878"/><rect x="111" y="231" width="78" height="12" rx="4" fill="#af7851"/>
   ${tool ? protractorSVG(x, y, ruler) : ""}</svg>`;
 }
-function protractorSVG(x, y, angle) {
+function protractorSVG(x, y, angle, baselineBottom = 260) {
   const radius = 62,
     a = (angle * Math.PI) / 180;
   const marks = Array.from({ length: 19 }, (_, i) => i * 10 - 90)
@@ -246,13 +246,13 @@ function protractorSVG(x, y, angle) {
       return `<path d="M${x + Math.sin(r) * 55} ${y - Math.cos(r) * 55}L${x + Math.sin(r) * 62} ${y - Math.cos(r) * 62}" stroke="#789399"/><text x="${x + Math.sin(r) * 76}" y="${y - Math.cos(r) * 76 + 4}" text-anchor="middle" font-size="9" fill="#526a70">${Math.abs(d)}</text>`;
     })
     .join("");
-  return `<g data-protractor="true"><path d="M${x - radius} ${y}A${radius} ${radius} 0 0 1 ${x + radius} ${y}" fill="none" stroke="#9cbbc2"/>${marks}<path d="M${x} ${y + 14}V${Math.max(24, y - 90)}" stroke="#79868c" stroke-dasharray="4 3"/><path d="M${x} ${y}L${x + Math.sin(a) * 88} ${y - Math.cos(a) * 88}" stroke="#cc7b30" stroke-width="2"/><circle cx="${x}" cy="${y}" r="3" fill="#cc7b30"/></g>`;
+  return `<g data-protractor="true"><path d="M${x - radius} ${y}A${radius} ${radius} 0 0 1 ${x + radius} ${y}" fill="none" stroke="#9cbbc2"/>${marks}<path data-vertical-reference="true" d="M${x} ${baselineBottom}V${Math.max(24, y - 90)}" stroke="#79868c" stroke-dasharray="4 3"/><path d="M${x} ${y}L${x + Math.sin(a) * 88} ${y - Math.cos(a) * 88}" stroke="#cc7b30" stroke-width="2"/><circle cx="${x}" cy="${y}" r="3" fill="#cc7b30"/></g>`;
 }
 function angleExample() {
   const a = (20 * Math.PI) / 180,
     x = 150,
     y = 145;
-  return `<svg class="angle-example" viewBox="0 0 300 220" role="img" aria-label="獨立量度示例：偏離鉛直線20度，方向向右"><path d="M150 200L150 145L${x + Math.sin(a) * 80} ${y - Math.cos(a) * 80}" stroke="#59a16a" stroke-width="8" fill="none"/>${protractorSVG(x, y, 20)}<text x="150" y="215" text-anchor="middle" font-size="12">鉛直為 0°；示例為 20°</text></svg>`;
+  return `<svg class="angle-example" viewBox="0 0 300 220" role="img" aria-label="獨立量度示例：偏離鉛直線20度，方向向右"><path d="M150 200L150 145L${x + Math.sin(a) * 80} ${y - Math.cos(a) * 80}" stroke="#59a16a" stroke-width="8" fill="none"/>${protractorSVG(x, y, 20, 200)}<text x="150" y="215" text-anchor="middle" font-size="12">鉛直為 0°；示例為 20°</text></svg>`;
 }
 function resetExtension() {
   extensionGeneration++;
@@ -279,7 +279,7 @@ function resetExtension() {
 function renderExtensionBench() {
   $("#extensionBench").innerHTML = EXT_IDS.map(
     (id) =>
-      `<article class="specimen"><h3>${id} · ${EXT_LABELS[id]}</h3><div id="ext-plant-${id}">${extensionPlant(id)}</div><label for="ruler-${id}">量角器指針（左右調整）<input id="ruler-${id}" type="range" min="-90" max="90" step="1" value="0"><output id="ruler-output-${id}">0°</output></label><button id="read-angle-${id}" class="secondary">把指針讀數填入角度</button><label for="ext-angle-${id}">偏離鉛直角度（°）<input id="ext-angle-${id}" type="number" min="0" max="90" step="1"></label>${selectHTML("ext-growth-" + id, GROWTH, "", "延長表現")}${selectHTML("ext-direction-" + id, DIRECTIONS, "", "彎曲方向")}</article>`,
+      `<article class="specimen"><h3>${id} · ${EXT_LABELS[id]}</h3><div id="ext-plant-${id}">${extensionPlant(id)}</div><label for="ruler-${id}">量角器指針（左右調整）<input id="ruler-${id}" type="range" min="-90" max="90" step="1" value="0"><output id="ruler-output-${id}">0°</output></label><button id="read-angle-${id}" class="secondary">把指針讀數填入角度</button><label for="ext-angle-${id}">偏離鉛直角度（°）<input id="ext-angle-${id}" type="number" min="0" max="90" step="1"></label>${selectHTML("ext-direction-" + id, DIRECTIONS, "", "彎曲方向")}</article>`,
   ).join("");
   EXT_IDS.forEach((id) => {
     $("#ruler-" + id).oninput = () => {
@@ -296,7 +296,7 @@ function renderExtensionBench() {
         angle: Number($("#ext-angle-" + id).value),
       });
     };
-    ["angle", "growth", "direction"].forEach(
+    ["angle", "direction"].forEach(
       (k) =>
         ($("#ext-" + k + "-" + id).oninput = () =>
           log("extension_reading_changed", {
@@ -395,7 +395,6 @@ function confirmExtension() {
       id,
       {
         angle: $("#ext-angle-" + id).value,
-        growth: $("#ext-growth-" + id).value,
         direction: $("#ext-direction-" + id).value,
       },
     ]),
@@ -403,17 +402,14 @@ function confirmExtension() {
   const incomplete = EXT_IDS.find(
     (id) =>
       !validAngle(readings[id].angle) ||
-      !GROWTH[readings[id].growth] ||
       !DIRECTIONS[readings[id].direction],
   );
   if (incomplete) {
     const field = !validAngle(readings[incomplete].angle)
       ? "angle"
-      : !GROWTH[readings[incomplete].growth]
-        ? "growth"
-        : "direction";
+      : "direction";
     return remind(
-      "請完成四組延長、角度（0–90°）及方向。",
+      "請完成四組角度（0–90°）及方向。",
       `#ext-${field}-${incomplete}`,
     );
   }
@@ -430,7 +426,8 @@ function confirmExtension() {
   message("延伸讀數已保存，請用自己的讀數繪圖及分析。");
 }
 function extensionTableHTML(readings) {
-  return `<div class="table-wrap"><table class="vl3-table"><thead><tr><th>裝置</th><th>延長</th><th>角度（°）</th><th>方向</th></tr></thead><tbody>${EXT_IDS.map((id) => `<tr><td>${id}</td><td>${esc(GROWTH[readings[id]?.growth] || "未記錄")}</td><td>${esc(readings[id]?.angle ?? "未記錄")}</td><td>${esc(DIRECTIONS[readings[id]?.direction] || "未記錄")}</td></tr>`).join("")}</tbody></table></div>`;
+  const showGrowth = Object.values(readings).some((reading) => reading.growth);
+  return `<div class="table-wrap"><table class="vl3-table"><thead><tr><th>裝置</th>${showGrowth ? "<th>延長</th>" : ""}<th>角度（°）</th><th>方向</th></tr></thead><tbody>${EXT_IDS.map((id) => `<tr><td>${id}</td>${showGrowth ? `<td>${esc(GROWTH[readings[id]?.growth] || "未記錄")}</td>` : ""}<td>${esc(readings[id]?.angle ?? "未記錄")}</td><td>${esc(DIRECTIONS[readings[id]?.direction] || "未記錄")}</td></tr>`).join("")}</tbody></table></div>`;
 }
 function barChartSVG(points) {
   const bars = EXT_IDS.map((id, i) => {
