@@ -4,21 +4,27 @@ const TIP_IDS = ["A", "C"];
 const TIP_FIELDS = [
   "tipPrediction",
   "tipReason",
-  "tipFair",
-  "tipLimit",
   "substancePrediction",
   "tipEvidence",
 ];
 const TIP_PREDICTIONS = {
-  less: "伸長較少或沒有明顯伸長",
-  same: "伸長表現相近",
-  more: "伸長較多",
+  less: "沒有明顯延長",
+  same: "延長表現相近",
+  more: "延長較多",
 };
-const TIP_ANSWERS = {
+const PREVIOUS_TIP_ANSWERS = {
   qCap: "tipRole",
   tipLimit: "limited",
   substancePrediction: "possible",
 };
+const TIP_ANSWERS = { qCap: "tipRole", substancePrediction: "possible" };
+const TIP_GROWTH = { clear: "有", none: "沒有" };
+function tipObservationFields(record) {
+  return record.experimentVersion >= 7 ? ["growth"] : ["growth", "direction"];
+}
+function tipAnswersFor(record) {
+  return record.experimentVersion >= 7 ? TIP_ANSWERS : PREVIOUS_TIP_ANSWERS;
+}
 let tipRunning = false,
   tipHasRun = false,
   tipGeneration = 0;
@@ -37,13 +43,12 @@ function freshTipInquiry() {
 }
 function tipModel(id, record = state) {
   const model = mainModel(id, record);
-  return { growth: record.experimentVersion >= 6 ? (id === "C" ? "none" : "clear") : model.growth, direction: model.direction };
+  return { growth: record.experimentVersion >= 6 ? (id === "C" ? "none" : "clear") : model.growth, ...(record.experimentVersion >= 7 ? {} : { direction: model.direction }) };
 }
 function tipObservationComplete(observation) {
   return (
     !!observation &&
-    !!GROWTH[observation.growth] &&
-    !!DIRECTIONS[observation.direction]
+    !!GROWTH[observation.growth]
   );
 }
 function tipObservationText(observation) {
@@ -54,27 +59,23 @@ function tipObservationText(observation) {
     : "未記錄";
 }
 function tipTableHTML(observations = {}, record) {
-  return `<div class="table-wrap"><table class="vl3-table"><thead><tr><th>裝置</th><th>處理</th><th>伸長表現及彎曲方向</th></tr></thead><tbody>${TIP_IDS.map((id) => `<tr><td>${sampleName(id, record)}</td><td>${GROUPS[id].label}</td><td>${esc(tipObservationText(observations[id]))}</td></tr>`).join("")}</tbody></table></div>`;
+  return `<div class="table-wrap"><table class="vl3-table"><thead><tr><th>裝置</th><th>處理</th><th>延長表現</th></tr></thead><tbody>${TIP_IDS.map((id) => `<tr><td>${sampleName(id, record)}</td><td>${GROUPS[id].label}</td><td>${esc(tipObservationText(observations[id]))}</td></tr>`).join("")}</tbody></table></div>`;
 }
 function initTipInquiry() {
   $("#tipSection").innerHTML = `
-  <article class="vl3-card"><p class="card-kicker">04 · 延伸探究一</p><h3>頂端除了感受光照，是否也影響伸長？</h3>
-  <p>遮光比較為感光部位提供了線索，但頂端是否還有其他作用？這次只改變「頂端是否存在」，比較完整的 A 與切去頂端的 D。</p>
-  <p class="notice">唯一獨立變量：頂端是否存在。兩組接受相同左側光照；種類、處理前大小及生長狀況、培養時間、溫度及供水相同。</p>
-  <p>延伸一材料：燕麥胚芽鞘 × 2、剪刀 × 1、單側光源 × 1、計時工具 × 1。</p>
-  ${selectHTML("tipPrediction", TIP_PREDICTIONS, "", "切去頂端後，與完整胚芽鞘相比，你預測伸長表現如何？")}
+  <article class="vl3-card"><p class="card-kicker">04 · 延伸探究一</p><h3>頂端除了感受光照，是否也影響延長？</h3>
+  <p>透過遮光比較實驗，我們找到了植物的感光部位，但試想想頂端是否還有其他作用？這次加入新裝置，只改變「頂端是否存在」，比較完整的 A 與切去頂端的 D。</p>
+  ${selectHTML("tipPrediction", TIP_PREDICTIONS, "", "切去頂端後，與完整胚芽鞘相比，你預測延長表現如何？")}
   <label for="tipReason">我的理由</label><textarea id="tipReason" maxlength="1500"></textarea>
-  <label for="tipFair">比較 A 與 D 時，除了頂端是否存在，哪些條件需要保持相同？</label><textarea id="tipFair" maxlength="1500"></textarea>
   <p class="muted">第一次開始前，固定保存延伸一的原始預測及理由。動畫及 24 小時均為教學模擬。</p>
-  <button id="runTipExperiment" class="primary">進行頂端比較（模擬 24 小時）</button><p id="tipStatus" role="status">等待預測及公平比較</p></article>
+  <button id="runTipExperiment" class="primary">進行頂端比較（模擬 24 小時）</button><p id="tipStatus" role="status">等待預測及理由</p></article>
   <article class="vl3-card" id="tipResults"><h3>A 與 D：初始及培養後的比較</h3>
   <label>查看狀態<select id="tipView"><option value="after">目前培養狀態</option><option value="before">培養開始時</option></select></label>
   <div id="tipBench" class="bench tip-bench"></div><button id="confirmTipObservations" class="primary">確認延伸一觀察</button><div id="tipObservationTable"></div></article>
-  <article class="vl3-card" id="tipAnalysis"><h3>頂端與伸長：從比較提出新問題</h3>
-  ${selectHTML("qCap", { tipRole: "頂端參與正常伸長及朝光反應。", noEffect: "頂端是否存在不影響伸長及朝光反應。" }, "", "1. A 與 D 的伸長及彎曲比較支持甚麼？")}
-  ${selectHTML("tipLimit", { limited: "切頂同時移除組織並造成傷口，不能單靠這個比較確定頂端如何影響生長。", proof: "切頂後不伸長，就能確定頂端只負責感光。" }, "", "2. 這個比較有哪些推論限制？")}
-  ${selectHTML("substancePrediction", { possible: "頂端可能產生能向下傳遞的物質 X，促進下方伸長；這個想法仍需測試。", proof: "單靠切頂結果，已能確定物質 X 的身分和作用方式。" }, "", "3. 哪個想法值得下一步測試？")}
-  <label for="tipEvidence">引用 A 與 D 的觀察，說明頂端與伸長的關係，以及還不能確定的事情。</label><textarea id="tipEvidence" maxlength="2500"></textarea>
+  <article class="vl3-card" id="tipAnalysis"><h3>頂端與延長：從比較提出新問題</h3>
+  ${selectHTML("qCap", { tipRole: "頂端的存在亦影響胚芽鞘的生長／延長。", noEffect: "頂端的存在不影響胚芽鞘的生長／延長。" }, "", "1. A 與 D 的延長比較支持甚麼？")}
+  ${selectHTML("substancePrediction", { possible: "頂端可能產生能向下傳遞的物質 X，促進下方延長；這個想法仍需測試。", proof: "單靠切頂結果，已能確定物質 X 的身分和作用方式。" }, "", "2. 哪個想法值得下一步測試？")}
+  <label for="tipEvidence">比較 A 和 D 是否有延長，說明頂端的存在是否影響胚芽鞘的生長／延長。</label><textarea id="tipEvidence" maxlength="2500"></textarea>
   <button id="toAgar" class="primary">測試物質 X：繼續延伸探究二 →</button></article>`;
   $("#runTipExperiment").onclick = runTipExperiment;
   $("#confirmTipObservations").onclick = confirmTipObservations;
@@ -112,17 +113,17 @@ function resetTipInquiry() {
   tipHasRun = false;
   $("#tipSection").hidden = true;
   $("#tipView").value = "after";
-  $("#tipStatus").textContent = "等待預測及公平比較";
+  $("#tipStatus").textContent = "等待預測及理由";
   $("#tipObservationTable").innerHTML = "";
   renderTipBench();
 }
 function renderTipBench() {
   $("#tipBench").innerHTML = TIP_IDS.map(
     (id) =>
-      `<article class="specimen"><h3>${sampleName(id)} · ${GROUPS[id].label}</h3><div id="tip-plant-${id}">${seedling(id)}</div>${selectHTML("tip-growth-" + id, GROWTH, state.tipInquiry.observations[id]?.growth, "伸長表現")}${selectHTML("tip-direction-" + id, DIRECTIONS, state.tipInquiry.observations[id]?.direction, "彎曲方向")}</article>`,
+      `<article class="specimen"><h3>${sampleName(id)} · ${GROUPS[id].label}</h3><div id="tip-plant-${id}">${seedling(id)}</div>${selectHTML("tip-growth-" + id, TIP_GROWTH, state.tipInquiry.observations[id]?.growth, "延長表現")}</article>`,
   ).join("");
   TIP_IDS.forEach((id) =>
-    ["growth", "direction"].forEach((field) => {
+    ["growth"].forEach((field) => {
       $("#tip-" + field + "-" + id).onchange = () =>
         log("tip_observation_selected", {
           group: id,
@@ -146,18 +147,17 @@ function runTipExperiment() {
   readForm();
   if (
     !state.tipInquiry.unlocked ||
-    firstEmptyField(["tipPrediction", "tipReason", "tipFair"])
+    firstEmptyField(["tipPrediction", "tipReason"])
   )
     return remind(
-      "請完成延伸一預測、理由及公平比較。",
-      firstEmptyField(["tipPrediction", "tipReason", "tipFair"]),
+      "請完成延伸一預測及理由。",
+      firstEmptyField(["tipPrediction", "tipReason"]),
     );
   if (!state.tipInquiry.initialPrediction)
     state.tipInquiry.initialPrediction = {
       at: new Date().toISOString(),
       prediction: state.form.tipPrediction,
       reason: state.form.tipReason,
-      fair: state.form.tipFair,
     };
   tipRunning = true;
   tipHasRun = false;
@@ -195,15 +195,14 @@ function confirmTipObservations() {
       id,
       {
         growth: $("#tip-growth-" + id).value,
-        direction: $("#tip-direction-" + id).value,
       },
     ]),
   );
   if (!TIP_IDS.every((id) => tipObservationComplete(observations[id])))
     return remind(
-      "請完成 A 與 D 的伸長及彎曲方向觀察。",
+      "請完成 A 與 D 的延長表現觀察。",
       firstEmptyField(
-        TIP_IDS.flatMap((id) => ["tip-growth-" + id, "tip-direction-" + id]),
+        TIP_IDS.flatMap((id) => ["tip-growth-" + id]),
       ),
     );
   if (!state.tipInquiry.firstObservations)
@@ -214,7 +213,7 @@ function confirmTipObservations() {
   state.tipInquiry.observations = observations;
   $("#tipObservationTable").innerHTML = tipTableHTML(observations);
   log("tip_observations_confirmed", { observations });
-  message("延伸一觀察已保存。請分析頂端與伸長的關係。");
+  message("延伸一觀察已保存。請分析頂端與延長的關係。");
 }
 function tipMissing() {
   const missing = [];
@@ -238,7 +237,7 @@ function tipReminderTarget() {
   if (!state.tipInquiry.unlocked) return "#toExtension";
   if (!state.tipInquiry.initialPrediction || !state.tipInquiry.hasRun)
     return (
-      firstEmptyField(["tipPrediction", "tipReason", "tipFair"]) ||
+      firstEmptyField(["tipPrediction", "tipReason"]) ||
       "#runTipExperiment"
     );
   if (
@@ -269,15 +268,15 @@ function tipReportHTML(record) {
   const first = inquiry.initialPrediction;
   const open = (title, value, reference) =>
     reportAnswer(title, value, reference, null, true);
-  return `<section class="report-card"><h2>04 · 延伸探究一：頂端與伸長</h2>
+  return `<section class="report-card"><h2>04 · 延伸探究一：頂端與延長</h2>
   ${reportAnswer("延伸一原始預測", TIP_PREDICTIONS[first?.prediction], "預測須可測試；與模型結果不符不代表假說不合理。")}
-  ${open("延伸一原始理由", first?.reason, "說明頂端是否存在與伸長之間的預期關係。")}
-  ${open("延伸一公平比較", record.form.tipFair, "只改變頂端是否存在，保持種類、處理前大小及生長狀況、左側光照、時間、溫度及供水相同。")}
+  ${open("延伸一原始理由", first?.reason, "說明頂端是否存在與延長之間的預期關係。")}
+  ${record.experimentVersion < 7 ? open("延伸一公平比較", record.form.tipFair, "只改變頂端是否存在，保持種類、處理前大小及生長狀況、左側光照、時間、溫度及供水相同。") : ""}
   <h3>首次確認觀察</h3>${inquiry.firstObservations ? tipTableHTML(inquiry.firstObservations.observations, record) : "未確認"}
   <h3>最後觀察</h3>${tipTableHTML(inquiry.observations, record)}
-  ${TIP_IDS.map((id) => reportAnswer(sampleName(id, record) + " " + GROUPS[id].label, tipObservationText(inquiry.observations[id]), tipObservationText(tipModel(id, record)), inquiry.observations[id] ? ["growth", "direction"].every((key) => inquiry.observations[id][key] === tipModel(id, record)[key]) : null)).join("")}
-  <p class="report-reference">${sampleName("C", record)} 在本教學模型中不伸長；切頂後不一定完全停止生長，實際結果受植物狀況及條件影響。</p>
-  ${Object.entries(TIP_ANSWERS)
+  ${TIP_IDS.map((id) => reportAnswer(sampleName(id, record) + " " + GROUPS[id].label, tipObservationText(inquiry.observations[id]), tipObservationText(tipModel(id, record)), inquiry.observations[id] ? tipObservationFields(record).every((key) => inquiry.observations[id][key] === tipModel(id, record)[key]) : null)).join("")}
+  <p class="report-reference">${sampleName("C", record)} 在本教學模型中不延長；切頂後不一定完全停止生長，實際結果受植物狀況及條件影響。</p>
+  ${Object.entries(tipAnswersFor(record))
     .map(([id, target]) =>
       reportAnswer(
         questionText(id, record),
@@ -287,6 +286,6 @@ function tipReportHTML(record) {
       ),
     )
     .join("")}
-  ${open("延伸一證據解釋", record.form.tipEvidence, `A–${sampleName("C", record)} 支持頂端參與正常伸長；切頂造成傷口，仍不能直接確定物質 X 或作用機制。`)}
+  ${open("延伸一證據解釋", record.form.tipEvidence, `A–${sampleName("C", record)} 支持頂端參與正常延長；切頂造成傷口，仍不能直接確定物質 X 或作用機制。`)}
   </section>`;
 }

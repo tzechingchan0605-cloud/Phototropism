@@ -289,7 +289,6 @@ async function saveExcel(page, target) {
     assert(await page.locator("#extensionSection").isHidden());
     await page.selectOption("#tipPrediction", "same");
     await page.fill("#tipReason", "頂端原文");
-    await page.fill("#tipFair", "學生公平比較");
     await page.evaluate(() => flushSync());
     await unchanged(page, () => switchLanguage(page, "zh"));
     await unchanged(page, () => switchLanguage(page, "en"));
@@ -324,10 +323,6 @@ async function saveExcel(page, target) {
       await page.selectOption(
         `#tip-growth-${id}`,
         id === "C" ? "none" : "clear",
-      );
-      await page.selectOption(
-        `#tip-direction-${id}`,
-        id === "C" ? "straight" : "left",
       );
     }
     await page.click("#confirmTipObservations");
@@ -430,7 +425,6 @@ async function saveExcel(page, target) {
       "學生實驗裝置設計",
       "頂端",
       "頂端原文",
-      "學生公平比較",
       "物質X原文",
       "向右彎曲",
       "瓊脂",
@@ -518,11 +512,11 @@ async function saveExcel(page, target) {
     assert.equal(cloudRecord.form.reflection, "我的理由");
     assert.equal(cloudRecord.initialDesign.form.hypothesisPart, "頂端以下位置");
     assert.equal(cloudRecord.extension.initialPrediction.reason, "向右彎曲");
-    assert.equal(cloudRecord.experimentVersion, 6);
+    assert.equal(cloudRecord.experimentVersion, 7);
     assert.deepEqual(Object.keys(cloudRecord.observations), ["A", "B", "D"]);
     assert.equal(cloudRecord.tipInquiry.initialPrediction.prediction, "same");
     assert.equal(cloudRecord.tipInquiry.initialPrediction.reason, "頂端原文");
-    assert.equal(cloudRecord.tipInquiry.initialPrediction.fair, "學生公平比較");
+    assert.equal(cloudRecord.tipInquiry.initialPrediction.fair, undefined);
     assert.equal(
       cloudRecord.tipInquiry.firstObservations.observations.C.growth,
       "none",

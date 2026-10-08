@@ -84,14 +84,14 @@ function comparisonText(record) {
 const OUTCOMES = { bend: "仍向光彎曲", straight: "沒有明顯向光彎曲" };
 const VARIABLES = [
   "遮光處理",
-  "胚芽鞘的彎曲方向",
+  "胚芽鞘的彎曲反應",
   "光源方向及光強度",
   "胚芽鞘種類、初始高度及生長階段",
   "照射時間",
   "溫度及供水條件",
 ];
 const VERSION5_VARIABLES = [...VARIABLES];
-VERSION5_VARIABLES[1] = "胚芽鞘的伸長及彎曲反應";
+VERSION5_VARIABLES[1] = "胚芽鞘的延長及彎曲反應";
 const PREVIOUS_VARIABLES = [
   "遮光處理／部位或頂端是否存在",
   ...VERSION5_VARIABLES.slice(1),
@@ -110,7 +110,7 @@ const LEGACY_ASSUMPTIONS = [
 ];
 const ASSUMPTIONS = [
   ["similar", "各胚芽鞘的初始生長狀況相近。", true],
-  ["free", "遮光帽及遮光套不限制胚芽鞘伸長或彎曲。", true],
+  ["free", "遮光帽及遮光套不限制胚芽鞘延長或彎曲。", true],
   ["temperature", "各處理不會令裝置溫度明顯不同。", true],
   ["size", "植物種類相同便毋須控制初始大小。", false],
 ];
@@ -154,7 +154,7 @@ function fresh(profile = null) {
   return {
     moduleId: MODULE_ID,
     schemaVersion: 1,
-    experimentVersion: 6,
+    experimentVersion: 7,
     id: crypto.randomUUID(),
     profile,
     createdAt: new Date().toISOString(),
@@ -357,7 +357,7 @@ function seedling(id, progress = 0) {
     const sleeve = `M130 205 L130 ${jointY} C130 ${jointY - 31} ${130 + 12 * p} ${endY + 14} ${endX} ${endY}`;
     cover = `<path data-sleeve="true" d="${sleeve}" fill="none" stroke="#15333b" stroke-width="26" stroke-linecap="butt"/><path d="${sleeve}" fill="none" stroke="#344a50" stroke-width="22" stroke-linecap="butt"/>`;
   }
-  const description = `${sampleName(id)} 組：${GROUPS[id].label}，${p === 1 ? (id === "C" ? "沒有明顯伸長，沒有明顯彎曲" : bent ? "下部保持直立，上部向光彎曲並伸長" : "保持直立並伸長") : "開始時"}`;
+  const description = `${sampleName(id)} 組：${GROUPS[id].label}，${p === 1 ? (id === "C" ? "沒有明顯延長，沒有明顯彎曲" : bent ? "下部保持直立，上部向光彎曲並延長" : "保持直立並延長") : "開始時"}`;
   return `<svg class="seedling" viewBox="0 0 270 260" role="img" aria-label="${description}" xmlns="http://www.w3.org/2000/svg">
     <g transform="translate(270 0) scale(-1 1)"><path d="M235 46L157 27L157 145L235 100Z" fill="#f9d779" opacity=".2"/><rect x="232" y="45" width="17" height="55" rx="5" fill="#f3b946"/><path d="M236 100V222M219 223H253" stroke="#658087" stroke-width="5"/><path d="M221 69H203M208 64L203 69L208 74" stroke="#c28c1a" stroke-width="2" fill="none"/>
     <path data-stem="${id}" d="${stem}" fill="none" stroke="#59a16a" stroke-width="13" stroke-linecap="${id === "C" ? "butt" : "round"}"/><path d="${stem}" fill="none" stroke="#a1d38a" stroke-width="4" stroke-linecap="${id === "C" ? "butt" : "round"}"/>${cover}</g><text x="40" y="30" text-anchor="middle" fill="#9c731d" font-size="13">光源</text>
@@ -862,7 +862,7 @@ function printRecord(r) {
   const title = document.title;
   document.title =
     "VL3_" +
-    VL3Language.t("幼芽為甚麼朝光生長") +
+    VL3Language.t("幼芽為甚麼向光生長") +
     "_" +
     r.profile.classInfo +
     "_" +
@@ -1211,7 +1211,7 @@ function scoringWorkbook(all) {
     ["communicating", "SPS 溝通（0–4）", "communicating"],
     ["sps", "SPS 總分（0–24）", "score"],
     ["tip", "知識｜向光性名稱及感光部位・教師（0–2）", "knowledge", 2],
-    ["growth", "知識｜不均勻伸長及彎曲方向・教師（0–2）", "knowledge", 2],
+    ["growth", "知識｜不均勻延長及彎曲方向・教師（0–2）", "knowledge", 2],
     ["auxin", "知識｜生長素與生長訊號・教師（0–2）", "knowledge", 2],
     ["revision", "知識｜依據證據修訂及限制・教師（0–2）", "knowledge", 2],
     ["knowledge", "新知識總分（0–8）", "score"],
@@ -1326,7 +1326,7 @@ function scoringWorkbook(all) {
     [
       "定性觀察",
       2,
-      "版本6：主探究A、B、C三組彎曲方向共1分，延伸一A、D四項伸長／方向共1分；版本5按原伸長／方向記錄評分。版本3／4主探究12項共2；更舊四組每組0.5。原始觀察保留。",
+      "版本7：主探究A、B、C三組彎曲方向共1分，延伸一A、D兩項延長表現共1分；版本5／6按原延長／方向記錄評分。版本3／4主探究12項共2；更舊四組每組0.5。原始觀察保留。",
     ],
     ["變量分類", 4, "獨立及因變量各 1；控制變量完整選對得 2，錯選或漏選得 0。"],
     [
@@ -1357,7 +1357,7 @@ function scoringWorkbook(all) {
     [
       "結論比較",
       2,
-      "版本6主探究3項、延伸一3項及延伸二5項選擇共2，按答對比例；版本5按原主探究5項評分；版本3／4原11項共2，更舊按原比較。",
+      "版本7主探究3項、延伸一2項及延伸二5項選擇共2，按答對比例；版本6按原延伸一3項評分；版本5按原主探究5項評分；版本3／4原11項共2，更舊按原比較。",
     ],
     [
       "數據解釋",
@@ -1382,7 +1382,7 @@ function scoringWorkbook(all) {
     [
       "感光與生長部位",
       2,
-      "2：正確連結兩側不均勻伸長及彎曲方向，包括主探究左光向左及瓊脂左置向右；1：部分正確；0：未顯示理解。",
+      "2：正確連結兩側不均勻延長及彎曲方向，包括主探究左光向左及瓊脂左置向右；1：部分正確；0：未顯示理解。",
     ],
     [
       "生長素機制",
@@ -1453,7 +1453,7 @@ async function exportExcel() {
     ["extFair", "延伸公平比較", "designing"],
     ["extEF", "E–F 比較", "inferring"],
     ["extPosition", "F–G–H 比較", "inferring"],
-    ["extSides", "兩側伸長與方向", "knowledge"],
+    ["extSides", "兩側延長與方向", "knowledge"],
     ["extDark", "黑暗彎曲推論", "inferring"],
     ["extLimit", "延伸證據限制", "knowledge"],
     ["extEvidence", "延伸數據解釋", "inferring"],
@@ -1473,10 +1473,10 @@ async function exportExcel() {
       "姓名",
       "裝置",
       "瓊脂處理／位置",
-      "首次伸長",
+      "首次延長",
       "首次角度（°）",
       "首次方向",
-      "最後伸長",
+      "最後延長",
       "最後角度（°）",
       "最後方向",
       "模型角度（°）",
@@ -1548,6 +1548,8 @@ async function exportExcel() {
         f.reflection,
         Math.round(Object.values(r.phaseDurations).reduce((a, b) => a + b, 0)),
         ...extraFields.map(([id]) => {
+          if (["tipFair", "tipLimit"].includes(id))
+            return f[id] ? answerOption(id, f[id], r) : "";
           if (id === "qSites")
             return f.qSites ? answerOption(id, f.qSites, r) : "";
           if (id === "initialIdea") return f.initialIdea || "";
@@ -1591,7 +1593,7 @@ async function exportExcel() {
     extraFields.forEach(([id], j) => {
       const target = {
         ...mainAnswersFor(r),
-        ...(threeStage(r) ? TIP_ANSWERS : {}),
+        ...(threeStage(r) ? tipAnswersFor(r) : {}),
         ...EXT_ANSWERS,
         knowledgeName: "positive",
       }[id];
@@ -1663,7 +1665,7 @@ async function exportExcel() {
             tipObservationText(current),
             "observing",
             current
-              ? ["growth", "direction"].every(
+              ? tipObservationFields(r).every(
                   (key) => current[key] === expected[key],
                 )
               : null,
@@ -1771,7 +1773,7 @@ async function exportExcel() {
       ],
       images,
     ),
-    "VL3_胚芽鞘朝光生長_全班學習紀錄.xlsx",
+    "VL3_胚芽鞘向光生長_全班學習紀錄.xlsx",
   );
 }
 $("#exportExcel").onclick = exportExcel;

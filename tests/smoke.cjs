@@ -32,7 +32,7 @@ async function flow(p, student = true) {
   assert.doesNotMatch(await p.locator("main").innerText(), /向光性|生長素/);
   assert.equal(
     (await p.locator("h1").innerText()).replace(/\s/g, ""),
-    "幼芽為甚麼朝光生長？",
+    "幼芽為甚麼向光生長？",
   );
   assert.doesNotMatch(
     await p
@@ -91,7 +91,7 @@ async function flow(p, student = true) {
   );
   await p.selectOption("#hypothesisPart", "頂端");
   await p.selectOption("#hypothesisOutcome", "bend");
-  await p.fill("#reason", "若上方只是被動生長，遮光後可能仍朝光彎曲。");
+  await p.fill("#reason", "若上方只是被動生長，遮光後可能仍向光彎曲。");
   assert.equal(await p.locator("#comparison").count(), 0);
   await reminder(p, "#toExperiment", /三類變量/);
   for (const [g, ids] of Object.entries({ iv: [0], dv: [1], cv: [2, 3, 4, 5] }))
@@ -120,7 +120,7 @@ async function flow(p, student = true) {
   await p.click("#saveDrawing");
   await p.click("#toExperiment");
   assert(await p.locator("#phase-3").isVisible());
-  assert.equal(await p.evaluate(() => state.experimentVersion), 6);
+  assert.equal(await p.evaluate(() => state.experimentVersion), 7);
   assert.deepEqual(await p.evaluate(() => MAIN_IDS), ["A", "B", "D"]);
   assert.equal(await p.locator("#bench .specimen").count(), 3);
   assert.equal(await p.locator("#growth-C").count(), 0);
@@ -198,7 +198,7 @@ async function flow(p, student = true) {
     await p.selectOption("#" + id, v);
   await p.fill(
     "#evidence",
-    "A–B：B仍伸長但不明顯朝光彎曲；A–D：D下部遮光仍朝光彎曲。",
+    "A–B：B仍延長但不明顯向光彎曲；A–D：D下部遮光仍向光彎曲。",
   );
   assert.doesNotMatch(
     await p.locator("#conclusionForm").innerText(),
@@ -208,21 +208,23 @@ async function flow(p, student = true) {
   assert(await p.locator("#learningReveal").isHidden());
   await p.click("#toExtension");
   assert(await p.locator("#tipSection").isVisible());
-  assert.match(await p.locator("#tipSection").innerText(), /剪刀/);
+  assert.doesNotMatch(await p.locator("#tipSection").innerText(), /延伸一材料|唯一獨立變量/);
+  assert.equal(await p.locator("#tipFair,#tipLimit").count(), 0);
+  assert.deepEqual(
+    await p.locator("#tip-growth-A option").allTextContents(),
+    ["請選擇", "有", "沒有"],
+  );
+  assert.doesNotMatch(await p.locator("#qCap").innerText(), /向光/);
   assert(await p.locator("#extensionSection").isHidden());
   await reminder(
     p,
     "#runTipExperiment",
-    /預測.*理由.*公平比較/,
+    /預測.*理由/,
     "tipPrediction",
   );
   assert.equal(await p.evaluate(() => tipHasRun), false);
   await p.selectOption("#tipPrediction", "same");
-  await p.fill("#tipReason", "我預測沒有頂端也可同樣伸長。");
-  await p.fill(
-    "#tipFair",
-    "A與C只改變頂端是否存在；種類、大小、單側光、時間、溫度及供水相同。",
-  );
+  await p.fill("#tipReason", "我預測沒有頂端也可同樣延長。");
   await p.emulateMedia({ reducedMotion: "no-preference" });
   await p.click("#runTipExperiment");
   assert(await p.locator("#confirmTipObservations").isDisabled());
@@ -251,33 +253,16 @@ async function flow(p, student = true) {
     cutPaths.every((path) => path === cutPaths[0]),
     "C must keep its length throughout the tip animation",
   );
-  await reminder(p, "#confirmTipObservations", /伸長.*方向/, "tip-growth-A");
+  await reminder(p, "#confirmTipObservations", /延長表現/, "tip-growth-A");
   assert.equal(
     await p.evaluate(() => state.tipInquiry.firstObservations),
     null,
   );
   for (const id of ["A", "C"]) {
     await p.selectOption(`#tip-growth-${id}`, id === "C" ? "none" : "clear");
-    await p.selectOption(
-      `#tip-direction-${id}`,
-      id === "C" ? "straight" : "left",
-    );
   }
   await p.click("#confirmTipObservations");
-  await p.selectOption("#tip-direction-C", "left");
-  await p.click("#confirmTipObservations");
-  assert.equal(
-    await p.evaluate(
-      () => state.tipInquiry.firstObservations.observations.C.direction,
-    ),
-    "straight",
-  );
-  assert.equal(
-    await p.evaluate(() => state.tipInquiry.observations.C.direction),
-    "left",
-  );
-  await p.selectOption("#tip-direction-C", "straight");
-  await p.click("#confirmTipObservations");
+  assert.equal(await p.locator('[id^="tip-direction-"]').count(), 0);
   await p.selectOption("#tipView", "before");
   assert.match(await p.locator("#tip-plant-A").innerHTML(), /開始時/);
   await p.selectOption("#tipView", "after");
@@ -285,13 +270,12 @@ async function flow(p, student = true) {
   assert(await p.locator("#extensionSection").isHidden());
   for (const [id, value] of Object.entries({
     qCap: "tipRole",
-    tipLimit: "limited",
     substancePrediction: "possible",
   }))
     await p.selectOption(`#${id}`, value);
   await p.fill(
     "#tipEvidence",
-    "A有明顯伸長及朝光彎曲，C沒有明顯伸長或彎曲；頂端可能提供促進下方生長的物質X，但傷口也是限制。",
+    "A有明顯延長及向光彎曲，C沒有明顯延長或彎曲；頂端可能提供促進下方生長的物質X，但傷口也是限制。",
   );
   assert.doesNotMatch(await p.locator("main").innerText(), /生長素|向光性/);
   await reminder(p, "#submitInvestigation", /延伸/, "toAgar");
@@ -330,12 +314,12 @@ async function flow(p, student = true) {
     structuredClone(state.extension.initialPrediction),
   );
   await p.selectOption("#extPrediction", "right");
-  await p.fill("#extReason", "修訂：左側伸長較多可能向右彎曲。");
+  await p.fill("#extReason", "修訂：左側延長較多可能向右彎曲。");
   assert.deepEqual(
     await p.evaluate(() => state.extension.initialPrediction),
     extOriginal,
   );
-  await reminder(p, "#confirmExtension", /四組伸長、角度/, "ext-angle-E");
+  await reminder(p, "#confirmExtension", /四組延長、角度/, "ext-angle-E");
   assert.equal(await p.evaluate(() => state.extension.firstReadings), null);
   for (const id of ["E", "F", "G", "H"]) {
     const angle = id === "G" ? 30 : id === "H" ? -35 : 0;
@@ -398,7 +382,7 @@ async function flow(p, student = true) {
     await p.selectOption("#" + id, v);
   await p.fill(
     "#extEvidence",
-    "E–F：處理瓊脂中央組伸長较多；G–H：左放向右、右放向左，支持兩側不均勻伸長決定彎曲方向。",
+    "E–F：處理瓊脂中央組延長较多；G–H：左放向右、右放向左，支持兩側不均勻延長決定彎曲方向。",
   );
   await p.fill(
     "#extControl",
@@ -421,7 +405,7 @@ async function flow(p, student = true) {
   );
   assert.match(
     await p.locator("#originalHypothesis").innerText(),
-    /沒有頂端也可同樣伸長/,
+    /沒有頂端也可同樣延長/,
   );
   assert(await p.locator("#downloadPDF").isDisabled());
   await reminder(p, "#saveReflection", /學習檢核及反思/, "knowledgeName");
@@ -430,7 +414,7 @@ async function flow(p, student = true) {
   await reminder(p, "#saveReflection", /學習檢核及反思/, "reflection");
   await p.fill(
     "#reflection",
-    "主探究原始假說需要修訂：A與B表明頂端遮光後仍伸長但沒有明顯朝光彎曲，支持頂端感光。延伸1原預測需要修訂：A伸長而C沒有明顯伸長，頂端可能產生促進生長的物質X。延伸2原預測方向不符：G與H顯示左側伸長較多向右彎曲。生長素是生長激素，頂端的生長訊號可向下傳遞；光照下右側背光側細胞伸長較多使幼芽向左彎曲，屬正向光性。這些實驗沒有直接鑑定物質或測量光照下分布。",
+    "主探究原始假說需要修訂：A與B表明頂端遮光後仍延長但沒有明顯向光彎曲，支持頂端感光。延伸1原預測需要修訂：A延長而C沒有明顯延長，頂端可能產生促進生長的物質X。延伸2原預測方向不符：G與H顯示左側延長較多向右彎曲。生長素是生長激素，頂端的生長訊號可向下傳遞；光照下右側背光側細胞延長較多使幼芽向左彎曲，屬正向光性。這些實驗沒有直接鑑定物質或測量光照下分布。",
   );
   await p.click("#saveReflection");
   assert(await p.locator("#reflection").isDisabled());
@@ -446,7 +430,7 @@ async function flow(p, student = true) {
   assert(await p.evaluate(() => window.printCalled));
   assert.match(
     await p.evaluate(() => window.printTitle),
-    /^VL3_幼芽為甚麼朝光生長_S4A-05_/,
+    /^VL3_幼芽為甚麼向光生長_S4A-05_/,
   );
   const report = await p.locator("#printReport").innerHTML();
   assert.match(report, /首次確認讀數/);
@@ -586,6 +570,7 @@ async function flow(p, student = true) {
       r.form.qLimit = "indirect";
       for (const id of ["A", "B", "D"])
         r.observations[id] = mainModel(id, r);
+      for (const id of TIP_IDS) r.tipInquiry.observations[id] = tipModel(id, r);
       return {
         score: mainObservationScore(r),
         mainLabels: MAIN_IDS.map((id) => sampleName(id, r)),
@@ -618,7 +603,7 @@ async function flow(p, student = true) {
         growth: mainModel("C", r).growth,
         score: mainObservationScore(r),
         oldComparison: newReport(r).includes("A 與 B：頂端遮光處理"),
-        oldModel: newReport(r).includes("C 的伸長減少是本模型設定"),
+        oldModel: newReport(r).includes("C 的延長減少是本模型設定"),
       };
     });
     assert.deepEqual(version3, {
@@ -657,7 +642,7 @@ async function flow(p, student = true) {
         label: groupDefinitions(r).C.label,
         growth: mainModel("C", r).growth,
         score: mainObservationScore(r),
-        cutReference: html.includes("C 在本教學模型中不伸長"),
+        cutReference: html.includes("C 在本教學模型中不延長"),
         analysis: html.includes("A 與 C"),
         cutLimit: html.includes("切頂也移除其他組織並造成傷口"),
         originalVariable: html.includes("遮光處理／部位或頂端是否存在"),

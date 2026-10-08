@@ -14,7 +14,7 @@ w=load_workbook(path)
 assert w.sheetnames==['學生探究答案','定性觀察紀錄','延伸量度與棒形圖','教師評分','評分準則','操作事件紀錄','原始與遞交快照','裝置設計圖']
 a=w['學生探究答案'];s=w['教師評分'];o=w['定性觀察紀錄']
 # Retain every historical answer column and append the new inquiry fields after AI.
-original_headers=['紀錄識別碼','姓名','班別','狀態','初步觀察','原始假說','原始理由','獨立變量','因變量','控制變量','實驗前提','對照組設計','裝置文字設計','感光部位','組別比較','下部遮光反應','證據限制','數據解釋','學習反思','總時間（秒）','初步想法（舊版）','指定比較（舊版）','頂端遮光比較','感光與彎曲位置','延伸原始預測','延伸原始理由','延伸公平比較','E–F 比較','F–G–H 比較','兩側伸長與方向','黑暗彎曲推論','延伸證據限制','延伸數據解釋','額外對照（選答）','向光性名稱檢核']
+original_headers=['紀錄識別碼','姓名','班別','狀態','初步觀察','原始假說','原始理由','獨立變量','因變量','控制變量','實驗前提','對照組設計','裝置文字設計','感光部位','組別比較','下部遮光反應','證據限制','數據解釋','學習反思','總時間（秒）','初步想法（舊版）','指定比較（舊版）','頂端遮光比較','感光與彎曲位置','延伸原始預測','延伸原始理由','延伸公平比較','E–F 比較','F–G–H 比較','兩側延長與方向','黑暗彎曲推論','延伸證據限制','延伸數據解釋','額外對照（選答）','向光性名稱檢核']
 tip_headers=['延伸一原始預測','延伸一原始理由','延伸一公平比較','延伸一證據限制','物質 X 待測想法','延伸一數據解釋']
 assert [cell.value for cell in a[1]]==original_headers+tip_headers
 assert [cell.value for cell in o[1]]==['紀錄識別碼','姓名','組別','處理','第一次觀察','目前觀察','模型典型反應','探究階段']
@@ -25,27 +25,27 @@ assert '被動生長' in a['G2'].value
 assert a['H2'].font.color.rgb=='FF00834A'
 assert a['E2'].font.color.rgb=='FF173E34'
 assert a['Q2'].value in (None, '')
-assert o['D6'].value=='切去頂端' and '沒有明顯伸長' in o['G6'].value
+assert o['D6'].value=='切去頂端' and '沒有明顯延長' in o['G6'].value
 assert len({a[c+'2'].fill.fgColor.rgb for c in ['E','F','H','M','R','N','S']})>=6
 assert len(w['裝置設計圖']._images)==2
 assert '沒有明顯彎曲' in o['E4'].value and '向左彎曲' in o['F4'].value
 assert [o.cell(row,3).value for row in range(2,7)]==['A','B','C','A','D']
 assert [o.cell(row,8).value for row in range(2,7)]==['主探究']*3+['延伸一']*2
-assert all('向左彎曲' in o.cell(5,col).value for col in (5,6,7))
-assert all('沒有明顯伸長' in o.cell(6,col).value and '沒有明顯彎曲' in o.cell(6,col).value for col in (5,6,7))
+assert all('延長' in o.cell(5,col).value and '彎曲' not in o.cell(5,col).value for col in (5,6,7))
+assert all('沒有明顯延長' in o.cell(6,col).value for col in (5,6,7))
 assert o['F5'].font.color.rgb==o['F6'].font.color.rgb=='FF00834A'
 assert len(s.data_validations.dataValidation)==10
 assert len(s.conditional_formatting)==19
 assert len(a.conditional_formatting)==9
 assert {str(cf.sqref) for cf in a.conditional_formatting}=={'E2','F2','G2','L2','M2','R2','S2','AJ2','AK2'}
-assert a['AJ2'].value=='伸長表現相近'
-assert a['AK2'].value=='我預測沒有頂端也可同樣伸長。'
-assert a['AL2'].value=='A與C只改變頂端是否存在；種類、大小、單側光、時間、溫度及供水相同。'
-assert '傷口' in a['AM2'].value and '不能' in a['AM2'].value
+assert a['AJ2'].value=='延長表現相近'
+assert a['AK2'].value=='我預測沒有頂端也可同樣延長。'
+assert a['AL2'].value in (None, '')
+assert a['AM2'].value in (None, '')
 assert '物質 X' in a['AN2'].value and '向下傳遞' in a['AN2'].value
-assert a['AO2'].value=='A有明顯伸長及朝光彎曲，C沒有明顯伸長或彎曲；頂端可能提供促進下方生長的物質X，但傷口也是限制。'
+assert a['AO2'].value=='A有明顯延長及向光彎曲，C沒有明顯延長或彎曲；頂端可能提供促進下方生長的物質X，但傷口也是限制。'
 assert a['AJ2'].font.color.rgb==a['AK2'].font.color.rgb=='FF173E34'
-assert a['AM2'].font.color.rgb==a['AN2'].font.color.rgb=='FF00834A'
+assert a['AN2'].font.color.rgb=='FF00834A'
 assert w.calculation.fullCalcOnLoad and w.calculation.forceFullCalc
 assert len(w['評分準則']['A'])>=19
 manual=[str(v.sqref).split(':')[0] for v in s.data_validations.dataValidation]
@@ -112,20 +112,20 @@ assert a['Y2'].value=='向左彎曲'  # original extension prediction, not the r
 assert a['AI2'].value=='正向光性'
 chunks=w['原始與遞交快照']
 r=json.loads(''.join(chunks.cell(i,3).value for i in range(2,chunks.max_row+1)))
-assert r['experimentVersion']==6
+assert r['experimentVersion']==7
 assert list(r['observations'])==list(r['firstObservations'])==['A','B','D']
 assert r['firstObservations']['D']['direction']=='straight'
 assert r['observations']['D']['direction']=='left'
 tip=r['tipInquiry']
 assert tip['unlocked'] and tip['hasRun']
 assert tip['initialPrediction']['prediction']=='same'
-assert tip['initialPrediction']['reason']=='我預測沒有頂端也可同樣伸長。'
-assert tip['initialPrediction']['fair']=='A與C只改變頂端是否存在；種類、大小、單側光、時間、溫度及供水相同。'
+assert tip['initialPrediction']['reason']=='我預測沒有頂端也可同樣延長。'
+assert 'fair' not in tip['initialPrediction']
 assert r['form']['tipPrediction']=='less'
 assert r['form']['tipReason']=='修訂：頂端可能提供生長訊號。'
-assert tip['firstObservations']['observations']==tip['observations']=={'A':{'growth':'clear','direction':'left'},'C':{'growth':'none','direction':'straight'}}
-assert tip['firstAnalysis']['answers']=={'qCap':'tipRole','tipLimit':'limited','substancePrediction':'possible'}
-assert tip['firstAnalysis']['evidence']=='A有明顯伸長及朝光彎曲，C沒有明顯伸長或彎曲；頂端可能提供促進下方生長的物質X，但傷口也是限制。'
+assert tip['firstObservations']['observations']==tip['observations']=={'A':{'growth':'clear'},'C':{'growth':'none'}}
+assert tip['firstAnalysis']['answers']=={'qCap':'tipRole','substancePrediction':'possible'}
+assert tip['firstAnalysis']['evidence']=='A有明顯延長及向光彎曲，C沒有明顯延長或彎曲；頂端可能提供促進下方生長的物質X，但傷口也是限制。'
 assert r['form']['tipEvidence']==tip['firstAnalysis']['evidence']
 assert r['finalAnswers']['tipInquiry']==tip
 assert r['finalAnswers']['observations']==r['observations']
