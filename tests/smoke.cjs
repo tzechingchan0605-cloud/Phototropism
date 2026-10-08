@@ -58,6 +58,7 @@ async function flow(p, student = true) {
   assert.equal(await p.locator("#initialIdea").count(), 0);
   await p.click("#toDesign");
   assert(await p.locator("#phase-2").isVisible());
+  await p.waitForFunction(() => window.scrollY === 0);
   assert.equal(await p.inputValue("#hypothesisPart"), "");
   assert.equal(await p.inputValue("#hypothesisOutcome"), "");
   const hint = p.locator("#assumptionDefinition");
@@ -411,6 +412,9 @@ async function flow(p, student = true) {
   assert.doesNotMatch(await p.locator("main").innerText(), /生長素|向光性/);
   await p.click("#submitInvestigation");
   assert(await p.locator("#learningReveal").isVisible());
+  await p.waitForFunction(() =>
+    Math.abs(document.querySelector("#learningCard").getBoundingClientRect().top) < 2,
+  );
   assert(await p.locator("#qTip").isDisabled());
   assert(await p.locator("#tipPrediction").isDisabled());
   assert(await p.locator("#qCap").isDisabled());

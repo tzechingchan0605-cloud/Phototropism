@@ -318,6 +318,7 @@ function phase(n) {
   });
   if (n === 4) renderEvidence();
   log("phase_opened", { phase: n });
+  window.scrollTo({ top: 0, behavior: scrollBehavior() });
 }
 function hypothesis(form, version = state?.experimentVersion) {
   if (version >= 3) {
@@ -803,6 +804,10 @@ $("#submitInvestigation").onclick = () => {
   });
   applyLock();
   message("探究答案已鎖定。請閱讀學習重點，然後回顧原始假說。");
+  $("#learningCard").scrollIntoView({
+    block: "start",
+    behavior: scrollBehavior(),
+  });
 };
 $("#saveReflection").onclick = () => {
   if (!state.submittedAt || state.reflectionSubmittedAt) return;
