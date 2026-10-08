@@ -120,7 +120,7 @@ async function flow(p, student = true) {
   await p.click("#saveDrawing");
   await p.click("#toExperiment");
   assert(await p.locator("#phase-3").isVisible());
-  assert.equal(await p.evaluate(() => state.experimentVersion), 8);
+  assert.equal(await p.evaluate(() => state.experimentVersion), 9);
   assert.deepEqual(await p.evaluate(() => MAIN_IDS), ["A", "B", "D"]);
   assert.equal(await p.locator("#bench .specimen").count(), 3);
   assert.equal(await p.locator("#growth-C").count(), 0);
@@ -164,7 +164,9 @@ async function flow(p, student = true) {
     /培養容器/,
   );
   assert.match(await p.locator("#equipmentBank").innerText(), /計時工具/);
-  assert.equal(await p.locator("#equipmentBank .equipment").count(), 5);
+  assert.match(await p.locator("#equipmentBank").innerText(), /單側光源 × 3/);
+  assert.match(await p.locator("#equipmentBank").innerText(), /直尺 × 1/);
+  assert.equal(await p.locator("#equipmentBank .equipment").count(), 6);
   await reminder(p, "#recordData", /三組的彎曲方向/, "obs-A");
   assert.equal(await p.evaluate(() => state.firstObservations), null);
   for (const id of ["A", "B", "D"]) {
@@ -335,7 +337,7 @@ async function flow(p, student = true) {
     );
   }
   await p.click("#confirmExtension");
-  await reminder(p, "#saveGraph", /四條棒的角度及方向/, "graph-angle-E");
+  assert.equal(await p.locator("#saveGraph,#graphInputs,#barChart").count(), 0);
   assert.equal(
     await p.evaluate(() => state.extension.firstReadings.readings.G.angle),
     30,
@@ -351,42 +353,14 @@ async function flow(p, student = true) {
   await p.selectOption("#extensionView", "before");
   assert.match(await p.locator("#ext-plant-G").innerHTML(), /開始時/);
   await p.selectOption("#extensionView", "after");
-  await p.click("#saveGraph");
-  assert.equal(await p.evaluate(() => state.extension.graphSaved), false);
-  for (const id of ["E", "F", "G", "H"]) {
-    await p.fill("#graph-angle-" + id, ["G", "H"].includes(id) ? "35" : "0");
-    await p.selectOption(
-      "#graph-direction-" + id,
-      id === "G" ? "right" : id === "H" ? "left" : "straight",
-    );
-  }
-  await p.click("#saveGraph");
-  assert(await p.locator("#barChart svg").isVisible());
-  assert.equal(await p.locator("#barChart svg rect").count(), 4);
-  assert.equal(await p.locator("#barChart svg polyline").count(), 0);
-  if (student) {
-    await p
-      .locator("#extensionResults")
-      .screenshot({ path: "/tmp/vl3-extension.png" });
-    await p.locator("#barChart").screenshot({ path: "/tmp/vl3-chart.png" });
-  }
-  await reminder(p, "#submitInvestigation", /延伸分析及證據/, "extEF");
+  await reminder(p, "#submitInvestigation", /延伸分析/, "extEF");
   for (const [id, v] of Object.entries({
     extEF: "transfer",
     extPosition: "position",
     extSides: "opposite",
-    extDark: "unequal",
-    extLimit: "limited",
   }))
     await p.selectOption("#" + id, v);
-  await p.fill(
-    "#extEvidence",
-    "E–F：處理瓊脂中央組延長较多；G–H：左放向右、右放向左，支持兩側不均勻延長決定彎曲方向。",
-  );
-  await p.fill(
-    "#extControl",
-    "增加左側及右側空白瓊脂對照，排除單側放置本身的影響。",
-  );
+  assert.equal(await p.locator("#extDark,#extLimit,#extEvidence,#extControl").count(), 0);
   assert.doesNotMatch(await p.locator("main").innerText(), /生長素|向光性/);
   await p.click("#submitInvestigation");
   assert(await p.locator("#learningReveal").isVisible());
@@ -472,10 +446,9 @@ async function flow(p, student = true) {
     const check = await p.evaluate(() => {
       const r = structuredClone(state);
       r.extension.readings.G.angle = 30;
-      r.extension.graph.G.angle = 30;
       return { angle: angleScore(r), graph: graphScore(r) };
     });
-    assert.deepEqual(check, { angle: 1.5, graph: 2 });
+    assert.deepEqual(check, { angle: 1.5, graph: null });
   }
   return await p.evaluate(() => structuredClone(state));
 }
@@ -493,7 +466,7 @@ async function flow(p, student = true) {
     p.on("pageerror", (e) => errors.push(e.message));
     p.on("dialog", (d) => d.accept());
     await p.goto(base);
-    assert.equal(await p.evaluate(() => graphScore(fresh())), 0);
+    assert.equal(await p.evaluate(() => graphScore(fresh())), null);
     await login(p, "陳小明", "student@example.com");
     const final = await flow(p);
     assert(final.finalAnswers.tipInquiry);
@@ -536,7 +509,7 @@ async function flow(p, student = true) {
     );
     assert.deepEqual(await p.evaluate(() => state.tipInquiry.observations), {});
     assert(await p.locator("#tipSection").isHidden());
-    assert.equal(await p.locator("#barChart").innerText(), "");
+    assert.equal(await p.locator("#barChart").count(), 0);
     await login(p, "教師", "tzechingchan0605@gmail.com");
     await authenticate(p);
     assert.match(await p.locator("#teacherRows").innerText(), /陳小明/);

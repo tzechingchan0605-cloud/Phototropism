@@ -154,7 +154,7 @@ function fresh(profile = null) {
   return {
     moduleId: MODULE_ID,
     schemaVersion: 1,
-    experimentVersion: 8,
+    experimentVersion: 9,
     id: crypto.randomUUID(),
     profile,
     createdAt: new Date().toISOString(),
@@ -777,9 +777,7 @@ $("#submitInvestigation").onclick = () => {
           "#runExtension"
         : !EXT_IDS.every((id) => state.extension.readings[id])
           ? "#extensionResults"
-          : !state.extension.graphSaved
-            ? "#saveGraph"
-            : firstEmptyField([...Object.keys(EXT_ANSWERS), "extEvidence"]);
+          : firstEmptyField(Object.keys(EXT_ANSWERS));
     return remind("請完成：" + missing.join("、"), target);
   }
   if (running || tipRunning || extensionRunning)
@@ -1113,7 +1111,7 @@ const materials = [
     '<path d="M60 87V25" stroke="#65a772" stroke-width="9" stroke-linecap="round"/><rect x="36" y="84" width="48" height="10" rx="3" fill="#af7851"/><path d="M40 94L47 110H74L81 94" fill="#d6a878"/>',
   ],
   [
-    "單側光源 × 1",
+    "單側光源 × 3",
     '<path d="M70 22L32 8V78L70 58Z" fill="#f9d779" opacity=".35"/><rect x="70" y="20" width="15" height="40" rx="5" fill="#f3b946"/><path d="M78 61V104M60 105H97" stroke="#658087" stroke-width="4"/>',
   ],
   [
@@ -1123,6 +1121,10 @@ const materials = [
   [
     "下部遮光套 × 1",
     '<path d="M43 18V103Q60 114 77 103V18" fill="#344a50" stroke="#15333b" stroke-width="3"/><ellipse cx="60" cy="18" rx="17" ry="7" fill="#edf5ee" stroke="#15333b" stroke-width="3"/>',
+  ],
+  [
+    "直尺 × 1",
+    '<rect x="40" y="10" width="40" height="100" rx="3" fill="#f9d779" stroke="#658087" stroke-width="3"/><path d="M40 25H58M40 35H50M40 45H58M40 55H50M40 65H58M40 75H50M40 85H58M40 95H50" stroke="#658087" stroke-width="2"/>',
   ],
   [
     "計時工具 × 1",
@@ -1207,7 +1209,7 @@ function scoringWorkbook(all) {
     ["evidence", "推論｜數據解釋・教師（0–2）", "inferring", 2],
     ["inferring", "SPS 推論（0–4）", "inferring"],
     ["reflection", "溝通｜反思表達・教師（0–2）", "communicating", 2],
-    ["submission", "溝通｜棒形圖與自身讀數一致（0–2）", "communicating"],
+    ["submission", "溝通｜數據紀錄及證據表達・教師（0–2）", "communicating", 2],
     ["communicating", "SPS 溝通（0–4）", "communicating"],
     ["sps", "SPS 總分（0–24）", "score"],
     ["tip", "知識｜向光性名稱及感光部位・教師（0–2）", "knowledge", 2],
@@ -1284,7 +1286,7 @@ function scoringWorkbook(all) {
         .map((c) => ref(c[0]))
         .join(
           ",",
-        )})=${newExperiment(r) ? 10 : 9},${ref("status")}="已完成"),"評分完成","待教師評分／學生未完成")`,
+        )})=${newExperiment(r) ? 11 : 10},${ref("status")}="已完成"),"評分完成","待教師評分／學生未完成")`,
     };
     rows.push(
       cols.map((c) => {
@@ -1370,9 +1372,9 @@ function scoringWorkbook(all) {
       "2：連貫表達三段原始想法、比較證據與修訂；1：部分連結；0：無相關反思。舊版按原兩段或一段。",
     ],
     [
-      "棒形圖溝通",
+      "數據紀錄及證據表達",
       2,
-      "四條棒角度及方向與學生自身讀數一致，每組0.5；不因自身量度錯誤再扣繪圖分。完成率及用時不換算能力。",
+      "版本9由教師按角度、方向及比較證據是否表達清楚評閱：清楚完整2，部分清楚1，未顯示相關表達0；舊版保留棒形圖與自身讀數的一致性分數。",
     ],
     [
       "名稱及感光部位",
@@ -1550,6 +1552,8 @@ async function exportExcel() {
         ...extraFields.map(([id]) => {
           if (["tipFair", "tipLimit"].includes(id))
             return f[id] ? answerOption(id, f[id], r) : "";
+          if (["extDark", "extLimit", "extEvidence", "extControl"].includes(id))
+            return f[id] ? answerOption(id, f[id], r) : "";
           if (id === "qSites")
             return f.qSites ? answerOption(id, f.qSites, r) : "";
           if (id === "initialIdea") return f.initialIdea || "";
@@ -1594,7 +1598,7 @@ async function exportExcel() {
       const target = {
         ...mainAnswersFor(r),
         ...(threeStage(r) ? tipAnswersFor(r) : {}),
-        ...EXT_ANSWERS,
+        ...extensionAnswersFor(r),
         knowledgeName: "positive",
       }[id];
       if (target && f[id]) marks[20 + j] = f[id] === target;

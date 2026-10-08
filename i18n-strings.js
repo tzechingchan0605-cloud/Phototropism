@@ -195,7 +195,8 @@ A 與 D：下部遮光處理	A and D: blocking light below the tip
 培養容器 × 4	Growing containers × 4
 不透光帽 × 1	Opaque cap × 1
 下部遮光套 × 1	Light-blocking sleeve for the lower part × 1
-單側光源 × 1	Light source on one side × 1
+單側光源 × 3	Light source on one side × 3
+直尺 × 1	Ruler × 1
 剪刀 × 1	Scissors × 1
 計時工具 × 1	Timer × 1
 可繪圖、上載相片或填寫文字設計，再按下方「儲存」一併保存。	Draw, upload a photo or write your plan, then press Save below to save them together.
@@ -681,6 +682,7 @@ A、B、C 三組遮光處理、單側光源及固定條件清楚；圖片與文�
 請完成 A 與 D 的延長表現觀察。	Complete your observations of elongation in A and D.
 比較 A 和 D 是否有延長，說明頂端的存在是否影響胚芽鞘的生長／延長。	Compare whether A and D elongate, and explain whether the presence of the tip affects the coleoptile’s growth / elongation.
 請完成四組角度（0–90°）及方向。	Complete the angles (0–90°) and directions for all four setups.
+延伸分析	Extension analysis
 `
     .trim()
     .split("\n")

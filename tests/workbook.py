@@ -27,15 +27,15 @@ assert a['E2'].font.color.rgb=='FF173E34'
 assert a['Q2'].value in (None, '')
 assert o['D6'].value=='切去頂端' and '沒有明顯延長' in o['G6'].value
 assert len({a[c+'2'].fill.fgColor.rgb for c in ['E','F','H','M','R','N','S']})>=6
-assert len(w['裝置設計圖']._images)==2
+assert len(w['裝置設計圖']._images)==1
 assert '沒有明顯彎曲' in o['E4'].value and '向左彎曲' in o['F4'].value
 assert [o.cell(row,3).value for row in range(2,7)]==['A','B','C','A','D']
 assert [o.cell(row,8).value for row in range(2,7)]==['主探究']*3+['延伸一']*2
 assert all('延長' in o.cell(5,col).value and '彎曲' not in o.cell(5,col).value for col in (5,6,7))
 assert all('沒有明顯延長' in o.cell(6,col).value for col in (5,6,7))
 assert o['F5'].font.color.rgb==o['F6'].font.color.rgb=='FF00834A'
-assert len(s.data_validations.dataValidation)==10
-assert len(s.conditional_formatting)==19
+assert len(s.data_validations.dataValidation)==11
+assert len(s.conditional_formatting)==20
 assert len(a.conditional_formatting)==9
 assert {str(cf.sqref) for cf in a.conditional_formatting}=={'E2','F2','G2','L2','M2','R2','S2','AJ2','AK2'}
 assert a['AJ2'].value=='延長表現相近'
@@ -49,7 +49,7 @@ assert a['AN2'].font.color.rgb=='FF00834A'
 assert w.calculation.fullCalcOnLoad and w.calculation.forceFullCalc
 assert len(w['評分準則']['A'])>=19
 manual=[str(v.sqref).split(':')[0] for v in s.data_validations.dataValidation]
-assert manual==['E2','L2','N2','Q2','T2','V2','Z2','AA2','AB2','AC2']
+assert manual==['E2','L2','N2','Q2','T2','V2','W2','Z2','AA2','AB2','AC2']
 assert all(s[c].value in ('',None) for c in manual)
 def number(v):return isinstance(v,(int,float)) and not isinstance(v,bool)
 def ev(cell,seen=None):
@@ -94,7 +94,7 @@ print('PASS: actual XLSX archive, XML, eight sheets, preserved answer/observatio
 multi=load_workbook('/tmp/vl3-multi.xlsx')
 answers=multi['學生探究答案']
 assert {answers.cell(r,2).value for r in range(2,answers.max_row+1)}=={'陳小明','李同學'}
-assert len(multi['教師評分'].data_validations.dataValidation)==20
+assert len(multi['教師評分'].data_validations.dataValidation)==22
 for name in ['陳小明','李同學']:
     rows=[row for row in multi['定性觀察紀錄'].iter_rows(min_row=2) if row[1].value==name]
     assert [row[2].value for row in rows]==['A','B','C','A','D']
@@ -106,13 +106,13 @@ import json
 e=w['延伸量度與棒形圖']
 assert e['F4'].value==30 and e['I4'].value==35
 assert e['J4'].value=='向右彎曲' and e['J5'].value=='向左彎曲'
-assert e['M4'].value==35 and e['N4'].value=='向右彎曲'
+assert e['M4'].value in (None, '') and e['N4'].value in (None, '')
 assert e['I4'].font.color.rgb=='FF00834A'
 assert a['Y2'].value=='向左彎曲'  # original extension prediction, not the revised right choice
 assert a['AI2'].value=='正向光性'
 chunks=w['原始與遞交快照']
 r=json.loads(''.join(chunks.cell(i,3).value for i in range(2,chunks.max_row+1)))
-assert r['experimentVersion']==8
+assert r['experimentVersion']==9
 assert list(r['observations'])==list(r['firstObservations'])==['A','B','D']
 assert r['firstObservations']['D']['direction']=='straight'
 assert r['observations']['D']['direction']=='left'

@@ -363,19 +363,10 @@ async function saveExcel(page, target) {
     await unchanged(page, () => switchLanguage(page, "en"));
     assert.equal(await page.inputValue("#ruler-G"), "35");
     await page.click("#confirmExtension");
-    for (const [id, model] of await page.evaluate(() =>
-      Object.entries(EXT_MODEL),
-    )) {
-      await page.fill(`#graph-angle-${id}`, String(model.angle));
-      await page.selectOption(`#graph-direction-${id}`, model.direction);
-    }
-    await page.click("#saveGraph");
     for (const [id, value] of await page.evaluate(() =>
       Object.entries(EXT_ANSWERS),
     ))
       await page.selectOption(`#${id}`, value);
-    await page.fill("#extEvidence", "向光性");
-    await page.fill("#extControl", "保持較直");
     await noChineseSystem(page);
     await page.click("#submitInvestigation");
     assert.match(dialogs.at(-1).message, /After submission/);
@@ -427,8 +418,6 @@ async function saveExcel(page, target) {
       "物質X原文",
       "向右彎曲",
       "瓊脂",
-      "向光性",
-      "保持較直",
       "我的理由",
     ])
       assert(studentAnswers.includes(value), `PDF must preserve ${value}`);
@@ -511,7 +500,7 @@ async function saveExcel(page, target) {
     assert.equal(cloudRecord.form.reflection, "我的理由");
     assert.equal(cloudRecord.initialDesign.form.hypothesisPart, "頂端以下位置");
     assert.equal(cloudRecord.extension.initialPrediction.reason, "向右彎曲");
-    assert.equal(cloudRecord.experimentVersion, 8);
+    assert.equal(cloudRecord.experimentVersion, 9);
     assert.deepEqual(Object.keys(cloudRecord.observations), ["A", "B", "D"]);
     assert.equal(cloudRecord.tipInquiry.initialPrediction.prediction, "same");
     assert.equal(cloudRecord.tipInquiry.initialPrediction.reason, "頂端原文");
