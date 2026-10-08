@@ -153,7 +153,7 @@ function fresh(profile = null) {
   return {
     moduleId: MODULE_ID,
     schemaVersion: 1,
-    experimentVersion: 12,
+    experimentVersion: 13,
     id: crypto.randomUUID(),
     profile,
     createdAt: new Date().toISOString(),
@@ -235,6 +235,7 @@ function valid(r) {
     r.form &&
     FIELDS.filter(
       (f) =>
+        (f !== "extLightInference" || r.experimentVersion >= 13) &&
         (!NEW_FIELDS.includes(f) || newExperiment(r)) &&
         (!TIP_FIELDS.includes(f) || threeStage(r)),
     ).every((f) => typeof r.form[f] === "string") &&
@@ -775,7 +776,7 @@ $("#submitInvestigation").onclick = () => {
           "#runExtension"
         : !EXT_IDS.every((id) => state.extension.readings[id])
           ? "#extensionResults"
-          : firstEmptyField(Object.keys(EXT_ANSWERS));
+          : firstEmptyField([...Object.keys(EXT_ANSWERS), "extLightInference"]);
     return remind("請完成：" + missing.join("、"), target);
   }
   if (running || tipRunning || extensionRunning)
@@ -1362,7 +1363,7 @@ function scoringWorkbook(all) {
     [
       "數據解釋",
       2,
-      "2：引用遮光、頂端及瓊脂比較的實際觀察形成合理推論，並區分待測的物質X與已證實身分；1：部分證據；0：無證據。舊版按原探究。",
+      "版本13：合理連結單側光、物質 X 移向背光側並向下傳遞、兩側延長差異與向光彎曲得2；部分連結得1；無相關推論得0。由教師評閱，不以關鍵字自動判分；瓊脂比較沒有直接量得光照下的物質分布。舊版按原探究證據解釋。",
     ],
     [
       "反思表達",
@@ -1465,6 +1466,7 @@ async function exportExcel() {
     ["tipLimit", "延伸一證據限制", "inferring"],
     ["substancePrediction", "物質 X 待測想法", "inferring"],
     ["tipEvidence", "延伸一數據解釋", "inferring"],
+    ["extLightInference", "單側光與物質 X 的推論", "inferring"],
   ];
   extraFields.forEach(([, label, category]) => headers.push([label, category]));
   const extensionRows = [
@@ -1549,6 +1551,7 @@ async function exportExcel() {
         Math.round(Object.values(r.phaseDurations).reduce((a, b) => a + b, 0)),
         ...extraFields.map(([id]) => {
           if (id === "tipEvidence") return f.tipEvidence || "";
+          if (id === "extLightInference") return f.extLightInference || "";
           if (id === "substancePrediction") return f[id] ? answerOption(id, f[id], r) : "";
           if (["tipFair", "tipLimit"].includes(id))
             return f[id] ? answerOption(id, f[id], r) : "";

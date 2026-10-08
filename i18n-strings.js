@@ -269,7 +269,7 @@ A 與 D：下部遮光處理	A and D: blocking light below the tip
 從證據走向解釋	From evidence to explanation
 植物向光生長的機制	How plants grow towards light
 植物因光照方向而產生的定向生長反應稱為「向光性」；向光源生長屬於「正向光性」。	Phototropism is directional growth in response to the direction of light. Growth towards light is positive phototropism.
-在這個燕麥胚芽鞘模型中，頂端參與感受單側光照；切頂比較也涉及傷口及生長訊號，不能獨自確定頂端只負責感光。	In this oat coleoptile model, the tip helps sense light from one side. Removing the tip also affects growth signals and causes a wound, so this comparison alone cannot show that sensing light is the tip's only role.
+在這個燕麥胚芽鞘模型中，頂端參與感受單側光照。	In this oat coleoptile model, the tip helps sense light from one side.
 生長素是影響植物生長的激素。頂端可產生能向下傳遞的生長促進作用。	Auxin is a hormone that affects plant growth. The tip can produce a growth-promoting effect that passes downwards.
 單側光照下，背光側生長素較多，該側細胞延長較多，使胚芽鞘向光彎曲；感光部位與彎曲部位可不同。	With light from one side, more auxin is found on the shaded side. Cells on that side elongate more, making the coleoptile bend towards light. The part that senses light may differ from the part that bends.
 瓊脂實驗支持可轉移的生長促進作用及不均勻生長，但沒有直接鑑定物質，也沒有量度單側光照下的生長素分布。生長素的鑑定及分布由其他研究支持。本活動全部動畫、培養時間及角度為教學模擬。	The agar experiments support a growth-promoting effect that can be transferred, and unequal growth. They do not identify the substance or measure auxin distribution under light from one side. Other research supports the identification and distribution of auxin. All animations, growing times and angles here are teaching simulations.
@@ -683,6 +683,9 @@ A、B、C 三組遮光處理、單側光源及固定條件清楚；圖片與文�
 比較 A 和 D 是否有延長，說明頂端的存在是否影響胚芽鞘的生長／延長。	Compare whether A and D elongate, and explain whether the presence of the tip affects the coleoptile’s growth / elongation.
 請完成四組角度（0–90°）及方向。	Complete the angles (0–90°) and directions for all four setups.
 研究員準備了曾接觸頂端的瓊脂，讓你測試這種作用能否傳遞，以及作用位置如何影響彎曲。	Researchers prepared agar that had touched the tip so you can test whether this effect can be transferred and how its position affects bending.
+4. 根據以上比較，推論單側光如何影響物質 X 的移動，並使胚芽鞘向光彎曲生長。	4. Based on these comparisons, infer how light from one side affects the movement of substance X and causes the coleoptile to bend and grow towards the light.
+單側光與物質 X 的推論	Inference about light from one side and substance X
+單側光可能使物質 X 移向背光側，再向下傳遞，促進背光側細胞延長。背光側延長較多，使胚芽鞘向光彎曲；這是結合比較結果提出的推論，瓊脂實驗並未直接觀察光照下物質 X 的分布。	Light from one side may cause substance X to move towards the shaded side and then pass downwards, promoting cell elongation there. Greater elongation on the shaded side causes the coleoptile to bend towards the light. This inference combines the comparisons; the agar experiment did not directly observe the distribution of substance X under light.
 延伸分析	Extension analysis
 `
     .trim()

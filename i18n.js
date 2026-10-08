@@ -27,6 +27,7 @@ window.VL3Language = (() => {
     tipFair: "說明需要保持相同的條件……",
     tipEvidence: "引用比較，解釋你的推論……",
     extReason: "寫下你的理由……",
+    extLightInference: "引用比較，解釋你的推論……",
     extFair: "說明需要保持相同的條件……",
     extEvidence: "引用比較，解釋你的推論……",
     extControl: "描述你的額外對照……",

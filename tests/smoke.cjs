@@ -120,7 +120,7 @@ async function flow(p, student = true) {
   await p.click("#saveDrawing");
   await p.click("#toExperiment");
   assert(await p.locator("#phase-3").isVisible());
-  assert.equal(await p.evaluate(() => state.experimentVersion), 12);
+  assert.equal(await p.evaluate(() => state.experimentVersion), 13);
   assert.deepEqual(await p.evaluate(() => MAIN_IDS), ["A", "B", "D"]);
   assert.equal(await p.locator("#bench .specimen").count(), 3);
   assert.equal(await p.locator("#growth-C").count(), 0);
@@ -356,6 +356,8 @@ async function flow(p, student = true) {
     extSides: "opposite",
   }))
     await p.selectOption("#" + id, v);
+  await reminder(p, "#submitInvestigation", /單側光與物質 X 的推論/, "extLightInference");
+  await p.fill("#extLightInference", "單側光可能使物質X移向背光側並向下傳遞；背光側延長較多，因此向光彎曲。");
   assert.equal(await p.locator("#extDark,#extLimit,#extEvidence,#extControl").count(), 0);
   assert.doesNotMatch(await p.locator("main").innerText(), /生長素|向光性/);
   await p.click("#submitInvestigation");
@@ -557,6 +559,7 @@ async function flow(p, student = true) {
     const version3 = await p.evaluate(() => {
       const r = structuredClone(records()[0]);
       r.experimentVersion = 3;
+      delete r.form.extLightInference;
       for (const id of ["A", "B", "D"])
         Object.assign(r.observations[id], mainModel(id, r));
       r.form.comparison = "AB";
@@ -584,6 +587,7 @@ async function flow(p, student = true) {
     const version4 = await p.evaluate(() => {
       const r = structuredClone(records()[0]);
       r.experimentVersion = 4;
+      delete r.form.extLightInference;
       for (const id of ["A", "B", "D"])
         Object.assign(r.observations[id], mainModel(id, r));
       r.observations.C = {

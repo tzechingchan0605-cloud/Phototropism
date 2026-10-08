@@ -364,6 +364,7 @@ async function saveExcel(page, target) {
       Object.entries(EXT_ANSWERS),
     ))
       await page.selectOption(`#${id}`, value);
+    await page.fill("#extLightInference", "單側光可能使物質X移向背光側並向下傳遞；背光側延長較多，因此向光彎曲。");
     await noChineseSystem(page);
     await page.click("#submitInvestigation");
     assert.match(dialogs.at(-1).message, /After submission/);
@@ -413,6 +414,7 @@ async function saveExcel(page, target) {
       "頂端原文",
       "向右彎曲",
       "我的理由",
+      "單側光可能使物質X移向背光側並向下傳遞；背光側延長較多，因此向光彎曲。",
     ])
       assert(studentAnswers.includes(value), `PDF must preserve ${value}`);
     assert(
@@ -494,7 +496,7 @@ async function saveExcel(page, target) {
     assert.equal(cloudRecord.form.reflection, "我的理由");
     assert.equal(cloudRecord.initialDesign.form.hypothesisPart, "頂端以下位置");
     assert.equal(cloudRecord.extension.initialPrediction.reason, "向右彎曲");
-    assert.equal(cloudRecord.experimentVersion, 12);
+    assert.equal(cloudRecord.experimentVersion, 13);
     assert.deepEqual(Object.keys(cloudRecord.observations), ["A", "B", "D"]);
     assert.equal(cloudRecord.tipInquiry.initialPrediction.prediction, "same");
     assert.equal(cloudRecord.tipInquiry.initialPrediction.reason, "頂端原文");

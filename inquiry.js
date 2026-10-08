@@ -42,6 +42,7 @@ const NEW_FIELDS = [
   "extEF",
   "extPosition",
   "extSides",
+  "extLightInference",
   "knowledgeName",
 ];
 const LEGACY_MAIN_ANSWERS = {
@@ -169,6 +170,7 @@ function initExtension() {
     ${selectHTML("extEF", { transfer: "頂端可能產生可轉移的生長促進作用。", agar: "所有瓊脂都會產生相同的生長促進作用。" }, "", "1. E 與 F 的比較支持甚麼？")}
     ${selectHTML("extPosition", { position: "生長作用的位置影響彎曲方向。", noEffect: "放置位置不影響彎曲方向。" }, "", "2. F、G、H 的比較支持甚麼？")}
     ${selectHTML("extSides", { opposite: "左側延長較多向右彎曲；右側延長較多向左彎曲。", same: "哪側延長較多，就向哪側彎曲。" }, "", "3. 兩側延長差異與彎曲方向有甚麼關係？")}
+    <label for="extLightInference">4. 根據以上比較，推論單側光如何影響物質 X 的移動，並使胚芽鞘向光彎曲生長。</label><textarea id="extLightInference" maxlength="2500"></textarea>
     </article>`;
   document.querySelector("#runExtension").onclick = runExtension;
   document.querySelector("#confirmExtension").onclick = confirmExtension;
@@ -426,6 +428,7 @@ function extensionMissing() {
     !Object.keys(EXT_ANSWERS).every((k) => state.form[k])
   )
     missing.push("延伸分析");
+  if (!state.form.extLightInference?.trim()) missing.push("單側光與物質 X 的推論");
   return missing;
 }
 function lockExtension() {
@@ -539,6 +542,7 @@ function newReport(r) {
     "數據推論",
     "公平比較",
     "延伸證據",
+    "單側光與物質 X 的推論",
     "額外對照（選答）",
     "實際反思",
   ]);
@@ -591,7 +595,7 @@ function newReport(r) {
   <section class="report-card"><h2>04 · 主探究分析</h2>${questions(mainAnswersFor(r))}${r.experimentVersion < 10 ? open("數據推論", f.evidence, threeStage(r) ? `比較 A–B 及 A–${sampleName("D", r)} 的彎曲方向，說明哪個部位可能感受光。` : "以 A–B、A–C、A–D 的具體比較支持推論，留意傷口、溫度及機械限制。") : ""}</section>
   ${threeStage(r) ? tipReportHTML(r) : ""}
   <section class="report-card"><h2>${threeStage(r) ? "04 · 延伸探究二：物質 X" : "04 · 延伸預測與觀察"}</h2>${open("原始預測", DIRECTIONS[e.initialPrediction?.prediction], "處理瓊脂放左側，模型中左側延長較多而向右彎曲；原始預測由教師按可測試性評閱。")}${open("原始理由", e.initialPrediction?.reason, "合理理由不因結果不符直接判錯。")}${r.experimentVersion < 12 ? open("公平比較", f.extFair, "E–F 均放中央，保持瓊脂大小、胚芽鞘初始大小及狀況、黑暗、溫度、供水及時間相同。") : ""}<h3>首次確認讀數</h3>${firstExt}<h3>最後讀數</h3>${extensionTableHTML(e.readings)}${EXT_IDS.map((id) => reportAnswer(id + " 最終角度", e.readings[id]?.angle === undefined ? "" : e.readings[id].angle + "°", EXT_MODEL[id].angle + "°（教學模型；±3°）", e.readings[id] ? Math.abs(e.readings[id].angle - EXT_MODEL[id].angle) <= 3 : null)).join("")}${r.experimentVersion < 9 ? `<h3>學生棒形圖</h3>${Object.keys(e.graph).length ? barChartSVG(e.graph) : "未確認"}<p class="report-reference">圖表以學生本身讀數核對；量度準確性另與模型比較。不用鉛直高度差推算延長量。</p>` : ""}</section>
-  <section class="report-card"><h2>${threeStage(r) ? "04 · 延伸二分析" : "04 · 延伸分析"}</h2>${questions(extensionAnswersFor(r))}${r.experimentVersion < 9 ? open("延伸證據", f.extEvidence, "E–F 支持可轉移的生長促進作用；G–H 支持作用位置影響彎曲方向。") : ""}${r.experimentVersion < 9 ? open("額外對照（選答）", f.extControl, "可把空白瓊脂放左側及右側，以排除單側放置本身的影響。") : ""}</section>
+  <section class="report-card"><h2>${threeStage(r) ? "04 · 延伸二分析" : "04 · 延伸分析"}</h2>${questions(extensionAnswersFor(r))}${r.experimentVersion >= 13 ? open("單側光與物質 X 的推論", f.extLightInference, "單側光可能使物質 X 移向背光側，再向下傳遞，促進背光側細胞延長。背光側延長較多，使胚芽鞘向光彎曲；這是結合比較結果提出的推論，瓊脂實驗並未直接觀察光照下物質 X 的分布。") : ""}${r.experimentVersion < 9 ? open("延伸證據", f.extEvidence, "E–F 支持可轉移的生長促進作用；G–H 支持作用位置影響彎曲方向。") : ""}${r.experimentVersion < 9 ? open("額外對照（選答）", f.extControl, "可把空白瓊脂放左側及右側，以排除單側放置本身的影響。") : ""}</section>
   ${r.submittedAt ? `<section class="report-card"><h2>學習重點</h2><p>向光性是因光照方向而產生的定向生長；向光源屬正向光性。頂端參與感光，生長素是影響植物生長的激素。${threeStage(r) ? "探究中的物質 X 可結合其他研究理解為生長素；瓊脂比較本身並未鑑定其身分。" : ""}背光側生長素較多、細胞延長較多，使胚芽鞘向光彎曲。</p>${mechanismSVG()}<p class="report-reference">本模型未直接鑑定瓊脂內的物質或量得單側光下的生長素分布；名稱及機制由其他研究支持。</p>${reportAnswer("名稱檢核", answerOption("knowledgeName", f.knowledgeName), "正向光性", f.knowledgeName ? f.knowledgeName === "positive" : null)}</section>` : ""}
   <section class="report-card"><h2>學習反思</h2>${open("實際反思", f.reflection, threeStage(r) ? "引用遮光主探究、頂端比較及瓊脂延伸各一項比較，修訂三段原始預測，連結感光、生長訊號與不均勻延長。由教師評閱，不自動判錯。" : "引用主探究及延伸各一項比較，修訂兩次原始預測，連結感光、生長訊號與不均勻延長。由教師評閱，不自動判錯。")}</section><p class="report-reference">動畫、24 小時及角度為教學模擬。學生報告不顯示分數。</p>`;
 }

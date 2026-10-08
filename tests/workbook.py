@@ -16,7 +16,7 @@ a=w['學生探究答案'];s=w['教師評分'];o=w['定性觀察紀錄']
 # Retain every historical answer column and append the new inquiry fields after AI.
 original_headers=['紀錄識別碼','姓名','班別','狀態','初步觀察','原始假說','原始理由','獨立變量','因變量','控制變量','實驗前提','對照組設計','裝置文字設計','感光部位','組別比較','下部遮光反應','證據限制','數據解釋','學習反思','總時間（秒）','初步想法（舊版）','指定比較（舊版）','頂端遮光比較','感光與彎曲位置','延伸原始預測','延伸原始理由','延伸公平比較','E–F 比較','F–G–H 比較','兩側延長與方向','黑暗彎曲推論','延伸證據限制','延伸數據解釋','額外對照（選答）','向光性名稱檢核']
 tip_headers=['延伸一原始預測','延伸一原始理由','延伸一公平比較','延伸一證據限制','物質 X 待測想法','延伸一數據解釋']
-assert [cell.value for cell in a[1]]==original_headers+tip_headers
+assert [cell.value for cell in a[1]]==original_headers+tip_headers+['單側光與物質 X 的推論']
 assert [cell.value for cell in o[1]]==['紀錄識別碼','姓名','組別','處理','第一次觀察','目前觀察','模型典型反應','探究階段']
 assert o.max_column==8 and o.max_row==6
 assert a['B2'].value=='陳小明'
@@ -45,6 +45,7 @@ assert a['AM2'].value in (None, '')
 assert a['AN2'].value in (None, '')
 assert a['AO2'].value in (None, '')
 assert a['R2'].value in (None, '')
+assert a['AP2'].value=='單側光可能使物質X移向背光側並向下傳遞；背光側延長較多，因此向光彎曲。'
 assert a['AJ2'].font.color.rgb==a['AK2'].font.color.rgb=='FF173E34'
 assert a['AN2'].font.color.rgb=='FF173E34'
 assert w.calculation.fullCalcOnLoad and w.calculation.forceFullCalc
@@ -113,7 +114,7 @@ assert a['Y2'].value=='向左彎曲'  # original extension prediction, not the r
 assert a['AI2'].value=='正向光性'
 chunks=w['原始與遞交快照']
 r=json.loads(''.join(chunks.cell(i,3).value for i in range(2,chunks.max_row+1)))
-assert r['experimentVersion']==12
+assert r['experimentVersion']==13
 assert list(r['observations'])==list(r['firstObservations'])==['A','B','D']
 assert r['firstObservations']['D']['direction']=='straight'
 assert r['observations']['D']['direction']=='left'
