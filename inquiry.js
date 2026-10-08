@@ -23,6 +23,10 @@ const GROWTH = {
   reduced: "較少伸長",
   none: "沒有明顯伸長",
 };
+const MAIN_GROWTH = { clear: "有", none: "沒有" };
+function mainObservationFields(record) {
+  return threeStage(record) ? ["growth", "direction"] : ["growth", "direction", "position"];
+}
 const POSITIONS = {
   upper: "上部／頂端以下",
   lower: "接近底部",
@@ -84,7 +88,9 @@ function mainModel(id, record = state) {
           : "reduced"
         : "clear",
     direction: ["A", "D"].includes(id) ? "left" : "straight",
-    position: ["A", "D"].includes(id) ? "upper" : "none",
+    ...(threeStage(record)
+      ? {}
+      : { position: ["A", "D"].includes(id) ? "upper" : "none" }),
   };
 }
 function mainObservationText(obs) {
@@ -98,8 +104,7 @@ function mainObservationComplete(obs) {
   return (
     !!obs &&
     !!GROWTH[obs.growth] &&
-    !!DIRECTIONS[obs.direction] &&
-    !!POSITIONS[obs.position]
+    !!DIRECTIONS[obs.direction]
   );
 }
 function mainObservationScore(r) {
@@ -115,7 +120,7 @@ function mainObservationScore(r) {
   const correct = groups.reduce(
     (sum, id) =>
       sum +
-      ["growth", "direction", "position"].filter(
+      mainObservationFields(r).filter(
         (key) => r.observations[id]?.[key] === mainModel(id, r)[key],
       ).length,
     0,
@@ -129,7 +134,7 @@ function mainObservationScore(r) {
       ).length,
     0,
   );
-  return Math.round((correct / 9 + tipCorrect / 4) * 100) / 100;
+  return Math.round((correct / 6 + tipCorrect / 4) * 100) / 100;
 }
 function assumptionsFor(r) {
   return newExperiment(r) ? ASSUMPTIONS : LEGACY_ASSUMPTIONS;
@@ -609,7 +614,7 @@ function newReport(r) {
         mainObservationText(obs),
         mainObservationText(expected),
         obs
-          ? ["growth", "direction", "position"].every(
+          ? mainObservationFields(r).every(
               (k) => obs[k] === expected[k],
             )
           : null,

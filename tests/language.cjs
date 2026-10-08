@@ -222,7 +222,7 @@ async function saveExcel(page, target) {
       await page.check(`[data-assumption=${id}]`);
     await page.fill("#controlPlan", "向左彎曲");
     await page.fill("#setupDescription", "學生實驗裝置設計");
-    await page.click("#saveTextSetup");
+    await page.click("#saveDrawing");
     const box = await page.locator("#setupCanvas").boundingBox();
     await page.mouse.move(box.x + 20, box.y + 25);
     await page.mouse.down();
@@ -276,10 +276,6 @@ async function saveExcel(page, target) {
       await page.selectOption(
         `#obs-${id}`,
         ["A", "D"].includes(id) ? "left" : "straight",
-      );
-      await page.selectOption(
-        `#position-${id}`,
-        ["A", "D"].includes(id) ? "upper" : "none",
       );
     }
     await page.click("#recordData");

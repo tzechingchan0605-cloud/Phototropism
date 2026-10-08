@@ -110,7 +110,7 @@ async function flow(p, student = true) {
     "A完整 B不透光帽 D下部長遮光套；左側光照，帽及套留足空間。",
   );
   await reminder(p, "#toExperiment", /已儲存的裝置設計/);
-  await p.click("#saveTextSetup");
+  await p.click("#saveDrawing");
   const b = await p.locator("#setupCanvas").boundingBox();
   await p.mouse.move(b.x + 20, b.y + 30);
   await p.mouse.down();
@@ -123,6 +123,14 @@ async function flow(p, student = true) {
   assert.deepEqual(await p.evaluate(() => MAIN_IDS), ["A", "B", "D"]);
   assert.equal(await p.locator("#bench .specimen").count(), 3);
   assert.equal(await p.locator("#growth-C").count(), 0);
+  assert.equal(await p.locator('[id^="position-"]').count(), 0);
+  assert.match(await p.locator("#bench").innerText(), /B · 頂端遮光/);
+  assert.deepEqual(
+    await p.locator("#growth-A option").evaluateAll((options) =>
+      options.map((option) => [option.value, option.textContent]),
+    ),
+    [["", "請選擇"], ["clear", "有"], ["none", "沒有"]],
+  );
   assert.doesNotMatch(
     await p.locator("#phase-2").innerText(),
     /頂端是否存在|切去頂端|A.?C/,
@@ -158,17 +166,13 @@ async function flow(p, student = true) {
   );
   assert.match(await p.locator("#equipmentBank").innerText(), /計時工具/);
   assert.equal(await p.locator("#equipmentBank .equipment").count(), 5);
-  await reminder(p, "#recordData", /三組的伸長、彎曲方向及位置/, "growth-A");
+  await reminder(p, "#recordData", /三組的伸長及彎曲方向/, "growth-A");
   assert.equal(await p.evaluate(() => state.firstObservations), null);
   for (const id of ["A", "B", "D"]) {
     await p.selectOption("#growth-" + id, "clear");
     await p.selectOption(
       "#obs-" + id,
       ["A", "D"].includes(id) ? "left" : "straight",
-    );
-    await p.selectOption(
-      "#position-" + id,
-      ["A", "D"].includes(id) ? "upper" : "none",
     );
   }
   await p.selectOption("#obs-D", "straight");
@@ -577,6 +581,8 @@ async function flow(p, student = true) {
     const version3 = await p.evaluate(() => {
       const r = structuredClone(records()[0]);
       r.experimentVersion = 3;
+      for (const id of ["A", "B", "D"])
+        r.observations[id].position = mainModel(id, r).position;
       r.form.comparison = "AB";
       r.initialDesign.form.comparison = "AB";
       r.observations.C = {
@@ -602,6 +608,8 @@ async function flow(p, student = true) {
     const version4 = await p.evaluate(() => {
       const r = structuredClone(records()[0]);
       r.experimentVersion = 4;
+      for (const id of ["A", "B", "D"])
+        r.observations[id].position = mainModel(id, r).position;
       r.observations.C = {
         growth: "none",
         direction: "straight",

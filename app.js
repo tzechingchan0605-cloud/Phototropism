@@ -16,7 +16,7 @@ const esc = (v) =>
 const clone = (v) => structuredClone(v);
 const GROUPS = {
   A: { label: "不遮光", bend: true },
-  B: { label: "頂端不透光罩", bend: false },
+  B: { label: "頂端遮光", bend: false },
   C: { label: "切去頂端", bend: false },
   D: { label: "頂端以下位置遮光", bend: true },
 };
@@ -386,10 +386,10 @@ function contextComparison() {
 function renderBench(p = 0) {
   $("#bench").innerHTML = MAIN_IDS.map(
     (id) =>
-      `<article class="specimen"><h3>${id} · ${GROUPS[id].label}</h3><div id="plant-${id}">${seedling(id, p)}</div>${selectHTML("growth-" + id, GROWTH, state.observations[id]?.growth, "伸長表現")}${selectHTML("obs-" + id, DIRECTIONS, state.observations[id]?.direction, "彎曲方向")}${selectHTML("position-" + id, POSITIONS, state.observations[id]?.position, "彎曲位置")}</article>`,
+      `<article class="specimen"><h3>${id} · ${GROUPS[id].label}</h3><div id="plant-${id}">${seedling(id, p)}</div>${selectHTML("growth-" + id, MAIN_GROWTH, state.observations[id]?.growth, "伸長表現")}${selectHTML("obs-" + id, DIRECTIONS, state.observations[id]?.direction, "彎曲方向")}</article>`,
   ).join("");
   MAIN_IDS.forEach((id) =>
-    ["growth", "obs", "position"].forEach(
+    ["growth", "obs"].forEach(
       (k) =>
         ($("#" + k + "-" + id).onchange = () =>
           log("observation_selected", {
@@ -587,14 +587,19 @@ $("#clearDrawing").onclick = () => {
   log("setup_cleared");
 };
 $("#saveDrawing").onclick = () => {
-  if (!drawMade)
-    return remind("請先繪畫裝置，或改用文字設計。", "#setupCanvas");
-  saveSetup("drawing", canvas.toDataURL("image/png"));
-};
-$("#saveTextSetup").onclick = () => {
-  if (!$("#setupDescription").value.trim())
-    return remind("請先描述你的裝置設計。", "#setupDescription");
-  saveSetup("text");
+  if (state.submittedAt) return;
+  if (drawMade) {
+    saveSetup(
+      state.setup.method === "photo" ? "photo" : "drawing",
+      canvas.toDataURL("image/png"),
+    );
+  } else if (state.setup.image) {
+    saveSetup(state.setup.method, state.setup.image);
+  } else if ($("#setupDescription").value.trim()) {
+    saveSetup("text");
+  } else {
+    remind("請先繪畫裝置，或改用文字設計。", "#setupCanvas");
+  }
 };
 $("#setupPhoto").onchange = async (e) => {
   const f = e.target.files[0];
@@ -677,6 +682,10 @@ $("#runExperiment").onclick = () => {
   hasRun = false;
   const generation = ++runGeneration;
   renderBench(0);
+  $("#bench").scrollIntoView({
+    behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+    block: "start",
+  });
   applyLock();
   const duration = matchMedia("(prefers-reduced-motion: reduce)").matches
     ? 0
@@ -707,18 +716,16 @@ $("#recordData").onclick = () => {
       {
         growth: $("#growth-" + id).value,
         direction: $("#obs-" + id).value,
-        position: $("#position-" + id).value,
       },
     ]),
   );
   if (Object.values(obs).some((v) => !mainObservationComplete(v)))
     return remind(
-      "請先選擇三組的伸長、彎曲方向及位置。",
+      "請先選擇三組的伸長及彎曲方向。",
       firstEmptyField(
         MAIN_IDS.flatMap((id) => [
           "growth-" + id,
           "obs-" + id,
-          "position-" + id,
         ]),
       ),
     );
@@ -1609,7 +1616,7 @@ async function exportExcel() {
       const expected = newExperiment(r) ? mainModel(id, r) : outcome;
       const correct = r.observations[id]
         ? newExperiment(r)
-          ? ["growth", "direction", "position"].every(
+          ? mainObservationFields(r).every(
               (k) => r.observations[id][k] === expected[k],
             )
           : r.observations[id] === outcome

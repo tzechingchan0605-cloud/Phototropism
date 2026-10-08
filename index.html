@@ -165,11 +165,11 @@
               <p class="card-kicker">04 · 探究的對照組</p>
               <h3>
                 <label for="controlPlan"
-                  >若想判斷遮光處理是否影響胚芽鞘的生長方向，你會保留甚麼未經處理的裝置作比較？哪些條件需要保持相同？</label
+                  >若想判斷遮光處理是否影響胚芽鞘的生長方向，你會如何設計對照組？</label
                 >
               </h3>
               <p class="muted design-hint">
-                （提示：對照組主要功能是作為比較的基準，用來確認實驗中的改變是由於測試的變因（獨立變量）所引起，而不是其他外在因素的干擾。）
+                （提示：對照組主要功能是作為比較的基準，用來確認實驗中的改變是由獨立變量所引起，而非其他外在因素的干擾，因此對照組不包含獨立變量的處理條件）
               </p>
               <textarea
                 id="controlPlan"
@@ -185,7 +185,7 @@
                 （提示：此實驗需要多少個裝置？實驗組和對照組分別是什麼？）
               </p>
               <div id="equipmentBank" class="equipment-bank"></div>
-              <p>可先繪圖或上載相片，然後按「儲存」。也可使用下方文字設計。</p>
+              <p>可繪圖、上載相片或填寫文字設計，再按下方「儲存」一併保存。</p>
               <canvas
                 id="setupCanvas"
                 width="900"
@@ -209,7 +209,6 @@
                 >
                   ⌫ 橡皮擦</button
                 ><button id="clearDrawing" type="button">清除</button
-                ><button id="saveDrawing" type="button">儲存</button
                 ><label
                   class="upload-control"
                   tabindex="0"
@@ -225,8 +224,8 @@
                 >文字設計（可代替繪圖）：描述 A、B、D
                 三組裝置、遮光方法及固定條件。</label
               ><textarea id="setupDescription" maxlength="2500"></textarea
-              ><button id="saveTextSetup" class="secondary">
-                儲存文字設計
+              ><button id="saveDrawing" type="button" class="secondary">
+                儲存
               </button>
               <p id="setupStatus" role="status"></p>
             </article>
@@ -266,7 +265,7 @@
                   <tr>
                     <th>組別</th>
                     <th>處理</th>
-                    <th>伸長表現／方向／彎曲位置</th>
+                    <th>伸長表現／方向</th>
                   </tr>
                 </thead>
                 <tbody id="observationTable"></tbody>

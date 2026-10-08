@@ -282,6 +282,9 @@ button {
   border-radius: 8px;
   background: white;
 }
+#phase-1 > .vl3-actions {
+  justify-content: flex-end;
+}
 .vl3-actions {
   display: flex;
   gap: 12px;

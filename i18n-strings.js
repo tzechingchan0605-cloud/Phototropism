@@ -11,7 +11,7 @@ window.VL3_ENGLISH = Object.fromEntries(
 學校園藝小組發現，窗邊胚芽鞘逐漸朝窗戶方向彎曲。大家知道植物會朝光源方向生長，但不知道植物哪個部位感受光照，以及甚麼令它彎曲。	The school gardening club notices that coleoptiles near a window gradually bend towards it. They know that plants grow towards light, but they do not know which part senses light or what makes the plant bend.
 試描述情景中的可觀察變化：胚芽鞘的外形及生長方向有甚麼變化？	Describe the changes you can observe. How do the coleoptiles' shape and growth direction change?
 本次只改變遮光處理，比較不遮光、頂端遮光及下部遮光。三組頂端均完整，其他條件保持相同。	Change only the light-blocking treatment. Compare no light blocked, light blocked at the tip and light blocked below the tip. All three setups keep their tips, and other conditions stay the same.
-若想判斷遮光處理是否影響胚芽鞘的生長方向，你會保留甚麼未經處理的裝置作比較？哪些條件需要保持相同？	To find out whether blocking light affects the coleoptile's growth direction, which untreated setup would you keep for comparison? Which conditions should stay the same?
+若想判斷遮光處理是否影響胚芽鞘的生長方向，你會如何設計對照組？	To find out whether blocking light affects the coleoptile's growth direction, how would you design the control group?
 文字設計（可代替繪圖）：描述 A、B、D 三組裝置、遮光方法及固定條件。	Written plan (may replace a drawing): describe setups A, B and D, how light is blocked and the conditions kept the same.
 03 · 進行主探究與記錄	03 · Run and record the main inquiry
 相同單側光照，三種遮光處理	Light from the same side, three light-blocking treatments
@@ -31,7 +31,7 @@ window.VL3_ENGLISH = Object.fromEntries(
 你的延伸一原始預測	Your original extension 1 prediction
 你的延伸二原始預測	Your original extension 2 prediction
 原始假說及理由已固定保存。請觀察三組胚芽鞘。	Your original hypothesis and reason are saved. Observe the three coleoptiles.
-請先選擇三組的伸長、彎曲方向及位置。	Choose elongation, bending direction and position for all three setups first.
+請先選擇三組的伸長及彎曲方向。	Choose elongation and bending direction for all three setups first.
 三組觀察已記錄。你可以再次實驗，或進入分析。	Observations for all three setups are saved. You can repeat the experiment or analyse the results.
 請先記錄全部三組的觀察。	Record observations for all three setups first.
 請完成主探究五項推論及觀察解釋。	Complete the five main inquiry conclusions and explain your observations.
@@ -185,7 +185,7 @@ A 與 D：下部遮光處理	A and D: blocking light below the tip
 植物種類相同便毋須控制初始大小。	If the plants are the same type, their starting size does not need to be controlled.
 04 · 探究的對照組	04 · The control group
 若想判斷不同處理是否影響胚芽鞘的生長方向，你會保留甚麼未經處理的裝置作比較？哪些條件需要保持相同？	To find out whether the treatments affect growth direction, which untreated setup would you keep for comparison? Which conditions should stay the same?
-（提示：對照組主要功能是作為比較的基準，用來確認實驗中的改變是由於測試的變因（獨立變量）所引起，而不是其他外在因素的干擾。）	(Hint: The control group provides a starting point for comparison. It helps you check whether a change is caused by the independent variable rather than other factors.)
+（提示：對照組主要功能是作為比較的基準，用來確認實驗中的改變是由獨立變量所引起，而非其他外在因素的干擾，因此對照組不包含獨立變量的處理條件）	(Hint: The control group provides a baseline for comparison. It helps you confirm that a change is caused by the independent variable rather than other external factors, so the control group does not receive the independent variable treatment.)
 對照組設計	Control group plan
 05 · 實驗裝置設計	05 · Experiment setup
 繪畫並標示你的實驗裝置	Draw and label your experiment setup
@@ -198,11 +198,13 @@ A 與 D：下部遮光處理	A and D: blocking light below the tip
 單側光源 × 1	Light source on one side × 1
 剪刀 × 1	Scissors × 1
 計時工具 × 1	Timer × 1
-可先繪圖或上載相片，然後按「儲存」。也可使用下方文字設計。	Draw or upload a photo, then press Save. You may also describe your setup below.
+可繪圖、上載相片或填寫文字設計，再按下方「儲存」一併保存。	Draw, upload a photo or write your plan, then press Save below to save them together.
 實驗裝置繪圖區	Experiment setup drawing area
 ✎ 鉛筆	✎ Pencil
 ⌫ 橡皮擦	⌫ Eraser
 清除	Clear
+有	Yes
+沒有	No
 儲存	Save
 上載相片	Upload a photo
 文字設計（可代替繪圖）：描述四組裝置、遮光方法及固定條件。	Written plan (may replace a drawing): describe the four setups, how light is blocked and the conditions kept the same.
@@ -216,7 +218,7 @@ A 與 D：下部遮光處理	A and D: blocking light below the tip
 ▶ 進行四組實驗	▶ Run the four setups
 等待開始	Waiting to start
 不遮光	No light blocked
-頂端不透光罩	Opaque cap on the tip
+頂端遮光	Light blocked at the tip
 切去頂端	Tip removed
 頂端以下位置遮光	Light blocked below the tip
 頂端透明罩	Transparent cap on the tip
@@ -236,7 +238,7 @@ A 與 D：下部遮光處理	A and D: blocking light below the tip
 我的觀察紀錄	My observation record
 組別	Group
 處理	Treatment
-伸長表現／方向／彎曲位置	Elongation / direction / bending position
+伸長表現／方向	Elongation / direction
 系統保存你記錄的觀察。若再次實驗並修訂，亦會保留第一次觀察和操作紀錄。	Your observations are saved. If you repeat the experiment and revise them, your first observations and action record are also kept.
 ← 返回設計	← Back to the plan
 分析我的數據 →	Analyse my data →
