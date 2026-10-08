@@ -495,7 +495,7 @@ E–F 支持可轉移的生長促進作用；G–H 支持作用位置影響彎�
 ；原資料保留。	; original data is kept.
 暫無學生紀錄可匯出。	No student records to export.
 請先完成主探究的六項推論及數據解釋。	Complete the six main inquiry conclusions and data explanation first.
-請完成延伸預測、理由及公平比較。	Complete the extension prediction, reason and fair comparison.
+請完成延伸預測及理由。	Complete the extension prediction and reason.
 黑暗培養中（加速模型）	Growing in darkness (speeded-up model)
 培養完成，請自行觀察並調整量角器。	Growth complete. Make your observations and adjust the protractors.
 請完成四組延長、角度（0–90°）及方向。	Complete elongation, angle (0–90°) and direction for all four setups.

@@ -345,7 +345,6 @@ async function saveExcel(page, target) {
     );
     await page.selectOption("#extPrediction", "left");
     await page.fill("#extReason", "向右彎曲");
-    await page.fill("#extFair", "瓊脂");
     await page.click("#runExtension");
     await page.waitForFunction(() => extensionHasRun);
     await page.locator("#ruler-G").fill("35");
@@ -413,7 +412,6 @@ async function saveExcel(page, target) {
       "學生實驗裝置設計",
       "頂端原文",
       "向右彎曲",
-      "瓊脂",
       "我的理由",
     ])
       assert(studentAnswers.includes(value), `PDF must preserve ${value}`);
@@ -496,7 +494,7 @@ async function saveExcel(page, target) {
     assert.equal(cloudRecord.form.reflection, "我的理由");
     assert.equal(cloudRecord.initialDesign.form.hypothesisPart, "頂端以下位置");
     assert.equal(cloudRecord.extension.initialPrediction.reason, "向右彎曲");
-    assert.equal(cloudRecord.experimentVersion, 11);
+    assert.equal(cloudRecord.experimentVersion, 12);
     assert.deepEqual(Object.keys(cloudRecord.observations), ["A", "B", "D"]);
     assert.equal(cloudRecord.tipInquiry.initialPrediction.prediction, "same");
     assert.equal(cloudRecord.tipInquiry.initialPrediction.reason, "頂端原文");

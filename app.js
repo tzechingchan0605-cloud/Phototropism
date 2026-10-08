@@ -153,7 +153,7 @@ function fresh(profile = null) {
   return {
     moduleId: MODULE_ID,
     schemaVersion: 1,
-    experimentVersion: 11,
+    experimentVersion: 12,
     id: crypto.randomUUID(),
     profile,
     createdAt: new Date().toISOString(),
@@ -771,7 +771,7 @@ $("#submitInvestigation").onclick = () => {
     const target = !state.extension.unlocked
       ? "#toAgar"
       : !state.extension.initialPrediction
-        ? firstEmptyField(["extPrediction", "extReason", "extFair"]) ||
+        ? firstEmptyField(["extPrediction", "extReason"]) ||
           "#runExtension"
         : !EXT_IDS.every((id) => state.extension.readings[id])
           ? "#extensionResults"
@@ -1552,7 +1552,7 @@ async function exportExcel() {
           if (id === "substancePrediction") return f[id] ? answerOption(id, f[id], r) : "";
           if (["tipFair", "tipLimit"].includes(id))
             return f[id] ? answerOption(id, f[id], r) : "";
-          if (["extDark", "extLimit", "extEvidence", "extControl"].includes(id))
+          if (["extFair", "extDark", "extLimit", "extEvidence", "extControl"].includes(id))
             return f[id] ? answerOption(id, f[id], r) : "";
           if (id === "qSites")
             return f.qSites ? answerOption(id, f.qSites, r) : "";

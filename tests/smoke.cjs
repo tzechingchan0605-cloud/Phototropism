@@ -120,7 +120,7 @@ async function flow(p, student = true) {
   await p.click("#saveDrawing");
   await p.click("#toExperiment");
   assert(await p.locator("#phase-3").isVisible());
-  assert.equal(await p.evaluate(() => state.experimentVersion), 11);
+  assert.equal(await p.evaluate(() => state.experimentVersion), 12);
   assert.deepEqual(await p.evaluate(() => MAIN_IDS), ["A", "B", "D"]);
   assert.equal(await p.locator("#bench .specimen").count(), 3);
   assert.equal(await p.locator("#growth-C").count(), 0);
@@ -293,16 +293,13 @@ async function flow(p, student = true) {
   await reminder(
     p,
     "#runExtension",
-    /延伸預測、理由及公平比較/,
+    /延伸預測及理由/,
     "extPrediction",
   );
   assert.equal(await p.evaluate(() => extensionHasRun), false);
   await p.selectOption("#extPrediction", "left");
   await p.fill("#extReason", "我預測接觸瓊脂的一側會向該側生長。");
-  await p.fill(
-    "#extFair",
-    "E與F同放中央；保持初始大小、瓊脂大小、黑暗、時間、溫度及供水相同。",
-  );
+  assert.equal(await p.locator("#extFair,#angleExample").count(), 0);
   await p.emulateMedia({ reducedMotion: "no-preference" });
   await p.click("#runExtension");
   assert(await p.locator("#confirmExtension").isDisabled());
@@ -332,6 +329,9 @@ async function flow(p, student = true) {
       id === "G" ? "right" : id === "H" ? "left" : "straight",
     );
   }
+  const pointer = await p.locator('#ext-plant-G [data-protractor-pointer]').getAttribute('d');
+  const coordinates = pointer.match(/-?[\d.]+/g).map(Number);
+  assert(Math.abs(Math.hypot(coordinates[2] - coordinates[0], coordinates[3] - coordinates[1]) - 168) < 0.01);
   await p.click("#confirmExtension");
   assert.equal(await p.locator("#saveGraph,#graphInputs,#barChart").count(), 0);
   assert.equal(
