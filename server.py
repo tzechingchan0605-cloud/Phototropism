@@ -50,7 +50,10 @@ def record_valid(r):
     p, f = r.get('profile'), r.get('form')
     if not isinstance(p, dict) or not all(isinstance(p.get(k), str) and 0 < len(p[k]) <= 254 for k in ['name','classInfo','email']):
         return False
-    if p['email'].lower() == TEACHER or not isinstance(f, dict) or not all(isinstance(f.get(k), str) for k in FIELDS):
+    version = r.get('experimentVersion', 0)
+    simplified = isinstance(version, int) and version >= 6
+    required_fields = [k for k in FIELDS if k != 'qLimit' or not simplified]
+    if p['email'].lower() == TEACHER or not isinstance(f, dict) or not all(isinstance(f.get(k), str) for k in required_fields):
         return False
     v = r.get('variables')
     if not isinstance(v, dict) or not all(isinstance(v.get(k), list) and all(isinstance(n, int) and 0 <= n <= 5 for n in v[k]) for k in ['iv','dv','cv']):

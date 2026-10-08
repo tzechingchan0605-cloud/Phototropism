@@ -29,14 +29,14 @@ assert w.calculation.fullCalcOnLoad
 assert any(isinstance(cell.value,str) and cell.value.startswith('=') for row in w['教師評分'] for cell in row)
 observations = w['定性觀察紀錄']
 student_rows = [row for row in observations.iter_rows(min_row=2) if row[1].value == '光源']
-assert [row[2].value for row in student_rows] == ['A','B','D','A','C']
+assert [row[2].value for row in student_rows] == ['A','B','C','A','D']
 assert observations.max_column == 8
 assert observations['H1'].value == '探究階段'
 assert [row[7].value for row in student_rows] == ['主探究']*3+['延伸一']*2
 chunks = w['原始與遞交快照']
 record_id = row[headers['紀錄識別碼']].value
 record = json.loads(''.join(part[2].value for part in chunks.iter_rows(min_row=2) if part[0].value == record_id))
-assert record['experimentVersion'] == 5
+assert record['experimentVersion'] == 6
 assert list(record['observations']) == ['A','B','D']
 tip = record['tipInquiry']
 assert tip['initialPrediction']['prediction'] == 'same'

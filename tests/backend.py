@@ -91,6 +91,9 @@ class BackendTest(unittest.TestCase):
                 self.assertEqual(persisted['id'],fixture['id'])
                 self.assertEqual(persisted['tipInquiry'],record['tipInquiry'])
                 self.assertEqual(request('/api/teacher/logout',{})[0],200);self.assertEqual(request('/api/records')[0],401)
+                simplified=json.loads(json.dumps(fixture));simplified['id']+='-v6';simplified['experimentVersion']=6
+                simplified['form'].pop('qLimit');simplified['observations']={'A':{'direction':'left'},'B':{'direction':'straight'},'D':{'direction':'left'}}
+                self.assertEqual(request('/api/records',{'record':simplified,'writeToken':secrets.token_urlsafe(32),'sequence':1})[0],200)
             finally:
                 process.terminate();process.wait()
         print('PASS: protected teacher API, owner write tokens, stale retries, immutable tip snapshots with editable observations, public scripts, private files, origin checks, logout, durable data after server restart.')

@@ -21,7 +21,7 @@ window.VL3Language = (() => {
     profileEmail: "輸入電郵地址",
     teacherPassword: "輸入教師密碼",
     controlPlan: "描述你的對照設計……",
-    setupDescription: "描述 A、B、D 三組裝置及固定條件……",
+    setupDescription: "描述 A、B、C 三組裝置及固定條件……",
     evidence: "引用比較，解釋你的推論……",
     tipReason: "寫下你的理由……",
     tipFair: "說明需要保持相同的條件……",

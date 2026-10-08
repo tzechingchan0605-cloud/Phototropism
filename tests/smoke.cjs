@@ -120,18 +120,16 @@ async function flow(p, student = true) {
   await p.click("#saveDrawing");
   await p.click("#toExperiment");
   assert(await p.locator("#phase-3").isVisible());
-  assert.equal(await p.evaluate(() => state.experimentVersion), 5);
+  assert.equal(await p.evaluate(() => state.experimentVersion), 6);
   assert.deepEqual(await p.evaluate(() => MAIN_IDS), ["A", "B", "D"]);
   assert.equal(await p.locator("#bench .specimen").count(), 3);
   assert.equal(await p.locator("#growth-C").count(), 0);
   assert.equal(await p.locator('[id^="position-"]').count(), 0);
   assert.match(await p.locator("#bench").innerText(), /B · 頂端遮光/);
-  assert.deepEqual(
-    await p.locator("#growth-A option").evaluateAll((options) =>
-      options.map((option) => [option.value, option.textContent]),
-    ),
-    [["", "請選擇"], ["clear", "有"], ["none", "沒有"]],
-  );
+  assert.equal(await p.locator("#bench select").count(), 3);
+  assert.equal(await p.locator("#growth-A").count(), 0);
+  assert.match(await p.locator("#bench").innerText(), /C · 頂端以下位置遮光/);
+  assert.equal(await p.locator("#qSites,#qLimit").count(), 0);
   assert.doesNotMatch(
     await p.locator("#phase-2").innerText(),
     /頂端是否存在|切去頂端|A.?C/,
@@ -167,10 +165,9 @@ async function flow(p, student = true) {
   );
   assert.match(await p.locator("#equipmentBank").innerText(), /計時工具/);
   assert.equal(await p.locator("#equipmentBank .equipment").count(), 5);
-  await reminder(p, "#recordData", /三組的伸長及彎曲方向/, "growth-A");
+  await reminder(p, "#recordData", /三組的彎曲方向/, "obs-A");
   assert.equal(await p.evaluate(() => state.firstObservations), null);
   for (const id of ["A", "B", "D"]) {
-    await p.selectOption("#growth-" + id, "clear");
     await p.selectOption(
       "#obs-" + id,
       ["A", "D"].includes(id) ? "left" : "straight",
@@ -188,7 +185,7 @@ async function flow(p, student = true) {
   if (student)
     await p.screenshot({ path: "/tmp/vl3-experiment.png", fullPage: true });
   await p.click("#toAnalysis");
-  await reminder(p, "#toExtension", /五項推論及觀察解釋/, "qTip");
+  await reminder(p, "#toExtension", /三項推論及觀察解釋/, "qTip");
   assert(await p.locator("#learningReveal").isHidden());
   await p.click("#toExtension");
   assert(await p.locator("#tipSection").isHidden());
@@ -197,8 +194,6 @@ async function flow(p, student = true) {
     qTip: "tip",
     qShade: "lessBend",
     qBelow: "bend",
-    qSites: "different",
-    qLimit: "indirect",
   }))
     await p.selectOption("#" + id, v);
   await p.fill(
@@ -521,6 +516,8 @@ async function flow(p, student = true) {
     assert(final.finalAnswers.tipInquiry);
     assert(final.finalAnswers.extension);
     assert.deepEqual(Object.keys(final.observations), ["A", "B", "D"]);
+    for (const observation of Object.values(final.observations))
+      assert.deepEqual(Object.keys(observation), ["direction"]);
     assert.equal(final.tipInquiry.initialPrediction.prediction, "same");
     assert.equal(
       final.tipInquiry.firstObservations.observations.C.growth,
@@ -582,11 +579,33 @@ async function flow(p, student = true) {
       score: 2,
       report: true,
     });
+    const version5 = await p.evaluate(() => {
+      const r = structuredClone(records()[0]);
+      r.experimentVersion = 5;
+      r.form.qSites = "different";
+      r.form.qLimit = "indirect";
+      for (const id of ["A", "B", "D"])
+        r.observations[id] = mainModel(id, r);
+      return {
+        score: mainObservationScore(r),
+        mainLabels: MAIN_IDS.map((id) => sampleName(id, r)),
+        tipLabels: TIP_IDS.map((id) => sampleName(id, r)),
+        questions: Object.keys(mainAnswersFor(r)).length,
+        deletedQuestionRetained: newReport(r).includes("感光部位與彎曲部位是否一定相同"),
+      };
+    });
+    assert.deepEqual(version5, {
+      score: 2,
+      mainLabels: ["A", "B", "D"],
+      tipLabels: ["A", "C"],
+      questions: 5,
+      deletedQuestionRetained: true,
+    });
     const version3 = await p.evaluate(() => {
       const r = structuredClone(records()[0]);
       r.experimentVersion = 3;
       for (const id of ["A", "B", "D"])
-        r.observations[id].position = mainModel(id, r).position;
+        Object.assign(r.observations[id], mainModel(id, r));
       r.form.comparison = "AB";
       r.initialDesign.form.comparison = "AB";
       r.observations.C = {
@@ -613,7 +632,7 @@ async function flow(p, student = true) {
       const r = structuredClone(records()[0]);
       r.experimentVersion = 4;
       for (const id of ["A", "B", "D"])
-        r.observations[id].position = mainModel(id, r).position;
+        Object.assign(r.observations[id], mainModel(id, r));
       r.observations.C = {
         growth: "none",
         direction: "straight",

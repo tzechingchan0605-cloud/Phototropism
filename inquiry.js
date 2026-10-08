@@ -23,9 +23,11 @@ const GROWTH = {
   reduced: "較少伸長",
   none: "沒有明顯伸長",
 };
-const MAIN_GROWTH = { clear: "有", none: "沒有" };
 function mainObservationFields(record) {
-  return threeStage(record) ? ["growth", "direction"] : ["growth", "direction", "position"];
+  if (record.experimentVersion >= 6) return ["direction"];
+  return threeStage(record)
+    ? ["growth", "direction"]
+    : ["growth", "direction", "position"];
 }
 const POSITIONS = {
   upper: "上部／頂端以下",
@@ -35,7 +37,6 @@ const POSITIONS = {
 };
 const NEW_FIELDS = [
   "qShade",
-  "qSites",
   "extPrediction",
   "extReason",
   "extFair",
@@ -56,15 +57,17 @@ const LEGACY_MAIN_ANSWERS = {
   qSites: "different",
   qLimit: "indirect",
 };
-const MAIN_ANSWERS = {
+const VERSION5_MAIN_ANSWERS = {
   qTip: "tip",
   qShade: "lessBend",
   qBelow: "bend",
   qSites: "different",
   qLimit: "indirect",
 };
+const MAIN_ANSWERS = { qTip: "tip", qShade: "lessBend", qBelow: "bend" };
 function mainAnswersFor(record) {
-  return threeStage(record) ? MAIN_ANSWERS : LEGACY_MAIN_ANSWERS;
+  if (record.experimentVersion >= 6) return MAIN_ANSWERS;
+  return threeStage(record) ? VERSION5_MAIN_ANSWERS : LEGACY_MAIN_ANSWERS;
 }
 const EXT_ANSWERS = {
   extEF: "transfer",
@@ -80,6 +83,8 @@ function newExperiment(r) {
   return r.experimentVersion >= 3;
 }
 function mainModel(id, record = state) {
+  if (record.experimentVersion >= 6)
+    return { direction: ["A", "D"].includes(id) ? "left" : "straight" };
   return {
     growth:
       id === "C"
@@ -101,11 +106,7 @@ function mainObservationText(obs) {
     : OUTCOMES[obs] || "未記錄";
 }
 function mainObservationComplete(obs) {
-  return (
-    !!obs &&
-    !!GROWTH[obs.growth] &&
-    !!DIRECTIONS[obs.direction]
-  );
+  return !!obs && !!DIRECTIONS[obs.direction];
 }
 function mainObservationScore(r) {
   if (!newExperiment(r))
@@ -134,7 +135,11 @@ function mainObservationScore(r) {
       ).length,
     0,
   );
-  return Math.round((correct / 6 + tipCorrect / 4) * 100) / 100;
+  return (
+    Math.round(
+      (correct / (mainObservationFields(r).length * 3) + tipCorrect / 4) * 100,
+    ) / 100
+  );
 }
 function assumptionsFor(r) {
   return newExperiment(r) ? ASSUMPTIONS : LEGACY_ASSUMPTIONS;
@@ -186,7 +191,7 @@ function initExtension() {
       !state.form.evidence.trim()
     )
       return remind(
-        "請先完成主探究的五項推論及觀察解釋。",
+        "請先完成主探究的三項推論及觀察解釋。",
         firstEmptyField([...Object.keys(MAIN_ANSWERS), "evidence"]),
       );
     state.tipInquiry.unlocked = true;
@@ -514,6 +519,14 @@ const PREVIOUS_Q_LIMIT = {
     "切頂也移除其他組織並造成傷口；遮光比較須假設溫度及機械限制受到控制，不能確定頂端只負責感光。",
   proof: "只要切頂組不彎曲，就能確定頂端只負責感光。",
 };
+const VERSION5_MAIN_QUESTIONS = {
+  qCap: "1. A 與 C 的伸長及彎曲比較支持甚麼？",
+  qShade: "1. A 與 B：頂端遮光後有甚麼不同？",
+  qBelow: "2. A 與 D：下部沒有直接受光，是否仍可彎曲？",
+  qTip: "3. 哪個部位可能感受單側光照？",
+  qSites: "4. 感光部位與彎曲部位是否一定相同？",
+  qLimit: "5. 本實驗的證據限制是甚麼？",
+};
 const PREVIOUS_MAIN_QUESTIONS = {
   qCap: "1. A 與 C：頂端是否參與正常伸長及朝光反應？",
   qShade: "2. A 與 B：頂端遮光後有甚麼不同？",
@@ -523,6 +536,7 @@ const PREVIOUS_MAIN_QUESTIONS = {
   qLimit: "6. 本實驗的證據限制是甚麼？",
 };
 function questionText(id, record) {
+  if (record.experimentVersion === 5 && VERSION5_MAIN_QUESTIONS[id]) return VERSION5_MAIN_QUESTIONS[id];
   if (!threeStage(record) && PREVIOUS_MAIN_QUESTIONS[id])
     return PREVIOUS_MAIN_QUESTIONS[id];
   return (
@@ -532,6 +546,13 @@ function questionText(id, record) {
   );
 }
 function answerOption(id, value, record) {
+  if (record && record.experimentVersion < 6 && id === "qShade")
+    return {
+      lessBend: "仍可伸長，但沒有明顯朝光彎曲。",
+      same: "仍有相同的朝光彎曲。",
+    }[value] || "未回答";
+  if (id === "qSites") return { different: "不一定相同，頂端可能影響下方的生長。", same: "必定是同一部位。" }[value] || "未回答";
+  if (record?.experimentVersion === 5 && id === "qLimit") return { indirect: "遮光比較提供感光部位的線索，不能單靠它確定內部機制；須控制溫度及機械限制。", proof: "只要遮光組不彎曲，就能完全確定頂端的所有作用。" }[value] || "未回答";
   if (record && !threeStage(record) && newExperiment(record) && id === "qLimit")
     return PREVIOUS_Q_LIMIT[value] || "未回答";
   if (id === "comparison")
@@ -595,22 +616,22 @@ function newReport(r) {
   if (Object.hasOwn(initial, "initialIdea")) rawTitles.add("原始假說");
   if (Object.hasOwn(f, "initialIdea")) rawTitles.add("最後假說");
   const firstMain = r.firstObservations
-    ? tableHTML(r.firstObservations, groupDefinitions(r))
+    ? tableHTML(r.firstObservations, groupDefinitions(r), r)
     : "未確認";
   const firstExt = e.firstReadings
     ? extensionTableHTML(e.firstReadings.readings)
     : "未確認";
   return `<h1>VL3 · 幼芽為甚麼朝光生長？</h1><p data-student-text>${esc(r.profile.classInfo)}｜${esc(r.profile.name)}｜${esc(r.profile.email)}</p><p>${esc(r.id)} · ${statusOf(r)}</p>
   <section class="report-card"><h2>01 · 了解情境</h2><p>學校園藝小組發現，窗邊胚芽鞘逐漸朝窗戶方向彎曲。大家知道植物會朝光源方向生長，但不知道植物哪個部位感受光照，以及甚麼令它彎曲。</p>${contextComparison()}${open("初步觀察", f.observation, "描述外形及生長方向的可觀察變化，不必先解釋機制。")}${f.initialIdea ? open("初步想法（舊版）", f.initialIdea, "保留舊版探究的原始回答；不因與模型不同直接判錯。") : ""}</section>
-  <section class="report-card"><h2>02 · 設計主探究</h2>${open("原始假說", o?.hypothesisText || hypothesis(initial, 3), "可測試的部位、遮光處理及預期反應；預測不符不代表假說不合理。")}${open("原始理由", initial.reason, "說明為甚麼作出該預測。")}${open("最後假說", hypothesis(f, 3), "保留修訂後內容，原始答案不覆蓋。")}${initial.comparison ? open("指定比較（舊版）", answerOption("comparison", initial.comparison), "A–B：頂端遮光；A–C：頂端是否存在；A–D：下部遮光。") : ""}${["iv", "dv", "cv"].map((key, i) => open(["獨立變量", "因變量", "控制變量"][i], r.variables[key].map((n) => variableDefinitions(r)[n]).join("；"), [threeStage(r) ? "只比較遮光處理；三組頂端均完整。" : "比較遮光處理／部位或頂端是否存在。", "伸長及彎曲反應。", "種類、處理前大小與狀況、光照、溫度、供水及培養時間。"][i])).join("")}${open("探究假設", r.assumptions.map((id) => assumptionsFor(r).find((a) => a[0] === id)?.[1]).join("；"), "初始狀況相近；帽及套不限制生長；處理不造成明顯溫差。相同種類仍需控制大小。")}${open("對照設計", f.controlPlan, threeStage(r) ? "保留 A 完整不遮蓋，與 B 頂端遮光及 D 下部遮光比較，其他條件相同。" : "保留 A 完整不遮蓋；按三項指定比較保持其他條件相同。")}${open("裝置設計", r.setup.description, threeStage(r) ? "A、B、D 三組遮光處理、單側光源及固定條件清楚；圖片與文字由教師評閱。" : "四組處理、單側光源及固定條件清楚；圖片與文字由教師評閱。")}${safeImage(r.setup.image) ? `<img src="${r.setup.image}" alt="學生實驗裝置設計">` : ""}</section>
-  <section class="report-card"><h2>03 · 主探究記錄</h2><h3>首次確認</h3>${firstMain}<h3>最後記錄</h3>${tableHTML(r.observations, groupDefinitions(r))}${Object.keys(
+  <section class="report-card"><h2>02 · 設計主探究</h2>${open("原始假說", o?.hypothesisText || hypothesis(initial, 3), "可測試的部位、遮光處理及預期反應；預測不符不代表假說不合理。")}${open("原始理由", initial.reason, "說明為甚麼作出該預測。")}${open("最後假說", hypothesis(f, 3), "保留修訂後內容，原始答案不覆蓋。")}${initial.comparison ? open("指定比較（舊版）", answerOption("comparison", initial.comparison), "A–B：頂端遮光；A–C：頂端是否存在；A–D：下部遮光。") : ""}${["iv", "dv", "cv"].map((key, i) => open(["獨立變量", "因變量", "控制變量"][i], r.variables[key].map((n) => variableDefinitions(r)[n]).join("；"), [threeStage(r) ? "只比較遮光處理；三組頂端均完整。" : "比較遮光處理／部位或頂端是否存在。", (r.experimentVersion >= 6 ? "彎曲方向。" : "伸長及彎曲反應。"), "種類、處理前大小與狀況、光照、溫度、供水及培養時間。"][i])).join("")}${open("探究假設", r.assumptions.map((id) => assumptionsFor(r).find((a) => a[0] === id)?.[1]).join("；"), "初始狀況相近；帽及套不限制生長；處理不造成明顯溫差。相同種類仍需控制大小。")}${open("對照設計", f.controlPlan, threeStage(r) ? `保留 A 完整不遮蓋，與 B 頂端遮光及 ${sampleName("D", r)} 下部遮光比較，其他條件相同。` : "保留 A 完整不遮蓋；按三項指定比較保持其他條件相同。")}${open("裝置設計", r.setup.description, threeStage(r) ? `A、B、${sampleName("D", r)} 三組遮光處理、單側光源及固定條件清楚；圖片與文字由教師評閱。` : "四組處理、單側光源及固定條件清楚；圖片與文字由教師評閱。")}${safeImage(r.setup.image) ? `<img src="${r.setup.image}" alt="學生實驗裝置設計">` : ""}</section>
+  <section class="report-card"><h2>03 · 主探究記錄</h2><h3>首次確認</h3>${firstMain}<h3>最後記錄</h3>${tableHTML(r.observations, groupDefinitions(r), r)}${Object.keys(
     groupDefinitions(r),
   )
     .map((id) => {
       const expected = mainModel(id, r),
         obs = r.observations[id];
       return reportAnswer(
-        id + " " + GROUPS[id].label,
+        sampleName(id, r) + " " + GROUPS[id].label,
         mainObservationText(obs),
         mainObservationText(expected),
         obs
@@ -623,7 +644,7 @@ function newReport(r) {
     .join(
       "",
     )}<p class="report-reference">${threeStage(r) ? "主探究三組頂端均完整，唯一改變因素為遮光處理。" : r.experimentVersion >= 4 ? "C 在本教學模型中不伸長；切頂後不一定完全停止生長，實際結果受植物狀況及條件影響。" : "C 的伸長減少是本模型設定；切頂後不一定完全停止生長。"}</p></section>
-  <section class="report-card"><h2>04 · 主探究分析</h2>${questions(mainAnswersFor(r))}${open("數據推論", f.evidence, threeStage(r) ? "以 A–B 及 A–D 的具體遮光比較支持感光部位的推論，留意溫度及機械限制。" : "以 A–B、A–C、A–D 的具體比較支持推論，留意傷口、溫度及機械限制。")}</section>
+  <section class="report-card"><h2>04 · 主探究分析</h2>${questions(mainAnswersFor(r))}${open("數據推論", f.evidence, threeStage(r) ? `比較 A–B 及 A–${sampleName("D", r)} 的彎曲方向，說明哪個部位可能感受光。` : "以 A–B、A–C、A–D 的具體比較支持推論，留意傷口、溫度及機械限制。")}</section>
   ${threeStage(r) ? tipReportHTML(r) : ""}
   <section class="report-card"><h2>${threeStage(r) ? "04 · 延伸探究二：物質 X" : "04 · 延伸預測與觀察"}</h2>${open("原始預測", DIRECTIONS[e.initialPrediction?.prediction], "處理瓊脂放左側，模型中左側伸長較多而向右彎曲；原始預測由教師按可測試性評閱。")}${open("原始理由", e.initialPrediction?.reason, "合理理由不因結果不符直接判錯。")}${open("公平比較", f.extFair, "E–F 均放中央，保持瓊脂大小、胚芽鞘初始大小及狀況、黑暗、溫度、供水及時間相同。")}<h3>首次確認讀數</h3>${firstExt}<h3>最後讀數</h3>${extensionTableHTML(e.readings)}${EXT_IDS.map((id) => reportAnswer(id + " 最終角度", e.readings[id]?.angle === undefined ? "" : e.readings[id].angle + "°", EXT_MODEL[id].angle + "°（教學模型；±3°）", e.readings[id] ? Math.abs(e.readings[id].angle - EXT_MODEL[id].angle) <= 3 : null)).join("")}<h3>學生棒形圖</h3>${Object.keys(e.graph).length ? barChartSVG(e.graph) : "未確認"}<p class="report-reference">圖表以學生本身讀數核對；量度準確性另與模型比較。不用鉛直高度差推算伸長量。</p></section>
   <section class="report-card"><h2>${threeStage(r) ? "04 · 延伸二分析" : "04 · 延伸分析"}</h2>${questions(EXT_ANSWERS)}${open("延伸證據", f.extEvidence, "E–F 支持可轉移的生長促進作用；G–H 支持作用位置影響彎曲方向。")}${open("額外對照（選答）", f.extControl, "可把空白瓊脂放左側及右側，以排除單側放置本身的影響。")}</section>

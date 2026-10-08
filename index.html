@@ -221,7 +221,7 @@
                 /></label>
               </div>
               <label for="setupDescription" class="design-field-label"
-                >文字設計（可代替繪圖）：描述 A、B、D
+                >文字設計（可代替繪圖）：描述 A、B、C
                 三組裝置、遮光方法及固定條件。</label
               ><textarea id="setupDescription" maxlength="2500"></textarea
               ><button id="saveDrawing" type="button" class="secondary">
@@ -265,7 +265,7 @@
                   <tr>
                     <th>組別</th>
                     <th>處理</th>
-                    <th>伸長表現／方向</th>
+                    <th>彎曲方向</th>
                   </tr>
                 </thead>
                 <tbody id="observationTable"></tbody>
@@ -286,14 +286,14 @@
             <h3>根據主探究的比較作推論</h3>
             <div id="evidenceTable"></div>
             <label
-              >1. A 與 B：頂端遮光後有甚麼不同？<select id="qShade">
+              >1. 比較 A 與 B：頂端遮光後有甚麼不同？<select id="qShade">
                 <option value="">請選擇</option>
-                <option value="lessBend">仍可伸長，但沒有明顯朝光彎曲。</option>
+                <option value="lessBend">沒有明顯朝光彎曲。</option>
                 <option value="same">仍有相同的朝光彎曲。</option>
               </select></label
             >
             <label
-              >2. A 與 D：下部沒有直接受光，是否仍可彎曲？<select id="qBelow">
+              >2. 比較 A 與 C：下部沒有直接受光，是否仍會彎曲？<select id="qBelow">
                 <option value="">請選擇</option>
                 <option value="bend">仍可朝光彎曲。</option>
                 <option value="straight">沒有明顯朝光彎曲。</option>
@@ -306,28 +306,8 @@
                 <option value="below">只有下部</option>
               </select></label
             >
-            <label
-              >4. 感光部位與彎曲部位是否一定相同？<select id="qSites">
-                <option value="">請選擇</option>
-                <option value="different">
-                  不一定相同，頂端可能影響下方的生長。
-                </option>
-                <option value="same">必定是同一部位。</option>
-              </select></label
-            >
-            <label
-              >5. 本實驗的證據限制是甚麼？<select id="qLimit">
-                <option value="">請選擇</option>
-                <option value="indirect">
-                  遮光比較提供感光部位的線索，不能單靠它確定內部機制；須控制溫度及機械限制。
-                </option>
-                <option value="proof">
-                  只要遮光組不彎曲，就能完全確定頂端的所有作用。
-                </option>
-              </select></label
-            >
             <label for="evidence"
-              >引用 A–B 及 A–D 的比較，說明哪些觀察支持感光部位的推論。</label
+              >比較 A、B、C 的彎曲方向：遮住頂端和遮住下部，結果有甚麼不同？這些結果顯示哪個部位可能感受光？</label
             ><textarea id="evidence" maxlength="2500"></textarea>
             <button id="toExtension" class="primary">
               延伸探究一：頂端與伸長 →

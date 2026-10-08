@@ -645,6 +645,31 @@ VL3 · 胚芽鞘的向光性	VL3 · Coleoptile phototropism
 ；	;
 ：	:
 。	.
+遮光比較為感光部位提供了線索，但頂端是否還有其他作用？這次只改變「頂端是否存在」，比較完整的 A 與切去頂端的 D。	Light-blocking comparisons gave clues about the part that senses light. Does the tip have other roles? This time, change only whether the tip is present. Compare intact setup A with setup D, which has its tip removed.
+比較 A 與 D 時，除了頂端是否存在，哪些條件需要保持相同？	When comparing A and D, which conditions should stay the same, apart from whether the tip is present?
+A 與 D：初始及培養後的比較	A and D: compare before and after growth
+1. A 與 D 的伸長及彎曲比較支持甚麼？	1. What does comparing elongation and bending in A and D support?
+引用 A 與 D 的觀察，說明頂端與伸長的關係，以及還不能確定的事情。	Use your observations of A and D to explain the link between the tip and elongation, and what is still uncertain.
+培養完成，請記錄 A 與 D 的觀察。	Growth complete. Record your observations of A and D.
+請完成 A 與 D 的伸長及彎曲方向觀察。	Complete your observations of elongation and bending direction for A and D.
+A 與 D 的已確認觀察	Confirmed observations of A and D
+A–D 支持頂端參與正常伸長；切頂造成傷口，仍不能直接確定物質 X 或作用機制。	A–D supports the idea that the tip has a role in normal elongation. Removing the tip causes a wound. This still does not directly identify substance X or its mechanism.
+D 在本教學模型中不伸長；切頂後不一定完全停止生長，實際結果受植物狀況及條件影響。	D does not elongate in this teaching model. Removing the tip does not always stop growth completely; actual results depend on plant condition and growing conditions.
+1. 比較 A 與 B：頂端遮光後有甚麼不同？	1. Compare A and B: What changes when light is blocked at the tip?
+2. 比較 A 與 C：下部沒有直接受光，是否仍會彎曲？	2. Compare A and C: Does it still bend when the lower part receives no direct light?
+沒有明顯朝光彎曲。	No clear bending towards the light.
+比較 A、B、C 的彎曲方向：遮住頂端和遮住下部，結果有甚麼不同？這些結果顯示哪個部位可能感受光？	Compare the bending directions of A, B and C. How do the results differ when the tip or the lower part is covered? Which part do these results suggest senses light?
+請先選擇三組的彎曲方向。	Choose the bending direction for all three setups first.
+請先完成主探究的三項推論及觀察解釋。	Complete the three main inquiry conclusions and explain your observations first.
+請完成主探究三項推論及觀察解釋。	Complete the three main inquiry conclusions and explain your observations.
+文字設計（可代替繪圖）：描述 A、B、C 三組裝置、遮光方法及固定條件。	Written plan (may replace a drawing): describe setups A, B and C, how light is blocked and the conditions kept the same.
+描述 A、B、C 三組裝置及固定條件……	Describe setups A, B and C and the fixed conditions…
+對照設計參考：主探究三組頂端均完整，A–B 比較頂端遮光，A–C 比較下部遮光，只改變遮光處理。延伸一A–D只比較頂端是否存在，留意傷口影響。延伸二E–F只比較瓊脂是否曾接觸頂端，位置同在中央；F–G–H只比較處理瓊脂放置位置。每項比較保持其他條件相同。	Reference control plan: all three main setups keep their tips. A–B compares blocking light at the tip; A–C compares blocking light below the tip. Change only the light-blocking treatment. Extension 1 A–D changes only whether the tip is present; consider the wound caused by removing the tip. Extension 2 E–F changes only whether the agar has touched a tip, with both blocks in the centre. F–G–H changes only the position of the treated agar. Keep other conditions the same within each comparison.
+保留 A 完整不遮蓋，與 B 頂端遮光及 C 下部遮光比較，其他條件相同。	Keep A intact and uncovered. Compare it with B, where light is blocked at the tip, and C, where light is blocked below the tip. Keep other conditions the same.
+A、B、C 三組遮光處理、單側光源及固定條件清楚；圖片與文字由教師評閱。	Clearly show the light-blocking treatments for A, B and C, the light source on one side and the fixed conditions. The teacher reviews the image and written plan.
+比較 A–B 及 A–C 的彎曲方向，說明哪個部位可能感受光。	Compare the bending directions in A–B and A–C and explain which part may sense light.
+胚芽鞘的彎曲方向	The coleoptile’s bending direction
+彎曲方向。	Bending direction.
 `
     .trim()
     .split("\n")

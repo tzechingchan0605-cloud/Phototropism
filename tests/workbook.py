@@ -24,12 +24,12 @@ assert '仍向光彎曲' in a['F2'].value
 assert '被動生長' in a['G2'].value
 assert a['H2'].font.color.rgb=='FF00834A'
 assert a['E2'].font.color.rgb=='FF173E34'
-assert '不能單靠它確定內部機制' in a['Q2'].value
+assert a['Q2'].value in (None, '')
 assert o['D6'].value=='切去頂端' and '沒有明顯伸長' in o['G6'].value
 assert len({a[c+'2'].fill.fgColor.rgb for c in ['E','F','H','M','R','N','S']})>=6
 assert len(w['裝置設計圖']._images)==2
 assert '沒有明顯彎曲' in o['E4'].value and '向左彎曲' in o['F4'].value
-assert [o.cell(row,3).value for row in range(2,7)]==['A','B','D','A','C']
+assert [o.cell(row,3).value for row in range(2,7)]==['A','B','C','A','D']
 assert [o.cell(row,8).value for row in range(2,7)]==['主探究']*3+['延伸一']*2
 assert all('向左彎曲' in o.cell(5,col).value for col in (5,6,7))
 assert all('沒有明顯伸長' in o.cell(6,col).value and '沒有明顯彎曲' in o.cell(6,col).value for col in (5,6,7))
@@ -97,7 +97,7 @@ assert {answers.cell(r,2).value for r in range(2,answers.max_row+1)}=={'陳小�
 assert len(multi['教師評分'].data_validations.dataValidation)==20
 for name in ['陳小明','李同學']:
     rows=[row for row in multi['定性觀察紀錄'].iter_rows(min_row=2) if row[1].value==name]
-    assert [row[2].value for row in rows]==['A','B','D','A','C']
+    assert [row[2].value for row in rows]==['A','B','C','A','D']
     assert [row[7].value for row in rows]==['主探究']*3+['延伸一']*2
 print('PASS: one teacher workbook includes both isolated student browsers.')
 
@@ -112,7 +112,7 @@ assert a['Y2'].value=='向左彎曲'  # original extension prediction, not the r
 assert a['AI2'].value=='正向光性'
 chunks=w['原始與遞交快照']
 r=json.loads(''.join(chunks.cell(i,3).value for i in range(2,chunks.max_row+1)))
-assert r['experimentVersion']==5
+assert r['experimentVersion']==6
 assert list(r['observations'])==list(r['firstObservations'])==['A','B','D']
 assert r['firstObservations']['D']['direction']=='straight'
 assert r['observations']['D']['direction']=='left'

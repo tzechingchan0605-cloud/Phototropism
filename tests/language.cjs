@@ -258,13 +258,13 @@ async function saveExcel(page, target) {
     await page.emulateMedia({ reducedMotion: "no-preference" });
     await page.click("#runExperiment");
     const generation = await page.evaluate(() => runGeneration);
-    const controlNode = await page.locator("#growth-A").elementHandle();
+    const controlNode = await page.locator("#obs-A").elementHandle();
     await switchLanguage(page, "zh");
     await switchLanguage(page, "en");
     assert.equal(await page.evaluate(() => runGeneration), generation);
     assert(
       await controlNode.evaluate(
-        (node) => node === document.querySelector("#growth-A"),
+        (node) => node === document.querySelector("#obs-A"),
       ),
       "Switching cannot recreate the experiment controls",
     );
@@ -272,7 +272,6 @@ async function saveExcel(page, target) {
     await page.emulateMedia({ reducedMotion: "reduce" });
     assert.equal(await page.locator("#growth-C").count(), 0);
     for (const id of ["A", "B", "D"]) {
-      await page.selectOption(`#growth-${id}`, "clear");
       await page.selectOption(
         `#obs-${id}`,
         ["A", "D"].includes(id) ? "left" : "straight",
@@ -519,7 +518,7 @@ async function saveExcel(page, target) {
     assert.equal(cloudRecord.form.reflection, "我的理由");
     assert.equal(cloudRecord.initialDesign.form.hypothesisPart, "頂端以下位置");
     assert.equal(cloudRecord.extension.initialPrediction.reason, "向右彎曲");
-    assert.equal(cloudRecord.experimentVersion, 5);
+    assert.equal(cloudRecord.experimentVersion, 6);
     assert.deepEqual(Object.keys(cloudRecord.observations), ["A", "B", "D"]);
     assert.equal(cloudRecord.tipInquiry.initialPrediction.prediction, "same");
     assert.equal(cloudRecord.tipInquiry.initialPrediction.reason, "頂端原文");

@@ -21,6 +21,12 @@ const GROUPS = {
   D: { label: "頂端以下位置遮光", bend: true },
 };
 const MAIN_IDS = ["A", "B", "D"];
+// Stored IDs remain stable so existing records keep their original meaning.
+function sampleName(id, record) {
+  if (!record || record.experimentVersion >= 6)
+    return { C: "D", D: "C" }[id] || id;
+  return id;
+}
 const MAIN_GROUPS = Object.fromEntries(MAIN_IDS.map((id) => [id, GROUPS[id]]));
 // Preserve the meaning and scoring of records from the original transparent-cap experiment.
 const LEGACY_GROUPS = { ...GROUPS, C: { label: "頂端透明罩", bend: true } };
@@ -35,6 +41,7 @@ function comparisonAnswer(record) {
   return record.experimentVersion >= 2 ? "tipRole" : "light";
 }
 function limitationText(record) {
+  if (record.experimentVersion >= 6) return "";
   if (threeStage(record))
     return answerOption("qLimit", record.form.qLimit, record);
   if (newExperiment(record))
@@ -77,18 +84,20 @@ function comparisonText(record) {
 const OUTCOMES = { bend: "仍向光彎曲", straight: "沒有明顯向光彎曲" };
 const VARIABLES = [
   "遮光處理",
-  "胚芽鞘的伸長及彎曲反應",
+  "胚芽鞘的彎曲方向",
   "光源方向及光強度",
   "胚芽鞘種類、初始高度及生長階段",
   "照射時間",
   "溫度及供水條件",
 ];
+const VERSION5_VARIABLES = [...VARIABLES];
+VERSION5_VARIABLES[1] = "胚芽鞘的伸長及彎曲反應";
 const PREVIOUS_VARIABLES = [
   "遮光處理／部位或頂端是否存在",
-  ...VARIABLES.slice(1),
+  ...VERSION5_VARIABLES.slice(1),
 ];
 function variableDefinitions(record) {
-  return threeStage(record) ? VARIABLES : PREVIOUS_VARIABLES;
+  return record.experimentVersion >= 6 ? VARIABLES : threeStage(record) ? VERSION5_VARIABLES : PREVIOUS_VARIABLES;
 }
 // Display order is independent of the stable IDs stored in student records.
 const VARIABLE_DISPLAY_ORDER = [4, 1, 2, 3, 0, 5];
@@ -115,7 +124,6 @@ const FIELDS = [
   "qTip",
   "qCap",
   "qBelow",
-  "qLimit",
   "evidence",
   "reflection",
   ...NEW_FIELDS,
@@ -146,7 +154,7 @@ function fresh(profile = null) {
   return {
     moduleId: MODULE_ID,
     schemaVersion: 1,
-    experimentVersion: 5,
+    experimentVersion: 6,
     id: crypto.randomUUID(),
     profile,
     createdAt: new Date().toISOString(),
@@ -349,7 +357,7 @@ function seedling(id, progress = 0) {
     const sleeve = `M130 205 L130 ${jointY} C130 ${jointY - 31} ${130 + 12 * p} ${endY + 14} ${endX} ${endY}`;
     cover = `<path data-sleeve="true" d="${sleeve}" fill="none" stroke="#15333b" stroke-width="26" stroke-linecap="butt"/><path d="${sleeve}" fill="none" stroke="#344a50" stroke-width="22" stroke-linecap="butt"/>`;
   }
-  const description = `${id} 組：${GROUPS[id].label}，${p === 1 ? (id === "C" ? "沒有明顯伸長，沒有明顯彎曲" : bent ? "下部保持直立，上部向光彎曲並伸長" : "保持直立並伸長") : "開始時"}`;
+  const description = `${sampleName(id)} 組：${GROUPS[id].label}，${p === 1 ? (id === "C" ? "沒有明顯伸長，沒有明顯彎曲" : bent ? "下部保持直立，上部向光彎曲並伸長" : "保持直立並伸長") : "開始時"}`;
   return `<svg class="seedling" viewBox="0 0 270 260" role="img" aria-label="${description}" xmlns="http://www.w3.org/2000/svg">
     <g transform="translate(270 0) scale(-1 1)"><path d="M235 46L157 27L157 145L235 100Z" fill="#f9d779" opacity=".2"/><rect x="232" y="45" width="17" height="55" rx="5" fill="#f3b946"/><path d="M236 100V222M219 223H253" stroke="#658087" stroke-width="5"/><path d="M221 69H203M208 64L203 69L208 74" stroke="#c28c1a" stroke-width="2" fill="none"/>
     <path data-stem="${id}" d="${stem}" fill="none" stroke="#59a16a" stroke-width="13" stroke-linecap="${id === "C" ? "butt" : "round"}"/><path d="${stem}" fill="none" stroke="#a1d38a" stroke-width="4" stroke-linecap="${id === "C" ? "butt" : "round"}"/>${cover}</g><text x="40" y="30" text-anchor="middle" fill="#9c731d" font-size="13">光源</text>
@@ -387,10 +395,10 @@ function contextComparison() {
 function renderBench(p = 0) {
   $("#bench").innerHTML = MAIN_IDS.map(
     (id) =>
-      `<article class="specimen"><h3>${id} · ${GROUPS[id].label}</h3><div id="plant-${id}">${seedling(id, p)}</div>${selectHTML("growth-" + id, MAIN_GROWTH, state.observations[id]?.growth, "伸長表現")}${selectHTML("obs-" + id, DIRECTIONS, state.observations[id]?.direction, "彎曲方向")}</article>`,
+      `<article class="specimen"><h3>${sampleName(id)} · ${GROUPS[id].label}</h3><div id="plant-${id}">${seedling(id, p)}</div>${selectHTML("obs-" + id, DIRECTIONS, state.observations[id]?.direction, "彎曲方向")}</article>`,
   ).join("");
   MAIN_IDS.forEach((id) =>
-    ["growth", "obs"].forEach(
+    ["obs"].forEach(
       (k) =>
         ($("#" + k + "-" + id).onchange = () =>
           log("observation_selected", {
@@ -457,13 +465,13 @@ function designMissing() {
   if (!state.setup.saved) missing.push("已儲存的裝置設計");
   return missing;
 }
-function tableHTML(obs, groups = MAIN_GROUPS) {
+function tableHTML(obs, groups = MAIN_GROUPS, record) {
   return `<div class="table-wrap"><table class="vl3-table"><thead><tr><th>組別</th><th>處理</th><th>我的觀察</th></tr></thead><tbody>${Object.entries(
     groups,
   )
     .map(
       ([id, g]) =>
-        `<tr><td>${id}</td><td>${g.label}</td><td>${esc(mainObservationText(obs[id]))}</td></tr>`,
+        `<tr><td>${sampleName(id, record)}</td><td>${g.label}</td><td>${esc(mainObservationText(obs[id]))}</td></tr>`,
     )
     .join("")}</tbody></table></div>`;
 }
@@ -472,7 +480,7 @@ function renderEvidence() {
   $("#observationTable").innerHTML = Object.entries(MAIN_GROUPS)
     .map(
       ([id, g]) =>
-        `<tr><td>${id}</td><td>${g.label}</td><td>${esc(mainObservationText(state.observations[id]))}</td></tr>`,
+        `<tr><td>${sampleName(id)}</td><td>${g.label}</td><td>${esc(mainObservationText(state.observations[id]))}</td></tr>`,
     )
     .join("");
 }
@@ -715,17 +723,15 @@ $("#recordData").onclick = () => {
     MAIN_IDS.map((id) => [
       id,
       {
-        growth: $("#growth-" + id).value,
         direction: $("#obs-" + id).value,
       },
     ]),
   );
   if (Object.values(obs).some((v) => !mainObservationComplete(v)))
     return remind(
-      "請先選擇三組的伸長及彎曲方向。",
+      "請先選擇三組的彎曲方向。",
       firstEmptyField(
         MAIN_IDS.flatMap((id) => [
-          "growth-" + id,
           "obs-" + id,
         ]),
       ),
@@ -756,7 +762,7 @@ $("#submitInvestigation").onclick = () => {
     !state.form.evidence.trim()
   )
     return remind(
-      "請完成主探究五項推論及觀察解釋。",
+      "請完成主探究三項推論及觀察解釋。",
       firstEmptyField([...Object.keys(MAIN_ANSWERS), "evidence"]),
     );
   const tipIncomplete = tipMissing();
@@ -848,7 +854,7 @@ function report(r) {
     original = r.initialDesign?.form;
   const answer = (title, value) =>
     `<div class="report-block"><strong>${esc(title)}</strong><p style="white-space:pre-wrap"${["初步觀察", "原始理由", "目前理由", "對照組設計", "裝置文字設計", "我的數據解釋", "學習反思"].includes(title) && value ? " data-student-text" : ""}>${esc(value || "未回答")}</p></div>`;
-  return `<h1>VL3 · 胚芽鞘的向光性</h1><p data-student-text>${esc(r.profile.name)}｜${esc(r.profile.classInfo)}｜${esc(r.profile.email)}</p><p>紀錄 ${esc(r.id)} · ${statusOf(r)}</p><h2>01 了解情境</h2>${answer("初步觀察", f.observation)}<h2>02 設計探究</h2>${answer("第一次實驗前固定保存的原始假說", original ? r.initialDesign.hypothesisText || hypothesis(original, r.experimentVersion) : "尚未開始實驗")}${answer("原始理由", original?.reason)}${answer("目前假說", hypothesis(f, r.experimentVersion))}${answer("目前理由", f.reason)}${["iv", "dv", "cv"].map((g, i) => answer(["獨立變量", "因變量", "控制變量"][i], r.variables[g].map((n) => variableDefinitions(r)[n]).join("；"))).join("")}${answer("實驗前提", r.assumptions.map((id) => assumptionsFor(r).find((a) => a[0] === id)?.[1]).join("；"))}${answer("對照組設計", f.controlPlan)}${answer("裝置文字設計", r.setup.description)}${safeImage(r.setup.image) ? `<img src="${r.setup.image}" alt="學生裝置設計">` : ""}<h2>03 觀察紀錄</h2>${tableHTML(r.observations, groupDefinitions(r))}<h2>04 分析與反思</h2>${answer("感光部位", f.qTip === "tip" ? "頂端" : f.qTip === "below" ? "頂端以下位置" : "")}${answer("組別比較", comparisonText(r))}${answer("頂端以下位置遮光的反應", OUTCOMES[f.qBelow])}${answer("證據限制", limitationText(r))}${answer("我的數據解釋", f.evidence)}${answer("學習反思", f.reflection)}<p>實驗模型：四組相同單側光照；動畫是典型反應示意，並非真實量度。紀錄可同步至共用資料庫。</p>`;
+  return `<h1>VL3 · 胚芽鞘的向光性</h1><p data-student-text>${esc(r.profile.name)}｜${esc(r.profile.classInfo)}｜${esc(r.profile.email)}</p><p>紀錄 ${esc(r.id)} · ${statusOf(r)}</p><h2>01 了解情境</h2>${answer("初步觀察", f.observation)}<h2>02 設計探究</h2>${answer("第一次實驗前固定保存的原始假說", original ? r.initialDesign.hypothesisText || hypothesis(original, r.experimentVersion) : "尚未開始實驗")}${answer("原始理由", original?.reason)}${answer("目前假說", hypothesis(f, r.experimentVersion))}${answer("目前理由", f.reason)}${["iv", "dv", "cv"].map((g, i) => answer(["獨立變量", "因變量", "控制變量"][i], r.variables[g].map((n) => variableDefinitions(r)[n]).join("；"))).join("")}${answer("實驗前提", r.assumptions.map((id) => assumptionsFor(r).find((a) => a[0] === id)?.[1]).join("；"))}${answer("對照組設計", f.controlPlan)}${answer("裝置文字設計", r.setup.description)}${safeImage(r.setup.image) ? `<img src="${r.setup.image}" alt="學生裝置設計">` : ""}<h2>03 觀察紀錄</h2>${tableHTML(r.observations, groupDefinitions(r), r)}<h2>04 分析與反思</h2>${answer("感光部位", f.qTip === "tip" ? "頂端" : f.qTip === "below" ? "頂端以下位置" : "")}${answer("組別比較", comparisonText(r))}${answer("頂端以下位置遮光的反應", OUTCOMES[f.qBelow])}${answer("證據限制", limitationText(r))}${answer("我的數據解釋", f.evidence)}${answer("學習反思", f.reflection)}<p>實驗模型：四組相同單側光照；動畫是典型反應示意，並非真實量度。紀錄可同步至共用資料庫。</p>`;
 }
 function printRecord(r) {
   $("#printReport").innerHTML = report(r);
@@ -1132,7 +1138,7 @@ $("#equipmentBank").innerHTML = materials
 $("#contextPlant").innerHTML = contextComparison();
 $("#mechanismDiagram").innerHTML = mechanismSVG();
 $("#referenceDesign").innerHTML =
-  "對照設計參考：主探究三組頂端均完整，A–B 比較頂端遮光，A–D 比較下部遮光，只改變遮光處理。延伸一A–C只比較頂端是否存在，留意傷口影響。延伸二E–F只比較瓊脂是否曾接觸頂端，位置同在中央；F–G–H只比較處理瓊脂放置位置。每項比較保持其他條件相同。";
+  "對照設計參考：主探究三組頂端均完整，A–B 比較頂端遮光，A–C 比較下部遮光，只改變遮光處理。延伸一A–D只比較頂端是否存在，留意傷口影響。延伸二E–F只比較瓊脂是否曾接觸頂端，位置同在中央；F–G–H只比較處理瓊脂放置位置。每項比較保持其他條件相同。";
 document.addEventListener("visibilitychange", () => {
   accountTime();
   timingVisible = !document.hidden;
@@ -1320,7 +1326,7 @@ function scoringWorkbook(all) {
     [
       "定性觀察",
       2,
-      "版本5：主探究9項伸長／方向／位置共1分，延伸一4項伸長／方向共1分。版本3／4主探究12項共2；更舊四組每組0.5。原始觀察保留。",
+      "版本6：主探究A、B、C三組彎曲方向共1分，延伸一A、D四項伸長／方向共1分；版本5按原伸長／方向記錄評分。版本3／4主探究12項共2；更舊四組每組0.5。原始觀察保留。",
     ],
     ["變量分類", 4, "獨立及因變量各 1；控制變量完整選對得 2，錯選或漏選得 0。"],
     [
@@ -1336,7 +1342,7 @@ function scoringWorkbook(all) {
     [
       "對照組",
       1,
-      "版本5主探究以A不遮光比較B頂端遮光及D下部遮光，保持其餘條件相同得1；延伸一以完整A與切頂C公平比較另供證據評閱。舊版按原四組設計評分。",
+      "版本6主探究以A不遮光比較B頂端遮光及C下部遮光，保持其餘條件相同得1；延伸一以完整A與切頂D公平比較另供證據評閱。舊版按原四組設計評分。",
     ],
     [
       "實驗操作",
@@ -1346,12 +1352,12 @@ function scoringWorkbook(all) {
     [
       "裝置設計",
       2,
-      "版本5：A、B、D三組遮光處理、單側光源及固定條件清楚得2，部分完整1，不能形成有效比較0；舊版按原四組設計。",
+      "版本6：A、B、C三組遮光處理、單側光源及固定條件清楚得2，部分完整1，不能形成有效比較0；舊版按原四組設計。",
     ],
     [
       "結論比較",
       2,
-      "版本5主探究5項、延伸一3項及延伸二5項選擇共2，按答對比例；版本3／4原11項共2，更舊按原比較。",
+      "版本6主探究3項、延伸一3項及延伸二5項選擇共2，按答對比例；版本5按原主探究5項評分；版本3／4原11項共2，更舊按原比較。",
     ],
     [
       "數據解釋",
@@ -1542,6 +1548,8 @@ async function exportExcel() {
         f.reflection,
         Math.round(Object.values(r.phaseDurations).reduce((a, b) => a + b, 0)),
         ...extraFields.map(([id]) => {
+          if (id === "qSites")
+            return f.qSites ? answerOption(id, f.qSites, r) : "";
           if (id === "initialIdea") return f.initialIdea || "";
           if (id === "comparison")
             return f.comparison ? answerOption(id, f.comparison, r) : "";
@@ -1629,7 +1637,7 @@ async function exportExcel() {
       observations.push([
         r.id,
         r.profile.name,
-        id,
+        sampleName(id, r),
         g.label,
         mainObservationText(r.firstObservations?.[id]),
         excelCell(
@@ -1648,7 +1656,7 @@ async function exportExcel() {
         observations.push([
           r.id,
           r.profile.name,
-          id,
+          sampleName(id, r),
           GROUPS[id].label,
           tipObservationText(r.tipInquiry.firstObservations?.observations[id]),
           excelCell(
