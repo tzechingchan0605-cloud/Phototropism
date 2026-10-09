@@ -25,14 +25,14 @@ assert '被動生長' in a['G2'].value
 assert a['H2'].font.color.rgb=='FF00834A'
 assert a['E2'].font.color.rgb=='FF173E34'
 assert a['Q2'].value in (None, '')
-assert o['D6'].value=='切去頂端' and '沒有明顯延長' in o['G6'].value
+assert o['D6'].value=='切去頂端' and o['G6'].value=='沒有'
 assert len({a[c+'2'].fill.fgColor.rgb for c in ['E','F','H','M','R','N','S']})>=6
 assert len(w['裝置設計圖']._images)==1
 assert '沒有明顯彎曲' in o['E4'].value and '向左彎曲' in o['F4'].value
 assert [o.cell(row,3).value for row in range(2,7)]==['A','B','C','A','D']
 assert [o.cell(row,8).value for row in range(2,7)]==['主探究']*3+['延伸一']*2
-assert all('延長' in o.cell(5,col).value and '彎曲' not in o.cell(5,col).value for col in (5,6,7))
-assert all('沒有明顯延長' in o.cell(6,col).value for col in (5,6,7))
+assert all(o.cell(5,col).value=='有' for col in (5,6,7))
+assert all(o.cell(6,col).value=='沒有' for col in (5,6,7))
 assert o['F5'].font.color.rgb==o['F6'].font.color.rgb=='FF00834A'
 assert len(s.data_validations.dataValidation)==11
 assert len(s.conditional_formatting)==20

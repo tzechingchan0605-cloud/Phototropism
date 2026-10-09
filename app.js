@@ -1664,9 +1664,9 @@ async function exportExcel() {
           r.profile.name,
           sampleName(id, r),
           GROUPS[id].label,
-          tipObservationText(r.tipInquiry.firstObservations?.observations[id]),
+          tipObservationText(r.tipInquiry.firstObservations?.observations[id], r),
           excelCell(
-            tipObservationText(current),
+            tipObservationText(current, r),
             "observing",
             current
               ? tipObservationFields(r).every(
@@ -1674,7 +1674,7 @@ async function exportExcel() {
                 )
               : null,
           ),
-          tipObservationText(expected),
+          tipObservationText(expected, r),
           "延伸一",
         ]);
       });

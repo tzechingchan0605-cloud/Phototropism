@@ -69,7 +69,7 @@ A、B、D 三組遮光處理、單側光源及固定條件清楚；圖片與文�
 進行頂端比較（模擬 24 小時）	Run the tip comparison (simulated 24 hours)
 A 與 C：初始及培養後的比較	A and C: compare before and after growth
 確認延伸一觀察	Confirm extension 1 observations
-頂端與延長：從比較提出新問題	The tip and elongation: use comparisons to ask new questions
+實驗結論	Experimental conclusion
 1. A 與 C 的延長及彎曲比較支持甚麼？	1. What does comparing elongation and bending in A and C support?
 切頂同時移除組織並造成傷口，不能單靠這個比較確定頂端如何影響生長。	Removing the tip also removes tissues and causes a wound. This comparison alone cannot show how the tip affects growth.
 切頂後不延長，就能確定頂端只負責感光。	If there is no elongation after the tip is removed, we can be sure that the tip only senses light.

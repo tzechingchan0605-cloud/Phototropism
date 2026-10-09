@@ -51,7 +51,8 @@ function tipObservationComplete(observation) {
     !!GROWTH[observation.growth]
   );
 }
-function tipObservationText(observation) {
+function tipObservationText(observation, record) {
+  if (!record || record.experimentVersion >= 7) return observation ? TIP_GROWTH[observation.growth] || "未記錄" : "未記錄";
   return observation
     ? [GROWTH[observation.growth], DIRECTIONS[observation.direction]]
         .filter(Boolean)
@@ -59,7 +60,7 @@ function tipObservationText(observation) {
     : "未記錄";
 }
 function tipTableHTML(observations = {}, record) {
-  return `<div class="table-wrap"><table class="vl3-table"><thead><tr><th>裝置</th><th>處理</th><th>延長表現</th></tr></thead><tbody>${TIP_IDS.map((id) => `<tr><td>${sampleName(id, record)}</td><td>${GROUPS[id].label}</td><td>${esc(tipObservationText(observations[id]))}</td></tr>`).join("")}</tbody></table></div>`;
+  return `<div class="table-wrap"><table class="vl3-table"><thead><tr><th>裝置</th><th>處理</th><th>延長表現</th></tr></thead><tbody>${TIP_IDS.map((id) => `<tr><td>${sampleName(id, record)}</td><td>${GROUPS[id].label}</td><td>${esc(tipObservationText(observations[id], record))}</td></tr>`).join("")}</tbody></table></div>`;
 }
 function initTipInquiry() {
   $("#tipSection").innerHTML = `
@@ -72,7 +73,7 @@ function initTipInquiry() {
   <article class="vl3-card" id="tipResults"><h3>A 與 D：初始及培養後的比較</h3>
   <label>查看狀態<select id="tipView"><option value="after">目前培養狀態</option><option value="before">培養開始時</option></select></label>
   <div id="tipBench" class="bench tip-bench"></div><button id="confirmTipObservations" class="primary">確認延伸一觀察</button><div id="tipObservationTable"></div></article>
-  <article class="vl3-card" id="tipAnalysis"><h3>頂端與延長：從比較提出新問題</h3>
+  <article class="vl3-card" id="tipAnalysis"><h3>實驗結論</h3>
   ${selectHTML("qCap", { tipRole: "頂端的存在亦影響胚芽鞘的生長／延長。", noEffect: "頂端的存在不影響胚芽鞘的生長／延長。" }, "", "1. A 與 D 的延長比較支持甚麼？")}
   <button id="toAgar" class="primary">測試物質 X：繼續延伸探究二 →</button></article>`;
   $("#runTipExperiment").onclick = runTipExperiment;
@@ -272,7 +273,7 @@ function tipReportHTML(record) {
   ${record.experimentVersion < 7 ? open("延伸一公平比較", record.form.tipFair, "只改變頂端是否存在，保持種類、處理前大小及生長狀況、左側光照、時間、溫度及供水相同。") : ""}
   <h3>首次確認觀察</h3>${inquiry.firstObservations ? tipTableHTML(inquiry.firstObservations.observations, record) : "未確認"}
   <h3>最後觀察</h3>${tipTableHTML(inquiry.observations, record)}
-  ${TIP_IDS.map((id) => reportAnswer(sampleName(id, record) + " " + GROUPS[id].label, tipObservationText(inquiry.observations[id]), tipObservationText(tipModel(id, record)), inquiry.observations[id] ? tipObservationFields(record).every((key) => inquiry.observations[id][key] === tipModel(id, record)[key]) : null)).join("")}
+  ${TIP_IDS.map((id) => reportAnswer(sampleName(id, record) + " " + GROUPS[id].label, tipObservationText(inquiry.observations[id], record), tipObservationText(tipModel(id, record), record), inquiry.observations[id] ? tipObservationFields(record).every((key) => inquiry.observations[id][key] === tipModel(id, record)[key]) : null)).join("")}
   <p class="report-reference">${sampleName("C", record)} 在本教學模型中不延長；切頂後不一定完全停止生長，實際結果受植物狀況及條件影響。</p>
   ${Object.entries(tipAnswersFor(record))
     .map(([id, target]) =>
