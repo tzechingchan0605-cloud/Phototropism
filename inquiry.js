@@ -8,11 +8,15 @@ const EXT_LABELS = {
   H: "處理瓊脂 · 右側",
 };
 const EXT_MODEL = {
-  E: { growth: "reduced", direction: "straight", angle: 0 },
+  E: { growth: "none", direction: "straight", angle: 0 },
   F: { growth: "clear", direction: "straight", angle: 0 },
   G: { growth: "clear", direction: "right", angle: 35 },
   H: { growth: "clear", direction: "left", angle: 35 },
 };
+function extensionModel(id, record) {
+  if (id === "E" && record && record.experimentVersion < 15) return { ...EXT_MODEL.E, growth: "reduced" };
+  return EXT_MODEL[id];
+}
 const DIRECTIONS = {
   left: "向左彎曲",
   right: "向右彎曲",
@@ -211,7 +215,7 @@ function extensionGeometry(id, p) {
   const model = EXT_MODEL[id],
     signed = (model.direction === "left" ? -1 : 1) * model.angle * p;
   const a = (signed * Math.PI) / 180;
-  const growth = (id === "E" ? 8 : 45) * p;
+  const growth = (model.growth === "none" ? 0 : 45) * p;
   const x = 150 + Math.sin(a) * 65,
     y = 135 - growth;
   return {
@@ -395,11 +399,11 @@ function confirmExtension() {
   state.extension.graphSaved = false;
   $("#extensionTable").innerHTML = extensionTableHTML(readings);
   log("extension_readings_confirmed", { readings });
-  message("延伸讀數已保存，請用自己的讀數繪圖及分析。");
+  message("延伸讀數已保存，請用自己的讀數分析。");
 }
 function extensionTableHTML(readings) {
   const showGrowth = Object.values(readings).some((reading) => reading.growth);
-  return `<div class="table-wrap"><table class="vl3-table"><thead><tr><th>裝置</th>${showGrowth ? "<th>延長</th>" : ""}<th>角度（°）</th><th>方向</th></tr></thead><tbody>${EXT_IDS.map((id) => `<tr><td>${id}</td>${showGrowth ? `<td>${esc(GROWTH[readings[id]?.growth] || "未記錄")}</td>` : ""}<td>${esc(readings[id]?.angle ?? "未記錄")}</td><td>${esc(DIRECTIONS[readings[id]?.direction] || "未記錄")}</td></tr>`).join("")}</tbody></table></div>`;
+  return `<div class="table-wrap"><table class="vl3-table"><thead><tr><th>裝置</th><th>處理</th>${showGrowth ? "<th>延長</th>" : ""}<th>角度（°）</th><th>方向</th></tr></thead><tbody>${EXT_IDS.map((id) => `<tr><td>${id}</td><td>${esc(EXT_LABELS[id])}</td>${showGrowth ? `<td>${esc(GROWTH[readings[id]?.growth] || "未記錄")}</td>` : ""}<td>${esc(readings[id]?.angle ?? "未記錄")}</td><td>${esc(DIRECTIONS[readings[id]?.direction] || "未記錄")}</td></tr>`).join("")}</tbody></table></div>`;
 }
 function barChartSVG(points) {
   const bars = EXT_IDS.map((id, i) => {

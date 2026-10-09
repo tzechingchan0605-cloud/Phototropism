@@ -509,7 +509,7 @@ E–F 支持可轉移的生長促進作用；G–H 支持作用位置影響彎�
 黑暗培養中（加速模型）	Growing in darkness (speeded-up model)
 培養完成，請自行觀察並調整量角器。	Growth complete. Make your observations and adjust the protractors.
 請完成四組延長、角度（0–90°）及方向。	Complete elongation, angle (0–90°) and direction for all four setups.
-延伸讀數已保存，請用自己的讀數繪圖及分析。	Extension readings saved. Use your own readings for your chart and analysis.
+延伸讀數已保存，請用自己的讀數分析。	Extension readings saved. Use your own readings for your analysis.
 請先確認全部延伸讀數。	Confirm all extension readings first.
 請填寫四條棒的角度及方向。	Enter an angle and direction for each of the four bars.
 棒形圖已保存。圖表按你的讀數評分，量度準確性另行比較。	Bar chart saved. The chart is checked against your readings; measurement accuracy is checked separately.

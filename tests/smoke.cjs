@@ -120,7 +120,7 @@ async function flow(p, student = true) {
   await p.click("#saveDrawing");
   await p.click("#toExperiment");
   assert(await p.locator("#phase-3").isVisible());
-  assert.equal(await p.evaluate(() => state.experimentVersion), 14);
+  assert.equal(await p.evaluate(() => state.experimentVersion), 15);
   assert.deepEqual(await p.evaluate(() => MAIN_IDS), ["A", "B", "D"]);
   assert.equal(await p.locator("#bench .specimen").count(), 3);
   assert.equal(await p.locator("#growth-C").count(), 0);
@@ -301,9 +301,13 @@ async function flow(p, student = true) {
   await p.fill("#extReason", "我預測接觸瓊脂的一側會向該側生長。");
   assert.equal(await p.locator("#extFair,#angleExample").count(), 0);
   await p.emulateMedia({ reducedMotion: "no-preference" });
+  const initialLengths = await p.locator("[data-ext-stem]").evaluateAll(stems => stems.map(stem => stem.getTotalLength()));
   await p.click("#runExtension");
   assert(await p.locator("#confirmExtension").isDisabled());
   await p.waitForFunction(() => extensionHasRun);
+  const finalLengths = await p.locator("[data-ext-stem]").evaluateAll(stems => stems.map(stem => stem.getTotalLength()));
+  assert.equal(finalLengths[0], initialLengths[0], "E with blank agar must not elongate");
+  assert(finalLengths.slice(1).every((length, index) => length > initialLengths[index + 1]), "F, G and H with treated agar must elongate");
   const agar = await p.locator("[data-agar-block]").evaluateAll(blocks => blocks.map(block => {
     const matrix = block.transform.baseVal.consolidate().matrix;
     return { angle: Math.round(Math.atan2(matrix.b, matrix.a) * 180 / Math.PI), width: Number(block.querySelector("rect").getAttribute("width")) };

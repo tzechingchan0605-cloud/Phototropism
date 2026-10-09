@@ -153,7 +153,7 @@ function fresh(profile = null) {
   return {
     moduleId: MODULE_ID,
     schemaVersion: 1,
-    experimentVersion: 14,
+    experimentVersion: 15,
     id: crypto.randomUUID(),
     profile,
     createdAt: new Date().toISOString(),
@@ -1684,7 +1684,7 @@ async function exportExcel() {
           first = e.firstReadings?.readings[id],
           final = e.readings[id],
           point = e.graph[id],
-          model = EXT_MODEL[id];
+          model = extensionModel(id, r);
         const consistent =
           !!final &&
           !!point &&
