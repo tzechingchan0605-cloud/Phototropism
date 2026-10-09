@@ -203,7 +203,7 @@ function initExtension() {
     <article class="vl3-card" id="extensionAnalysis"><h3>分析物質 X 的作用線索</h3>
     ${selectHTML("extEF", { transfer: "頂端可能產生可轉移的生長促進作用。", agar: "所有瓊脂都會產生相同的生長促進作用。" }, "", "1. E 與 F 的比較支持甚麼？")}
     ${extensionPositionHTML()}
-    <fieldset class="cloze-question" aria-label="瓊脂作用推論"><p>${extensionClozeSentence(extensionClozeSelect)}</p></fieldset>
+    <fieldset class="cloze-question" aria-label="瓊脂作用推論"><p>3. ${extensionClozeSentence(extensionClozeSelect)}</p></fieldset>
     </article>`;
   document.querySelector("#runExtension").onclick = runExtension;
   document.querySelector("#confirmExtension").onclick = confirmExtension;
@@ -632,7 +632,7 @@ function extensionClozeReport(record) {
   const answered = Object.keys(EXT_CLOZE_ANSWERS).every(id => record.form[id]);
   const correct = Object.entries(EXT_CLOZE_ANSWERS).every(([id, target]) => record.form[id] === target);
   const sentence = answers => extensionClozeSentence(id => `<span>${esc(answerOption(id, answers[id], record))}</span>`);
-  return `<div class="report-answer" data-cloze-report>${record.experimentVersion < 18 ? `<strong>${EXT_CLOZE_TITLE}</strong>` : ""}${answered ? ` <b class="${correct ? "answer-correct" : "answer-wrong"}">${correct ? "✓" : "✕"}</b>` : ""}<p>${sentence(record.form)}</p><p class="report-reference"><span>參考答案：</span>${sentence(EXT_CLOZE_ANSWERS)}</p></div>`;
+  return `<div class="report-answer" data-cloze-report>${record.experimentVersion < 18 ? `<strong>${EXT_CLOZE_TITLE}</strong>` : ""}${answered ? ` <b class="${correct ? "answer-correct" : "answer-wrong"}">${correct ? "✓" : "✕"}</b>` : ""}<p>${record.experimentVersion >= 18 ? "3. " : ""}${sentence(record.form)}</p><p class="report-reference"><span>參考答案：</span>${sentence(EXT_CLOZE_ANSWERS)}</p></div>`;
 }
 function reflectionReport(record, open) {
   const reference = record.experimentVersion >= 17 ? REFLECTION_REFERENCE : threeStage(record)
