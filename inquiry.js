@@ -628,6 +628,19 @@ function reportAnswer(
 ) {
   return `<div class="report-answer"><strong>${esc(title)}</strong>${correct === null ? "" : ` <b class="${correct ? "answer-correct" : "answer-wrong"}">${correct ? "✓" : "✕"}</b>`}<p${studentText && value ? " data-student-text" : ""}>${esc(value || "未回答")}</p><p class="report-reference">${correct === null ? "參考說明" : "參考答案"}：${esc(reference)}</p></div>`;
 }
+function variableReportHTML(record) {
+  const definitions = variableDefinitions(record);
+  return [["iv", "獨立變量"], ["dv", "因變量"], ["cv", "控制變量"]]
+    .map(([key, title]) => {
+      const selected = record.variables[key];
+      return reportAnswer(
+        title,
+        selected.map(id => definitions[id]).join("；"),
+        EXPECTED[key].map(id => definitions[id]).join("；"),
+        selected.length ? sameSet(selected, EXPECTED[key]) : null,
+      );
+    }).join("");
+}
 function extensionClozeReport(record) {
   const answered = Object.keys(EXT_CLOZE_ANSWERS).every(id => record.form[id]);
   const correct = Object.entries(EXT_CLOZE_ANSWERS).every(([id, target]) => record.form[id] === target);
@@ -682,7 +695,7 @@ function newReport(r) {
     : "未確認";
   return `<h1>VL3 · 幼芽為甚麼向光生長？</h1><p data-student-text>${esc(r.profile.classInfo)}｜${esc(r.profile.name)}｜${esc(r.profile.email)}</p><p>${esc(r.id)} · ${statusOf(r)}</p>
   <section class="report-card"><h2>01 · 了解情境</h2><p>學校園藝小組發現，窗邊胚芽鞘逐漸朝窗戶方向彎曲。大家知道植物會向光源方向生長，但不知道植物哪個部位感受光照，以及甚麼令它彎曲。</p>${contextComparison()}${open("初步觀察", f.observation, "描述外形及生長方向的可觀察變化，不必先解釋機制。")}${f.initialIdea ? open("初步想法（舊版）", f.initialIdea, "保留舊版探究的原始回答；不因與模型不同直接判錯。") : ""}</section>
-  <section class="report-card"><h2>02 · 設計主探究</h2>${open("原始假說", o?.hypothesisText || hypothesis(initial, 3), "可測試的部位、遮光處理及預期反應；預測不符不代表假說不合理。")}${open("原始理由", initial.reason, "說明為甚麼作出該預測。")}${open("最後假說", hypothesis(f, 3), "保留修訂後內容，原始答案不覆蓋。")}${initial.comparison ? open("指定比較（舊版）", answerOption("comparison", initial.comparison), "A–B：頂端遮光；A–C：頂端是否存在；A–D：下部遮光。") : ""}${["iv", "dv", "cv"].map((key, i) => open(["獨立變量", "因變量", "控制變量"][i], r.variables[key].map((n) => variableDefinitions(r)[n]).join("；"), [threeStage(r) ? "只比較遮光處理；三組頂端均完整。" : "比較遮光處理／部位或頂端是否存在。", (r.experimentVersion >= 6 ? "彎曲方向。" : "延長及彎曲反應。"), "種類、處理前大小與狀況、光照、溫度、供水及培養時間。"][i])).join("")}${open("探究假設", r.assumptions.map((id) => assumptionsFor(r).find((a) => a[0] === id)?.[1]).join("；"), "初始狀況相近；帽及套不限制生長；處理不造成明顯溫差。相同種類仍需控制大小。")}${open("對照設計", f.controlPlan, threeStage(r) ? `保留 A 完整不遮蓋，與 B 頂端遮光及 ${sampleName("D", r)} 下部遮光比較，其他條件相同。` : "保留 A 完整不遮蓋；按三項指定比較保持其他條件相同。")}${open("裝置設計", r.setup.description, threeStage(r) ? `A、B、${sampleName("D", r)} 三組遮光處理、單側光源及固定條件清楚；圖片與文字由教師評閱。` : "四組處理、單側光源及固定條件清楚；圖片與文字由教師評閱。")}${safeImage(r.setup.image) ? `<img src="${r.setup.image}" alt="學生實驗裝置設計">` : ""}</section>
+  <section class="report-card"><h2>02 · 設計主探究</h2>${open("原始假說", o?.hypothesisText || hypothesis(initial, 3), "可測試的部位、遮光處理及預期反應；預測不符不代表假說不合理。")}${open("原始理由", initial.reason, "說明為甚麼作出該預測。")}${open("最後假說", hypothesis(f, 3), "保留修訂後內容，原始答案不覆蓋。")}${initial.comparison ? open("指定比較（舊版）", answerOption("comparison", initial.comparison), "A–B：頂端遮光；A–C：頂端是否存在；A–D：下部遮光。") : ""}${variableReportHTML(r)}${open("探究假設", r.assumptions.map((id) => assumptionsFor(r).find((a) => a[0] === id)?.[1]).join("；"), "初始狀況相近；帽及套不限制生長；處理不造成明顯溫差。相同種類仍需控制大小。")}${open("對照設計", f.controlPlan, threeStage(r) ? `保留 A 完整不遮蓋，與 B 頂端遮光及 ${sampleName("D", r)} 下部遮光比較，其他條件相同。` : "保留 A 完整不遮蓋；按三項指定比較保持其他條件相同。")}${open("裝置設計", r.setup.description, threeStage(r) ? `A、B、${sampleName("D", r)} 三組遮光處理、單側光源及固定條件清楚；圖片與文字由教師評閱。` : "四組處理、單側光源及固定條件清楚；圖片與文字由教師評閱。")}${safeImage(r.setup.image) ? `<img src="${r.setup.image}" alt="學生實驗裝置設計">` : ""}</section>
   <section class="report-card"><h2>03 · 主探究記錄</h2><h3>首次確認</h3>${firstMain}<h3>最後記錄</h3>${tableHTML(r.observations, groupDefinitions(r), r)}${Object.keys(
     groupDefinitions(r),
   )
@@ -705,7 +718,7 @@ function newReport(r) {
     )}<p class="report-reference">${threeStage(r) ? "主探究三組頂端均完整，唯一改變因素為遮光處理。" : r.experimentVersion >= 4 ? "C 在本教學模型中不延長；切頂後不一定完全停止生長，實際結果受植物狀況及條件影響。" : "C 的延長減少是本模型設定；切頂後不一定完全停止生長。"}</p></section>
   <section class="report-card"><h2>04 · 主探究分析</h2>${questions(mainAnswersFor(r))}${r.experimentVersion < 10 ? open("數據推論", f.evidence, threeStage(r) ? `比較 A–B 及 A–${sampleName("D", r)} 的彎曲方向，說明哪個部位可能感受光。` : "以 A–B、A–C、A–D 的具體比較支持推論，留意傷口、溫度及機械限制。") : ""}</section>
   ${threeStage(r) ? tipReportHTML(r) : ""}
-  <section class="report-card"><h2>${threeStage(r) ? "04 · 延伸探究二：物質 X" : "04 · 延伸預測與觀察"}</h2>${open("原始預測", DIRECTIONS[e.initialPrediction?.prediction], "處理瓊脂放左側，模型中左側延長較多而向右彎曲；原始預測由教師按可測試性評閱。")}${open("原始理由", e.initialPrediction?.reason, "合理理由不因結果不符直接判錯。")}${r.experimentVersion < 12 ? open("公平比較", f.extFair, "E–F 均放中央，保持瓊脂大小、胚芽鞘初始大小及狀況、黑暗、溫度、供水及時間相同。") : ""}<h3>首次確認讀數</h3>${firstExt}<h3>最後讀數</h3>${extensionTableHTML(e.readings)}${EXT_IDS.map((id) => reportAnswer(id + " 最終角度", e.readings[id]?.angle === undefined ? "" : e.readings[id].angle + "°", EXT_MODEL[id].angle + "°（教學模型；±" + extensionAngleTolerance(id) + "°）", e.readings[id] ? extensionAngleCorrect(id, e.readings[id].angle) : null)).join("")}${r.experimentVersion < 9 ? `<h3>學生棒形圖</h3>${Object.keys(e.graph).length ? barChartSVG(e.graph) : "未確認"}<p class="report-reference">圖表以學生本身讀數核對；量度準確性另與模型比較。不用鉛直高度差推算延長量。</p>` : ""}</section>
+  <section class="report-card"><h2>${threeStage(r) ? "04 · 延伸探究二：物質 X" : "04 · 延伸預測與觀察"}</h2>${open("原始預測", DIRECTIONS[e.initialPrediction?.prediction], "處理瓊脂放左側，模型中左側延長較多而向右彎曲；原始預測由教師按可測試性評閱。")}${open("原始理由", e.initialPrediction?.reason, "合理理由不因結果不符直接判錯。")}${r.experimentVersion < 12 ? open("公平比較", f.extFair, "E–F 均放中央，保持瓊脂大小、胚芽鞘初始大小及狀況、黑暗、溫度、供水及時間相同。") : ""}<h3>首次確認讀數</h3>${firstExt}<h3>最後讀數</h3>${extensionTableHTML(e.readings)}${EXT_IDS.map((id) => reportAnswer(id + " 最終角度", e.readings[id]?.angle === undefined ? "" : e.readings[id].angle + "°", extensionAngleReference(id), e.readings[id] ? extensionAngleCorrect(id, e.readings[id].angle) : null)).join("")}${r.experimentVersion < 9 ? `<h3>學生棒形圖</h3>${Object.keys(e.graph).length ? barChartSVG(e.graph) : "未確認"}<p class="report-reference">圖表以學生本身讀數核對；量度準確性另與模型比較。不用鉛直高度差推算延長量。</p>` : ""}</section>
   <section class="report-card"><h2>${threeStage(r) ? "04 · 延伸二分析" : "04 · 延伸分析"}</h2>${r.experimentVersion >= 16 ? questions({extEF:"transfer",extPosition:"position"}) + extensionClozeReport(r) : questions(extensionAnswersFor(r))}${r.experimentVersion >= 13 && r.experimentVersion < 17 ? open("單側光與物質 X 的推論", f.extLightInference, "單側光可能使物質 X 移向背光側，再向下傳遞，促進背光側細胞延長。背光側延長較多，使胚芽鞘向光彎曲；這是結合比較結果提出的推論，瓊脂實驗並未直接觀察光照下物質 X 的分布。") : ""}${r.experimentVersion < 9 ? open("延伸證據", f.extEvidence, "E–F 支持可轉移的生長促進作用；G–H 支持作用位置影響彎曲方向。") : ""}${r.experimentVersion < 9 ? open("額外對照（選答）", f.extControl, "可把空白瓊脂放左側及右側，以排除單側放置本身的影響。") : ""}</section>
   ${r.submittedAt ? `<section class="report-card"><h2>學習重點</h2>${r.experimentVersion >= 17 ? learningPointsHTML() : `<p>向光性是因光照方向而產生的定向生長；向光源屬正向光性。頂端參與感光，生長素是影響植物生長的激素。${threeStage(r) ? "探究中的物質 X 可結合其他研究理解為生長素；瓊脂比較本身並未鑑定其身分。" : ""}背光側生長素較多、細胞延長較多，使胚芽鞘向光彎曲。</p>`}${mechanismSVG()}${r.experimentVersion < 14 ? `<p class="report-reference">本模型未直接鑑定瓊脂內的物質或量得單側光下的生長素分布；名稱及機制由其他研究支持。</p>` : ""}${r.experimentVersion < 14 ? reportAnswer("名稱檢核", answerOption("knowledgeName", f.knowledgeName), "正向光性", f.knowledgeName ? f.knowledgeName === "positive" : null) : ""}</section>` : ""}
   ${reflectionReport(r, open)}<p class="report-reference">動畫、24 小時及角度為教學模擬。學生報告不顯示分數。</p>`;
@@ -725,7 +738,11 @@ function graphScore(r) {
   );
 }
 function extensionAngleTolerance(id) {
-  return ["G", "H"].includes(id) ? 2 : 3;
+  return ["G", "H"].includes(id) ? 2 : 0;
+}
+function extensionAngleReference(id) {
+  const tolerance = extensionAngleTolerance(id);
+  return EXT_MODEL[id].angle + "°（教學模型" + (tolerance ? "；±" + tolerance + "°" : "") + "）";
 }
 function extensionAngleCorrect(id, angle) {
   return validAngle(angle) && Math.abs(Number(angle) - EXT_MODEL[id].angle) <= extensionAngleTolerance(id);

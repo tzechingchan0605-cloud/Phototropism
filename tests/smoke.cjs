@@ -419,6 +419,7 @@ async function flow(p, student = true) {
   assert(await p.locator("#reflection").isDisabled());
   assert(await p.locator("#downloadPDF").isEnabled());
   await p.evaluate(() => {
+    window.titleBeforePrint = document.title;
     window.print = () => {
       window.printCalled = true;
       window.printTitle = document.title;
@@ -426,15 +427,43 @@ async function flow(p, student = true) {
   });
   await p.click("#downloadPDF");
   assert(await p.evaluate(() => window.printCalled));
-  assert.match(
-    await p.evaluate(() => window.printTitle),
-    /^VL3_幼芽為甚麼向光生長_S4A-05_/,
-  );
+  assert.equal(await p.evaluate(() => window.printTitle), await p.evaluate(() => "VL3_S4A-05_" + state.profile.name));
+  assert.equal(await p.title(), await p.evaluate(() => window.printTitle));
+  assert.deepEqual(await p.evaluate(() => [
+    pdfFileName({profile:{classInfo:"X1",name:"Chan Siu Ming"}}),
+    pdfFileName({profile:{classInfo:" 4A/05 ",name:" 陳小明. "}}),
+  ]), ["VL3_X1_Chan Siu Ming","VL3_4A_05_陳小明"]);
+  await p.evaluate(() => window.dispatchEvent(new Event("afterprint")));
+  assert.equal(await p.title(), await p.evaluate(() => window.titleBeforePrint));
   const report = await p.locator("#printReport").innerHTML();
   assert.match(report, /首次確認讀數/);
   assert.match(report, /參考答案/);
   assert.match(report, /參考說明/);
   assert.match(report, /✓/);
+  const variableMarks = await p.evaluate(() => {
+    const marks = variables => {
+      const doc = new DOMParser().parseFromString(variableReportHTML({...state, variables}), "text/html");
+      return [...doc.querySelectorAll(".report-answer")].map(answer => ({mark:answer.querySelector("b")?.textContent || "", value:answer.querySelector("p").textContent, reference:answer.querySelector(".report-reference").textContent}));
+    };
+    return {
+      correct:marks({iv:[0],dv:[1],cv:[5,4,3,2]}),
+      incorrect:marks({iv:[4],dv:[4],cv:[4]}),
+      missing:marks({iv:[0],dv:[1],cv:[2,3,4]}),
+      extra:marks({iv:[0],dv:[1],cv:[0,2,3,4,5]}),
+      empty:marks({iv:[],dv:[],cv:[]}),
+      printed:[...document.querySelectorAll("#printReport .report-answer")].filter(answer => ["獨立變量","因變量","控制變量"].includes(answer.querySelector("strong")?.textContent)).map(answer => answer.querySelector("b")?.textContent),
+    };
+  });
+  assert.deepEqual(variableMarks.correct.map(answer => answer.mark), ["✓","✓","✓"]);
+  assert.deepEqual(variableMarks.incorrect.map(answer => answer.mark), ["✕","✕","✕"]);
+  assert(variableMarks.incorrect.every(answer => answer.value === "照射時間"));
+  assert.equal(variableMarks.incorrect[0].reference, "參考答案：遮光處理");
+  assert.equal(variableMarks.incorrect[1].reference, "參考答案：胚芽鞘的彎曲反應");
+  assert.equal(variableMarks.incorrect[2].reference, "參考答案：光源方向及光強度；胚芽鞘種類、初始高度及生長階段；照射時間；溫度及供水條件");
+  assert.equal(variableMarks.missing[2].mark, "✕");
+  assert.equal(variableMarks.extra[2].mark, "✕");
+  assert.deepEqual(variableMarks.empty.map(answer => answer.mark), ["","",""]);
+  assert.deepEqual(variableMarks.printed, ["✓","✓","✓"]);
   assert.doesNotMatch(report, /整體分數|SPS 總分/);
   assert.doesNotMatch(report, /初步想法/);
   assert.doesNotMatch(report, /單側光與物質 X 的推論/);
@@ -495,6 +524,14 @@ async function flow(p, student = true) {
       return {angle, score: angleScore(record), g: correct("G"), h: correct("H")};
     }));
     assert.deepEqual(boundaries, [32, 33, 35, 37, 38].map(angle => ({angle, score: angle >= 33 && angle <= 37 ? 2 : 1, g: angle >= 33 && angle <= 37 ? "answer-correct" : "answer-wrong", h: angle >= 33 && angle <= 37 ? "answer-correct" : "answer-wrong"})));
+    const straightAngles = await p.evaluate(() => [0,0.1,1,3].map(angle => {
+      const record = structuredClone(state);
+      record.extension.readings.E.angle = record.extension.readings.F.angle = angle;
+      const report = new DOMParser().parseFromString(newReport(record), "text/html");
+      const answer = id => [...report.querySelectorAll(".report-answer")].find(answer => answer.querySelector("strong")?.textContent === id + " 最終角度");
+      return {angle,score:angleScore(record),marks:["E","F"].map(id => answer(id).querySelector("b").textContent),references:["E","F"].map(id => answer(id).querySelector(".report-reference").textContent)};
+    }));
+    assert.deepEqual(straightAngles, [0,0.1,1,3].map(angle => ({angle,score:angle === 0 ? 2 : 1,marks:angle === 0 ? ["✓","✓"] : ["✕","✕"],references:["參考答案：0°（教學模型）","參考答案：0°（教學模型）"]})));
   }
   return await p.evaluate(() => structuredClone(state));
 }

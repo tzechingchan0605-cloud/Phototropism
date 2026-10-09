@@ -393,10 +393,14 @@ async function saveExcel(page, target) {
       window.print = () => {
         window.printedLanguage = document.documentElement.lang;
         window.printedHTML = document.querySelector("#printReport").innerHTML;
+        window.printedTitle = document.title;
       };
     });
     await page.click("#downloadPDF");
     assert.equal(await page.evaluate(() => window.printedLanguage), "en");
+    assert.equal(await page.evaluate(() => window.printedTitle), await page.evaluate(() => "VL3_" + state.profile.classInfo + "_" + state.profile.name));
+    assert.equal(await page.title(), await page.evaluate(() => window.printedTitle));
+    await page.evaluate(() => window.dispatchEvent(new Event("afterprint")));
     await noChineseSystem(page, "#printReport");
     assert.match(
       await page.locator("#printReport").innerText(),
@@ -449,6 +453,8 @@ async function saveExcel(page, target) {
     await page.setViewportSize({ width: 1440, height: 1000 });
     await switchLanguage(page, "zh");
     await page.click("#downloadPDF");
+    assert.equal(await page.evaluate(() => window.printedTitle), await page.evaluate(() => "VL3_" + state.profile.classInfo + "_" + state.profile.name));
+    await page.evaluate(() => window.dispatchEvent(new Event("afterprint")));
     assert.match(await page.locator("#printReport").innerText(), /參考答案/);
     await page.emulateMedia({ media: "print" });
     await page.pdf({

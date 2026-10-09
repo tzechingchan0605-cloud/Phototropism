@@ -850,21 +850,32 @@ function report(r) {
     original = r.initialDesign?.form;
   const answer = (title, value) =>
     `<div class="report-block"><strong>${esc(title)}</strong><p style="white-space:pre-wrap"${["初步觀察", "原始理由", "目前理由", "對照組設計", "裝置文字設計", "我的數據解釋", "學習反思"].includes(title) && value ? " data-student-text" : ""}>${esc(value || "未回答")}</p></div>`;
-  return `<h1>VL3 · 胚芽鞘的向光性</h1><p data-student-text>${esc(r.profile.name)}｜${esc(r.profile.classInfo)}｜${esc(r.profile.email)}</p><p>紀錄 ${esc(r.id)} · ${statusOf(r)}</p><h2>01 了解情境</h2>${answer("初步觀察", f.observation)}<h2>02 設計探究</h2>${answer("第一次實驗前固定保存的原始假說", original ? r.initialDesign.hypothesisText || hypothesis(original, r.experimentVersion) : "尚未開始實驗")}${answer("原始理由", original?.reason)}${answer("目前假說", hypothesis(f, r.experimentVersion))}${answer("目前理由", f.reason)}${["iv", "dv", "cv"].map((g, i) => answer(["獨立變量", "因變量", "控制變量"][i], r.variables[g].map((n) => variableDefinitions(r)[n]).join("；"))).join("")}${answer("實驗前提", r.assumptions.map((id) => assumptionsFor(r).find((a) => a[0] === id)?.[1]).join("；"))}${answer("對照組設計", f.controlPlan)}${answer("裝置文字設計", r.setup.description)}${safeImage(r.setup.image) ? `<img src="${r.setup.image}" alt="學生裝置設計">` : ""}<h2>03 觀察紀錄</h2>${tableHTML(r.observations, groupDefinitions(r), r)}<h2>04 分析與反思</h2>${answer("感光部位", f.qTip === "tip" ? "頂端" : f.qTip === "below" ? "頂端以下位置" : "")}${answer("組別比較", comparisonText(r))}${answer("頂端以下位置遮光的反應", OUTCOMES[f.qBelow])}${answer("證據限制", limitationText(r))}${answer("我的數據解釋", f.evidence)}${answer("學習反思", f.reflection)}<p>實驗模型：四組相同單側光照；動畫是典型反應示意，並非真實量度。紀錄可同步至共用資料庫。</p>`;
+  return `<h1>VL3 · 胚芽鞘的向光性</h1><p data-student-text>${esc(r.profile.name)}｜${esc(r.profile.classInfo)}｜${esc(r.profile.email)}</p><p>紀錄 ${esc(r.id)} · ${statusOf(r)}</p><h2>01 了解情境</h2>${answer("初步觀察", f.observation)}<h2>02 設計探究</h2>${answer("第一次實驗前固定保存的原始假說", original ? r.initialDesign.hypothesisText || hypothesis(original, r.experimentVersion) : "尚未開始實驗")}${answer("原始理由", original?.reason)}${answer("目前假說", hypothesis(f, r.experimentVersion))}${answer("目前理由", f.reason)}${variableReportHTML(r)}${answer("實驗前提", r.assumptions.map((id) => assumptionsFor(r).find((a) => a[0] === id)?.[1]).join("；"))}${answer("對照組設計", f.controlPlan)}${answer("裝置文字設計", r.setup.description)}${safeImage(r.setup.image) ? `<img src="${r.setup.image}" alt="學生裝置設計">` : ""}<h2>03 觀察紀錄</h2>${tableHTML(r.observations, groupDefinitions(r), r)}<h2>04 分析與反思</h2>${answer("感光部位", f.qTip === "tip" ? "頂端" : f.qTip === "below" ? "頂端以下位置" : "")}${answer("組別比較", comparisonText(r))}${answer("頂端以下位置遮光的反應", OUTCOMES[f.qBelow])}${answer("證據限制", limitationText(r))}${answer("我的數據解釋", f.evidence)}${answer("學習反思", f.reflection)}<p>實驗模型：四組相同單側光照；動畫是典型反應示意，並非真實量度。紀錄可同步至共用資料庫。</p>`;
+}
+function pdfFileName(r) {
+  const part = value => String(value).trim()
+    .replace(/[<>:"/\\|?*\u0000-\u001f]/g, "_")
+    .replace(/[. ]+$/, "");
+  return "VL3_" + part(r.profile.classInfo) + "_" + part(r.profile.name);
 }
 function printRecord(r) {
   $("#printReport").innerHTML = report(r);
   VL3Language.translateTree($("#printReport"));
   const title = document.title;
-  document.title =
-    "VL3_" +
-    VL3Language.t("幼芽為甚麼向光生長") +
-    "_" +
-    r.profile.classInfo +
-    "_" +
-    r.profile.name;
-  window.print();
-  document.title = title;
+  const restoreTitle = () => {
+    document.title = title;
+    window.removeEventListener("afterprint", restoreTitle);
+  };
+  window.addEventListener("afterprint", restoreTitle);
+  document.title = pdfFileName(r);
+  // Some browsers return before the print preview closes; keep its filename
+  // until printing or cancellation finishes.
+  try {
+    window.print();
+  } catch (error) {
+    restoreTitle();
+    throw error;
+  }
 }
 $("#downloadPDF").onclick = () => {
   if (!complete()) return;
@@ -1347,7 +1358,7 @@ function scoringWorkbook(all) {
     [
       "實驗操作",
       2,
-      "延伸二 G、H 接受33–37°（35° ±2°），E、F 沿用0° ±3°；每組0.5。量度方法與裝置品質仍由教師評閱。不以點擊或用時評分。",
+      "延伸二 E、F 只接受0°，G、H 接受33–37°（35° ±2°）；每組0.5。量度方法與裝置品質仍由教師評閱。不以點擊或用時評分。",
     ],
     [
       "裝置設計",
