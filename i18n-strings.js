@@ -229,6 +229,7 @@ A 與 D：下部遮光處理	A and D: blocking light below the tip
 較明顯延長	Clearer elongation
 較少延長	Less elongation
 沒有明顯延長	No clear elongation
+不會延長	Will not elongate
 向左彎曲	Bends left
 向右彎曲	Bends right
 沒有明顯彎曲	No clear bending

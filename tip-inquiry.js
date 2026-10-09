@@ -6,7 +6,7 @@ const TIP_FIELDS = [
   "tipReason",
 ];
 const TIP_PREDICTIONS = {
-  less: "沒有明顯延長",
+  less: "不會延長",
   same: "延長表現相近",
   more: "延長較多",
 };
