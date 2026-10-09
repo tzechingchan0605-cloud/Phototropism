@@ -153,7 +153,7 @@ function fresh(profile = null) {
   return {
     moduleId: MODULE_ID,
     schemaVersion: 1,
-    experimentVersion: 16,
+    experimentVersion: 17,
     id: crypto.randomUUID(),
     profile,
     createdAt: new Date().toISOString(),
@@ -235,11 +235,12 @@ function valid(r) {
     r.form &&
     FIELDS.filter(
       (f) =>
-        (f !== "extLightInference" || r.experimentVersion >= 13) &&
         (!Object.hasOwn(EXT_CLOZE_ANSWERS, f) || r.experimentVersion >= 16) &&
         (!NEW_FIELDS.includes(f) || newExperiment(r)) &&
         (!TIP_FIELDS.includes(f) || threeStage(r)),
     ).every((f) => typeof r.form[f] === "string") &&
+    (!(r.experimentVersion >= 13 && r.experimentVersion < 17) ||
+      typeof r.form.extLightInference === "string") &&
     r.variables &&
     ["iv", "dv", "cv"].every((g) => Array.isArray(r.variables[g])) &&
     Array.isArray(r.assumptions) &&
@@ -391,6 +392,9 @@ function contextComparison() {
     <figure class="context-frame">${windowSeedling(true)}</figure>
   </div><p class="context-timing-note muted">生長變化示意；24小時為情境設定。</p>`;
 }
+function reflectionContext() {
+  return `<figure class="reflection-context">${windowSeedling(true)}<figcaption>24小時後</figcaption></figure>`;
+}
 function renderBench(p = 0) {
   $("#bench").innerHTML = MAIN_IDS.map(
     (id) =>
@@ -510,11 +514,6 @@ function applyLock() {
   $("#reflectionStatus").textContent = complete()
     ? "學習反思已提交，可以列印／儲存 PDF。"
     : "提交反思後，才可列印／儲存 PDF。";
-  if (locked) {
-    const original = state.initialDesign.form;
-    $("#originalHypothesis").innerHTML =
-      `<strong>你的主探究原始假說</strong><p${Object.hasOwn(original, "initialIdea") ? " data-student-text" : ""}>${esc(state.initialDesign.hypothesisText || hypothesis(original))}</p><p><span>原始理由：</span><span data-student-text>${esc(original.reason)}</span></p><strong>你的延伸一原始預測</strong><p><span>切去頂端的 D 與完整的 A 相比，預測：</span><span>${esc(TIP_PREDICTIONS[state.tipInquiry.initialPrediction?.prediction] || "")}</span></p><p><span>原始理由：</span><span data-student-text>${esc(state.tipInquiry.initialPrediction?.reason || "")}</span></p><strong>你的延伸二原始預測</strong><p><span>處理瓊脂放在切頂胚芽鞘左側（G），預測：</span><span>${esc(DIRECTIONS[state.extension.initialPrediction?.prediction] || "")}</span></p><p><span>原始理由：</span><span data-student-text>${esc(state.extension.initialPrediction?.reason || "")}</span></p>`;
-  }
 }
 function saveSetup(method, image = "") {
   readForm();
@@ -775,7 +774,7 @@ $("#submitInvestigation").onclick = () => {
           "#runExtension"
         : !EXT_IDS.every((id) => state.extension.readings[id])
           ? "#extensionResults"
-          : firstEmptyField([...Object.keys(EXT_ANSWERS), "extLightInference"]);
+          : firstEmptyField(Object.keys(EXT_ANSWERS));
     return remind("請完成：" + missing.join("、"), target);
   }
   if (running || tipRunning || extensionRunning)
@@ -1136,6 +1135,8 @@ $("#equipmentBank").innerHTML = materials
   )
   .join("");
 $("#contextPlant").innerHTML = contextComparison();
+$("#reflectionContext").innerHTML = reflectionContext();
+$("#learningPoints").innerHTML = learningPointsHTML();
 $("#mechanismDiagram").innerHTML = mechanismSVG();
 document.addEventListener("visibilitychange", () => {
   accountTime();
@@ -1211,7 +1212,7 @@ function scoringWorkbook(all) {
     ["tip", "知識｜向光性名稱及感光部位・教師（0–2）", "knowledge", 2],
     ["growth", "知識｜不均勻延長及彎曲方向・教師（0–2）", "knowledge", 2],
     ["auxin", "知識｜生長素與生長訊號・教師（0–2）", "knowledge", 2],
-    ["revision", "知識｜依據證據修訂及限制・教師（0–2）", "knowledge", 2],
+    ["revision", "知識｜情境應用／舊版證據修訂・教師（0–2）", "knowledge", 2],
     ["knowledge", "新知識總分（0–8）", "score"],
     ["overall", "整體（0–32）", "score"],
     ["marking", "評分狀態", "score"],
@@ -1360,12 +1361,12 @@ function scoringWorkbook(all) {
     [
       "數據解釋",
       2,
-      "版本13：合理連結單側光、物質 X 移向背光側並向下傳遞、兩側延長差異與向光彎曲得2；部分連結得1；無相關推論得0。由教師評閱，不以關鍵字自動判分；瓊脂比較沒有直接量得光照下的物質分布。舊版按原探究證據解釋。",
+      "版本17依學習反思評閱：合理連結右側光源、頂端感光、生長素在左側（背光側）較多並向下傳遞、左側細胞延長較多及向右彎曲得2；部分連結得1；無相關解釋得0。由教師評閱，不以關鍵字自動判分。版本13–16按原單側光與物質 X 的推論；更舊按原探究證據解釋。",
     ],
     [
       "反思表達",
       2,
-      "2：連貫表達三段原始想法、比較證據與修訂；1：部分連結；0：無相關反思。舊版按原兩段或一段。",
+      "版本17：以清楚、連貫的因果關係解釋情境圖中胚芽鞘向右彎曲得2；部分清楚得1；無相關反思得0。舊版按原始想法、比較證據及修訂評閱。",
     ],
     [
       "數據紀錄及證據表達",
@@ -1388,9 +1389,9 @@ function scoringWorkbook(all) {
       "2：說明生長素是植物激素、頂端產生可向下傳遞的生長促進作用；1：部分正確；0：未顯示理解。",
     ],
     [
-      "依證據修訂與限制",
+      "情境應用／舊版證據修訂",
       2,
-      "2：引用三段各一項比較修訂原始解釋，指出切頂傷口、未鑑定物質X及未直接量度光照下分布；1：部分完成；0：無相關內容。舊版按原流程。",
+      "版本17：把學習重點正確應用於右側光源情境，指出左側是背光側、延長較多，故向右彎曲得2；部分正確得1；無相關應用得0。舊版按原證據修訂與限制題評閱。",
     ],
     [
       "總分",

@@ -120,7 +120,7 @@ async function flow(p, student = true) {
   await p.click("#saveDrawing");
   await p.click("#toExperiment");
   assert(await p.locator("#phase-3").isVisible());
-  assert.equal(await p.evaluate(() => state.experimentVersion), 16);
+  assert.equal(await p.evaluate(() => state.experimentVersion), 17);
   assert.deepEqual(await p.evaluate(() => MAIN_IDS), ["A", "B", "D"]);
   assert.equal(await p.locator("#bench .specimen").count(), 3);
   assert.equal(await p.locator("#growth-C").count(), 0);
@@ -371,8 +371,8 @@ async function flow(p, student = true) {
   await p.selectOption("#extCellElongation", "more");
   await reminder(p, "#submitInvestigation", /延伸分析/, "extBendDirection");
   await p.selectOption("#extBendDirection", "right");
-  await reminder(p, "#submitInvestigation", /單側光與物質 X 的推論/, "extLightInference");
-  await p.fill("#extLightInference", "單側光可能使物質X移向背光側並向下傳遞；背光側延長較多，因此向光彎曲。");
+  assert.equal(await p.locator("#extLightInference").count(), 0);
+  assert.equal(await p.evaluate(() => Object.hasOwn(state.form, "extLightInference")), false);
   assert.equal(await p.locator("#extDark,#extLimit,#extEvidence,#extControl").count(), 0);
   assert.doesNotMatch(await p.locator("main").innerText(), /生長素|向光性/);
   await p.click("#submitInvestigation");
@@ -384,22 +384,20 @@ async function flow(p, student = true) {
   assert(await p.locator("#tipPrediction").isDisabled());
   assert(await p.locator("#qCap").isDisabled());
   assert(await p.locator("#extPrediction").isDisabled());
-  assert.match(await p.locator("#originalHypothesis").innerText(), /向左彎曲/);
-  assert.match(
-    await p.locator("#originalHypothesis").innerText(),
-    /仍向光彎曲/,
-  );
-  assert.match(
-    await p.locator("#originalHypothesis").innerText(),
-    /沒有頂端也可同樣延長/,
-  );
+  assert.equal(await p.locator("#originalHypothesis").count(), 0);
+  assert.equal(await p.locator("#reflectionCard h3").innerText(), "學習反思");
+  assert.equal(await p.locator('label[for="reflection"]').innerText(), "試運用學習重點所學，解釋圖中胚芽鞘為何會向右彎曲。");
+  assert.equal(await p.locator("#reflectionContext svg").count(), 1);
+  assert.equal(await p.locator('#reflectionContext [data-stem="before"]').count(), 0);
+  assert.equal(await p.evaluate(() => document.querySelector("#reflectionContext svg").outerHTML === document.querySelector('#contextPlant [data-stem="after"]').closest("svg").outerHTML), true);
+  assert.doesNotMatch(await p.locator("#reflectionCard").innerText(), /原始假說|原始預測|原始理由|修訂/);
   assert(await p.locator("#downloadPDF").isDisabled());
   assert.equal(await p.locator("#knowledgeName,#referenceDesign").count(), 0);
   assert(await p.locator("#downloadPDF").isDisabled());
   await reminder(p, "#saveReflection", /學習反思/, "reflection");
   await p.fill(
     "#reflection",
-    "主探究原始假說需要修訂：A與B表明頂端遮光後仍延長但沒有明顯向光彎曲，支持頂端感光。延伸1原預測需要修訂：A延長而C沒有明顯延長，頂端可能產生促進生長的物質X。延伸2原預測方向不符：G與H顯示左側延長較多向右彎曲。生長素是生長激素，頂端的生長訊號可向下傳遞；光照下右側背光側細胞延長較多使幼芽向左彎曲，屬正向光性。這些實驗沒有直接鑑定物質或測量光照下分布。",
+    "圖中光源在右側。頂端感受光照，生長素在左側背光側較多並向下傳遞，令左側細胞延長較多，所以胚芽鞘向右側光源彎曲，屬正向光性。",
   );
   await p.click("#saveReflection");
   assert(await p.locator("#reflection").isDisabled());
@@ -423,6 +421,9 @@ async function flow(p, student = true) {
   assert.match(report, /✓/);
   assert.doesNotMatch(report, /整體分數|SPS 總分/);
   assert.doesNotMatch(report, /初步想法/);
+  assert.doesNotMatch(report, /單側光與物質 X 的推論/);
+  assert.match(report, /試運用學習重點所學，解釋圖中胚芽鞘為何會向右彎曲。/);
+  assert.equal(await p.evaluate(() => document.querySelector("#printReport .reflection-context svg").outerHTML === document.querySelector("#reflectionContext svg").outerHTML), true);
   assert.match(
     await p.evaluate(() =>
       newReport({
@@ -564,6 +565,14 @@ async function flow(p, student = true) {
       score: 2,
       report: true,
     });
+    const version16 = await p.evaluate(() => {
+      const r = structuredClone(records()[0]);
+      r.experimentVersion = 16;
+      r.form.extLightInference = "保留舊版單側光推論";
+      const report = newReport(r);
+      return {valid:valid(r), oldAnswer:report.includes(r.form.extLightInference), oldReflection:report.includes("修訂三段原始預測"), newPrompt:report.includes(REFLECTION_PROMPT)};
+    });
+    assert.deepEqual(version16, {valid:true, oldAnswer:true, oldReflection:true, newPrompt:false});
     const version5 = await p.evaluate(() => {
       const r = structuredClone(records()[0]);
       r.experimentVersion = 5;

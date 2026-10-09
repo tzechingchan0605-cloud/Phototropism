@@ -710,6 +710,22 @@ A、B、C 三組遮光處理、單側光源及固定條件清楚；圖片與文�
 左	left
 右	right
 延伸分析	Extension analysis
+植物因光照方向而產生的定向生長反應稱為	Directional plant growth in response to light direction is called
+「向光性」	"phototropism"
+；向光源生長屬於「正向光性」。	; growth towards light is called "positive phototropism".
+在這個燕麥胚芽鞘模型中，	In this oat coleoptile model,
+參與	helps
+感受單側光照	sense light from one side
+本探究中暫稱的「物質 X」，可結合其他研究理解為	Other research helps us understand the substance called "substance X" in this inquiry as
+。生長素是影響植物生長的激素；頂端可產生能	. Auxin is a hormone that affects plant growth; the tip can produce a growth-promoting effect that
+向下傳遞	passes downwards
+的生長促進作用。	.
+單側光照下，	With light from one side,
+背光側生長素較多，該側細胞延長較多，使胚芽鞘向光彎曲	more auxin is found on the shaded side, so cells on that side elongate more, making the coleoptile bend towards light
+解釋圖中胚芽鞘向右彎曲的原因……	Explain why the coleoptile in the diagram bends to the right...
+第一次開始實驗前，系統會固定保存完整原始假說及理由，作為探究紀錄。	Your full original hypothesis and reason will be saved before your first experiment as part of your inquiry record.
+試運用學習重點所學，解釋圖中胚芽鞘為何會向右彎曲。	Use what you have learnt from the learning points to explain why the coleoptile in the diagram bends to the right.
+圖中光源在右側，胚芽鞘頂端感受單側光照。生長素移向左側（背光側）並向下傳遞，令左側細胞延長較多，因此胚芽鞘向右側光源彎曲，屬正向光性。由教師評閱，不自動判錯。	The light source is on the right, and the coleoptile tip senses light from one side. Auxin moves towards the left (shaded side) and passes downwards, causing cells on the left to elongate more. The coleoptile therefore bends towards the light on the right, showing positive phototropism. The teacher reviews this; it is not automatically marked wrong.
 `
     .trim()
     .split("\n")

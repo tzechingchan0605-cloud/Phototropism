@@ -364,7 +364,7 @@ async function saveExcel(page, target) {
       Object.entries(EXT_ANSWERS),
     ))
       await page.selectOption(`#${id}`, value);
-    await page.fill("#extLightInference", "單側光可能使物質X移向背光側並向下傳遞；背光側延長較多，因此向光彎曲。");
+    assert.equal(await page.locator("#extLightInference").count(), 0);
     await noChineseSystem(page);
     await page.click("#submitInvestigation");
     assert.match(dialogs.at(-1).message, /After submission/);
@@ -377,13 +377,11 @@ async function saveExcel(page, target) {
       await page.locator("#learningCard").innerText(),
       /hormone(?!（)/i,
     );
-    assert.equal(
-      await page
-        .locator("#originalHypothesis [data-student-text]")
-        .first()
-        .innerText(),
-      "光源",
-    );
+    assert.equal(await page.locator("#originalHypothesis").count(), 0);
+    assert.equal(await page.locator("#reflectionCard h3").innerText(), "Learning reflection");
+    assert.match(await page.locator('label[for="reflection"]').innerText(), /why the coleoptile（胚芽鞘） in the diagram bends to the right/);
+    assert.equal(await page.locator('#reflectionContext [data-stem="after"]').count(), 1);
+    assert.equal(await page.locator('#reflectionContext [data-stem="before"]').count(), 0);
     await page.fill("#reflection", "我的理由");
     await page.click("#saveReflection");
     await page.evaluate(() => flushSync());
@@ -413,7 +411,6 @@ async function saveExcel(page, target) {
       "頂端原文",
       "向右彎曲",
       "我的理由",
-      "單側光可能使物質X移向背光側並向下傳遞；背光側延長較多，因此向光彎曲。",
     ])
       assert(studentAnswers.includes(value), `PDF must preserve ${value}`);
     assert(
@@ -495,7 +492,7 @@ async function saveExcel(page, target) {
     assert.equal(cloudRecord.form.reflection, "我的理由");
     assert.equal(cloudRecord.initialDesign.form.hypothesisPart, "頂端以下位置");
     assert.equal(cloudRecord.extension.initialPrediction.reason, "向右彎曲");
-    assert.equal(cloudRecord.experimentVersion, 16);
+    assert.equal(cloudRecord.experimentVersion, 17);
     assert.deepEqual(Object.keys(cloudRecord.observations), ["A", "B", "D"]);
     assert.equal(cloudRecord.tipInquiry.initialPrediction.prediction, "same");
     assert.equal(cloudRecord.tipInquiry.initialPrediction.reason, "頂端原文");

@@ -31,7 +31,7 @@ window.VL3Language = (() => {
     extFair: "說明需要保持相同的條件……",
     extEvidence: "引用比較，解釋你的推論……",
     extControl: "描述你的額外對照……",
-    reflection: "回顧原始預測，用證據解釋你的修訂……",
+    reflection: "解釋圖中胚芽鞘向右彎曲的原因……",
   };
   const terms =
     /\b(coleoptiles?|phototropism|auxins?|agar|elongation|elongations|elongate|elongates|elongated|elongating|opaque)\b/gi;
@@ -137,7 +137,7 @@ window.VL3Language = (() => {
     const source =
       previous && node.data === previous.rendered ? previous.source : node.data;
     const translated =
-      language === "en" && /[\u3400-\u9fff]/.test(source)
+      language === "en" && /[\u3400-\u9fff；：。、，]/.test(source)
         ? source.match(/^\s*/)[0] + t(source) + source.match(/\s*$/)[0]
         : source;
     originals.set(node, { source, rendered: translated });

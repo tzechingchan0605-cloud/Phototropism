@@ -26,7 +26,7 @@ assert row[headers['延伸一公平比較']].value in (None, '')
 assert row[headers['物質 X 待測想法']].value in (None, '')
 assert '頂端以下位置' in row[headers['原始假說']].value
 assert '而其他部位仍然受光' in row[headers['原始假說']].value
-assert row[headers['單側光與物質 X 的推論']].value=='單側光可能使物質X移向背光側並向下傳遞；背光側延長較多，因此向光彎曲。'
+assert row[headers['單側光與物質 X 的推論']].value in (None, '')
 assert [row[headers[name]].value for name in ['左側物質 X 的量','左側細胞延長','胚芽鞘彎曲方向']]==['多','多','右']
 assert w.calculation.fullCalcOnLoad
 assert any(isinstance(cell.value,str) and cell.value.startswith('=') for row in w['教師評分'] for cell in row)
@@ -39,7 +39,8 @@ assert [row[7].value for row in student_rows] == ['主探究']*3+['延伸一']*2
 chunks = w['原始與遞交快照']
 record_id = row[headers['紀錄識別碼']].value
 record = json.loads(''.join(part[2].value for part in chunks.iter_rows(min_row=2) if part[0].value == record_id))
-assert record['experimentVersion'] == 16
+assert record['experimentVersion'] == 17
+assert 'extLightInference' not in record['form']
 assert list(record['observations']) == ['A','B','D']
 tip = record['tipInquiry']
 assert tip['initialPrediction']['prediction'] == 'same'

@@ -477,9 +477,26 @@ button {
   break-inside: avoid;
   margin: 18px 0;
 }
-.reflection-original {
-  border-left: 4px solid var(--teal);
-  padding-left: 16px;
+.reflection-context {
+  width: min(100%, 320px);
+  margin: 20px auto;
+  text-align: center;
+}
+.reflection-context figcaption {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.learning-points {
+  font-size: 17px;
+  line-height: 1.9;
+}
+.learning-points li {
+  margin-bottom: 10px;
+}
+.learning-highlight {
+  color: #c22b32;
+  font-weight: 700;
 }
 .teacher-tag {
   font-size: 12px;

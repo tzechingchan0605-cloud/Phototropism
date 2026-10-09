@@ -45,7 +45,7 @@ assert a['AM2'].value in (None, '')
 assert a['AN2'].value in (None, '')
 assert a['AO2'].value in (None, '')
 assert a['R2'].value in (None, '')
-assert a['AP2'].value=='單側光可能使物質X移向背光側並向下傳遞；背光側延長較多，因此向光彎曲。'
+assert a['AP2'].value in (None, '')
 assert a['AJ2'].font.color.rgb==a['AK2'].font.color.rgb=='FF173E34'
 assert a['AN2'].font.color.rgb=='FF173E34'
 assert w.calculation.fullCalcOnLoad and w.calculation.forceFullCalc
@@ -117,7 +117,8 @@ assert [a[c+'2'].value for c in ('AQ','AR','AS')]==['多','多','右']
 assert all(a[c+'2'].font.color.rgb=='FF00834A' for c in ('AQ','AR','AS'))
 chunks=w['原始與遞交快照']
 r=json.loads(''.join(chunks.cell(i,3).value for i in range(2,chunks.max_row+1)))
-assert r['experimentVersion']==16
+assert r['experimentVersion']==17
+assert 'extLightInference' not in r['form']
 assert list(r['observations'])==list(r['firstObservations'])==['A','B','D']
 assert r['firstObservations']['D']['direction']=='straight'
 assert r['observations']['D']['direction']=='left'
