@@ -1344,7 +1344,7 @@ function scoringWorkbook(all) {
     [
       "實驗操作",
       2,
-      "新版延伸四組角度與教學模型相差不超過3°，每組0.5；量度方法與裝置品質仍由教師評閱。不以點擊或用時評分。",
+      "延伸二 G、H 接受33–37°（35° ±2°），E、F 沿用0° ±3°；每組0.5。量度方法與裝置品質仍由教師評閱。不以點擊或用時評分。",
     ],
     [
       "裝置設計",
@@ -1706,7 +1706,7 @@ async function exportExcel() {
           excelCell(
             final?.angle ?? "",
             "conducting",
-            final ? Math.abs(final.angle - model.angle) <= 3 : null,
+            final ? extensionAngleCorrect(id, final.angle) : null,
           ),
           excelCell(
             DIRECTIONS[final?.direction] || "",

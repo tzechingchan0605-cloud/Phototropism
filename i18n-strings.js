@@ -612,6 +612,7 @@ VL3 · 胚芽鞘的向光性	VL3 · Coleoptile phototropism
 雲端執行失敗	The cloud action failed.
 培養後	After growth
 教學模型；±3°	Teaching model; ±3°
+教學模型；±2°	Teaching model; ±2°
 教學模擬	Teaching simulation
 未選擇部位	Part not chosen
 未填寫部位	Part not entered

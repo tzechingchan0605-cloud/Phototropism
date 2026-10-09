@@ -450,6 +450,14 @@ async function flow(p, student = true) {
       return { angle: angleScore(r), graph: graphScore(r) };
     });
     assert.deepEqual(check, { angle: 1.5, graph: null });
+    const boundaries = await p.evaluate(() => [32, 33, 35, 37, 38].map(angle => {
+      const record = structuredClone(state);
+      record.extension.readings.G.angle = record.extension.readings.H.angle = angle;
+      const report = new DOMParser().parseFromString(newReport(record), "text/html");
+      const correct = id => [...report.querySelectorAll(".report-answer")].find(answer => answer.querySelector("strong")?.textContent === id + " 最終角度").querySelector("b").className;
+      return {angle, score: angleScore(record), g: correct("G"), h: correct("H")};
+    }));
+    assert.deepEqual(boundaries, [32, 33, 35, 37, 38].map(angle => ({angle, score: angle >= 33 && angle <= 37 ? 2 : 1, g: angle >= 33 && angle <= 37 ? "answer-correct" : "answer-wrong", h: angle >= 33 && angle <= 37 ? "answer-correct" : "answer-wrong"})));
   }
   return await p.evaluate(() => structuredClone(state));
 }
