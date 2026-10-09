@@ -153,7 +153,7 @@ function fresh(profile = null) {
   return {
     moduleId: MODULE_ID,
     schemaVersion: 1,
-    experimentVersion: 17,
+    experimentVersion: 18,
     id: crypto.randomUUID(),
     profile,
     createdAt: new Date().toISOString(),
@@ -199,6 +199,7 @@ function message(text) {
 }
 function firstEmptyField(ids) {
   const id = ids.find((id) => !$("#" + id).value.trim());
+  if (id === "extPosition") return "#extPosition-position";
   return id ? "#" + id : null;
 }
 function remind(text, selector) {

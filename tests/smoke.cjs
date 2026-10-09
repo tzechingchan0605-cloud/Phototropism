@@ -120,7 +120,7 @@ async function flow(p, student = true) {
   await p.click("#saveDrawing");
   await p.click("#toExperiment");
   assert(await p.locator("#phase-3").isVisible());
-  assert.equal(await p.evaluate(() => state.experimentVersion), 17);
+  assert.equal(await p.evaluate(() => state.experimentVersion), 18);
   assert.deepEqual(await p.evaluate(() => MAIN_IDS), ["A", "B", "D"]);
   assert.equal(await p.locator("#bench .specimen").count(), 3);
   assert.equal(await p.locator("#growth-C").count(), 0);
@@ -278,7 +278,8 @@ async function flow(p, student = true) {
   assert(await p.locator("#learningReveal").isHidden());
   await p.click("#toAgar");
   assert(await p.locator("#agarTransition").isVisible());
-  assert.equal(await p.locator("#agarTransition").innerText(), "頂端可能產生能向下傳遞的物質 X，促進下方延長；這個想法仍需測試。");
+  assert.equal((await p.locator("#agarTransition").innerText()).replace(/\s/g, ""), "頂端可能產生能向下傳遞的物質X，促進下方延長；這個想法仍需測試。");
+  assert.doesNotMatch(await p.locator("#extensionSection").innerText(), /本段分開兩項公平比較/);
   const firstTipAnalysis = await p.evaluate(() =>
     structuredClone(state.tipInquiry.firstAnalysis),
   );
@@ -300,11 +301,23 @@ async function flow(p, student = true) {
   await p.selectOption("#extPrediction", "left");
   await p.fill("#extReason", "我預測接觸瓊脂的一側會向該側生長。");
   assert.equal(await p.locator("#extFair,#angleExample").count(), 0);
+  assert(await p.locator("#ruler-hint-G").isHidden());
+  assert(await p.locator("#ruler-hint-H").isHidden());
+  assert.equal(await p.locator("#ruler-hint-E,#ruler-hint-F").count(), 0);
   await p.emulateMedia({ reducedMotion: "no-preference" });
   const initialLengths = await p.locator("[data-ext-stem]").evaluateAll(stems => stems.map(stem => stem.getTotalLength()));
   await p.click("#runExtension");
   assert(await p.locator("#confirmExtension").isDisabled());
+  assert(await p.locator("#ruler-hint-G").isHidden());
   await p.waitForFunction(() => extensionHasRun);
+  assert(await p.locator("#ruler-hint-G").isVisible());
+  assert(await p.locator("#ruler-hint-H").isVisible());
+  await p.selectOption("#extensionView", "before");
+  assert(await p.locator("#ruler-hint-G").isHidden());
+  assert(await p.locator("#ruler-hint-H").isHidden());
+  await p.selectOption("#extensionView", "after");
+  assert(await p.locator("#ruler-hint-G").isVisible());
+  assert(await p.locator("#ruler-hint-H").isVisible());
   const finalLengths = await p.locator("[data-ext-stem]").evaluateAll(stems => stems.map(stem => stem.getTotalLength()));
   assert.equal(finalLengths[0], initialLengths[0], "E with blank agar must not elongate");
   assert(finalLengths.slice(1).every((length, index) => length > initialLengths[index + 1]), "F, G and H with treated agar must elongate");
@@ -328,6 +341,7 @@ async function flow(p, student = true) {
   for (const id of ["E", "F", "G", "H"]) {
     const angle = id === "G" ? 30 : id === "H" ? -35 : 0;
     await p.locator("#ruler-" + id).fill(String(angle));
+    if (["G", "H"].includes(id)) assert(await p.locator("#ruler-hint-" + id).isHidden());
     await p.click("#read-angle-" + id);
     assert.equal(
       await p.inputValue("#ext-angle-" + id),
@@ -359,11 +373,13 @@ async function flow(p, student = true) {
   assert.match(await p.locator("#ext-plant-G").innerHTML(), /開始時/);
   await p.selectOption("#extensionView", "after");
   await reminder(p, "#submitInvestigation", /延伸分析/, "extEF");
-  for (const [id, v] of Object.entries({
-    extEF: "transfer",
-    extPosition: "position",
-  }))
-    await p.selectOption("#" + id, v);
+  await p.selectOption("#extEF", "transfer");
+  await reminder(p, "#submitInvestigation", /延伸分析/, "extPosition-position");
+  await p.check("#extPosition-noEffect");
+  assert.equal(await p.evaluate(() => state.form.extPosition), "noEffect");
+  await p.check("#extPosition-position");
+  assert.equal(await p.evaluate(() => state.form.extPosition), "position");
+  assert.equal(await p.locator(".cloze-question legend").count(), 0);
   assert.equal(await p.locator("#extSides").count(), 0);
   await reminder(p, "#submitInvestigation", /延伸分析/, "extXAmount");
   await p.selectOption("#extXAmount", "more");
@@ -466,7 +482,7 @@ async function flow(p, student = true) {
       const original = inferenceScore(record);
       record.form.extBendDirection = "left";
       const wrongReport = new DOMParser().parseFromString(newReport(record), "text/html");
-      const question = [...wrongReport.querySelectorAll(".report-answer")].find(answer => answer.querySelector("strong")?.textContent === EXT_CLOZE_TITLE);
+      const question = wrongReport.querySelector("[data-cloze-report]");
       return {original, partial:inferenceScore(record), wrong:question.querySelector("b").className};
     });
     assert.deepEqual(cloze, {original:2,partial:1.9,wrong:"answer-wrong"});
@@ -529,6 +545,7 @@ async function flow(p, student = true) {
     assert(final.reflectionSubmittedAt);
     assert(await p.evaluate(() => flushSync()));
     await p.click("#newSession");
+    assert.equal(await p.locator('[name="extPositionChoice"]:checked').count(), 0);
     assert.equal(await p.inputValue("#hypothesisPart"), "");
     assert.equal(await p.evaluate(() => extensionRunning), false);
     assert.equal(await p.evaluate(() => tipRunning), false);

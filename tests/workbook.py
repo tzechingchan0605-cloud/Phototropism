@@ -117,7 +117,7 @@ assert [a[c+'2'].value for c in ('AQ','AR','AS')]==['多','多','右']
 assert all(a[c+'2'].font.color.rgb=='FF00834A' for c in ('AQ','AR','AS'))
 chunks=w['原始與遞交快照']
 r=json.loads(''.join(chunks.cell(i,3).value for i in range(2,chunks.max_row+1)))
-assert r['experimentVersion']==17
+assert r['experimentVersion']==18
 assert 'extLightInference' not in r['form']
 assert list(r['observations'])==list(r['firstObservations'])==['A','B','D']
 assert r['firstObservations']['D']['direction']=='straight'

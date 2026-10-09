@@ -362,8 +362,10 @@ async function saveExcel(page, target) {
     await page.click("#confirmExtension");
     for (const [id, value] of await page.evaluate(() =>
       Object.entries(EXT_ANSWERS),
-    ))
-      await page.selectOption(`#${id}`, value);
+    )) {
+      if (id === "extPosition") await page.check(`#extPosition-${value}`);
+      else await page.selectOption(`#${id}`, value);
+    }
     assert.equal(await page.locator("#extLightInference").count(), 0);
     await noChineseSystem(page);
     await page.click("#submitInvestigation");
@@ -492,7 +494,7 @@ async function saveExcel(page, target) {
     assert.equal(cloudRecord.form.reflection, "我的理由");
     assert.equal(cloudRecord.initialDesign.form.hypothesisPart, "頂端以下位置");
     assert.equal(cloudRecord.extension.initialPrediction.reason, "向右彎曲");
-    assert.equal(cloudRecord.experimentVersion, 17);
+    assert.equal(cloudRecord.experimentVersion, 18);
     assert.deepEqual(Object.keys(cloudRecord.observations), ["A", "B", "D"]);
     assert.equal(cloudRecord.tipInquiry.initialPrediction.prediction, "same");
     assert.equal(cloudRecord.tipInquiry.initialPrediction.reason, "頂端原文");

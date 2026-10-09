@@ -494,9 +494,52 @@ button {
 .learning-points li {
   margin-bottom: 10px;
 }
-.learning-highlight {
+.learning-highlight,
+.inquiry-highlight {
   color: #c22b32;
   font-weight: 700;
+}
+.extension-position-question {
+  border: 0;
+  padding: 0;
+}
+.extension-position-question legend {
+  padding: 0;
+  font-weight: 600;
+}
+.extension-position-question label {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-weight: 400;
+}
+.extension-position-question input[type="radio"] {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+}
+.ruler-control {
+  display: block;
+  position: relative;
+  margin-top: 24px;
+}
+.ruler-hint {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 22px;
+  height: 24px;
+  margin-left: -11px;
+  color: #c22b32;
+  pointer-events: none;
+  animation: ruler-hint-bounce 0.9s ease-in-out infinite;
+}
+@keyframes ruler-hint-bounce {
+  0%, 100% { transform: translateY(-5px); }
+  50% { transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ruler-hint { animation: none; }
 }
 .teacher-tag {
   font-size: 12px;

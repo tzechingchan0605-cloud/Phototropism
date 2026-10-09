@@ -710,6 +710,36 @@ A、B、C 三組遮光處理、單側光源及固定條件清楚；圖片與文�
 左	left
 右	right
 延伸分析	Extension analysis
+1. 比較 A 與 B：	1. Compare A and B: after
+後有甚麼不同？	, what changes?
+2. 比較 A 與 C：下部	2. Compare A and C: when the lower part
+直接受光，是否仍會彎曲？	receive light directly, does the coleoptile still bend?
+3. 哪個部位可能	3. Which part may
+後，與完整胚芽鞘相比，你預測延長表現如何？	, what elongation do you predict compared with a complete coleoptile?
+可能產生能	may produce and
+物質 X	substance X
+，促進下方	, promoting
+；這個想法仍需測試。	below; this idea still needs to be tested.
+研究員準備了	Researchers have prepared
+曾接觸頂端的瓊脂	agar that has been in contact with coleoptile tips
+，讓你測試這種作用能否	to test whether this effect can be
+傳遞	transferred
+，以及作用位置如何	and how its position
+影響彎曲	affects bending
+兩種瓊脂外觀相同。	Both types of agar look the same.
+未接觸	has not been in contact with
+曾接觸	has been in contact with
+胚芽鞘頂端；	coleoptile tips;
+胚芽鞘頂端。瓊脂可讓一些物質進入及通過。	coleoptile tips. Some substances can enter and pass through agar.
+經處理瓊脂的放置位置影響胚芽鞘的彎曲方向。	The position of treated agar affects the direction of coleoptile bending.
+經處理瓊脂的放置位置不影響胚芽鞘的彎曲方向。	The position of treated agar does not affect the direction of coleoptile bending.
+經處理瓊脂的放置位置	The position of treated agar
+影響胚芽鞘的彎曲方向。	affect the direction of coleoptile bending.
+將處理瓊脂放在切去頂端的胚芽鞘	When treated agar is placed on the
+時，與右側相比，左側會獲得較	side of a coleoptile with its tip removed, compared with the right side, the left side receives
+的物質 X，令左側	substance X, causing cells on the left to
+瓊脂作用推論	Inference about the action of agar
+左側	left
 植物因光照方向而產生的定向生長反應稱為	Directional plant growth in response to light direction is called
 「向光性」	"phototropism"
 ；向光源生長屬於「正向光性」。	; growth towards light is called "positive phototropism".

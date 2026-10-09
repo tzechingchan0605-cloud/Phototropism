@@ -111,9 +111,9 @@ window.VL3Language = (() => {
     return source
       .replace(phrases, (key) => dictionary[key])
       .replace(
-        /[；：。、，]/g,
+        /[；：。、，？]/g,
         (mark) =>
-          ({ "；": "; ", "：": ": ", "。": ".", "、": ", ", "，": ", " })[mark],
+          ({ "；": "; ", "：": ": ", "。": ".", "、": ", ", "，": ", ", "？": "?" })[mark],
       );
   }
   function t(value) {
@@ -137,8 +137,8 @@ window.VL3Language = (() => {
     const source =
       previous && node.data === previous.rendered ? previous.source : node.data;
     const translated =
-      language === "en" && /[\u3400-\u9fff；：。、，]/.test(source)
-        ? source.match(/^\s*/)[0] + t(source) + source.match(/\s*$/)[0]
+      language === "en" && /[\u3400-\u9fff；：。、，？]/.test(source)
+        ? source.match(/^\s*/)[0] + (parent.hasAttribute("data-en") ? addSupport(parent.getAttribute("data-en")) : t(source)) + source.match(/\s*$/)[0]
         : source;
     originals.set(node, { source, rendered: translated });
     if (node.data !== translated) node.data = translated;
@@ -199,6 +199,8 @@ window.VL3Language = (() => {
       )
         limit = 114;
       const style = getComputedStyle(text);
+      const labelWidth = Number(text.getAttribute("data-label-width"));
+      if (labelWidth > 0) limit = labelWidth;
       measurement.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
       if (
         measurement.measureText(text.textContent).width > limit &&
