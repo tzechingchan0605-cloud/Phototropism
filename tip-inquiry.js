@@ -63,7 +63,7 @@ function tipTableHTML(observations = {}, record) {
 }
 function initTipInquiry() {
   $("#tipSection").innerHTML = `
-  <article class="vl3-card"><p class="card-kicker">04 · 延伸探究一</p><h3>頂端除了感受光照，是否也影響延長？</h3>
+  <article class="vl3-card"><p class="card-kicker">04 · 延伸探究一</p><h3>頂端除了感受光照，是否也影響胚芽鞘的生長／延長？</h3>
   <p>透過遮光比較實驗，我們確認了植物的感光部位，但試想想頂端是否還有其他作用？這次加入新裝置，只改變「頂端是否存在」，比較完整的 A 與切去頂端的 D。</p>
   ${selectHTML("tipPrediction", TIP_PREDICTIONS, "", "切去頂端後，與完整胚芽鞘相比，你預測延長表現如何？")}
   <label for="tipReason">我的理由</label><textarea id="tipReason" maxlength="1500"></textarea>
