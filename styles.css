@@ -344,6 +344,10 @@ button {
 .muted {
   color: var(--muted);
 }
+.materials-note {
+  color: #6b7280;
+  font-size: 13px;
+}
 .notice {
   background: var(--mint);
   padding: 14px;

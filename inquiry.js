@@ -158,7 +158,7 @@ function initExtension() {
     <p id="agarTransition" class="notice">頂端可能產生能向下傳遞的物質 X，促進下方延長；這個想法仍需測試。</p>
     <article class="vl3-card"><p class="card-kicker">04 · 延伸探究二</p><h3>物質 X 能否傳遞生長作用？位置如何影響彎曲？</h3>
     <p>研究員準備了曾接觸頂端的瓊脂，讓你測試這種作用能否傳遞，以及作用位置如何影響彎曲。</p>
-    <p>延伸二材料：切去頂端的燕麥胚芽鞘 × 4、培養容器 × 4、空白瓊脂 × 1、處理瓊脂 × 3、計時工具 × 1。</p>
+    <p class="materials-note">延伸二材料：切去頂端的燕麥胚芽鞘 × 4、培養容器 × 4、空白瓊脂 × 1、處理瓊脂 × 3、計時工具 × 1。</p>
     <p>兩種瓊脂外觀相同。<strong>空白瓊脂</strong>未接觸胚芽鞘頂端；<strong>處理瓊脂</strong>曾與胚芽鞘頂端接觸。瓊脂可讓一些物質進入及通過。</p>
     ${selectHTML("extPrediction", { left: "向左彎曲", right: "向右彎曲", straight: "保持較直" }, "", "把處理瓊脂放在切頂胚芽鞘左側，你預測它會怎樣生長？")}
     <label for="extReason">我的理由</label><textarea id="extReason" maxlength="1500"></textarea>
