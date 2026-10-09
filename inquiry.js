@@ -637,7 +637,7 @@ function variableReportHTML(record) {
         title,
         selected.map(id => definitions[id]).join("；"),
         EXPECTED[key].map(id => definitions[id]).join("；"),
-        selected.length ? sameSet(selected, EXPECTED[key]) : null,
+        variableCorrect(record, key),
       );
     }).join("");
 }

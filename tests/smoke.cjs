@@ -600,6 +600,35 @@ async function flow(p, student = true) {
     const x = p.waitForEvent("download");
     await p.click("#exportExcel");
     await (await x).saveAs("/tmp/vl3-records.xlsx");
+    const variableWorkbook = p.waitForEvent("download");
+    const exportMarks = await p.evaluate(record => {
+      const fixtures = [
+        ["correct", {iv:[0],dv:[1],cv:[5,4,3,2]}],
+        ["wrong", {iv:[4],dv:[4],cv:[4]}],
+        ["missing", {iv:[0],dv:[1],cv:[2,3,4]}],
+        ["extra", {iv:[0],dv:[1],cv:[0,2,3,4,5]}],
+        ["empty", {iv:[],dv:[],cv:[]}],
+        ["partial", {iv:[4],dv:[],cv:[2,3,4,5]}],
+      ].map(([name, variables]) => ({...record,profile:{...record.profile,name},variables}));
+      const rows = [
+        ["姓名", "獨立變量", "因變量", "控制變量"].map(label => excelCell(label, "classifying")),
+        ...fixtures.map(r => [excelCell(r.profile.name), ...["iv", "dv", "cv"].map(key => variableExcelCell(r, key))]),
+      ];
+      download(workbook([{name:"變量判定",rows},scoringWorkbook(fixtures).sheet]), "variable-marking.xlsx");
+      return fixtures.map(r => {
+        const pdf = new DOMParser().parseFromString(variableReportHTML(r), "text/html");
+        return {
+          pdf:[...pdf.querySelectorAll(".report-answer")].map(answer => answer.querySelector("b")?.textContent || ""),
+          excel:["iv", "dv", "cv"].map(key => variableExcelCell(r, key).value.slice(0,1)),
+        };
+      });
+    }, final);
+    await (await variableWorkbook).saveAs("/tmp/vl3-variable-marking.xlsx");
+    assert.deepEqual(exportMarks.map(row => row.excel), [
+      ["✓","✓","✓"], ["✕","✕","✕"], ["✓","✓","✕"],
+      ["✓","✓","✕"], ["","",""], ["✕","","✓"],
+    ]);
+    assert(exportMarks.every(row => JSON.stringify(row.pdf) === JSON.stringify(row.excel)));
     const legacy = await p.evaluate(() => {
       const r = structuredClone(records()[0]);
       delete r.experimentVersion;

@@ -19,6 +19,7 @@ headers = {cell.value:cell.column - 1 for cell in answers[1]}
 assert [cell.value for cell in answers[1]][35:] == ['延伸一原始預測','延伸一原始理由','延伸一公平比較','延伸一證據限制','物質 X 待測想法','延伸一數據解釋','單側光與物質 X 的推論','左側物質 X 的量','左側細胞延長','胚芽鞘彎曲方向']
 for header, expected in [('姓名','光源'),('班別','學生棒形圖'),('初步觀察','我觀察到……'),('原始理由','光源'),('對照組設計','向左彎曲'),('裝置文字設計','學生實驗裝置設計'),('學習反思','我的理由')]:
     assert row[headers[header]].value == expected, header
+assert [row[headers[header]].value[:1] for header in ['獨立變量','因變量','控制變量']]==['✓']*3
 for header,expected in [('延伸一原始預測','延長表現相近'),('延伸一原始理由','頂端原文')]:
     assert row[headers[header]].value == expected, header
 assert row[headers['延伸一證據限制']].value in (None, '')

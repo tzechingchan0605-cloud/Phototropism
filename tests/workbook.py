@@ -23,6 +23,9 @@ assert a['B2'].value=='陳小明'
 assert '仍向光彎曲' in a['F2'].value
 assert '被動生長' in a['G2'].value
 assert a['H2'].font.color.rgb=='FF00834A'
+assert [a[c+'2'].value for c in ('H','I')]==['✓ 遮光處理','✓ 胚芽鞘的彎曲反應']
+assert a['J2'].value.startswith('✓ ') and '溫度及供水條件' in a['J2'].value
+assert all(a[c+'2'].font.color.rgb=='FF00834A' for c in ('H','I','J'))
 assert a['E2'].font.color.rgb=='FF173E34'
 assert a['Q2'].value in (None, '')
 assert o['D6'].value=='切去頂端' and o['G6'].value=='沒有'
@@ -91,6 +94,27 @@ for target in ['AJ2','AK2']:
     s['L2']=0;assert colour_matches(target)==[1]
     s['L2']=1;assert colour_matches(target)==[2]
 print('PASS: actual XLSX archive, XML, eight sheets, preserved answer/observation columns, ABD main and AC tip observations, embedded design and chart, original hypothesis, first observations, colours, ten manual fields in their original positions, pending vs zero, six SPS totals, knowledge and overall formulas, conditional colours.')
+
+# Actual exported variable cells and scores agree for wrong, omitted and extra choices.
+variable_book=load_workbook('/tmp/vl3-variable-marking.xlsx')
+variable_answers=variable_book['變量判定'];variable_scores=variable_book['教師評分']
+expected=[
+    ('correct',['✓','✓','✓'],[1,1,2]),
+    ('wrong',['✕','✕','✕'],[0,0,0]),
+    ('missing',['✓','✓','✕'],[1,1,0]),
+    ('extra',['✓','✓','✕'],[1,1,0]),
+    ('empty',['','',''],[0,0,0]),
+    ('partial',['✕','','✓'],[0,0,2]),
+]
+for row,(name,marks,scores) in enumerate(expected,2):
+    assert variable_answers.cell(row,1).value==name
+    for col,mark in enumerate(marks,2):
+        cell=variable_answers.cell(row,col)
+        assert (cell.value or '')[:1]==mark
+        assert cell.font.color.rgb=={'✓':'FF00834A','✕':'FFC03030','':'FF173E34'}[mark]
+    assert [variable_scores.cell(row,col).value for col in (8,9,10)]==scores
+assert [variable_answers.cell(3,col).value for col in (2,3,4)]==['✕ 照射時間']*3
+print('PASS: Excel variable ✓/✕ marks, preserved choices, colours and automatic scores for exact, reordered, wrong, omitted, extra and unanswered selections.')
 
 # All students from isolated browsers belong to one teacher export.
 multi=load_workbook('/tmp/vl3-multi.xlsx')

@@ -1184,6 +1184,17 @@ showLogin();
 function sameSet(a, b) {
   return a.length === b.length && b.every((x) => a.includes(x));
 }
+function variableCorrect(record, key) {
+  const selected = record.variables[key];
+  return selected.length ? sameSet(selected, EXPECTED[key]) : null;
+}
+function variableExcelCell(record, key) {
+  const correct = variableCorrect(record, key);
+  const value = record.variables[key]
+    .map(id => variableDefinitions(record)[id]).join("；");
+  const mark = correct === null ? "" : correct ? "✓ " : "✕ ";
+  return excelCell(mark + value, "classifying", correct);
+}
 function colourRule(cell, ref, max) {
   return {
     cell,
@@ -1244,9 +1255,9 @@ function scoringWorkbook(all) {
       class: r.profile.classInfo,
       status: statusOf(r),
       observations: mainObservationScore(r),
-      iv: sameSet(r.variables.iv, EXPECTED.iv) ? 1 : 0,
-      dv: sameSet(r.variables.dv, EXPECTED.dv) ? 1 : 0,
-      cv: sameSet(r.variables.cv, EXPECTED.cv) ? 2 : 0,
+      iv: variableCorrect(r, "iv") ? 1 : 0,
+      dv: variableCorrect(r, "dv") ? 1 : 0,
+      cv: variableCorrect(r, "cv") ? 2 : 0,
       assumptions: sameSet(
         r.assumptions,
         assumptionsFor(r)
@@ -1598,9 +1609,6 @@ async function exportExcel() {
         }),
       ];
     const marks = {
-      7: sameSet(r.variables.iv, EXPECTED.iv),
-      8: sameSet(r.variables.dv, EXPECTED.dv),
-      9: sameSet(r.variables.cv, EXPECTED.cv),
       10: sameSet(
         r.assumptions,
         assumptionsFor(r)
@@ -1622,7 +1630,9 @@ async function exportExcel() {
       if (target && f[id]) marks[20 + j] = f[id] === target;
     });
     answers.push(
-      values.map((v, c) => excelCell(v, headers[c][1], marks[c] ?? null)),
+      values.map((v, c) => c >= 7 && c <= 9
+        ? variableExcelCell(r, ["iv", "dv", "cv"][c - 7])
+        : excelCell(v, headers[c][1], marks[c] ?? null)),
     );
     const n = i + 2;
     [
