@@ -196,7 +196,7 @@ function initExtension() {
     <p><span>研究員準備了</span> <strong class="inquiry-highlight">曾接觸頂端的瓊脂</strong> <span>，讓你測試這種作用能否</span> <strong class="inquiry-highlight">傳遞</strong> <span>，以及作用位置如何</span> <strong class="inquiry-highlight">影響彎曲</strong><span>。</span></p>
     <p class="materials-note">延伸二材料：切去頂端的燕麥胚芽鞘 × 4、培養容器 × 4、空白瓊脂 × 1、處理瓊脂 × 3、計時工具 × 1。</p>
     <p><span>兩種瓊脂外觀相同。</span> <strong>空白瓊脂</strong> <strong class="inquiry-highlight">未接觸</strong> <span>胚芽鞘頂端；</span> <strong>處理瓊脂</strong> <strong class="inquiry-highlight">曾接觸</strong> <span>胚芽鞘頂端。瓊脂可讓一些物質進入及通過。</span></p>
-    ${selectHTML("extPrediction", { left: "向左彎曲", right: "向右彎曲", straight: "保持較直" }, "", "把處理瓊脂放在切頂胚芽鞘左側，你預測它會怎樣生長？")}
+    ${selectHTML("extPrediction", { left: "向左彎曲", right: "向右彎曲", straight: "保持較直" }, "", '<span data-en="If">把</span> <strong class="inquiry-highlight" data-en="treated agar">處理瓊脂</strong> <span>放在切頂胚芽鞘</span> <strong class="inquiry-highlight">左側</strong> <span>，你預測它會怎樣生長？</span>')}
     <label for="extReason">我的理由</label><textarea id="extReason" maxlength="1500"></textarea>
     <button id="runExtension" class="primary">進行物質 X 比較（模擬 24 小時）</button><p id="extensionStatus" role="status">等待預測及理由</p></article>
     <article class="vl3-card" id="extensionResults"><h3>黑暗中的四個延伸二裝置</h3><p>所有胚芽鞘均切去頂端，初始大小相近，置於黑暗；瓊脂大小、培養時間、溫度及供水相同。初始與培養後可切換查看。套上瓊脂不代表機械壓住胚芽鞘。</p><p class="notice">培養時間、逐漸生長動畫及角度均為教學模擬，不是真實量度或精確實驗常數。</p><label>查看狀態<select id="extensionView"><option value="after">目前培養狀態</option><option value="before">培養開始時</option></select></label><div id="extensionBench" class="bench"></div><button id="confirmExtension" class="primary">確認延伸觀察及讀數</button><div id="extensionTable"></div></article>

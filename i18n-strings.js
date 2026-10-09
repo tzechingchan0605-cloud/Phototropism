@@ -740,6 +740,8 @@ A、B、C 三組遮光處理、單側光源及固定條件清楚；圖片與文�
 的物質 X，令左側	substance X, causing cells on the left to
 瓊脂作用推論	Inference about the action of agar
 左側	left
+放在切頂胚芽鞘	is placed on the
+，你預測它會怎樣生長？	side of a coleoptile with its tip removed, how do you predict it will grow?
 植物因光照方向而產生的定向生長反應稱為	Directional plant growth in response to light direction is called
 「向光性」	"phototropism"
 ；向光源生長屬於「正向光性」。	; growth towards light is called "positive phototropism".
