@@ -120,7 +120,7 @@ async function flow(p, student = true) {
   await p.click("#saveDrawing");
   await p.click("#toExperiment");
   assert(await p.locator("#phase-3").isVisible());
-  assert.equal(await p.evaluate(() => state.experimentVersion), 15);
+  assert.equal(await p.evaluate(() => state.experimentVersion), 16);
   assert.deepEqual(await p.evaluate(() => MAIN_IDS), ["A", "B", "D"]);
   assert.equal(await p.locator("#bench .specimen").count(), 3);
   assert.equal(await p.locator("#growth-C").count(), 0);
@@ -362,9 +362,15 @@ async function flow(p, student = true) {
   for (const [id, v] of Object.entries({
     extEF: "transfer",
     extPosition: "position",
-    extSides: "opposite",
   }))
     await p.selectOption("#" + id, v);
+  assert.equal(await p.locator("#extSides").count(), 0);
+  await reminder(p, "#submitInvestigation", /延伸分析/, "extXAmount");
+  await p.selectOption("#extXAmount", "more");
+  await reminder(p, "#submitInvestigation", /延伸分析/, "extCellElongation");
+  await p.selectOption("#extCellElongation", "more");
+  await reminder(p, "#submitInvestigation", /延伸分析/, "extBendDirection");
+  await p.selectOption("#extBendDirection", "right");
   await reminder(p, "#submitInvestigation", /單側光與物質 X 的推論/, "extLightInference");
   await p.fill("#extLightInference", "單側光可能使物質X移向背光側並向下傳遞；背光側延長較多，因此向光彎曲。");
   assert.equal(await p.locator("#extDark,#extLimit,#extEvidence,#extControl").count(), 0);
@@ -454,6 +460,16 @@ async function flow(p, student = true) {
       return { angle: angleScore(r), graph: graphScore(r) };
     });
     assert.deepEqual(check, { angle: 1.5, graph: null });
+    const cloze = await p.evaluate(() => {
+      const record = structuredClone(state);
+      const original = inferenceScore(record);
+      record.form.extBendDirection = "left";
+      const wrongReport = new DOMParser().parseFromString(newReport(record), "text/html");
+      const question = [...wrongReport.querySelectorAll(".report-answer")].find(answer => answer.querySelector("strong")?.textContent === EXT_CLOZE_TITLE);
+      return {original, partial:inferenceScore(record), wrong:question.querySelector("b").className};
+    });
+    assert.deepEqual(cloze, {original:2,partial:1.9,wrong:"answer-wrong"});
+
     const boundaries = await p.evaluate(() => [32, 33, 35, 37, 38].map(angle => {
       const record = structuredClone(state);
       record.extension.readings.G.angle = record.extension.readings.H.angle = angle;
@@ -575,6 +591,8 @@ async function flow(p, student = true) {
       const r = structuredClone(records()[0]);
       r.experimentVersion = 3;
       delete r.form.extLightInference;
+      for (const id of Object.keys(EXT_CLOZE_ANSWERS)) delete r.form[id];
+      r.form.extSides = "opposite";
       for (const id of ["A", "B", "D"])
         Object.assign(r.observations[id], mainModel(id, r));
       r.form.comparison = "AB";
@@ -603,6 +621,8 @@ async function flow(p, student = true) {
       const r = structuredClone(records()[0]);
       r.experimentVersion = 4;
       delete r.form.extLightInference;
+      for (const id of Object.keys(EXT_CLOZE_ANSWERS)) delete r.form[id];
+      r.form.extSides = "opposite";
       for (const id of ["A", "B", "D"])
         Object.assign(r.observations[id], mainModel(id, r));
       r.observations.C = {

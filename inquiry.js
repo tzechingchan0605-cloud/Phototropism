@@ -45,7 +45,9 @@ const NEW_FIELDS = [
   "extReason",
   "extEF",
   "extPosition",
-  "extSides",
+  "extXAmount",
+  "extCellElongation",
+  "extBendDirection",
   "extLightInference",
 ];
 const LEGACY_MAIN_ANSWERS = {
@@ -75,9 +77,13 @@ const PREVIOUS_EXT_ANSWERS = {
   extDark: "unequal",
   extLimit: "limited",
 };
-const EXT_ANSWERS = { extEF: "transfer", extPosition: "position", extSides: "opposite" };
+const VERSION9_EXT_ANSWERS = { extEF: "transfer", extPosition: "position", extSides: "opposite" };
+const EXT_CLOZE_ANSWERS = { extXAmount: "more", extCellElongation: "more", extBendDirection: "right" };
+const EXT_ANSWERS = { extEF: "transfer", extPosition: "position", ...EXT_CLOZE_ANSWERS };
+const EXT_CLOZE_TITLE = "3. 完成句子，解釋處理瓊脂如何影響胚芽鞘的彎曲。";
 function extensionAnswersFor(record) {
-  return record.experimentVersion >= 9 ? EXT_ANSWERS : PREVIOUS_EXT_ANSWERS;
+  if (record.experimentVersion >= 16) return EXT_ANSWERS;
+  return record.experimentVersion >= 9 ? VERSION9_EXT_ANSWERS : PREVIOUS_EXT_ANSWERS;
 }
 let extensionRunning = false,
   extensionHasRun = false,
@@ -157,6 +163,14 @@ function selectHTML(id, values, value = "", label = "") {
     )
     .join("")}</select></label>`;
 }
+function extensionClozeSentence(fill) {
+  return `<span>將處理瓊脂放在切去頂端的胚芽鞘左側時，與右側相比，左側會獲得較</span> ${fill("extXAmount")} <span>的物質 X，令左側細胞延長較</span> ${fill("extCellElongation")} <span>，最終使胚芽鞘向</span> ${fill("extBendDirection")} <span>方彎曲。</span>`;
+}
+function extensionClozeSelect(id) {
+  const labels = {extXAmount:"左側物質 X 的量", extCellElongation:"左側細胞延長", extBendDirection:"胚芽鞘彎曲方向"};
+  const options = id === "extBendDirection" ? {left:"左",right:"右"} : {more:"多",less:"少"};
+  return `<select id="${id}" aria-label="${labels[id]}"><option value="">請選擇</option>${Object.entries(options).map(([value, label]) => `<option value="${value}">${label}</option>`).join("")}</select>`;
+}
 function initExtension() {
   document.querySelector("#extensionSection").innerHTML = `
     <p id="agarTransition" class="notice">頂端可能產生能向下傳遞的物質 X，促進下方延長；這個想法仍需測試。</p>
@@ -172,7 +186,7 @@ function initExtension() {
     <article class="vl3-card" id="extensionAnalysis"><h3>分析物質 X 的作用線索</h3>
     ${selectHTML("extEF", { transfer: "頂端可能產生可轉移的生長促進作用。", agar: "所有瓊脂都會產生相同的生長促進作用。" }, "", "1. E 與 F 的比較支持甚麼？")}
     ${selectHTML("extPosition", { position: "生長作用的位置影響彎曲方向。", noEffect: "放置位置不影響彎曲方向。" }, "", "2. F、G、H 的比較支持甚麼？")}
-    ${selectHTML("extSides", { opposite: "左側延長較多向右彎曲；右側延長較多向左彎曲。", same: "哪側延長較多，就向哪側彎曲。" }, "", "3. 兩側延長差異與彎曲方向有甚麼關係？")}
+    <fieldset class="cloze-question"><legend>${EXT_CLOZE_TITLE}</legend><p>${extensionClozeSentence(extensionClozeSelect)}</p></fieldset>
     <label for="extLightInference">4. 根據以上比較，推論單側光如何影響物質 X 的移動，並使胚芽鞘向光彎曲生長。</label><textarea id="extLightInference" maxlength="2500"></textarea>
     </article>`;
   document.querySelector("#runExtension").onclick = runExtension;
@@ -467,10 +481,21 @@ function mechanismSVG() {
       dots([point(145, middle)]) +
       dots([point(180, middle - 2), point(191, middle - 2), point(180, middle + 2), point(191, middle + 2)]);
   }).join("");
+  const cellLengthArrow = (radius, side) => {
+    const start = 44.8, end = 56;
+    const head = (angle, direction) => {
+      const [x, y] = point(radius, angle), radians = angle * Math.PI / 180;
+      const tx = -Math.sin(radians) * direction, ty = -Math.cos(radians) * direction;
+      const nx = Math.cos(radians), ny = -Math.sin(radians);
+      return `M${(x + tx * 4 + nx * 3).toFixed(1)} ${(y + ty * 4 + ny * 3).toFixed(1)}L${x.toFixed(1)} ${y.toFixed(1)}L${(x + tx * 4 - nx * 3).toFixed(1)} ${(y + ty * 4 - ny * 3).toFixed(1)}`;
+    };
+    return `<g data-cell-length-arrow="${side}" fill="none" stroke="#d94b4b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M${xy(radius, start)}A${radius} ${radius} 0 0 0 ${xy(radius, end)}"/><path d="${head(start, 1)}${head(end, -1)}"/></g>`;
+  };
+  const lengthArrows = cellLengthArrow(116, "lit") + cellLengthArrow(214, "shaded");
   const [tipX, tipY] = point(165, 56);
   return `<svg class="mechanism-svg" viewBox="0 0 820 390" role="img" aria-label="左側光照下，完整頂端的胚芽鞘背光側生長素較多；放大圖顯示背光側細胞延長較多，使胚芽鞘向光彎曲。"><rect x="5" y="5" width="395" height="375" rx="18" fill="#edf8f2"/><rect x="420" y="5" width="395" height="375" rx="18" fill="#edf8f2"/>
   <text x="202" y="35" text-anchor="middle" font-size="17">1 · 左側光照</text><path d="M202 310L202 240C202 196 167 150 133 131" fill="none" stroke="#65a772" stroke-width="26"/><circle data-intact-tip="true" cx="133" cy="131" r="13" fill="#65a772"/><path d="M212 306L212 240C213 191 171 143 139 122" fill="none" stroke="#d5e989" stroke-width="5" stroke-linecap="round"/><g data-auxin-dots="true">${auxin}</g><rect x="30" y="92" width="13" height="55" rx="4" fill="#f3b946"/><path d="M50 120H108M99 112L108 120L99 128" stroke="#bb8725" fill="none"/><text x="34" y="76" font-size="14">光源</text><text x="68" y="178" font-size="14">向左彎曲</text><text x="240" y="115" font-size="14">右側＝背光側</text><text x="240" y="141" font-size="14">生長素較多</text><text x="240" y="167" font-size="14">細胞延長較多</text><path d="M239 178L189 191" fill="none" stroke="#526d71"/><text x="225" y="260" font-size="13">頂端以下彎曲</text><text x="35" y="342" font-size="13">頂端感光 → 生長訊號向下傳遞</text><circle cx="40" cy="363" r="3" fill="#d94b4b"/><text x="52" y="368" font-size="12">紅點＝生長素</text>
-  <text x="618" y="35" text-anchor="middle" font-size="17">2 · 左側光照：細胞放大</text><circle cx="${tipX}" cy="${tipY}" r="40" fill="#e4f3d7" stroke="#65a772" stroke-width="2"/>${cells}<rect x="438" y="170" width="10" height="46" rx="3" fill="#f3b946"/><path d="M455 193H515M507 185L515 193L507 201" fill="none" stroke="#bb8725"/><text x="437" y="155" font-size="13">光源</text><text x="440" y="92" font-size="13">左側＝向光側</text><path d="M529 97L558 144" fill="none" stroke="#526d71"/><text x="695" y="101" font-size="13">右側＝背光側</text><text x="695" y="124" font-size="13">生長素較多</text><path d="M695 132L645 169" fill="none" stroke="#526d71"/><text x="440" y="269" font-size="13">細胞延長較少</text><path d="M533 271L623 278" fill="none" stroke="#526d71"/><text x="704" y="269" font-size="13">細胞延長較多</text><path d="M703 274L671 278" fill="none" stroke="#526d71"/><text x="440" y="342" font-size="13">背光側延長較多 → 向左彎曲</text><text x="440" y="368" font-size="12">細胞與生長素分布為示意</text></svg>`;
+  <text x="618" y="35" text-anchor="middle" font-size="17">2 · 左側光照：細胞放大</text><circle cx="${tipX}" cy="${tipY}" r="40" fill="#e4f3d7" stroke="#65a772" stroke-width="2"/>${cells}${lengthArrows}<rect x="438" y="170" width="10" height="46" rx="3" fill="#f3b946"/><path d="M455 193H515M507 185L515 193L507 201" fill="none" stroke="#bb8725"/><text x="437" y="155" font-size="13">光源</text><text x="440" y="92" font-size="14">向左彎曲</text><text x="695" y="101" font-size="13">右側＝背光側</text><text x="695" y="124" font-size="13">生長素較多</text><path d="M695 132L645 169" fill="none" stroke="#526d71"/><text x="440" y="269" font-size="13">細胞延長較少</text><path d="M533 271L623 278" fill="none" stroke="#526d71"/><text x="704" y="269" font-size="13">細胞延長較多</text><path d="M703 274L671 278" fill="none" stroke="#526d71"/><text x="440" y="342" font-size="13">背光側延長較多 → 向左彎曲</text></svg>`;
 }
 const PREVIOUS_Q_LIMIT = {
   indirect:
@@ -494,6 +519,7 @@ const PREVIOUS_MAIN_QUESTIONS = {
   qLimit: "6. 本實驗的證據限制是甚麼？",
 };
 function questionText(id, record) {
+  if (id === "extSides") return "3. 兩側延長差異與彎曲方向有甚麼關係？";
   if (id === "substancePrediction") return "2. 哪個想法值得下一步測試？";
   if (id === "extDark") return "4. 黑暗下仍可彎曲提供甚麼線索？";
   if (id === "extLimit") return "5. 延伸結果的證據限制是甚麼？";
@@ -507,6 +533,8 @@ function questionText(id, record) {
   );
 }
 function answerOption(id, value, record) {
+  if (Object.hasOwn(EXT_CLOZE_ANSWERS, id)) return (id === "extBendDirection" ? {left:"左",right:"右"} : {more:"多",less:"少"})[value] || "未回答";
+  if (id === "extSides") return {opposite:"左側延長較多向右彎曲；右側延長較多向左彎曲。",same:"哪側延長較多，就向哪側彎曲。"}[value] || "";
   if (id === "substancePrediction") return { possible: "頂端可能產生能向下傳遞的物質 X，促進下方延長；這個想法仍需測試。", proof: "單靠切頂結果，已能確定物質 X 的身分和作用方式。" }[value] || "";
   if (["extFair", "extEvidence", "extControl"].includes(id)) return value || "";
   if (id === "extDark") return { unequal: "彎曲可由不均勻生長造成，並非一定要直接受光才發生。", light: "黑暗下的彎曲必定是光直接推動胚芽鞘。" }[value] || "";
@@ -548,6 +576,12 @@ function reportAnswer(
   studentText = false,
 ) {
   return `<div class="report-answer"><strong>${esc(title)}</strong>${correct === null ? "" : ` <b class="${correct ? "answer-correct" : "answer-wrong"}">${correct ? "✓" : "✕"}</b>`}<p${studentText && value ? " data-student-text" : ""}>${esc(value || "未回答")}</p><p class="report-reference">${correct === null ? "參考說明" : "參考答案"}：${esc(reference)}</p></div>`;
+}
+function extensionClozeReport(record) {
+  const answered = Object.keys(EXT_CLOZE_ANSWERS).every(id => record.form[id]);
+  const correct = Object.entries(EXT_CLOZE_ANSWERS).every(([id, target]) => record.form[id] === target);
+  const sentence = answers => extensionClozeSentence(id => `<span>${esc(answerOption(id, answers[id], record))}</span>`);
+  return `<div class="report-answer"><strong>${EXT_CLOZE_TITLE}</strong>${answered ? ` <b class="${correct ? "answer-correct" : "answer-wrong"}">${correct ? "✓" : "✕"}</b>` : ""}<p>${sentence(record.form)}</p><p class="report-reference"><span>參考答案：</span>${sentence(EXT_CLOZE_ANSWERS)}</p></div>`;
 }
 function newReport(r) {
   const f = r.form,
@@ -615,7 +649,7 @@ function newReport(r) {
   <section class="report-card"><h2>04 · 主探究分析</h2>${questions(mainAnswersFor(r))}${r.experimentVersion < 10 ? open("數據推論", f.evidence, threeStage(r) ? `比較 A–B 及 A–${sampleName("D", r)} 的彎曲方向，說明哪個部位可能感受光。` : "以 A–B、A–C、A–D 的具體比較支持推論，留意傷口、溫度及機械限制。") : ""}</section>
   ${threeStage(r) ? tipReportHTML(r) : ""}
   <section class="report-card"><h2>${threeStage(r) ? "04 · 延伸探究二：物質 X" : "04 · 延伸預測與觀察"}</h2>${open("原始預測", DIRECTIONS[e.initialPrediction?.prediction], "處理瓊脂放左側，模型中左側延長較多而向右彎曲；原始預測由教師按可測試性評閱。")}${open("原始理由", e.initialPrediction?.reason, "合理理由不因結果不符直接判錯。")}${r.experimentVersion < 12 ? open("公平比較", f.extFair, "E–F 均放中央，保持瓊脂大小、胚芽鞘初始大小及狀況、黑暗、溫度、供水及時間相同。") : ""}<h3>首次確認讀數</h3>${firstExt}<h3>最後讀數</h3>${extensionTableHTML(e.readings)}${EXT_IDS.map((id) => reportAnswer(id + " 最終角度", e.readings[id]?.angle === undefined ? "" : e.readings[id].angle + "°", EXT_MODEL[id].angle + "°（教學模型；±" + extensionAngleTolerance(id) + "°）", e.readings[id] ? extensionAngleCorrect(id, e.readings[id].angle) : null)).join("")}${r.experimentVersion < 9 ? `<h3>學生棒形圖</h3>${Object.keys(e.graph).length ? barChartSVG(e.graph) : "未確認"}<p class="report-reference">圖表以學生本身讀數核對；量度準確性另與模型比較。不用鉛直高度差推算延長量。</p>` : ""}</section>
-  <section class="report-card"><h2>${threeStage(r) ? "04 · 延伸二分析" : "04 · 延伸分析"}</h2>${questions(extensionAnswersFor(r))}${r.experimentVersion >= 13 ? open("單側光與物質 X 的推論", f.extLightInference, "單側光可能使物質 X 移向背光側，再向下傳遞，促進背光側細胞延長。背光側延長較多，使胚芽鞘向光彎曲；這是結合比較結果提出的推論，瓊脂實驗並未直接觀察光照下物質 X 的分布。") : ""}${r.experimentVersion < 9 ? open("延伸證據", f.extEvidence, "E–F 支持可轉移的生長促進作用；G–H 支持作用位置影響彎曲方向。") : ""}${r.experimentVersion < 9 ? open("額外對照（選答）", f.extControl, "可把空白瓊脂放左側及右側，以排除單側放置本身的影響。") : ""}</section>
+  <section class="report-card"><h2>${threeStage(r) ? "04 · 延伸二分析" : "04 · 延伸分析"}</h2>${r.experimentVersion >= 16 ? questions({extEF:"transfer",extPosition:"position"}) + extensionClozeReport(r) : questions(extensionAnswersFor(r))}${r.experimentVersion >= 13 ? open("單側光與物質 X 的推論", f.extLightInference, "單側光可能使物質 X 移向背光側，再向下傳遞，促進背光側細胞延長。背光側延長較多，使胚芽鞘向光彎曲；這是結合比較結果提出的推論，瓊脂實驗並未直接觀察光照下物質 X 的分布。") : ""}${r.experimentVersion < 9 ? open("延伸證據", f.extEvidence, "E–F 支持可轉移的生長促進作用；G–H 支持作用位置影響彎曲方向。") : ""}${r.experimentVersion < 9 ? open("額外對照（選答）", f.extControl, "可把空白瓊脂放左側及右側，以排除單側放置本身的影響。") : ""}</section>
   ${r.submittedAt ? `<section class="report-card"><h2>學習重點</h2><p>向光性是因光照方向而產生的定向生長；向光源屬正向光性。頂端參與感光，生長素是影響植物生長的激素。${threeStage(r) ? "探究中的物質 X 可結合其他研究理解為生長素；瓊脂比較本身並未鑑定其身分。" : ""}背光側生長素較多、細胞延長較多，使胚芽鞘向光彎曲。</p>${mechanismSVG()}${r.experimentVersion < 14 ? `<p class="report-reference">本模型未直接鑑定瓊脂內的物質或量得單側光下的生長素分布；名稱及機制由其他研究支持。</p>` : ""}${r.experimentVersion < 14 ? reportAnswer("名稱檢核", answerOption("knowledgeName", f.knowledgeName), "正向光性", f.knowledgeName ? f.knowledgeName === "positive" : null) : ""}</section>` : ""}
   <section class="report-card"><h2>學習反思</h2>${open("實際反思", f.reflection, threeStage(r) ? "引用遮光主探究、頂端比較及瓊脂延伸各一項比較，修訂三段原始預測，連結感光、生長訊號與不均勻延長。由教師評閱，不自動判錯。" : "引用主探究及延伸各一項比較，修訂兩次原始預測，連結感光、生長訊號與不均勻延長。由教師評閱，不自動判錯。")}</section><p class="report-reference">動畫、24 小時及角度為教學模擬。學生報告不顯示分數。</p>`;
 }
@@ -659,13 +693,10 @@ function inferenceScore(r) {
     ...(threeStage(r) ? tipAnswersFor(r) : {}),
     ...extensionAnswersFor(r),
   };
-  return (
-    Math.round(
-      (Object.keys(answers).filter((k) => r.form[k] === answers[k]).length /
-        Object.keys(answers).length) *
-        200,
-    ) / 100
-  );
+  const weight = id => r.experimentVersion >= 16 && Object.hasOwn(EXT_CLOZE_ANSWERS, id) ? 1 / 3 : 1;
+  const possible = Object.keys(answers).reduce((sum, id) => sum + weight(id), 0);
+  const earned = Object.entries(answers).reduce((sum, [id, target]) => sum + (r.form[id] === target ? weight(id) : 0), 0);
+  return Math.round(earned / possible * 200) / 100;
 }
 async function svgPNG(svg) {
   const url = URL.createObjectURL(

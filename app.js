@@ -153,7 +153,7 @@ function fresh(profile = null) {
   return {
     moduleId: MODULE_ID,
     schemaVersion: 1,
-    experimentVersion: 15,
+    experimentVersion: 16,
     id: crypto.randomUUID(),
     profile,
     createdAt: new Date().toISOString(),
@@ -236,6 +236,7 @@ function valid(r) {
     FIELDS.filter(
       (f) =>
         (f !== "extLightInference" || r.experimentVersion >= 13) &&
+        (!Object.hasOwn(EXT_CLOZE_ANSWERS, f) || r.experimentVersion >= 16) &&
         (!NEW_FIELDS.includes(f) || newExperiment(r)) &&
         (!TIP_FIELDS.includes(f) || threeStage(r)),
     ).every((f) => typeof r.form[f] === "string") &&
@@ -1354,7 +1355,7 @@ function scoringWorkbook(all) {
     [
       "結論比較",
       2,
-      "版本7主探究3項、延伸一2項及延伸二5項選擇共2，按答對比例；版本6按原延伸一3項評分；版本5按原主探究5項評分；版本3／4原11項共2，更舊按原比較。",
+      "版本16延伸二第3題的三個填空各佔該題三分之一，整題權重與其他比較題相同，按答對比例計分；版本7主探究3項、延伸一2項及延伸二5項選擇共2，按答對比例；版本6按原延伸一3項評分；版本5按原主探究5項評分；版本3／4原11項共2，更舊按原比較。",
     ],
     [
       "數據解釋",
@@ -1463,6 +1464,9 @@ async function exportExcel() {
     ["substancePrediction", "物質 X 待測想法", "inferring"],
     ["tipEvidence", "延伸一數據解釋", "inferring"],
     ["extLightInference", "單側光與物質 X 的推論", "inferring"],
+    ["extXAmount", "左側物質 X 的量", "inferring"],
+    ["extCellElongation", "左側細胞延長", "inferring"],
+    ["extBendDirection", "胚芽鞘彎曲方向", "inferring"],
   ];
   extraFields.forEach(([, label, category]) => headers.push([label, category]));
   const extensionRows = [
@@ -1546,6 +1550,7 @@ async function exportExcel() {
         f.reflection,
         Math.round(Object.values(r.phaseDurations).reduce((a, b) => a + b, 0)),
         ...extraFields.map(([id]) => {
+          if (id === "extSides" || Object.hasOwn(EXT_CLOZE_ANSWERS, id)) return f[id] ? answerOption(id, f[id], r) : "";
           if (id === "knowledgeName") return f[id] ? ({ positive: "正向光性", negative: "負向光性" }[f[id]] || "") : "";
           if (id === "tipEvidence") return f.tipEvidence || "";
           if (id === "extLightInference") return f.extLightInference || "";

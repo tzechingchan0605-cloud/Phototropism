@@ -697,6 +697,18 @@ A、B、C 三組遮光處理、單側光源及固定條件清楚；圖片與文�
 4. 根據以上比較，推論單側光如何影響物質 X 的移動，並使胚芽鞘向光彎曲生長。	4. Based on these comparisons, infer how light from one side affects the movement of substance X and causes the coleoptile to bend and grow towards the light.
 單側光與物質 X 的推論	Inference about light from one side and substance X
 單側光可能使物質 X 移向背光側，再向下傳遞，促進背光側細胞延長。背光側延長較多，使胚芽鞘向光彎曲；這是結合比較結果提出的推論，瓊脂實驗並未直接觀察光照下物質 X 的分布。	Light from one side may cause substance X to move towards the shaded side and then pass downwards, promoting cell elongation there. Greater elongation on the shaded side causes the coleoptile to bend towards the light. This inference combines the comparisons; the agar experiment did not directly observe the distribution of substance X under light.
+3. 完成句子，解釋處理瓊脂如何影響胚芽鞘的彎曲。	3. Complete the sentence to explain how treated agar affects coleoptile bending.
+將處理瓊脂放在切去頂端的胚芽鞘左側時，與右側相比，左側會獲得較	When treated agar is placed on the left of a coleoptile with its tip removed, compared with the right side, the left side receives
+的物質 X，令左側細胞延長較	substance X, causing cells on the left to elongate
+，最終使胚芽鞘向	and the coleoptile to bend to the
+方彎曲。	side.
+左側物質 X 的量	Amount of substance X on the left
+左側細胞延長	Cell elongation on the left
+胚芽鞘彎曲方向	Coleoptile bending direction
+多	more
+少	less
+左	left
+右	right
 延伸分析	Extension analysis
 `
     .trim()

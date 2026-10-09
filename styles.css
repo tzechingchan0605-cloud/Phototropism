@@ -348,6 +348,25 @@ button {
   color: #6b7280;
   font-size: 13px;
 }
+.cloze-question {
+  border: 0;
+  padding: 0;
+  margin: 14px 0;
+  min-width: 0;
+}
+.cloze-question legend {
+  font-weight: 600;
+  padding: 0;
+}
+.cloze-question p {
+  line-height: 2.8;
+}
+.cloze-question select {
+  display: inline-block;
+  width: auto;
+  margin: 0 4px;
+}
+
 .notice {
   background: var(--mint);
   padding: 14px;

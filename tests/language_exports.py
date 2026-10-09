@@ -16,7 +16,7 @@ assert w.sheetnames == ['學生探究答案','定性觀察紀錄','延伸量度�
 answers = w['學生探究答案']
 row = next(row for row in answers.iter_rows(min_row=2) if row[1].value == '光源')
 headers = {cell.value:cell.column - 1 for cell in answers[1]}
-assert [cell.value for cell in answers[1]][35:] == ['延伸一原始預測','延伸一原始理由','延伸一公平比較','延伸一證據限制','物質 X 待測想法','延伸一數據解釋','單側光與物質 X 的推論']
+assert [cell.value for cell in answers[1]][35:] == ['延伸一原始預測','延伸一原始理由','延伸一公平比較','延伸一證據限制','物質 X 待測想法','延伸一數據解釋','單側光與物質 X 的推論','左側物質 X 的量','左側細胞延長','胚芽鞘彎曲方向']
 for header, expected in [('姓名','光源'),('班別','學生棒形圖'),('初步觀察','我觀察到……'),('原始理由','光源'),('對照組設計','向左彎曲'),('裝置文字設計','學生實驗裝置設計'),('學習反思','我的理由')]:
     assert row[headers[header]].value == expected, header
 for header,expected in [('延伸一原始預測','延長表現相近'),('延伸一原始理由','頂端原文')]:
@@ -27,6 +27,7 @@ assert row[headers['物質 X 待測想法']].value in (None, '')
 assert '頂端以下位置' in row[headers['原始假說']].value
 assert '而其他部位仍然受光' in row[headers['原始假說']].value
 assert row[headers['單側光與物質 X 的推論']].value=='單側光可能使物質X移向背光側並向下傳遞；背光側延長較多，因此向光彎曲。'
+assert [row[headers[name]].value for name in ['左側物質 X 的量','左側細胞延長','胚芽鞘彎曲方向']]==['多','多','右']
 assert w.calculation.fullCalcOnLoad
 assert any(isinstance(cell.value,str) and cell.value.startswith('=') for row in w['教師評分'] for cell in row)
 observations = w['定性觀察紀錄']
@@ -38,7 +39,7 @@ assert [row[7].value for row in student_rows] == ['主探究']*3+['延伸一']*2
 chunks = w['原始與遞交快照']
 record_id = row[headers['紀錄識別碼']].value
 record = json.loads(''.join(part[2].value for part in chunks.iter_rows(min_row=2) if part[0].value == record_id))
-assert record['experimentVersion'] == 15
+assert record['experimentVersion'] == 16
 assert list(record['observations']) == ['A','B','D']
 tip = record['tipInquiry']
 assert tip['initialPrediction']['prediction'] == 'same'
