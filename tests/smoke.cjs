@@ -304,6 +304,11 @@ async function flow(p, student = true) {
   await p.click("#runExtension");
   assert(await p.locator("#confirmExtension").isDisabled());
   await p.waitForFunction(() => extensionHasRun);
+  const agar = await p.locator("[data-agar-block]").evaluateAll(blocks => blocks.map(block => {
+    const matrix = block.transform.baseVal.consolidate().matrix;
+    return { angle: Math.round(Math.atan2(matrix.b, matrix.a) * 180 / Math.PI), width: Number(block.querySelector("rect").getAttribute("width")) };
+  }));
+  assert.deepEqual(agar, [{angle:0,width:18},{angle:0,width:18},{angle:35,width:18},{angle:-35,width:18}]);
   await p.emulateMedia({ reducedMotion: "reduce" });
   const extOriginal = await p.evaluate(() =>
     structuredClone(state.extension.initialPrediction),

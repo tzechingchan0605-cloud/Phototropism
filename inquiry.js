@@ -223,9 +223,9 @@ function extensionGeometry(id, p) {
 }
 function extensionPlant(id, p = 0, ruler = 0, tool = true) {
   const { x, y, signed, stem } = extensionGeometry(id, p);
-  const offset = id === "G" ? -11 : id === "H" ? 11 : 0;
+  const offset = id === "G" ? -8 : id === "H" ? 8 : 0;
   return `<svg class="extension-plant" viewBox="0 0 300 280" role="img" aria-label="延伸裝置 ${id}，黑暗培養示意，請自行觀察及量度"><rect x="1" y="1" width="298" height="276" rx="16" fill="#f2f4f8"/><text x="12" y="274" font-size="12" fill="#526170">黑暗 · ${p === 0 ? "開始時" : "培養後"}</text><path data-ext-stem="${id}" d="${stem}" fill="none" stroke="#58a16b" stroke-width="12"/><path d="${stem}" fill="none" stroke="#a1d38a" stroke-width="3"/>
-  <rect x="${x + offset - 12}" y="${y - 10}" width="24" height="10" rx="2" fill="#b5e4e6" stroke="#7dabad"/><path d="M118 235H182L172 267H128Z" fill="#d6a878"/><rect x="111" y="231" width="78" height="12" rx="4" fill="#af7851"/>
+  <g data-agar-block="${id}" transform="translate(${x} ${y}) rotate(${signed})"><rect x="${offset - 9}" y="-10" width="18" height="10" rx="2" fill="#b5e4e6" stroke="#7dabad"/></g><path d="M118 235H182L172 267H128Z" fill="#d6a878"/><rect x="111" y="231" width="78" height="12" rx="4" fill="#af7851"/>
   ${tool ? protractorSVG(x, y, ruler) : ""}</svg>`;
 }
 function protractorSVG(x, y, angle) {
