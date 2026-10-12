@@ -99,7 +99,7 @@ A 與 C 的已確認觀察	Confirmed observations of A and C
 A–C 支持頂端參與正常延長；切頂造成傷口，仍不能直接確定物質 X 或作用機制。	A–C supports the idea that the tip has a role in normal elongation. Removing the tip causes a wound. This still does not directly identify substance X or its mechanism.
 本段分開兩項公平比較：E–F 只改變瓊脂是否曾接觸頂端，位置同在中央；F–G–H 只改變處理瓊脂的放置位置，瓊脂種類相同。每項比較只改變一個因素。首次開始時固定保存延伸二原始預測及理由。	This extension has two separate fair comparisons. E–F changes only whether the agar has touched a tip, with both blocks in the centre. F–G–H changes only the position of the treated agar, using the same type of agar. Each comparison changes one factor. Your original extension 2 prediction and reason are saved before the first experiment.
 請分類本探究的變量。A–B、A–C、A–D 分別比較頂端遮光、頂端是否存在及下部遮光；每項比較保持其他條件相同。	Sort the variables in this inquiry. A–B compares blocking light at the tip; A–C compares whether the tip is present; A–D compares blocking light below the tip. Keep other conditions the same within each comparison.
-提示：假設是指在沒有直接證據或未經證實的情況下，為了進行探究而先行設定為「正確」的預設條件。	Hint: An assumption is a condition we treat as true to carry out an inquiry, even though it has not been proved or supported by direct evidence.
+假設是指未經證實而被視為正確的條件，用於確保實驗結果的有效性。	An assumption is an unproven condition treated as true to ensure the validity of the experimental results.
 比較遮光處理／部位或頂端是否存在。	Compare the light-blocking treatment / part, or whether the tip is present.
 指定比較（舊版）	Chosen comparison (earlier version)
 沒有明顯延長，沒有明顯彎曲	No clear elongation or bending
@@ -200,6 +200,7 @@ A 與 D：下部遮光處理	A and D: blocking light below the tip
 剪刀 × 1	Scissors × 1
 計時工具 × 1	Timer × 1
 可繪圖、上載相片或填寫文字設計，再按下方「儲存」一併保存。	Draw, upload a photo or write your plan, then press Save below to save them together.
+不用精緻地繪畫所有特徵，簡單繪畫並標示清楚便可。	You do not need to draw every feature in detail. A simple drawing with clear labels is enough.
 實驗裝置繪圖區	Experiment setup drawing area
 ✎ 鉛筆	✎ Pencil
 ⌫ 橡皮擦	⌫ Eraser

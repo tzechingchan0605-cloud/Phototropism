@@ -64,7 +64,7 @@ async function flow(p, student = true) {
   const hint = p.locator("#assumptionDefinition");
   assert.equal(
     await hint.innerText(),
-    "提示：假設是指在沒有直接證據或未經證實的情況下，為了進行探究而先行設定為「正確」的預設條件。",
+    "假設是指未經證實而被視為正確的條件，用於確保實驗結果的有效性。",
   );
   assert(
     await hint.evaluate(
