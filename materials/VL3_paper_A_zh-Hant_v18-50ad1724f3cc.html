@@ -1,0 +1,159 @@
+<!DOCTYPE html><html lang="zh-Hant-HK"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>情境與原始探究設計</title><style>@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+html,body { margin:0; background:#e4e4e4; color:#161616; font-family:"Noto Sans CJK HK","Noto Sans CJK TC",Arial,sans-serif; }
+body { font-size:13px; line-height:1.45; }
+.paper-page { width:210mm; height:297mm; padding:12mm 13mm 11mm; background:white; position:relative; margin:8px auto; break-after:page; overflow:visible; }
+.paper-page:last-child { break-after:auto; }
+.paper-page > header { display:flex; justify-content:space-between; border-bottom:1px solid #555; padding-bottom:5px; margin-bottom:9px; font-size:15px; }
+.paper-page > footer { position:absolute; bottom:7mm; left:13mm; right:13mm; display:flex; justify-content:space-between; font-size:9px; color:#666; }
+.paper-page > main { display:block; }
+h1,h2,h3,p,figure,fieldset,ol,ul { margin:0 0 6px; }
+h2,h3 { font-size:15px; line-height:1.35; }
+h1 { font-size:19px; line-height:1.4; }
+ol,ul { padding-left:22px; } li { margin-bottom:5px; }
+label { display:block; margin-bottom:6px; }
+.vl3-card { margin:0 0 9px; padding:0; border:0; background:none; }
+.card-kicker,.phase-badge { font-size:10px; color:#666; margin-bottom:3px; }
+.muted,.materials-note,.materials-list,.design-hint,.hypothesis-save-note { color:#666; font-size:10px; line-height:1.4; }
+.notice { padding:5px 7px; border:1px solid #888; font-size:11px; }
+.inquiry-highlight,.learning-highlight { color:#a32020; font-weight:700; }
+.identity-fields { display:flex; gap:14px; margin:10px 0 16px; font-size:12px; }
+.identity-fields span { flex:1; white-space:nowrap; }.identity-fields i { display:inline-block; width:55%; border-bottom:1px solid #444; height:15px; }
+.answer-lines { margin:2px 0 7px; width:100%; }
+.answer-lines i { display:block; height:18px; border-bottom:1px solid #888; }
+.drawing-frame { width:100%; height:35mm; border:1px solid #555; margin:5px 0 7px; }
+.circle-options { font-size:12px; white-space:normal; }.circle-options > span { display:inline; }
+.paper-check { font-size:14px; margin-right:4px; }
+.variable-group { border:1px solid #aaa; padding:5px 8px; margin:6px 0; }
+.variable-group legend { font-weight:bold; padding:0 4px; }
+.variable-pills { display:grid; grid-template-columns:1fr 1fr; column-gap:12px; }
+.variable-pills label { margin:1px 0; font-size:12px; }
+[data-vl-source="assumptions"] { display:grid; grid-template-columns:1fr 1fr; gap:3px 12px; margin:4px 0 7px; }
+[data-vl-source="assumptions"] label { font-size:11px; margin:0; }
+.context-comparison { display:flex; align-items:center; justify-content:center; gap:12px; }.context-frame { width:220px; }.context-frame svg { width:100%; height:230px; }.context-transition { width:100px; text-align:center; }.context-transition svg { width:65px; }
+.context-timing-note { text-align:center; }
+.plant-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin:8px 0; }
+.plant-grid figure { border:1px solid #aaa; padding:4px; text-align:center; }.plant-grid figcaption { font-size:11px; font-weight:700; min-height:25px; }.plant-pair { display:flex; }.stage-figure { width:50%; }.stage-figure svg { width:100%; height:135px; }.stage-caption { display:block; font-size:11px; line-height:16px; }
+.four-plants { grid-template-columns:repeat(2,1fr); }.four-plants figcaption { min-height:18px; }.four-plants .plant-pair svg { height:185px; }.four-plants [data-protractor] text { font-size:12px; }
+[data-page="B4"] .plant-grid { gap:4px; margin:5px 0; }
+table { border-collapse:collapse; width:100%; margin:6px 0 9px; table-layout:fixed; }th,td { border:1px solid #aaa; text-align:left; vertical-align:top; padding:5px; overflow-wrap:anywhere; }th { font-weight:700; background:#eee; }th:first-child { width:20%; }
+.observation-table { font-size:11px; }.observation-table th:first-child { width:7%; }.observation-table th:nth-child(2) { width:19%; }.observation-table label { margin:0; }.observation-table .circle-options { font-size:11px; }.observation-table .answer-lines i { height:13px; }.angle-blank { display:block; margin:3px 0; }
+.extension-position-question,.cloze-question { border:0; padding:0; margin:6px 0; }.extension-position-question legend { font-weight:700; }.extension-position-question label { margin:2px 0; }
+.learning-points li { font-size:14px; margin-bottom:12px; }.mechanism-svg { width:100%; height:auto; display:block; margin:12px 0; }
+.reflection-context { margin:8px auto; text-align:center; }.reflection-context svg { width:260px; height:280px; }
+.rubric th:first-child { width:22%; }.rubric th:nth-child(2) { width:8%; }.rubric { font-size:12px; }
+[data-page="B2"] .plant-pair svg { height:150px; }[data-page="B2"] .plant-grid { grid-template-columns:1fr 1fr; margin:4px 0; }[data-page="B2"] .vl3-card { margin-bottom:5px; }[data-page="B2"] .answer-lines i { height:16px; }
+[data-page="B4"] .circle-options { font-size:11px; }
+body[lang="en"] { line-height:1.4; }
+@media print { html,body { background:white; }.paper-page { margin:0; } * { print-color-adjust:exact; -webkit-print-color-adjust:exact; } }
+@media screen and (max-width:820px) { body { width:210mm; } }
+</style></head><body lang="zh-Hant"><section class="paper-page" data-page="A1"><header><b>VL3 · 01 · 了解情境</b><span>A1</span></header><div class="identity-fields"><span><span data-en="Name">姓名</span>：<i></i></span><span><span data-en="Class">班別</span>：<i></i></span><span><span data-en="Student number">學號</span>：<i></i></span></div><main><h1>
+              幼芽為甚麼<span style="color: var(--teal)">向光生長？</span>
+            </h1><div class="vl3-grid">
+            <article class="vl3-card">
+              <p class="card-kicker">生活中的線索</p>
+              <h3>窗邊的胚芽鞘，為甚麼會彎向光？</h3>
+              <p class="muted">
+                本實驗使用燕麥胚芽鞘：包裹並保護內部嫩葉的鞘狀構造，外形較直，方便觀察。
+              </p>
+              <div data-vl-source="contextPlant"><div class="context-comparison">
+    <figure class="context-frame"><svg class="window-seedling" viewBox="0 0 260 270" role="img" xmlns="http://www.w3.org/2000/svg">
+    <rect x="5" y="5" width="250" height="255" rx="16" fill="#f4f8f1"></rect>
+    <path d="M210 65 L58 38 L58 181 L210 172 Z" fill="#f9d779" opacity=".24"></path>
+    <rect x="205" y="45" width="43" height="132" rx="3" fill="#cfeef3" stroke="#7dadae" stroke-width="5"></rect>
+    <circle cx="231" cy="67" r="10" fill="#f6c45d"></circle>
+    <path d="M226 46V176M207 110H247" stroke="#7dadae" stroke-width="4"></path>
+    <path d="M199 181H253" stroke="#87ada7" stroke-width="7" stroke-linecap="round"></path>
+    <path d="M191 98H171M177 92L171 98L177 104" stroke="#c28c1a" stroke-width="2" fill="none"></path>
+    <path data-stem="before" d="M100 207 L100 90" fill="none" stroke="#59a16a" stroke-width="13" stroke-linecap="round"></path>
+    <path d="M100 207 L100 90" fill="none" stroke="#a1d38a" stroke-width="4" stroke-linecap="round"></path>
+    <path d="M28 249H248" stroke="#d5e1d5" stroke-width="2"></path>
+    <rect x="60" y="205" width="80" height="14" rx="5" fill="#af7851"></rect>
+    <path d="M66 219L77 248H123L134 219" fill="#d6a878"></path>
+  </svg></figure>
+    <div class="context-transition"><span>24小時後</span><svg viewBox="0 0 64 26" aria-hidden="true"><path d="M3 13H57M45 3L57 13L45 23" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+    <figure class="context-frame"><svg class="window-seedling" viewBox="0 0 260 270" role="img" xmlns="http://www.w3.org/2000/svg">
+    <rect x="5" y="5" width="250" height="255" rx="16" fill="#f4f8f1"></rect>
+    <path d="M210 65 L58 38 L58 181 L210 172 Z" fill="#f9d779" opacity=".24"></path>
+    <rect x="205" y="45" width="43" height="132" rx="3" fill="#cfeef3" stroke="#7dadae" stroke-width="5"></rect>
+    <circle cx="231" cy="67" r="10" fill="#f6c45d"></circle>
+    <path d="M226 46V176M207 110H247" stroke="#7dadae" stroke-width="4"></path>
+    <path d="M199 181H253" stroke="#87ada7" stroke-width="7" stroke-linecap="round"></path>
+    <path d="M191 98H171M177 92L171 98L177 104" stroke="#c28c1a" stroke-width="2" fill="none"></path>
+    <path data-stem="after" d="M100 207 L100 140 C100 110 123 89 156 78" fill="none" stroke="#59a16a" stroke-width="13" stroke-linecap="round"></path>
+    <path d="M100 207 L100 140 C100 110 123 89 156 78" fill="none" stroke="#a1d38a" stroke-width="4" stroke-linecap="round"></path>
+    <path d="M28 249H248" stroke="#d5e1d5" stroke-width="2"></path>
+    <rect x="60" y="205" width="80" height="14" rx="5" fill="#af7851"></rect>
+    <path d="M66 219L77 248H123L134 219" fill="#d6a878"></path>
+  </svg></figure>
+  </div><p class="context-timing-note muted">生長變化示意；24小時為情境設定。</p></div>
+              <p>
+                學校園藝小組發現，窗邊胚芽鞘逐漸朝窗戶方向彎曲。大家知道植物會向光源方向生長，但不知道植物哪個部位感受光照，以及甚麼令它彎曲。你能透過實驗找出線索嗎？
+              </p>
+            </article>
+            <article class="vl3-card">
+              <h3>你的初步觀察</h3>
+              <label for="observation"><strong>試描述情景中的可觀察變化：胚芽鞘的外形及生長方向有甚麼變化？</strong></label><div class="answer-lines" data-answer-field="observation"><i></i><i></i></div>
+              <p class="observation-note muted">
+                <em>（此處只需記錄觀察，不用作解釋。）</em>
+              </p>
+            </article>
+          </div><div class="research-question">
+              <p class="card-kicker">研究問題</p>
+              <h3>胚芽鞘哪個部位感受單側光照，並影響它的生長方向？</h3>
+            </div></main><footer><span data-paper-version="">v18-50ad1724f3cc</span><span>A1</span></footer></section><section class="paper-page" data-page="A2"><header><b>VL3 · 02 · 設計主探究</b><span>A2</span></header><main><article class="vl3-card design-card hypothesis-card">
+              <p class="card-kicker">01 · 假說建立器</p>
+              <h3>完成你的假說</h3>
+              <p class="hypothesis-sentence">
+                若胚芽鞘
+                <span class="circle-options" data-answer-field="hypothesisPart">（<span>頂端</span> ／ <span>頂端以下位置</span>）</span>
+                被遮光，而其他部位仍然受光，胚芽鞘將會
+                <span class="circle-options" data-answer-field="hypothesisOutcome">（<span>仍向光彎曲</span> ／ <span>沒有明顯向光彎曲</span>）</span>。
+              </p>
+              <label for="reason" class="design-field-label">我的理由（必答；沒有固定答案）</label><div class="answer-lines" data-answer-field="reason"><i></i><i></i></div>
+              <p class="hypothesis-save-note muted">
+                第一次開始實驗前，系統會固定保存完整原始假說及理由，作為探究紀錄。
+              </p>
+            </article><article class="vl3-card design-card variables-card">
+              <p class="card-kicker">02 · 公平測試設計</p>
+              <p>
+                本次只改變遮光處理，比較不遮光、頂端遮光及下部遮光。三組頂端均完整，其他條件保持相同。
+              </p>
+              <div data-vl-source="variableChoices"><fieldset class="variable-group"><legend>獨立變量<span>（主動改變的因素）</span></legend><div class="variable-pills"><label class="variable-pill"><span class="paper-check" data-choice-type="checkbox">□</span><span>照射時間</span></label><label class="variable-pill"><span class="paper-check" data-choice-type="checkbox">□</span><span>胚芽鞘的彎曲反應</span></label><label class="variable-pill"><span class="paper-check" data-choice-type="checkbox">□</span><span>光源方向及光強度</span></label><label class="variable-pill"><span class="paper-check" data-choice-type="checkbox">□</span><span>胚芽鞘種類、初始高度及生長階段</span></label><label class="variable-pill"><span class="paper-check" data-choice-type="checkbox">□</span><span>遮光處理</span></label><label class="variable-pill"><span class="paper-check" data-choice-type="checkbox">□</span><span>溫度及供水條件</span></label></div></fieldset><fieldset class="variable-group"><legend>因變量<span>（量度或觀察的結果）</span></legend><div class="variable-pills"><label class="variable-pill"><span class="paper-check" data-choice-type="checkbox">□</span><span>照射時間</span></label><label class="variable-pill"><span class="paper-check" data-choice-type="checkbox">□</span><span>胚芽鞘的彎曲反應</span></label><label class="variable-pill"><span class="paper-check" data-choice-type="checkbox">□</span><span>光源方向及光強度</span></label><label class="variable-pill"><span class="paper-check" data-choice-type="checkbox">□</span><span>胚芽鞘種類、初始高度及生長階段</span></label><label class="variable-pill"><span class="paper-check" data-choice-type="checkbox">□</span><span>遮光處理</span></label><label class="variable-pill"><span class="paper-check" data-choice-type="checkbox">□</span><span>溫度及供水條件</span></label></div></fieldset><fieldset class="variable-group"><legend>控制變量<span>（保持不變的因素）</span></legend><div class="variable-pills"><label class="variable-pill"><span class="paper-check" data-choice-type="checkbox">□</span><span>照射時間</span></label><label class="variable-pill"><span class="paper-check" data-choice-type="checkbox">□</span><span>胚芽鞘的彎曲反應</span></label><label class="variable-pill"><span class="paper-check" data-choice-type="checkbox">□</span><span>光源方向及光強度</span></label><label class="variable-pill"><span class="paper-check" data-choice-type="checkbox">□</span><span>胚芽鞘種類、初始高度及生長階段</span></label><label class="variable-pill"><span class="paper-check" data-choice-type="checkbox">□</span><span>遮光處理</span></label><label class="variable-pill"><span class="paper-check" data-choice-type="checkbox">□</span><span>溫度及供水條件</span></label></div></fieldset></div>
+            </article><div class="revision"><span data-en="Revision (if needed)">修訂（如需要）</span><div class="answer-lines" data-answer-field="hypothesis-revision"><i></i><i></i></div></div></main><footer><span data-paper-version="">v18-50ad1724f3cc</span><span>A2</span></footer></section><section class="paper-page" data-page="A3"><header><b>VL3 · 02 · 設計主探究</b><span>A3</span></header><main><article class="vl3-card design-card assumptions-card">
+              <p class="card-kicker">03 · 實驗前提</p>
+              <h3>此探究的假設是什麼？</h3>
+              <p class="muted design-hint" data-vl-source="assumptionDefinition">
+                假設是指未經證實而被視為正確的條件，用於確保實驗結果的有效性。
+              </p>
+              <p class="muted design-hint">
+                請選出所有適用的假設，可選多於一項。
+              </p>
+              <div data-vl-source="assumptions"><label><span class="paper-check" data-choice-type="checkbox">□</span> 各胚芽鞘的初始生長狀況相近。</label><label><span class="paper-check" data-choice-type="checkbox">□</span> 遮光帽及遮光套不限制胚芽鞘延長或彎曲。</label><label><span class="paper-check" data-choice-type="checkbox">□</span> 各處理不會令裝置溫度明顯不同。</label><label><span class="paper-check" data-choice-type="checkbox">□</span> 植物種類相同便毋須控制初始大小。</label></div>
+            </article><article class="vl3-card design-card control-card">
+              <p class="card-kicker">04 · 探究的對照組</p>
+              <h3>
+                <label for="controlPlan">若想判斷遮光處理是否影響胚芽鞘的生長方向，你會如何設計對照組？</label>
+              </h3>
+              <p class="muted design-hint">
+                （提示：對照組主要功能是作為比較的基準，用來確認實驗中的改變是由獨立變量所引起，而非其他外在因素的干擾，因此對照組不包含獨立變量的處理條件）
+              </p>
+              <div class="answer-lines" data-answer-field="controlPlan"><i></i><i></i></div>
+            </article><article class="vl3-card design-card setup-card">
+              <p class="card-kicker">05 · 實驗裝置設計</p>
+              <h3>繪畫並標示你的實驗裝置</h3>
+              <p>試參考實驗變量，繪畫並標示你的實驗裝置。</p>
+              <p class="muted design-hint">
+                （提示：此實驗需要多少個裝置？實驗組和對照組分別是什麼？）
+              </p>
+              <div class="equipment-bank" data-vl-source="equipmentBank"><p class="materials-list">燕麥胚芽鞘 × 3；單側光源 × 3；不透光帽 × 1；下部遮光套 × 1；直尺 × 1；計時工具 × 1</p></div>
+              <p>可繪圖、上載相片或填寫文字設計，再按下方「儲存」一併保存。</p>
+              <p class="muted design-hint">
+                不用精緻地繪畫所有特徵，簡單繪畫並標示清楚便可。
+              </p>
+              <div class="drawing-frame" data-answer-field="setupCanvas"></div>
+              
+              <label for="setupDescription" class="design-field-label">文字設計（可代替繪圖）：描述 A、B、C
+                三組裝置、遮光方法及固定條件。</label><div class="answer-lines" data-answer-field="setupDescription"><i></i><i></i></div>
+              
+            </article></main><footer><span data-paper-version="">v18-50ad1724f3cc</span><span>A3</span></footer></section></body></html>

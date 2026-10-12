@@ -1,5 +1,6 @@
 "use strict";
 const MODULE_ID = "VL_BIO_PHOTOTROPISM";
+const EXPERIMENT_VERSION = 18;
 const CURRENT_KEY = "phototropismLab.current.v1",
   RECORDS_KEY = "phototropismLab.records.v1";
 const TEACHER_EMAIL = "tzechingchan0605@gmail.com";
@@ -153,7 +154,7 @@ function fresh(profile = null) {
   return {
     moduleId: MODULE_ID,
     schemaVersion: 1,
-    experimentVersion: 18,
+    experimentVersion: EXPERIMENT_VERSION,
     id: crypto.randomUUID(),
     profile,
     createdAt: new Date().toISOString(),
@@ -271,7 +272,7 @@ function records() {
 }
 function accountTime() {
   const now = Date.now();
-  if (state?.profile && timingVisible)
+  if (state?.profile && timingVisible && !teacher())
     state.phaseDurations[state.phase] += (now - lastActive) / 1000;
   lastActive = now;
 }
@@ -936,6 +937,7 @@ async function teacherDashboard(password) {
     }
     sharedRecords = mergeRecords(local, remote);
     $("#teacherLogin").hidden = true;
+    window.PaperMaterials?.setAccess(true);
     $("#exportExcel").disabled = false;
     $("#importRecords").disabled = false;
     $("#teacherStatus").textContent =
@@ -974,6 +976,7 @@ async function teacherDashboard(password) {
   }
 }
 $("#teacherButton").onclick = () => {
+  window.PaperMaterials?.setAccess(teacher());
   teacherDashboard();
   $("#teacherDialog").showModal();
 };
@@ -992,6 +995,7 @@ $("#teacherLogin").onsubmit = (e) => {
   teacherDashboard(password);
 };
 $("#teacherLogout").onclick = () => {
+  window.PaperMaterials?.setAccess(false);
   cloudSync.clearCredential();
   dashboardGeneration++;
   sharedRecords = [];
@@ -1054,6 +1058,7 @@ $("#importRecords").onchange = async (e) => {
   e.target.value = "";
 };
 function reset(profile) {
+  window.PaperMaterials?.setAccess(false);
   runGeneration++;
   running = false;
   hasRun = false;
@@ -1075,6 +1080,7 @@ function reset(profile) {
   $("#studentName").textContent = profile?.name || "同學";
   $("#studentName").toggleAttribute("data-student-text", Boolean(profile));
   $("#teacherButton").hidden = !teacher();
+  window.PaperMaterials?.setAccess(teacher());
   applyLock();
   phase(1);
   message("");
@@ -1348,13 +1354,13 @@ function scoringWorkbook(all) {
     [
       "定性觀察",
       2,
-      "版本7：主探究A、B、C三組彎曲方向共1分，延伸一A、D兩項延長表現共1分；版本5／6按原延長／方向記錄評分。版本3／4主探究12項共2；更舊四組每組0.5。原始觀察保留。",
+      "主探究A、B、C三組彎曲方向共1分，延伸一A、D兩項延長表現共1分。舊版按原題目及模型評分；原始觀察保留。",
     ],
     ["變量分類", 4, "獨立及因變量各 1；控制變量完整選對得 2，錯選或漏選得 0。"],
     [
       "原始假說與理由",
       2,
-      "版本5：三段均有可測試預測與合理理由得2，部分完整得1，缺乏可測試內容得0；版本3／4兩段各1，更舊只評主探究共2。預測與模型不符不直接扣分。",
+      "三段均有可測試預測與合理理由得2，部分完整得1，缺乏可測試內容得0。預測與模型不符不直接扣分；舊版按原探究評分。",
     ],
     [
       "實驗前提",
@@ -1364,7 +1370,7 @@ function scoringWorkbook(all) {
     [
       "對照組",
       1,
-      "版本6主探究以A不遮光比較B頂端遮光及C下部遮光，保持其餘條件相同得1；延伸一以完整A與切頂D公平比較另供證據評閱。舊版按原四組設計評分。",
+      "主探究以A不遮光比較B頂端遮光及C下部遮光，保持其餘條件相同得1。延伸一完整A與切頂D的比較另供證據評閱；舊版按原設計評分。",
     ],
     [
       "實驗操作",
@@ -1374,27 +1380,27 @@ function scoringWorkbook(all) {
     [
       "裝置設計",
       2,
-      "版本6：A、B、C三組遮光處理、單側光源及固定條件清楚得2，部分完整1，不能形成有效比較0；舊版按原四組設計。",
+      "A、B、C三組遮光處理、單側光源及固定條件清楚得2，部分完整1，不能形成有效比較0；舊版按原設計。",
     ],
     [
       "結論比較",
       2,
-      "版本16延伸二第3題的三個填空各佔該題三分之一，整題權重與其他比較題相同，按答對比例計分；版本7主探究3項、延伸一2項及延伸二5項選擇共2，按答對比例；版本6按原延伸一3項評分；版本5按原主探究5項評分；版本3／4原11項共2，更舊按原比較。",
+      "主探究3題、延伸一1題、延伸二3題共2分，按答對比例計分。延伸二第3題三個填空各佔該題三分之一，整題權重與其他比較題相同；舊版按原題目評分。",
     ],
     [
       "數據解釋",
       2,
-      "版本17依學習反思評閱：合理連結右側光源、頂端感光、生長素在左側（背光側）較多並向下傳遞、左側細胞延長較多及向右彎曲得2；部分連結得1；無相關解釋得0。由教師評閱，不以關鍵字自動判分。版本13–16按原單側光與物質 X 的推論；更舊按原探究證據解釋。",
+      "依學習反思評閱：合理連結右側光源、頂端感光、生長素在左側（背光側）較多並向下傳遞、左側細胞延長較多及向右彎曲得2；部分連結得1；無相關解釋得0。由教師評閱，不以關鍵字自動判分；舊版按原題目。",
     ],
     [
       "反思表達",
       2,
-      "版本17：以清楚、連貫的因果關係解釋情境圖中胚芽鞘向右彎曲得2；部分清楚得1；無相關反思得0。舊版按原始想法、比較證據及修訂評閱。",
+      "以清楚、連貫的因果關係解釋情境圖中胚芽鞘向右彎曲得2；部分清楚得1；無相關反思得0。舊版按原始想法、比較證據及修訂評閱。",
     ],
     [
       "數據紀錄及證據表達",
       2,
-      "版本9由教師按角度、方向及比較證據是否表達清楚評閱：清楚完整2，部分清楚1，未顯示相關表達0；舊版保留棒形圖與自身讀數的一致性分數。",
+      "教師按角度、方向及比較證據是否表達清楚評閱：清楚完整2，部分清楚1，未顯示相關表達0；舊版保留原圖表評分。",
     ],
     [
       "名稱及感光部位",
@@ -1414,12 +1420,12 @@ function scoringWorkbook(all) {
     [
       "情境應用／舊版證據修訂",
       2,
-      "版本17：把學習重點正確應用於右側光源情境，指出左側是背光側、延長較多，故向右彎曲得2；部分正確得1；無相關應用得0。舊版按原證據修訂與限制題評閱。",
+      "把學習重點正確應用於右側光源情境，指出左側是背光側、延長較多，故向右彎曲得2；部分正確得1；無相關應用得0。舊版按原題目評閱。",
     ],
     [
       "總分",
       32,
-      "六項 SPS 各 4，共 24；新知識共 8。十項教師分數填妥及反思完成後才顯示整體分數。",
+      "六項 SPS 各4，共24；新知識共8。新版11項教師分數填妥及反思完成後才顯示整體分數；舊版10項。",
     ],
     ["空白與零分", "", "空白為待評，0 為明確零分。公式由 Excel 開啟時重算。"],
     [

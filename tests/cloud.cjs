@@ -527,6 +527,9 @@ if (process.env.VL3_COLLECTOR_ONLY === "1") {
           },
         ),
       );
+      await new Promise((resolve,reject)=>execFile(process.execPath,["tests/paper-browser.cjs"],{
+        env:{...process.env,LAB_URL:base,VL3_TEST_PASSWORD_FILE:passwordFile},timeout:120000,
+      },(error,stdout,stderr)=>{process.stdout.write(stdout);process.stderr.write(stderr);error?reject(error):resolve();}));
       browser = await chromium.launch({
         headless: true,
         executablePath: process.env.CHROMIUM_PATH || "/usr/bin/chromium",

@@ -4,6 +4,9 @@
   "private": true,
   "description": "Traditional Chinese inquiry-based phototropism virtual lab",
   "scripts": {
+    "materials:build": "node scripts/build-materials.cjs",
+    "materials:check": "node tests/materials.cjs",
+    "pretest": "npm run materials:build",
     "start": "python3 server.py",
     "test": "python3 tests/run.py"
   },

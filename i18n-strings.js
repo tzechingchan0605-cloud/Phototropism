@@ -2,6 +2,62 @@
 // Only system text belongs here. Student text is never a translation key.
 window.VL3_ENGLISH = Object.fromEntries(
   String.raw`
+下載紙本對照組工作紙 PDF	Download paper control-group worksheets (PDF)
+依次派發 A、B、C；D 及完整套裝只供教師。先保存原始設計才派 B，固定探究答案後才派 C。	Give A, B and C in order. D and the full pack are for teachers only. Preserve the original design before B; fix inquiry answers before C.
+工作紙語言	Worksheet language
+繁體中文	Traditional Chinese
+紙本工作紙預覽	Paper worksheet preview
+工作紙暫時未能載入，請重新登入教師帳戶再試。	The worksheets could not be loaded. Sign in to the teacher account again and retry.
+工作紙版本不一致或檔案損壞，請重建材料後再試。	The worksheet version does not match or a file is damaged. Rebuild the materials and retry.
+重新載入工作紙	Reload worksheets
+預覽	Preview
+下載 PDF	Download PDF
+修訂（如需要）	Revision (if needed)
+首次記錄	First record
+學號	Student number
+教師指引	Teacher guide
+參考答案	Reference answers
+教師指引與派發次序	Teacher guide and distribution order
+準則／注意事項	Criteria / notes
+評分項目	Assessment item
+滿分	Maximum score
+跨 VL 校準狀態	Cross-VL calibration status
+此 rubric 為待跨VL校準初稿，尚未驗證；不以用時、完成率或點擊次數直接換算能力。	This draft rubric has not been validated or calibrated across VLs. Do not convert time, completion rate or clicks directly into ability scores.
+2：準確描述胚芽鞘與單側光源及彎曲；1：部分描述；0：沒有相關描述。	2: accurately describes the coleoptile, light from one side and bending; 1: partial description; 0: no relevant description.
+定性觀察	Qualitative observations
+主探究A、B、C三組彎曲方向共1分，延伸一A、D兩項延長表現共1分。舊版按原題目及模型評分；原始觀察保留。	The bending directions of A, B and C in the main inquiry total 1 mark; the elongation observations of A and D in extension 1 total 1 mark. Score older records using their original questions and models. Preserve original observations.
+變量分類	Variable classification
+獨立及因變量各 1；控制變量完整選對得 2，錯選或漏選得 0。	Independent and dependent variables: 1 each. Controlled variables: 2 for all correct choices with none extra; 0 for a wrong or missing choice.
+原始假說與理由	Original hypothesis and reasons
+三段均有可測試預測與合理理由得2，部分完整得1，缺乏可測試內容得0。預測與模型不符不直接扣分；舊版按原探究評分。	2: testable predictions and reasonable reasons for all three stages; 1: partly complete; 0: no testable content. Do not deduct marks just because a prediction differs from the model. Score older records using their original inquiry.
+完整選擇初始狀況、無機械限制、無明顯溫差三項，且不選種類相同毋須控制大小得1；舊版按原選項。	1: select similar initial conditions, no mechanical restriction and no clear temperature difference, without selecting that the same species needs no size control. Use the original options for older records.
+對照組	Control group
+主探究以A不遮光比較B頂端遮光及C下部遮光，保持其餘條件相同得1。延伸一完整A與切頂D的比較另供證據評閱；舊版按原設計評分。	1: compare uncovered A with B covered at the tip and C covered below the tip, keeping other conditions the same. Review the intact A versus cut-tip D comparison in extension 1 as additional evidence. Use the original design for older records.
+實驗操作	Experimental operation
+延伸二 E、F 只接受0°，G、H 接受33–37°（35° ±2°）；每組0.5。量度方法與裝置品質仍由教師評閱。不以點擊或用時評分。	Extension 2: accept only 0° for E and F and 33–37° (35° ±2°) for G and H; 0.5 per setup. The teacher still assesses the measurement method and setup quality. Do not score clicks or time.
+A、B、C三組遮光處理、單側光源及固定條件清楚得2，部分完整1，不能形成有效比較0；舊版按原設計。	2: clearly shows the light-blocking treatments for A, B and C, light from one side and controlled conditions; 1: partly complete; 0: no valid comparison. Use the original design for older records.
+結論比較	Comparison conclusions
+主探究3題、延伸一1題、延伸二3題共2分，按答對比例計分。延伸二第3題三個填空各佔該題三分之一，整題權重與其他比較題相同；舊版按原題目評分。	The 3 main questions, 1 extension 1 question and 3 extension 2 questions total 2 marks, proportional to correct answers. Each blank in extension 2 question 3 is one third of that question; its total weight equals any other comparison question. Use original questions for older records.
+數據解釋	Data interpretation
+依學習反思評閱：合理連結右側光源、頂端感光、生長素在左側（背光側）較多並向下傳遞、左側細胞延長較多及向右彎曲得2；部分連結得1；無相關解釋得0。由教師評閱，不以關鍵字自動判分；舊版按原題目。	Assess the learning reflection: 2 for linking light on the right, sensing at the tip, more auxin on the left (shaded side) passing down, more cell elongation on the left and bending right; 1 for partial links; 0 for no relevant explanation. The teacher assesses this, without automatic keyword scoring. Use original questions for older records.
+反思表達	Reflection expression
+以清楚、連貫的因果關係解釋情境圖中胚芽鞘向右彎曲得2；部分清楚得1；無相關反思得0。舊版按原始想法、比較證據及修訂評閱。	2: a clear, coherent cause-and-effect explanation of the coleoptile bending right in the context diagram; 1: partly clear; 0: no relevant reflection. For older records, assess original ideas, comparison evidence and revisions.
+數據紀錄及證據表達	Data recording and evidence communication
+教師按角度、方向及比較證據是否表達清楚評閱：清楚完整2，部分清楚1，未顯示相關表達0；舊版保留原圖表評分。	The teacher assesses clear communication of angles, directions and comparison evidence: 2 for clear and complete; 1 for partly clear; 0 for no relevant communication. Retain original chart scoring for older records.
+名稱及感光部位	Terminology and light-sensing part
+教師：正確運用向光性／正向光性名稱及頂端感光各1；綜合探究答案與反思。	Teacher assessment: 1 each for correct use of phototropism / positive phototropism and sensing light at the tip, considering inquiry answers and reflection.
+感光與生長部位	Light-sensing and growing parts
+2：正確連結兩側不均勻延長及彎曲方向，包括主探究左光向左及瓊脂左置向右；1：部分正確；0：未顯示理解。	2: correctly links unequal elongation on the two sides with bending direction, including bending left with light on the left and bending right with agar on the left; 1: partly correct; 0: no demonstrated understanding.
+生長素機制	Auxin mechanism
+2：說明生長素是植物激素、頂端產生可向下傳遞的生長促進作用；1：部分正確；0：未顯示理解。	2: explains that auxin is a plant hormone and the tip produces a growth-promoting effect that can pass downwards; 1: partly correct; 0: no demonstrated understanding.
+情境應用／舊版證據修訂	Context application / earlier evidence revision
+把學習重點正確應用於右側光源情境，指出左側是背光側、延長較多，故向右彎曲得2；部分正確得1；無相關應用得0。舊版按原題目評閱。	2: correctly applies learning points to light on the right, explaining that the left is shaded and elongates more, causing bending right; 1: partly correct; 0: no relevant application. Use original questions for older records.
+總分	Total score
+六項 SPS 各4，共24；新知識共8。新版11項教師分數填妥及反思完成後才顯示整體分數；舊版10項。	Six SPS categories, 4 each, total 24; new knowledge totals 8. Show the overall score only after all 11 teacher scores and reflection are complete (10 teacher scores for older records).
+空白與零分	Blank versus zero
+空白為待評，0 為明確零分。公式由 Excel 開啟時重算。	A blank means awaiting assessment; 0 is an explicit zero score. Excel recalculates formulas when opened.
+人工分數保存	Saving teacher scores
+分數只存在教師保存的 Excel 檔案；再次下載不會讀入舊檔人工分數。	Teacher scores exist only in the saved Excel file. Downloading again does not import teacher scores from an earlier file.
 延伸二材料：切去頂端的燕麥胚芽鞘 × 4、培養容器 × 4、空白瓊脂 × 1、處理瓊脂 × 3、計時工具 × 1。	Extension 2 materials: oat coleoptiles with tips removed × 4, growing containers × 4, blank agar × 1, treated agar × 3, timer × 1.
 向光性是因光照方向而產生的定向生長；向光源屬正向光性。頂端參與感光，生長素是影響植物生長的激素。探究中的物質 X 可結合其他研究理解為生長素；瓊脂比較本身並未鑑定其身分。背光側生長素較多、細胞延長較多，使胚芽鞘向光彎曲。	Phototropism is directional growth in response to light direction. Growth towards light is positive phototropism. The tip helps sense light. Auxin is a hormone that affects plant growth. Other research helps us understand substance X as auxin; the agar comparison itself does not identify the substance. More auxin on the shaded side causes more cell elongation there, so the coleoptile bends towards light.
 對照設計參考：主探究三組頂端均完整，A–B 比較頂端遮光，A–D 比較下部遮光，只改變遮光處理。延伸一A–C只比較頂端是否存在，留意傷口影響。延伸二E–F只比較瓊脂是否曾接觸頂端，位置同在中央；F–G–H只比較處理瓊脂放置位置。每項比較保持其他條件相同。	Reference control plan: all three main setups keep their tips. A–B compares blocking light at the tip; A–D compares blocking light below the tip. Change only the light-blocking treatment. Extension 1 A–C changes only whether the tip is present; consider the wound caused by removing the tip. Extension 2 E–F changes only whether the agar has touched a tip, with both blocks in the centre. F–G–H changes only the position of the treated agar. Keep other conditions the same within each comparison.
@@ -99,7 +155,7 @@ A 與 C 的已確認觀察	Confirmed observations of A and C
 A–C 支持頂端參與正常延長；切頂造成傷口，仍不能直接確定物質 X 或作用機制。	A–C supports the idea that the tip has a role in normal elongation. Removing the tip causes a wound. This still does not directly identify substance X or its mechanism.
 本段分開兩項公平比較：E–F 只改變瓊脂是否曾接觸頂端，位置同在中央；F–G–H 只改變處理瓊脂的放置位置，瓊脂種類相同。每項比較只改變一個因素。首次開始時固定保存延伸二原始預測及理由。	This extension has two separate fair comparisons. E–F changes only whether the agar has touched a tip, with both blocks in the centre. F–G–H changes only the position of the treated agar, using the same type of agar. Each comparison changes one factor. Your original extension 2 prediction and reason are saved before the first experiment.
 請分類本探究的變量。A–B、A–C、A–D 分別比較頂端遮光、頂端是否存在及下部遮光；每項比較保持其他條件相同。	Sort the variables in this inquiry. A–B compares blocking light at the tip; A–C compares whether the tip is present; A–D compares blocking light below the tip. Keep other conditions the same within each comparison.
-假設是指未經證實而被視為正確的條件，用於確保實驗結果的有效性。	An assumption is an unproven condition treated as true to ensure the validity of the experimental results.
+假設是指未經證實而被視為正確的條件，用於確保實驗結果的有效性。	An assumption is a condition we have not proved but take as true, to help make the experiment results valid.
 比較遮光處理／部位或頂端是否存在。	Compare the light-blocking treatment / part, or whether the tip is present.
 指定比較（舊版）	Chosen comparison (earlier version)
 沒有明顯延長，沒有明顯彎曲	No clear elongation or bending
@@ -200,7 +256,7 @@ A 與 D：下部遮光處理	A and D: blocking light below the tip
 剪刀 × 1	Scissors × 1
 計時工具 × 1	Timer × 1
 可繪圖、上載相片或填寫文字設計，再按下方「儲存」一併保存。	Draw, upload a photo or write your plan, then press Save below to save them together.
-不用精緻地繪畫所有特徵，簡單繪畫並標示清楚便可。	You do not need to draw every feature in detail. A simple drawing with clear labels is enough.
+不用精緻地繪畫所有特徵，簡單繪畫並標示清楚便可。	You do not need to draw every detail carefully. A simple drawing with clear labels is enough.
 實驗裝置繪圖區	Experiment setup drawing area
 ✎ 鉛筆	✎ Pencil
 ⌫ 橡皮擦	⌫ Eraser

@@ -15,6 +15,8 @@
     <script src="tip-inquiry.js" defer></script>
     <script src="inquiry.js" defer></script>
     <script src="app.js" defer></script>
+    <script src="paper-content.js" defer></script>
+    <script src="paper-ui.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">跳到探究內容</a>
@@ -454,6 +456,17 @@
             multiple
         /></label>
       </div>
+      <section id="paperMaterials" class="paper-materials" hidden aria-labelledby="paperMaterialsTitle">
+        <h3 id="paperMaterialsTitle">下載紙本對照組工作紙 PDF</h3>
+        <p class="muted">依次派發 A、B、C；D 及完整套裝只供教師。先保存原始設計才派 B，固定探究答案後才派 C。</p>
+        <label for="paperLanguage">工作紙語言</label>
+        <select id="paperLanguage"><option value="zh-Hant">繁體中文</option><option value="en">English</option></select>
+        <div id="paperDownloads" class="paper-downloads"></div>
+        <p id="paperVersion" class="muted" data-student-text></p>
+        <p id="paperStatus" class="muted" role="status"></p>
+        <button id="paperReload" type="button" class="secondary">重新載入工作紙</button>
+        <iframe id="paperPreview" title="紙本工作紙預覽" hidden></iframe>
+      </section>
       <div class="table-wrap">
         <table class="vl3-table">
           <thead>

@@ -1,0 +1,1647 @@
+{
+  "version": "v18-50ad1724f3cc",
+  "experiment_version": 18,
+  "sources": {
+    "index.html": "29027c8ead22f513fafbe0a224f041300d1ccd6258e3c12f36c252b7e1e195eb",
+    "app.js": "cf1102e6d77b69cda82d0dcb456ead09664e43f0a3e5ebd3952683978c3e71d0",
+    "inquiry.js": "aeaa73cd08b1ef8a865196add5a02bbe329a32b9ad8a225777e31be22c578e70",
+    "tip-inquiry.js": "79984b5e34fe4e43a073c3c28da7dd979fef2cdf77c74c9ebec76e38a5e2070e",
+    "excel.js": "83a36eadb68f191423e6d9666457cee55568499acc1d7e13dee23810333ab92c",
+    "i18n.js": "c94d18db86d0a03754ed9041db972b4cc7a0ea07e39bb715fc34c82b0d18e8ee",
+    "i18n-strings.js": "f8c60c4d1bc87498a9d7d9f231079088c7b1f28e99f1616ae970eaf699eff9e1",
+    "paper-content.js": "1c08b739edd75c560f74311af5d76caf03609515bafbafc4021879b5115bf139",
+    "materials/print.css": "4a733566aad458725850629845a683cedab62e13e6d28e64511d6791752bea6b",
+    "scripts/build-materials.cjs": "b5594363034cf94c9dcbb6f9b623b1838609ad6e94b58d60c8664167a5d1a49c"
+  },
+  "distribution": [
+    "A: original design fixed before B",
+    "B: complete and fix inquiry answers before C",
+    "C: learning and reflection",
+    "D/FULL: teachers only"
+  ],
+  "vl1_reference": {
+    "repository": "tzechingchan0605-cloud/Digestive-System",
+    "commit": "6ce583b",
+    "paper_version": "v3"
+  },
+  "proposal_alignment": [
+    "4.1: identical scenarios, static data plots and problem prompts",
+    "4.3.2: same concepts/questions before formal teaching; keep SPSAI/CKT separate"
+  ],
+  "books": [
+    {
+      "code": "A",
+      "language": "zh-Hant",
+      "title": "情境與原始探究設計",
+      "pages": 3,
+      "page_codes": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "filename": "VL3_paper_A_zh-Hant_v18-50ad1724f3cc.pdf",
+      "pdf": "materials/VL3_paper_A_zh-Hant_v18-50ad1724f3cc.pdf",
+      "preview": "materials/VL3_paper_A_zh-Hant_v18-50ad1724f3cc.html",
+      "sha256": "c7d1e0c05974ef48bb9a95d0c4afbadb42438fc3ae919dd00b6e0492d79b25da",
+      "preview_sha256": "dadd2fd16f63ec8f7524da3f241f043b31a40f0d5250f66f9026a39d5add88c4",
+      "bytes": 561277,
+      "audit": [
+        {
+          "page": "A1",
+          "overflow": [],
+          "mainHeight": 558.71875,
+          "lines": [
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "observation",
+              "lines": [
+                [
+                  36.84375,
+                  442.83984375,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  456.33984375,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 1
+        },
+        {
+          "page": "A2",
+          "overflow": [],
+          "mainHeight": 569.828125,
+          "lines": [
+            2,
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "reason",
+              "lines": [
+                [
+                  36.84375,
+                  145.1484375,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  158.6484375,
+                  558.421875
+                ]
+              ]
+            },
+            {
+              "field": "hypothesis-revision",
+              "lines": [
+                [
+                  36.84375,
+                  475.44140625,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  488.94140625,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        },
+        {
+          "page": "A3",
+          "overflow": [],
+          "mainHeight": 598.65625,
+          "lines": [
+            2,
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "controlPlan",
+              "lines": [
+                [
+                  36.84375,
+                  225.140625,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  238.640625,
+                  558.421875
+                ]
+              ]
+            },
+            {
+              "field": "setupDescription",
+              "lines": [
+                [
+                  36.84375,
+                  497.0625,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  510.5625,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        }
+      ],
+      "pack_range": [
+        1,
+        3
+      ]
+    },
+    {
+      "code": "B",
+      "language": "zh-Hant",
+      "title": "實驗資料、分析與結論",
+      "pages": 4,
+      "page_codes": [
+        "B1",
+        "B2",
+        "B3",
+        "B4"
+      ],
+      "filename": "VL3_paper_B_zh-Hant_v18-50ad1724f3cc.pdf",
+      "pdf": "materials/VL3_paper_B_zh-Hant_v18-50ad1724f3cc.pdf",
+      "preview": "materials/VL3_paper_B_zh-Hant_v18-50ad1724f3cc.html",
+      "sha256": "1c285e3d85ee166bdcfb5fcfbf3102c93e781f76d463791c287c9b2ffb6c6364",
+      "preview_sha256": "621d3fee5dd9149f7ba4997989731ec0cdc5d97ea517e6c909f7008fe8b7cdcc",
+      "bytes": 547558,
+      "audit": [
+        {
+          "page": "B1",
+          "overflow": [],
+          "mainHeight": 468.71875,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "B2",
+          "overflow": [],
+          "mainHeight": 676.90625,
+          "lines": [
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "tipReason",
+              "lines": [
+                [
+                  36.84375,
+                  252,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  264,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        },
+        {
+          "page": "B3",
+          "overflow": [],
+          "mainHeight": 339.9375,
+          "lines": [
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "extReason",
+              "lines": [
+                [
+                  36.84375,
+                  222.8671875,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  236.3671875,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        },
+        {
+          "page": "B4",
+          "overflow": [],
+          "mainHeight": 953.1875,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        }
+      ],
+      "pack_range": [
+        4,
+        7
+      ]
+    },
+    {
+      "code": "C",
+      "language": "zh-Hant",
+      "title": "學習重點及反思",
+      "pages": 2,
+      "page_codes": [
+        "C1",
+        "C2"
+      ],
+      "filename": "VL3_paper_C_zh-Hant_v18-50ad1724f3cc.pdf",
+      "pdf": "materials/VL3_paper_C_zh-Hant_v18-50ad1724f3cc.pdf",
+      "preview": "materials/VL3_paper_C_zh-Hant_v18-50ad1724f3cc.html",
+      "sha256": "c7420c505f867f2cf5e4d97b688a31afe5350656bafe26b734e15acec1a6a8f8",
+      "preview_sha256": "29e6e5c0adb3c9c85271990a0b145a6e38d8245f3eb1860daab1df1cdbf5f67c",
+      "bytes": 299436,
+      "audit": [
+        {
+          "page": "C1",
+          "overflow": [],
+          "mainHeight": 523.984375,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 1
+        },
+        {
+          "page": "C2",
+          "overflow": [],
+          "mainHeight": 400.78125,
+          "lines": [
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "reflection",
+              "lines": [
+                [
+                  36.84375,
+                  348.65625,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  362.15625,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        }
+      ],
+      "pack_range": [
+        8,
+        9
+      ]
+    },
+    {
+      "code": "D",
+      "language": "zh-Hant",
+      "title": "教師指引、參考答案及評分準則",
+      "pages": 4,
+      "page_codes": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "filename": "VL3_paper_D_zh-Hant_v18-50ad1724f3cc.pdf",
+      "pdf": "materials/VL3_paper_D_zh-Hant_v18-50ad1724f3cc.pdf",
+      "preview": "materials/VL3_paper_D_zh-Hant_v18-50ad1724f3cc.html",
+      "sha256": "bd57ddeee18654b85407cecba80dda84570ca62d83c017590528c57219f855c0",
+      "preview_sha256": "7038ed40be4c1719c75bb510971ccd310e3ed529285360d50def0c9c40452b27",
+      "bytes": 598294,
+      "audit": [
+        {
+          "page": "D1",
+          "overflow": [],
+          "mainHeight": 324.03125,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "D2",
+          "overflow": [],
+          "mainHeight": 467.90625,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "D3",
+          "overflow": [],
+          "mainHeight": 428.59375,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "D4",
+          "overflow": [],
+          "mainHeight": 858.0625,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        }
+      ],
+      "pack_range": [
+        10,
+        13
+      ]
+    },
+    {
+      "code": "FULL",
+      "language": "zh-Hant",
+      "title": "完整教師列印套裝",
+      "pages": 13,
+      "page_codes": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "C1",
+        "C2",
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "filename": "VL3_paper_FULL_zh-Hant_v18-50ad1724f3cc.pdf",
+      "pdf": "materials/VL3_paper_FULL_zh-Hant_v18-50ad1724f3cc.pdf",
+      "preview": "materials/VL3_paper_FULL_zh-Hant_v18-50ad1724f3cc.html",
+      "sha256": "162791b5701bf5becf498575f694b924b989f0de7a6f22c6b4f450ee8cfb4816",
+      "preview_sha256": "2592b8ca5e1a82dcebcbd42bb03c021daaa9533387c67cd476493929d47a44d9",
+      "bytes": 947393,
+      "audit": [
+        {
+          "page": "A1",
+          "overflow": [],
+          "mainHeight": 558.71875,
+          "lines": [
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "observation",
+              "lines": [
+                [
+                  36.84375,
+                  442.83984375,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  456.33984375,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 1
+        },
+        {
+          "page": "A2",
+          "overflow": [],
+          "mainHeight": 569.828125,
+          "lines": [
+            2,
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "reason",
+              "lines": [
+                [
+                  36.84375,
+                  145.1484375,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  158.6484375,
+                  558.421875
+                ]
+              ]
+            },
+            {
+              "field": "hypothesis-revision",
+              "lines": [
+                [
+                  36.84375,
+                  475.44140625,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  488.94140625,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        },
+        {
+          "page": "A3",
+          "overflow": [],
+          "mainHeight": 598.65625,
+          "lines": [
+            2,
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "controlPlan",
+              "lines": [
+                [
+                  36.84375,
+                  225.140625,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  238.640625,
+                  558.421875
+                ]
+              ]
+            },
+            {
+              "field": "setupDescription",
+              "lines": [
+                [
+                  36.84375,
+                  497.0625,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  510.5625,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        },
+        {
+          "page": "B1",
+          "overflow": [],
+          "mainHeight": 468.71875,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "B2",
+          "overflow": [],
+          "mainHeight": 676.90625,
+          "lines": [
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "tipReason",
+              "lines": [
+                [
+                  36.84375,
+                  252,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  264,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        },
+        {
+          "page": "B3",
+          "overflow": [],
+          "mainHeight": 339.9375,
+          "lines": [
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "extReason",
+              "lines": [
+                [
+                  36.84375,
+                  222.8671875,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  236.3671875,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        },
+        {
+          "page": "B4",
+          "overflow": [],
+          "mainHeight": 953.1875,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "C1",
+          "overflow": [],
+          "mainHeight": 523.984375,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 1
+        },
+        {
+          "page": "C2",
+          "overflow": [],
+          "mainHeight": 400.78125,
+          "lines": [
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "reflection",
+              "lines": [
+                [
+                  36.84375,
+                  348.65625,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  362.15625,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        },
+        {
+          "page": "D1",
+          "overflow": [],
+          "mainHeight": 324.03125,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "D2",
+          "overflow": [],
+          "mainHeight": 467.90625,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "D3",
+          "overflow": [],
+          "mainHeight": 428.59375,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "D4",
+          "overflow": [],
+          "mainHeight": 858.0625,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        }
+      ],
+      "pack_range": [
+        1,
+        13
+      ]
+    },
+    {
+      "code": "A",
+      "language": "en",
+      "title": "Context and original inquiry design",
+      "pages": 3,
+      "page_codes": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "filename": "VL3_paper_A_en_v18-50ad1724f3cc.pdf",
+      "pdf": "materials/VL3_paper_A_en_v18-50ad1724f3cc.pdf",
+      "preview": "materials/VL3_paper_A_en_v18-50ad1724f3cc.html",
+      "sha256": "214a752c440d28cf7c1d453b4dbf019de06fdd06acd243d0a2efb8bd5505c02c",
+      "preview_sha256": "d939cea4538619250eb95b525a3ed9c49817477bb758d707830dcdcaeff049b3",
+      "bytes": 98374,
+      "audit": [
+        {
+          "page": "A1",
+          "overflow": [],
+          "mainHeight": 625.71875,
+          "lines": [
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "observation",
+              "lines": [
+                [
+                  36.84375,
+                  478.01953125,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  491.51953125,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 1
+        },
+        {
+          "page": "A2",
+          "overflow": [],
+          "mainHeight": 644.671875,
+          "lines": [
+            2,
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "reason",
+              "lines": [
+                [
+                  36.84375,
+                  156.8671875,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  170.3671875,
+                  558.421875
+                ]
+              ]
+            },
+            {
+              "field": "hypothesis-revision",
+              "lines": [
+                [
+                  36.84375,
+                  531.01171875,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  544.51171875,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        },
+        {
+          "page": "A3",
+          "overflow": [],
+          "mainHeight": 691,
+          "lines": [
+            2,
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "controlPlan",
+              "lines": [
+                [
+                  36.84375,
+                  271.546875,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  285.046875,
+                  558.421875
+                ]
+              ]
+            },
+            {
+              "field": "setupDescription",
+              "lines": [
+                [
+                  36.84375,
+                  565.7578125,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  579.2578125,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        }
+      ],
+      "pack_range": [
+        1,
+        3
+      ]
+    },
+    {
+      "code": "B",
+      "language": "en",
+      "title": "Experimental data, analysis and conclusions",
+      "pages": 4,
+      "page_codes": [
+        "B1",
+        "B2",
+        "B3",
+        "B4"
+      ],
+      "filename": "VL3_paper_B_en_v18-50ad1724f3cc.pdf",
+      "pdf": "materials/VL3_paper_B_en_v18-50ad1724f3cc.pdf",
+      "preview": "materials/VL3_paper_B_en_v18-50ad1724f3cc.html",
+      "sha256": "23767c1683ea9dc32315fcb4240a7bc07457e666978928ea41a15bd8bcf0c651",
+      "preview_sha256": "dcc5217809276b7827763663699d2de0450d016f5bff1116944c069b0381cf21",
+      "bytes": 127336,
+      "audit": [
+        {
+          "page": "B1",
+          "overflow": [],
+          "mainHeight": 561.953125,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "B2",
+          "overflow": [],
+          "mainHeight": 798.234375,
+          "lines": [
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "tipReason",
+              "lines": [
+                [
+                  36.84375,
+                  317.3671875,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  329.3671875,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        },
+        {
+          "page": "B3",
+          "overflow": [],
+          "mainHeight": 454.734375,
+          "lines": [
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "extReason",
+              "lines": [
+                [
+                  36.84375,
+                  284.61328125,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  298.11328125,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        },
+        {
+          "page": "B4",
+          "overflow": [],
+          "mainHeight": 991.40625,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        }
+      ],
+      "pack_range": [
+        4,
+        7
+      ]
+    },
+    {
+      "code": "C",
+      "language": "en",
+      "title": "Learning points and reflection",
+      "pages": 2,
+      "page_codes": [
+        "C1",
+        "C2"
+      ],
+      "filename": "VL3_paper_C_en_v18-50ad1724f3cc.pdf",
+      "pdf": "materials/VL3_paper_C_en_v18-50ad1724f3cc.pdf",
+      "preview": "materials/VL3_paper_C_en_v18-50ad1724f3cc.html",
+      "sha256": "85dd6cf9967a781617a5eefdfcdb2d1555de5e0d740b206f8c6e6263f9325ecf",
+      "preview_sha256": "93e4b6dfcf98925aa35c8ad60f25ee3293a929216e64868d059140bb43eaa8a6",
+      "bytes": 112774,
+      "audit": [
+        {
+          "page": "C1",
+          "overflow": [],
+          "mainHeight": 578.75,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 1
+        },
+        {
+          "page": "C2",
+          "overflow": [],
+          "mainHeight": 417,
+          "lines": [
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "reflection",
+              "lines": [
+                [
+                  36.84375,
+                  360.2578125,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  373.7578125,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        }
+      ],
+      "pack_range": [
+        8,
+        9
+      ]
+    },
+    {
+      "code": "D",
+      "language": "en",
+      "title": "Teacher guide, answers and assessment criteria",
+      "pages": 5,
+      "page_codes": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "filename": "VL3_paper_D_en_v18-50ad1724f3cc.pdf",
+      "pdf": "materials/VL3_paper_D_en_v18-50ad1724f3cc.pdf",
+      "preview": "materials/VL3_paper_D_en_v18-50ad1724f3cc.html",
+      "sha256": "20dbdf676167ee3345b0de1dfa2019e62933a4f8abb4f4f0ad7de816558d12dc",
+      "preview_sha256": "ac25c6585f397276e19d1f26954cf32be4dba81a22cb52ddbda6f8f7c91a378d",
+      "bytes": 101553,
+      "audit": [
+        {
+          "page": "D1",
+          "overflow": [],
+          "mainHeight": 425.9375,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "D2",
+          "overflow": [],
+          "mainHeight": 494.4375,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "D3",
+          "overflow": [],
+          "mainHeight": 635.6875,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "D4",
+          "overflow": [],
+          "mainHeight": 860.46875,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "D5",
+          "overflow": [],
+          "mainHeight": 458.53125,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        }
+      ],
+      "pack_range": [
+        10,
+        14
+      ]
+    },
+    {
+      "code": "FULL",
+      "language": "en",
+      "title": "Complete teacher print pack",
+      "pages": 14,
+      "page_codes": [
+        "A1",
+        "A2",
+        "A3",
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "C1",
+        "C2",
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "filename": "VL3_paper_FULL_en_v18-50ad1724f3cc.pdf",
+      "pdf": "materials/VL3_paper_FULL_en_v18-50ad1724f3cc.pdf",
+      "preview": "materials/VL3_paper_FULL_en_v18-50ad1724f3cc.html",
+      "sha256": "991a9d272d474b97ffb053e52cfee495a15f14d40b10f51365ecedc5e36ddf13",
+      "preview_sha256": "9135bed4062f9fa509ff28851c7c2694eb88e4d88af11f92897b6643edd906ef",
+      "bytes": 239383,
+      "audit": [
+        {
+          "page": "A1",
+          "overflow": [],
+          "mainHeight": 625.71875,
+          "lines": [
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "observation",
+              "lines": [
+                [
+                  36.84375,
+                  478.01953125,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  491.51953125,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 1
+        },
+        {
+          "page": "A2",
+          "overflow": [],
+          "mainHeight": 644.671875,
+          "lines": [
+            2,
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "reason",
+              "lines": [
+                [
+                  36.84375,
+                  156.8671875,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  170.3671875,
+                  558.421875
+                ]
+              ]
+            },
+            {
+              "field": "hypothesis-revision",
+              "lines": [
+                [
+                  36.84375,
+                  531.01171875,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  544.51171875,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        },
+        {
+          "page": "A3",
+          "overflow": [],
+          "mainHeight": 691,
+          "lines": [
+            2,
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "controlPlan",
+              "lines": [
+                [
+                  36.84375,
+                  271.546875,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  285.046875,
+                  558.421875
+                ]
+              ]
+            },
+            {
+              "field": "setupDescription",
+              "lines": [
+                [
+                  36.84375,
+                  565.7578125,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  579.2578125,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        },
+        {
+          "page": "B1",
+          "overflow": [],
+          "mainHeight": 561.953125,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "B2",
+          "overflow": [],
+          "mainHeight": 798.234375,
+          "lines": [
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "tipReason",
+              "lines": [
+                [
+                  36.84375,
+                  317.3671875,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  329.3671875,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        },
+        {
+          "page": "B3",
+          "overflow": [],
+          "mainHeight": 454.734375,
+          "lines": [
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "extReason",
+              "lines": [
+                [
+                  36.84375,
+                  284.61328125,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  298.11328125,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        },
+        {
+          "page": "B4",
+          "overflow": [],
+          "mainHeight": 991.40625,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "C1",
+          "overflow": [],
+          "mainHeight": 578.75,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 1
+        },
+        {
+          "page": "C2",
+          "overflow": [],
+          "mainHeight": 417,
+          "lines": [
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "reflection",
+              "lines": [
+                [
+                  36.84375,
+                  360.2578125,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  373.7578125,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        },
+        {
+          "page": "D1",
+          "overflow": [],
+          "mainHeight": 425.9375,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "D2",
+          "overflow": [],
+          "mainHeight": 494.4375,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "D3",
+          "overflow": [],
+          "mainHeight": 635.6875,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "D4",
+          "overflow": [],
+          "mainHeight": 860.46875,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "D5",
+          "overflow": [],
+          "mainHeight": 458.53125,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        }
+      ],
+      "pack_range": [
+        1,
+        14
+      ]
+    }
+  ],
+  "source_digest": "f7d4ff7e55a73cee6e41ab98d19d662550eb30e2caaef9b507313d39d1256af4",
+  "option_order": {
+    "selects": [
+      {
+        "id": "hypothesisPart",
+        "options": [
+          {
+            "id": "頂端",
+            "text": "頂端"
+          },
+          {
+            "id": "頂端以下位置",
+            "text": "頂端以下位置"
+          }
+        ]
+      },
+      {
+        "id": "hypothesisOutcome",
+        "options": [
+          {
+            "id": "bend",
+            "text": "仍向光彎曲"
+          },
+          {
+            "id": "straight",
+            "text": "沒有明顯向光彎曲"
+          }
+        ]
+      },
+      {
+        "id": "obs-A",
+        "options": [
+          {
+            "id": "left",
+            "text": "向左彎曲"
+          },
+          {
+            "id": "right",
+            "text": "向右彎曲"
+          },
+          {
+            "id": "straight",
+            "text": "沒有明顯彎曲"
+          }
+        ]
+      },
+      {
+        "id": "obs-B",
+        "options": [
+          {
+            "id": "left",
+            "text": "向左彎曲"
+          },
+          {
+            "id": "right",
+            "text": "向右彎曲"
+          },
+          {
+            "id": "straight",
+            "text": "沒有明顯彎曲"
+          }
+        ]
+      },
+      {
+        "id": "obs-D",
+        "options": [
+          {
+            "id": "left",
+            "text": "向左彎曲"
+          },
+          {
+            "id": "right",
+            "text": "向右彎曲"
+          },
+          {
+            "id": "straight",
+            "text": "沒有明顯彎曲"
+          }
+        ]
+      },
+      {
+        "id": "qShade",
+        "options": [
+          {
+            "id": "lessBend",
+            "text": "沒有明顯向光彎曲。"
+          },
+          {
+            "id": "same",
+            "text": "仍有相同的向光彎曲。"
+          }
+        ]
+      },
+      {
+        "id": "qBelow",
+        "options": [
+          {
+            "id": "bend",
+            "text": "仍可向光彎曲。"
+          },
+          {
+            "id": "straight",
+            "text": "沒有明顯向光彎曲。"
+          }
+        ]
+      },
+      {
+        "id": "qTip",
+        "options": [
+          {
+            "id": "tip",
+            "text": "頂端"
+          },
+          {
+            "id": "below",
+            "text": "只有下部"
+          }
+        ]
+      },
+      {
+        "id": "tipPrediction",
+        "options": [
+          {
+            "id": "less",
+            "text": "不會延長"
+          },
+          {
+            "id": "same",
+            "text": "延長表現相近"
+          },
+          {
+            "id": "more",
+            "text": "延長較多"
+          }
+        ]
+      },
+      {
+        "id": "tip-growth-A",
+        "options": [
+          {
+            "id": "clear",
+            "text": "有"
+          },
+          {
+            "id": "none",
+            "text": "沒有"
+          }
+        ]
+      },
+      {
+        "id": "tip-growth-C",
+        "options": [
+          {
+            "id": "clear",
+            "text": "有"
+          },
+          {
+            "id": "none",
+            "text": "沒有"
+          }
+        ]
+      },
+      {
+        "id": "qCap",
+        "options": [
+          {
+            "id": "tipRole",
+            "text": "頂端的存在亦影響胚芽鞘的生長／延長。"
+          },
+          {
+            "id": "noEffect",
+            "text": "頂端的存在不影響胚芽鞘的生長／延長。"
+          }
+        ]
+      },
+      {
+        "id": "extPrediction",
+        "options": [
+          {
+            "id": "left",
+            "text": "向左彎曲"
+          },
+          {
+            "id": "right",
+            "text": "向右彎曲"
+          },
+          {
+            "id": "straight",
+            "text": "保持較直"
+          }
+        ]
+      },
+      {
+        "id": "ext-direction-E",
+        "options": [
+          {
+            "id": "left",
+            "text": "向左彎曲"
+          },
+          {
+            "id": "right",
+            "text": "向右彎曲"
+          },
+          {
+            "id": "straight",
+            "text": "沒有明顯彎曲"
+          }
+        ]
+      },
+      {
+        "id": "ext-direction-F",
+        "options": [
+          {
+            "id": "left",
+            "text": "向左彎曲"
+          },
+          {
+            "id": "right",
+            "text": "向右彎曲"
+          },
+          {
+            "id": "straight",
+            "text": "沒有明顯彎曲"
+          }
+        ]
+      },
+      {
+        "id": "ext-direction-G",
+        "options": [
+          {
+            "id": "left",
+            "text": "向左彎曲"
+          },
+          {
+            "id": "right",
+            "text": "向右彎曲"
+          },
+          {
+            "id": "straight",
+            "text": "沒有明顯彎曲"
+          }
+        ]
+      },
+      {
+        "id": "ext-direction-H",
+        "options": [
+          {
+            "id": "left",
+            "text": "向左彎曲"
+          },
+          {
+            "id": "right",
+            "text": "向右彎曲"
+          },
+          {
+            "id": "straight",
+            "text": "沒有明顯彎曲"
+          }
+        ]
+      },
+      {
+        "id": "extEF",
+        "options": [
+          {
+            "id": "transfer",
+            "text": "頂端可能產生可轉移的生長促進作用。"
+          },
+          {
+            "id": "agar",
+            "text": "所有瓊脂都會產生相同的生長促進作用。"
+          }
+        ]
+      },
+      {
+        "id": "extXAmount",
+        "options": [
+          {
+            "id": "more",
+            "text": "多"
+          },
+          {
+            "id": "less",
+            "text": "少"
+          }
+        ]
+      },
+      {
+        "id": "extCellElongation",
+        "options": [
+          {
+            "id": "more",
+            "text": "多"
+          },
+          {
+            "id": "less",
+            "text": "少"
+          }
+        ]
+      },
+      {
+        "id": "extBendDirection",
+        "options": [
+          {
+            "id": "left",
+            "text": "左"
+          },
+          {
+            "id": "right",
+            "text": "右"
+          }
+        ]
+      }
+    ],
+    "variables": [
+      {
+        "id": 4,
+        "text": "照射時間"
+      },
+      {
+        "id": 1,
+        "text": "胚芽鞘的彎曲反應"
+      },
+      {
+        "id": 2,
+        "text": "光源方向及光強度"
+      },
+      {
+        "id": 3,
+        "text": "胚芽鞘種類、初始高度及生長階段"
+      },
+      {
+        "id": 0,
+        "text": "遮光處理"
+      },
+      {
+        "id": 5,
+        "text": "溫度及供水條件"
+      }
+    ],
+    "assumptions": [
+      {
+        "id": "similar",
+        "text": "各胚芽鞘的初始生長狀況相近。"
+      },
+      {
+        "id": "free",
+        "text": "遮光帽及遮光套不限制胚芽鞘延長或彎曲。"
+      },
+      {
+        "id": "temperature",
+        "text": "各處理不會令裝置溫度明顯不同。"
+      },
+      {
+        "id": "size",
+        "text": "植物種類相同便毋須控制初始大小。"
+      }
+    ],
+    "radios": [
+      {
+        "id": "position",
+        "text": "經處理瓊脂的放置位置影響胚芽鞘的彎曲方向。"
+      },
+      {
+        "id": "noEffect",
+        "text": "經處理瓊脂的放置位置不影響胚芽鞘的彎曲方向。"
+      }
+    ]
+  }
+}
