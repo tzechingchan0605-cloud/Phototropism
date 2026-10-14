@@ -33,8 +33,9 @@ for book in manifest['books']:
         for term in ['胚芽鞘','向光性','生長素','瓊脂','延長','不透光']:stripped=stripped.replace('('+term+')','')
         assert not re.search(r'[\u3400-\u9fff]',stripped),(book['code'],'unapproved support')
     if book['code'] in ['A','B','C']:
-        assert not re.search(r'✓|✕|SPS|參考答案|Reference answers|tzechingchan0605|35°',text,re.I)
-        if book['code'] in ['A','B']:assert not re.search(r'生長素|向光性|auxin|phototropism',text,re.I)
+        assert not re.search(r'✓|✕|SPS|tzechingchan0605',text,re.I)
+        if book['code']=='A':assert re.search(r'生長素|auxin',text,re.I) and re.search(r'向光性|phototropism',text,re.I)
+        if book['code']=='B':assert not re.search(r'35°|參考答案|Reference answers',text,re.I)
         assert not re.search(r'棒形圖|彎曲位置|感光部位與彎曲部位是否一定相同|blackness necessarily|Inference about light from one side',text,re.I)
     for index,page in enumerate(pdf):
         audit=book['audit'][index];normal=unicodedata.normalize('NFKC',page.get_text())
@@ -63,4 +64,4 @@ for book in manifest['books']:
         if book['code']=='FULL':
             page.get_pixmap(matrix=fitz.Matrix(1.3,1.3)).save(out/f"{book['language']}-{audit['page']}.png")
             page.get_pixmap(matrix=fitz.Matrix(1.3,1.3),colorspace=fitz.csGRAY).save(out/f"{book['language']}-{audit['page']}-gray.png")
-print('PASS: ten actual A4 PDFs; all preview text survives in selectable PDF text, approved-only vocabulary, every vector answer block has two lines, A/C first-page identity rules, no student answer/score leaks, embedded glyphs and all-page bounds; every full-pack page rendered in colour and grayscale.')
+print('PASS: ten actual A4 PDFs; all preview text survives in selectable PDF text, approved-only vocabulary, every vector answer block has two lines, A/C first-page identity rules, core teaching in A, checking answers only in C, no B answer-key or student score leaks, embedded glyphs and all-page bounds; every full-pack page rendered in colour and grayscale.')

@@ -9,8 +9,8 @@ const {existsSync} = require("node:fs");
 const ROOT = path.resolve(__dirname, "..");
 const SOURCE_FILES = ["index.html","app.js","inquiry.js","tip-inquiry.js","excel.js","i18n.js","i18n-strings.js","paper-content.js","materials/print.css","scripts/build-materials.cjs"];
 const labels = {
-  "zh-Hant": {A:"情境與原始探究設計",B:"實驗資料、分析與結論",C:"學習重點及反思",D:"教師指引、參考答案及評分準則",FULL:"完整教師列印套裝"},
-  en: {A:"Context and original inquiry design",B:"Experimental data, analysis and conclusions",C:"Learning points and reflection",D:"Teacher guide, answers and assessment criteria",FULL:"Complete teacher print pack"},
+  "zh-Hant": {A:"自學概念、圖像及示例",B:"有提示練習及獨立應用",C:"核對答案及修正",D:"教師指引、參考答案及評分準則",FULL:"完整教師列印套裝"},
+  en: {A:"Self-study concepts, diagrams and examples",B:"Guided practice and independent application",C:"Answer checking and correction",D:"Teacher guide, answers and assessment criteria",FULL:"Complete teacher print pack"},
 };
 async function fingerprint() {
   const digest = crypto.createHash("sha256");
@@ -22,7 +22,7 @@ async function fingerprint() {
   }
   const app=await fs.readFile(path.join(ROOT,"app.js"),"utf8");
   const experiment_version=Number(/const EXPERIMENT_VERSION = (\d+)/.exec(app)[1]);
-  return {version:"v"+experiment_version+"-"+digest.digest("hex").slice(0,12),experiment_version,sources};
+  return {material_revision:2,version:"ws2-vl"+experiment_version+"-"+digest.digest("hex").slice(0,12),experiment_version,sources};
 }
 async function server() {
   const service = http.createServer(async (request, response) => {
@@ -63,7 +63,7 @@ async function build() {
   const {service,url} = await server();
   const executablePath=process.env.CHROMIUM_PATH || (existsSync("/usr/bin/chromium") ? "/usr/bin/chromium" : undefined);
   const browser = await chromium.launch({headless:true,executablePath});
-  const manifest = {...stamp,distribution:["A: original design fixed before B","B: complete and fix inquiry answers before C","C: learning and reflection","D/FULL: teachers only"],vl1_reference:{repository:"tzechingchan0605-cloud/Digestive-System",commit:"6ce583b",paper_version:"v3"},proposal_alignment:["4.1: identical scenarios, static data plots and problem prompts","4.3.2: same concepts/questions before formal teaching; keep SPSAI/CKT separate"],books:[]};
+  const manifest = {...stamp,instruction_mode:"explanation-example-guided-independent-check",duration_minutes:[15,20],distribution:["A: available from the start; no prelesson lecture or VL operation","B: guided practice then independent application; retain first answers","C: answer checking and correction only after completing B","D/FULL: teachers only"],vl1_reference:{repository:"tzechingchan0605-cloud/Digestive-System",commit:"6ce583b",paper_version:"v3"},proposal_alignment:["User-approved comparison condition: self-study explanations, examples, guided practice, independent application and correction; no prelesson lecture or VL operation","Shared scenarios, three investigations, model data, content and skill goals; equivalent prompts mapped individually","Separate common SPSAI/CKT outcomes from independent paper formative assessment"],books:[]};
   try {
     for (const language of ["zh-Hant","en"]) {
       const context = await browser.newContext();
@@ -82,17 +82,19 @@ async function build() {
         radios:Object.entries(EXT_POSITION_OPTIONS).map(([id,text])=>({id,text})),
       }));
       await fs.writeFile(path.join(output,"source.json"),sourceJSON+"\n");
-      let content = await sourcePage.evaluate(() => VL3PaperContent.render());
-      if (language === "en") {
-        await sourcePage.evaluate(() => VL3Language.requestSwitch());
-        content = await sourcePage.evaluate(books => VL3PaperContent.translate(books), content);
+      if (language === "zh-Hant") {
+        const lines=["# Phototropism 紙本逐題配對 / Question mapping", "", "材料教學版本 WS2；原 VL 題目版本 18。/ Paper curriculum WS2; native VL question version 18.", "", "| ID | VL 原題 / Original | 處理 / Treatment | 新版 / Revised | 共同目標 / Shared goal | 理由 / Reason |", "| --- | --- | --- | --- | --- | --- |"];
+        for (const [id,zh,en,method,methodEn,newZh,newEn,goal,goalEn,reason,reasonEn] of canonical.mapping) lines.push(`| ${id} | ${zh}<br>${en} | ${method}<br>${methodEn} | ${newZh}<br>${newEn} | ${goal}<br>${goalEn} | ${reason}<br>${reasonEn} |`);
+        await fs.writeFile(path.join(ROOT,"docs/PAPER_QUESTION_MAPPING.md"),lines.join("\n")+"\n");
       }
+      if (language === "en") await sourcePage.evaluate(() => VL3Language.requestSwitch());
+      const content = await sourcePage.evaluate(() => VL3PaperContent.render());
       const printPage = await context.newPage();
       await printPage.setContent(html(content.D.join(""),language,css,labels[language].D));
       // Paginate the shared rubric without cutting a table row across pages.
-      const rubricPages = await printPage.evaluate(({rubric,version}) => {
+      const rubricPages = await printPage.evaluate(({rubric,version,firstPage}) => {
         const pages = [],limit = 945;
-        let section,table,index=4;
+        let section,table,index=firstPage;
         function next() {
           section=document.createElement("section");section.className="paper-page";section.dataset.page="D"+index++;
           section.innerHTML=`<header><b>VL3 · ${rubric[0][0]}</b><span>${section.dataset.page}</span></header><main><table class="rubric"><thead><tr></tr></thead><tbody></tbody></table></main><footer><span>${version}</span><span>${section.dataset.page}</span></footer>`;
@@ -105,7 +107,7 @@ async function build() {
           if (section.querySelector("main").getBoundingClientRect().bottom-section.getBoundingClientRect().top>limit) {tr.remove();next();table.append(tr);}
         }
         return pages.map(page=>page.outerHTML);
-      },{rubric:content.rubric,version:stamp.version});
+      },{rubric:content.rubric,version:stamp.version,firstPage:content.D.length+1});
       content.D.push(...rubricPages);
       content.FULL=[...content.A,...content.B,...content.C,...content.D];
       for (const code of ["A","B","C","D","FULL"]) {

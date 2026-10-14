@@ -1,22 +1,28 @@
 {
-  "version": "v18-50ad1724f3cc",
+  "material_revision": 2,
+  "version": "ws2-vl18-7799bfec45d5",
   "experiment_version": 18,
   "sources": {
-    "index.html": "29027c8ead22f513fafbe0a224f041300d1ccd6258e3c12f36c252b7e1e195eb",
+    "index.html": "fba4dc2df5094cf68bdde5f91fba8aa92e3a9b8c76040862111f2fa2fceedd6a",
     "app.js": "cf1102e6d77b69cda82d0dcb456ead09664e43f0a3e5ebd3952683978c3e71d0",
     "inquiry.js": "aeaa73cd08b1ef8a865196add5a02bbe329a32b9ad8a225777e31be22c578e70",
     "tip-inquiry.js": "79984b5e34fe4e43a073c3c28da7dd979fef2cdf77c74c9ebec76e38a5e2070e",
     "excel.js": "83a36eadb68f191423e6d9666457cee55568499acc1d7e13dee23810333ab92c",
     "i18n.js": "c94d18db86d0a03754ed9041db972b4cc7a0ea07e39bb715fc34c82b0d18e8ee",
-    "i18n-strings.js": "f8c60c4d1bc87498a9d7d9f231079088c7b1f28e99f1616ae970eaf699eff9e1",
-    "paper-content.js": "1c08b739edd75c560f74311af5d76caf03609515bafbafc4021879b5115bf139",
-    "materials/print.css": "4a733566aad458725850629845a683cedab62e13e6d28e64511d6791752bea6b",
-    "scripts/build-materials.cjs": "b5594363034cf94c9dcbb6f9b623b1838609ad6e94b58d60c8664167a5d1a49c"
+    "i18n-strings.js": "a6a88e034887894804e3b7bbfffb5b0f320e4629c913083acfbc65db7eba30ba",
+    "paper-content.js": "26e76ce9babd7d39839896073284d2e17b727407d39232f116f87ac042e713f0",
+    "materials/print.css": "56757b4e6679120258656db219090d252766c6d01dee97d307ba43a50bdfdd2c",
+    "scripts/build-materials.cjs": "14dffd035e2c73142c28f987bdcb53c9746aade34f0a37f1263026ad22fa8828"
   },
+  "instruction_mode": "explanation-example-guided-independent-check",
+  "duration_minutes": [
+    15,
+    20
+  ],
   "distribution": [
-    "A: original design fixed before B",
-    "B: complete and fix inquiry answers before C",
-    "C: learning and reflection",
+    "A: available from the start; no prelesson lecture or VL operation",
+    "B: guided practice then independent application; retain first answers",
+    "C: answer checking and correction only after completing B",
     "D/FULL: teachers only"
   ],
   "vl1_reference": {
@@ -25,255 +31,234 @@
     "paper_version": "v3"
   },
   "proposal_alignment": [
-    "4.1: identical scenarios, static data plots and problem prompts",
-    "4.3.2: same concepts/questions before formal teaching; keep SPSAI/CKT separate"
+    "User-approved comparison condition: self-study explanations, examples, guided practice, independent application and correction; no prelesson lecture or VL operation",
+    "Shared scenarios, three investigations, model data, content and skill goals; equivalent prompts mapped individually",
+    "Separate common SPSAI/CKT outcomes from independent paper formative assessment"
   ],
   "books": [
     {
       "code": "A",
       "language": "zh-Hant",
-      "title": "情境與原始探究設計",
-      "pages": 3,
+      "title": "自學概念、圖像及示例",
+      "pages": 2,
       "page_codes": [
         "A1",
-        "A2",
-        "A3"
+        "A2"
       ],
-      "filename": "VL3_paper_A_zh-Hant_v18-50ad1724f3cc.pdf",
-      "pdf": "materials/VL3_paper_A_zh-Hant_v18-50ad1724f3cc.pdf",
-      "preview": "materials/VL3_paper_A_zh-Hant_v18-50ad1724f3cc.html",
-      "sha256": "c7d1e0c05974ef48bb9a95d0c4afbadb42438fc3ae919dd00b6e0492d79b25da",
-      "preview_sha256": "dadd2fd16f63ec8f7524da3f241f043b31a40f0d5250f66f9026a39d5add88c4",
-      "bytes": 561277,
+      "filename": "VL3_paper_A_zh-Hant_ws2-vl18-7799bfec45d5.pdf",
+      "pdf": "materials/VL3_paper_A_zh-Hant_ws2-vl18-7799bfec45d5.pdf",
+      "preview": "materials/VL3_paper_A_zh-Hant_ws2-vl18-7799bfec45d5.html",
+      "sha256": "b45853a27b33063eb3d1bf028ea53f9bbcc25c3302cc3d5ab88cce87b90ab369",
+      "preview_sha256": "44ff886b72bdf1f497fd1d328b1e545cc9d1c3d37c354660e9fa1ab4fe634a09",
+      "bytes": 494889,
       "audit": [
         {
           "page": "A1",
           "overflow": [],
-          "mainHeight": 558.71875,
-          "lines": [
-            2
-          ],
-          "writing_regions": [
-            {
-              "field": "observation",
-              "lines": [
-                [
-                  36.84375,
-                  442.83984375,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  456.33984375,
-                  558.421875
-                ]
-              ]
-            }
-          ],
+          "mainHeight": 699.75,
+          "lines": [],
+          "writing_regions": [],
           "identity": 1
         },
         {
           "page": "A2",
           "overflow": [],
-          "mainHeight": 569.828125,
-          "lines": [
-            2,
-            2
-          ],
-          "writing_regions": [
-            {
-              "field": "reason",
-              "lines": [
-                [
-                  36.84375,
-                  145.1484375,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  158.6484375,
-                  558.421875
-                ]
-              ]
-            },
-            {
-              "field": "hypothesis-revision",
-              "lines": [
-                [
-                  36.84375,
-                  475.44140625,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  488.94140625,
-                  558.421875
-                ]
-              ]
-            }
-          ],
-          "identity": 0
-        },
-        {
-          "page": "A3",
-          "overflow": [],
-          "mainHeight": 598.65625,
-          "lines": [
-            2,
-            2
-          ],
-          "writing_regions": [
-            {
-              "field": "controlPlan",
-              "lines": [
-                [
-                  36.84375,
-                  225.140625,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  238.640625,
-                  558.421875
-                ]
-              ]
-            },
-            {
-              "field": "setupDescription",
-              "lines": [
-                [
-                  36.84375,
-                  497.0625,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  510.5625,
-                  558.421875
-                ]
-              ]
-            }
-          ],
+          "mainHeight": 517.375,
+          "lines": [],
+          "writing_regions": [],
           "identity": 0
         }
       ],
       "pack_range": [
         1,
-        3
+        2
       ]
     },
     {
       "code": "B",
       "language": "zh-Hant",
-      "title": "實驗資料、分析與結論",
-      "pages": 4,
+      "title": "有提示練習及獨立應用",
+      "pages": 5,
       "page_codes": [
         "B1",
         "B2",
         "B3",
-        "B4"
+        "B4",
+        "B5"
       ],
-      "filename": "VL3_paper_B_zh-Hant_v18-50ad1724f3cc.pdf",
-      "pdf": "materials/VL3_paper_B_zh-Hant_v18-50ad1724f3cc.pdf",
-      "preview": "materials/VL3_paper_B_zh-Hant_v18-50ad1724f3cc.html",
-      "sha256": "1c285e3d85ee166bdcfb5fcfbf3102c93e781f76d463791c287c9b2ffb6c6364",
-      "preview_sha256": "621d3fee5dd9149f7ba4997989731ec0cdc5d97ea517e6c909f7008fe8b7cdcc",
-      "bytes": 547558,
+      "filename": "VL3_paper_B_zh-Hant_ws2-vl18-7799bfec45d5.pdf",
+      "pdf": "materials/VL3_paper_B_zh-Hant_ws2-vl18-7799bfec45d5.pdf",
+      "preview": "materials/VL3_paper_B_zh-Hant_ws2-vl18-7799bfec45d5.html",
+      "sha256": "42b8c2717cf737ab95c91c6a7b7e251bd1e35998f2a7d2cff2b4d58f4d7d971f",
+      "preview_sha256": "5887428dd5cb15d275fbef7263f07af28d551c50d45476bd95c76c70df24fb86",
+      "bytes": 624250,
       "audit": [
         {
           "page": "B1",
           "overflow": [],
-          "mainHeight": 468.71875,
-          "lines": [],
-          "writing_regions": [],
+          "mainHeight": 790.625,
+          "lines": [
+            2,
+            2,
+            2,
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "paper-label-A",
+              "lines": [
+                [
+                  40.59375,
+                  248.2265625,
+                  203.953125
+                ],
+                [
+                  40.59375,
+                  261.7265625,
+                  203.953125
+                ]
+              ]
+            },
+            {
+              "field": "paper-label-B",
+              "lines": [
+                [
+                  215.953125,
+                  248.2265625,
+                  379.3125
+                ],
+                [
+                  215.953125,
+                  261.7265625,
+                  379.3125
+                ]
+              ]
+            },
+            {
+              "field": "paper-label-C",
+              "lines": [
+                [
+                  391.3125,
+                  248.2265625,
+                  554.671875
+                ],
+                [
+                  391.3125,
+                  261.7265625,
+                  554.671875
+                ]
+              ]
+            },
+            {
+              "field": "paper-control",
+              "lines": [
+                [
+                  36.84375,
+                  625.2890625,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  638.7890625,
+                  558.421875
+                ]
+              ]
+            }
+          ],
           "identity": 0
         },
         {
           "page": "B2",
           "overflow": [],
-          "mainHeight": 676.90625,
-          "lines": [
-            2
-          ],
-          "writing_regions": [
-            {
-              "field": "tipReason",
-              "lines": [
-                [
-                  36.84375,
-                  252,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  264,
-                  558.421875
-                ]
-              ]
-            }
-          ],
+          "mainHeight": 834.875,
+          "lines": [],
+          "writing_regions": [],
           "identity": 0
         },
         {
           "page": "B3",
           "overflow": [],
-          "mainHeight": 339.9375,
+          "mainHeight": 761.4375,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "B4",
+          "overflow": [],
+          "mainHeight": 867.8125,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "B5",
+          "overflow": [],
+          "mainHeight": 652.875,
           "lines": [
+            2,
             2
           ],
           "writing_regions": [
             {
-              "field": "extReason",
+              "field": "paper-observation",
               "lines": [
                 [
                   36.84375,
-                  222.8671875,
+                  445.640625,
                   558.421875
                 ],
                 [
                   36.84375,
-                  236.3671875,
+                  459.140625,
+                  558.421875
+                ]
+              ]
+            },
+            {
+              "field": "reflection",
+              "lines": [
+                [
+                  36.84375,
+                  511.5234375,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  525.0234375,
                   558.421875
                 ]
               ]
             }
           ],
           "identity": 0
-        },
-        {
-          "page": "B4",
-          "overflow": [],
-          "mainHeight": 953.1875,
-          "lines": [],
-          "writing_regions": [],
-          "identity": 0
         }
       ],
       "pack_range": [
-        4,
+        3,
         7
       ]
     },
     {
       "code": "C",
       "language": "zh-Hant",
-      "title": "學習重點及反思",
+      "title": "核對答案及修正",
       "pages": 2,
       "page_codes": [
         "C1",
         "C2"
       ],
-      "filename": "VL3_paper_C_zh-Hant_v18-50ad1724f3cc.pdf",
-      "pdf": "materials/VL3_paper_C_zh-Hant_v18-50ad1724f3cc.pdf",
-      "preview": "materials/VL3_paper_C_zh-Hant_v18-50ad1724f3cc.html",
-      "sha256": "c7420c505f867f2cf5e4d97b688a31afe5350656bafe26b734e15acec1a6a8f8",
-      "preview_sha256": "29e6e5c0adb3c9c85271990a0b145a6e38d8245f3eb1860daab1df1cdbf5f67c",
-      "bytes": 299436,
+      "filename": "VL3_paper_C_zh-Hant_ws2-vl18-7799bfec45d5.pdf",
+      "pdf": "materials/VL3_paper_C_zh-Hant_ws2-vl18-7799bfec45d5.pdf",
+      "preview": "materials/VL3_paper_C_zh-Hant_ws2-vl18-7799bfec45d5.html",
+      "sha256": "05659711bd9e30d5ed9ba13ec2c71b94cc578ef9263c4c7a51dc3e32480e10e1",
+      "preview_sha256": "15dd92cdadaf8a391b7be36eff1150e5e33f57ab2351b271a401ca2f2aba5ed0",
+      "bytes": 458503,
       "audit": [
         {
           "page": "C1",
           "overflow": [],
-          "mainHeight": 523.984375,
+          "mainHeight": 700.3125,
           "lines": [],
           "writing_regions": [],
           "identity": 1
@@ -281,22 +266,38 @@
         {
           "page": "C2",
           "overflow": [],
-          "mainHeight": 400.78125,
+          "mainHeight": 556.09375,
           "lines": [
+            2,
             2
           ],
           "writing_regions": [
             {
-              "field": "reflection",
+              "field": "paper-correction-1",
               "lines": [
                 [
                   36.84375,
-                  348.65625,
+                  414.2578125,
                   558.421875
                 ],
                 [
                   36.84375,
-                  362.15625,
+                  427.7578125,
+                  558.421875
+                ]
+              ]
+            },
+            {
+              "field": "paper-correction-2",
+              "lines": [
+                [
+                  36.84375,
+                  465.140625,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  478.640625,
                   558.421875
                 ]
               ]
@@ -314,24 +315,26 @@
       "code": "D",
       "language": "zh-Hant",
       "title": "教師指引、參考答案及評分準則",
-      "pages": 4,
+      "pages": 6,
       "page_codes": [
         "D1",
         "D2",
         "D3",
-        "D4"
+        "D4",
+        "D5",
+        "D6"
       ],
-      "filename": "VL3_paper_D_zh-Hant_v18-50ad1724f3cc.pdf",
-      "pdf": "materials/VL3_paper_D_zh-Hant_v18-50ad1724f3cc.pdf",
-      "preview": "materials/VL3_paper_D_zh-Hant_v18-50ad1724f3cc.html",
-      "sha256": "bd57ddeee18654b85407cecba80dda84570ca62d83c017590528c57219f855c0",
-      "preview_sha256": "7038ed40be4c1719c75bb510971ccd310e3ed529285360d50def0c9c40452b27",
-      "bytes": 598294,
+      "filename": "VL3_paper_D_zh-Hant_ws2-vl18-7799bfec45d5.pdf",
+      "pdf": "materials/VL3_paper_D_zh-Hant_ws2-vl18-7799bfec45d5.pdf",
+      "preview": "materials/VL3_paper_D_zh-Hant_ws2-vl18-7799bfec45d5.html",
+      "sha256": "401bbbf6d05275d33c07eb1040d85873c837ad864480498b817e390e39c6e402",
+      "preview_sha256": "8cdc6b46f1ce943fe31c8b9273f0c91ad1b2f68caa0129e763e5adc94e9de90e",
+      "bytes": 707311,
       "audit": [
         {
           "page": "D1",
           "overflow": [],
-          "mainHeight": 324.03125,
+          "mainHeight": 490.8125,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -339,7 +342,7 @@
         {
           "page": "D2",
           "overflow": [],
-          "mainHeight": 467.90625,
+          "mainHeight": 597,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -347,7 +350,7 @@
         {
           "page": "D3",
           "overflow": [],
-          "mainHeight": 428.59375,
+          "mainHeight": 387.75,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -355,7 +358,23 @@
         {
           "page": "D4",
           "overflow": [],
-          "mainHeight": 858.0625,
+          "mainHeight": 538.875,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "D5",
+          "overflow": [],
+          "mainHeight": 492,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "D6",
+          "overflow": [],
+          "mainHeight": 413.03125,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -363,218 +382,198 @@
       ],
       "pack_range": [
         10,
-        13
+        15
       ]
     },
     {
       "code": "FULL",
       "language": "zh-Hant",
       "title": "完整教師列印套裝",
-      "pages": 13,
+      "pages": 15,
       "page_codes": [
         "A1",
         "A2",
-        "A3",
         "B1",
         "B2",
         "B3",
         "B4",
+        "B5",
         "C1",
         "C2",
         "D1",
         "D2",
         "D3",
-        "D4"
+        "D4",
+        "D5",
+        "D6"
       ],
-      "filename": "VL3_paper_FULL_zh-Hant_v18-50ad1724f3cc.pdf",
-      "pdf": "materials/VL3_paper_FULL_zh-Hant_v18-50ad1724f3cc.pdf",
-      "preview": "materials/VL3_paper_FULL_zh-Hant_v18-50ad1724f3cc.html",
-      "sha256": "162791b5701bf5becf498575f694b924b989f0de7a6f22c6b4f450ee8cfb4816",
-      "preview_sha256": "2592b8ca5e1a82dcebcbd42bb03c021daaa9533387c67cd476493929d47a44d9",
-      "bytes": 947393,
+      "filename": "VL3_paper_FULL_zh-Hant_ws2-vl18-7799bfec45d5.pdf",
+      "pdf": "materials/VL3_paper_FULL_zh-Hant_ws2-vl18-7799bfec45d5.pdf",
+      "preview": "materials/VL3_paper_FULL_zh-Hant_ws2-vl18-7799bfec45d5.html",
+      "sha256": "a06abe990e9df885885455658c9681531a8e76037206246de85f02cf2a9be1b8",
+      "preview_sha256": "9339ed3d199f45fc9337460aec24f1737b5dc201f2af1dbedb4f5e5771822847",
+      "bytes": 959530,
       "audit": [
         {
           "page": "A1",
           "overflow": [],
-          "mainHeight": 558.71875,
-          "lines": [
-            2
-          ],
-          "writing_regions": [
-            {
-              "field": "observation",
-              "lines": [
-                [
-                  36.84375,
-                  442.83984375,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  456.33984375,
-                  558.421875
-                ]
-              ]
-            }
-          ],
+          "mainHeight": 699.75,
+          "lines": [],
+          "writing_regions": [],
           "identity": 1
         },
         {
           "page": "A2",
           "overflow": [],
-          "mainHeight": 569.828125,
-          "lines": [
-            2,
-            2
-          ],
-          "writing_regions": [
-            {
-              "field": "reason",
-              "lines": [
-                [
-                  36.84375,
-                  145.1484375,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  158.6484375,
-                  558.421875
-                ]
-              ]
-            },
-            {
-              "field": "hypothesis-revision",
-              "lines": [
-                [
-                  36.84375,
-                  475.44140625,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  488.94140625,
-                  558.421875
-                ]
-              ]
-            }
-          ],
-          "identity": 0
-        },
-        {
-          "page": "A3",
-          "overflow": [],
-          "mainHeight": 598.65625,
-          "lines": [
-            2,
-            2
-          ],
-          "writing_regions": [
-            {
-              "field": "controlPlan",
-              "lines": [
-                [
-                  36.84375,
-                  225.140625,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  238.640625,
-                  558.421875
-                ]
-              ]
-            },
-            {
-              "field": "setupDescription",
-              "lines": [
-                [
-                  36.84375,
-                  497.0625,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  510.5625,
-                  558.421875
-                ]
-              ]
-            }
-          ],
+          "mainHeight": 517.375,
+          "lines": [],
+          "writing_regions": [],
           "identity": 0
         },
         {
           "page": "B1",
           "overflow": [],
-          "mainHeight": 468.71875,
-          "lines": [],
-          "writing_regions": [],
+          "mainHeight": 790.625,
+          "lines": [
+            2,
+            2,
+            2,
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "paper-label-A",
+              "lines": [
+                [
+                  40.59375,
+                  248.2265625,
+                  203.953125
+                ],
+                [
+                  40.59375,
+                  261.7265625,
+                  203.953125
+                ]
+              ]
+            },
+            {
+              "field": "paper-label-B",
+              "lines": [
+                [
+                  215.953125,
+                  248.2265625,
+                  379.3125
+                ],
+                [
+                  215.953125,
+                  261.7265625,
+                  379.3125
+                ]
+              ]
+            },
+            {
+              "field": "paper-label-C",
+              "lines": [
+                [
+                  391.3125,
+                  248.2265625,
+                  554.671875
+                ],
+                [
+                  391.3125,
+                  261.7265625,
+                  554.671875
+                ]
+              ]
+            },
+            {
+              "field": "paper-control",
+              "lines": [
+                [
+                  36.84375,
+                  625.2890625,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  638.7890625,
+                  558.421875
+                ]
+              ]
+            }
+          ],
           "identity": 0
         },
         {
           "page": "B2",
           "overflow": [],
-          "mainHeight": 676.90625,
-          "lines": [
-            2
-          ],
-          "writing_regions": [
-            {
-              "field": "tipReason",
-              "lines": [
-                [
-                  36.84375,
-                  252,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  264,
-                  558.421875
-                ]
-              ]
-            }
-          ],
-          "identity": 0
-        },
-        {
-          "page": "B3",
-          "overflow": [],
-          "mainHeight": 339.9375,
-          "lines": [
-            2
-          ],
-          "writing_regions": [
-            {
-              "field": "extReason",
-              "lines": [
-                [
-                  36.84375,
-                  222.8671875,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  236.3671875,
-                  558.421875
-                ]
-              ]
-            }
-          ],
-          "identity": 0
-        },
-        {
-          "page": "B4",
-          "overflow": [],
-          "mainHeight": 953.1875,
+          "mainHeight": 834.875,
           "lines": [],
           "writing_regions": [],
           "identity": 0
         },
         {
+          "page": "B3",
+          "overflow": [],
+          "mainHeight": 761.4375,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "B4",
+          "overflow": [],
+          "mainHeight": 867.8125,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "B5",
+          "overflow": [],
+          "mainHeight": 652.875,
+          "lines": [
+            2,
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "paper-observation",
+              "lines": [
+                [
+                  36.84375,
+                  445.640625,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  459.140625,
+                  558.421875
+                ]
+              ]
+            },
+            {
+              "field": "reflection",
+              "lines": [
+                [
+                  36.84375,
+                  511.5234375,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  525.0234375,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        },
+        {
           "page": "C1",
           "overflow": [],
-          "mainHeight": 523.984375,
+          "mainHeight": 700.3125,
           "lines": [],
           "writing_regions": [],
           "identity": 1
@@ -582,22 +581,38 @@
         {
           "page": "C2",
           "overflow": [],
-          "mainHeight": 400.78125,
+          "mainHeight": 556.09375,
           "lines": [
+            2,
             2
           ],
           "writing_regions": [
             {
-              "field": "reflection",
+              "field": "paper-correction-1",
               "lines": [
                 [
                   36.84375,
-                  348.65625,
+                  414.2578125,
                   558.421875
                 ],
                 [
                   36.84375,
-                  362.15625,
+                  427.7578125,
+                  558.421875
+                ]
+              ]
+            },
+            {
+              "field": "paper-correction-2",
+              "lines": [
+                [
+                  36.84375,
+                  465.140625,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  478.640625,
                   558.421875
                 ]
               ]
@@ -608,7 +623,7 @@
         {
           "page": "D1",
           "overflow": [],
-          "mainHeight": 324.03125,
+          "mainHeight": 490.8125,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -616,7 +631,7 @@
         {
           "page": "D2",
           "overflow": [],
-          "mainHeight": 467.90625,
+          "mainHeight": 597,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -624,7 +639,7 @@
         {
           "page": "D3",
           "overflow": [],
-          "mainHeight": 428.59375,
+          "mainHeight": 387.75,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -632,7 +647,23 @@
         {
           "page": "D4",
           "overflow": [],
-          "mainHeight": 858.0625,
+          "mainHeight": 538.875,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "D5",
+          "overflow": [],
+          "mainHeight": 492,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "D6",
+          "overflow": [],
+          "mainHeight": 413.03125,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -640,254 +671,232 @@
       ],
       "pack_range": [
         1,
-        13
+        15
       ]
     },
     {
       "code": "A",
       "language": "en",
-      "title": "Context and original inquiry design",
-      "pages": 3,
+      "title": "Self-study concepts, diagrams and examples",
+      "pages": 2,
       "page_codes": [
         "A1",
-        "A2",
-        "A3"
+        "A2"
       ],
-      "filename": "VL3_paper_A_en_v18-50ad1724f3cc.pdf",
-      "pdf": "materials/VL3_paper_A_en_v18-50ad1724f3cc.pdf",
-      "preview": "materials/VL3_paper_A_en_v18-50ad1724f3cc.html",
-      "sha256": "214a752c440d28cf7c1d453b4dbf019de06fdd06acd243d0a2efb8bd5505c02c",
-      "preview_sha256": "d939cea4538619250eb95b525a3ed9c49817477bb758d707830dcdcaeff049b3",
-      "bytes": 98374,
+      "filename": "VL3_paper_A_en_ws2-vl18-7799bfec45d5.pdf",
+      "pdf": "materials/VL3_paper_A_en_ws2-vl18-7799bfec45d5.pdf",
+      "preview": "materials/VL3_paper_A_en_ws2-vl18-7799bfec45d5.html",
+      "sha256": "36b31f5fe5d53cdf02aad860cb9f4e567087291cc850a09940088f25d5c25a08",
+      "preview_sha256": "af78c7930a87e6a5f97529c16b7d6f06bc4c1712fb7b2c3210c87bd3aa50135f",
+      "bytes": 133309,
       "audit": [
         {
           "page": "A1",
           "overflow": [],
-          "mainHeight": 625.71875,
-          "lines": [
-            2
-          ],
-          "writing_regions": [
-            {
-              "field": "observation",
-              "lines": [
-                [
-                  36.84375,
-                  478.01953125,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  491.51953125,
-                  558.421875
-                ]
-              ]
-            }
-          ],
+          "mainHeight": 750.484375,
+          "lines": [],
+          "writing_regions": [],
           "identity": 1
         },
         {
           "page": "A2",
           "overflow": [],
-          "mainHeight": 644.671875,
-          "lines": [
-            2,
-            2
-          ],
-          "writing_regions": [
-            {
-              "field": "reason",
-              "lines": [
-                [
-                  36.84375,
-                  156.8671875,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  170.3671875,
-                  558.421875
-                ]
-              ]
-            },
-            {
-              "field": "hypothesis-revision",
-              "lines": [
-                [
-                  36.84375,
-                  531.01171875,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  544.51171875,
-                  558.421875
-                ]
-              ]
-            }
-          ],
-          "identity": 0
-        },
-        {
-          "page": "A3",
-          "overflow": [],
-          "mainHeight": 691,
-          "lines": [
-            2,
-            2
-          ],
-          "writing_regions": [
-            {
-              "field": "controlPlan",
-              "lines": [
-                [
-                  36.84375,
-                  271.546875,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  285.046875,
-                  558.421875
-                ]
-              ]
-            },
-            {
-              "field": "setupDescription",
-              "lines": [
-                [
-                  36.84375,
-                  565.7578125,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  579.2578125,
-                  558.421875
-                ]
-              ]
-            }
-          ],
+          "mainHeight": 599.171875,
+          "lines": [],
+          "writing_regions": [],
           "identity": 0
         }
       ],
       "pack_range": [
         1,
-        3
+        2
       ]
     },
     {
       "code": "B",
       "language": "en",
-      "title": "Experimental data, analysis and conclusions",
-      "pages": 4,
+      "title": "Guided practice and independent application",
+      "pages": 5,
       "page_codes": [
         "B1",
         "B2",
         "B3",
-        "B4"
+        "B4",
+        "B5"
       ],
-      "filename": "VL3_paper_B_en_v18-50ad1724f3cc.pdf",
-      "pdf": "materials/VL3_paper_B_en_v18-50ad1724f3cc.pdf",
-      "preview": "materials/VL3_paper_B_en_v18-50ad1724f3cc.html",
-      "sha256": "23767c1683ea9dc32315fcb4240a7bc07457e666978928ea41a15bd8bcf0c651",
-      "preview_sha256": "dcc5217809276b7827763663699d2de0450d016f5bff1116944c069b0381cf21",
-      "bytes": 127336,
+      "filename": "VL3_paper_B_en_ws2-vl18-7799bfec45d5.pdf",
+      "pdf": "materials/VL3_paper_B_en_ws2-vl18-7799bfec45d5.pdf",
+      "preview": "materials/VL3_paper_B_en_ws2-vl18-7799bfec45d5.html",
+      "sha256": "4a9ad32d6bfd140fd80907e6e31f1924a0972f6e2964273ed09e52f94766520d",
+      "preview_sha256": "edcbb4b9905193455ca7581cbfa49f4d24d94aeb1bf90734db583cfd21f31212",
+      "bytes": 143834,
       "audit": [
         {
           "page": "B1",
           "overflow": [],
-          "mainHeight": 561.953125,
-          "lines": [],
-          "writing_regions": [],
+          "mainHeight": 926.984375,
+          "lines": [
+            2,
+            2,
+            2,
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "paper-label-A",
+              "lines": [
+                [
+                  40.59375,
+                  246.26953125,
+                  203.953125
+                ],
+                [
+                  40.59375,
+                  259.76953125,
+                  203.953125
+                ]
+              ]
+            },
+            {
+              "field": "paper-label-B",
+              "lines": [
+                [
+                  215.953125,
+                  246.26953125,
+                  379.3125
+                ],
+                [
+                  215.953125,
+                  259.76953125,
+                  379.3125
+                ]
+              ]
+            },
+            {
+              "field": "paper-label-C",
+              "lines": [
+                [
+                  391.3125,
+                  246.26953125,
+                  554.671875
+                ],
+                [
+                  391.3125,
+                  259.76953125,
+                  554.671875
+                ]
+              ]
+            },
+            {
+              "field": "paper-control",
+              "lines": [
+                [
+                  36.84375,
+                  716.49609375,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  729.99609375,
+                  558.421875
+                ]
+              ]
+            }
+          ],
           "identity": 0
         },
         {
           "page": "B2",
           "overflow": [],
-          "mainHeight": 798.234375,
-          "lines": [
-            2
-          ],
-          "writing_regions": [
-            {
-              "field": "tipReason",
-              "lines": [
-                [
-                  36.84375,
-                  317.3671875,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  329.3671875,
-                  558.421875
-                ]
-              ]
-            }
-          ],
+          "mainHeight": 976.71875,
+          "lines": [],
+          "writing_regions": [],
           "identity": 0
         },
         {
           "page": "B3",
           "overflow": [],
-          "mainHeight": 454.734375,
+          "mainHeight": 820.140625,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "B4",
+          "overflow": [],
+          "mainHeight": 940.890625,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "B5",
+          "overflow": [],
+          "mainHeight": 645.765625,
           "lines": [
+            2,
             2
           ],
           "writing_regions": [
             {
-              "field": "extReason",
+              "field": "paper-observation",
               "lines": [
                 [
                   36.84375,
-                  284.61328125,
+                  440.6484375,
                   558.421875
                 ],
                 [
                   36.84375,
-                  298.11328125,
+                  454.1484375,
+                  558.421875
+                ]
+              ]
+            },
+            {
+              "field": "reflection",
+              "lines": [
+                [
+                  36.84375,
+                  506.0390625,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  519.5390625,
                   558.421875
                 ]
               ]
             }
           ],
           "identity": 0
-        },
-        {
-          "page": "B4",
-          "overflow": [],
-          "mainHeight": 991.40625,
-          "lines": [],
-          "writing_regions": [],
-          "identity": 0
         }
       ],
       "pack_range": [
-        4,
+        3,
         7
       ]
     },
     {
       "code": "C",
       "language": "en",
-      "title": "Learning points and reflection",
+      "title": "Answer checking and correction",
       "pages": 2,
       "page_codes": [
         "C1",
         "C2"
       ],
-      "filename": "VL3_paper_C_en_v18-50ad1724f3cc.pdf",
-      "pdf": "materials/VL3_paper_C_en_v18-50ad1724f3cc.pdf",
-      "preview": "materials/VL3_paper_C_en_v18-50ad1724f3cc.html",
-      "sha256": "85dd6cf9967a781617a5eefdfcdb2d1555de5e0d740b206f8c6e6263f9325ecf",
-      "preview_sha256": "93e4b6dfcf98925aa35c8ad60f25ee3293a929216e64868d059140bb43eaa8a6",
-      "bytes": 112774,
+      "filename": "VL3_paper_C_en_ws2-vl18-7799bfec45d5.pdf",
+      "pdf": "materials/VL3_paper_C_en_ws2-vl18-7799bfec45d5.pdf",
+      "preview": "materials/VL3_paper_C_en_ws2-vl18-7799bfec45d5.html",
+      "sha256": "e436308274214ead3de2dcf1a715ffa77b0e704354d16d858a99f0910d9af49e",
+      "preview_sha256": "3feddc3e52b422cf891e59d3b5d28f7d15247074a530f900c3a4dafe48853d48",
+      "bytes": 81389,
       "audit": [
         {
           "page": "C1",
           "overflow": [],
-          "mainHeight": 578.75,
+          "mainHeight": 791.578125,
           "lines": [],
           "writing_regions": [],
           "identity": 1
@@ -895,22 +904,38 @@
         {
           "page": "C2",
           "overflow": [],
-          "mainHeight": 417,
+          "mainHeight": 726.8125,
           "lines": [
+            2,
             2
           ],
           "writing_regions": [
             {
-              "field": "reflection",
+              "field": "paper-correction-1",
               "lines": [
                 [
                   36.84375,
-                  360.2578125,
+                  542.2265625,
                   558.421875
                 ],
                 [
                   36.84375,
-                  373.7578125,
+                  555.7265625,
+                  558.421875
+                ]
+              ]
+            },
+            {
+              "field": "paper-correction-2",
+              "lines": [
+                [
+                  36.84375,
+                  592.6171875,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  606.1171875,
                   558.421875
                 ]
               ]
@@ -928,25 +953,26 @@
       "code": "D",
       "language": "en",
       "title": "Teacher guide, answers and assessment criteria",
-      "pages": 5,
+      "pages": 6,
       "page_codes": [
         "D1",
         "D2",
         "D3",
         "D4",
-        "D5"
+        "D5",
+        "D6"
       ],
-      "filename": "VL3_paper_D_en_v18-50ad1724f3cc.pdf",
-      "pdf": "materials/VL3_paper_D_en_v18-50ad1724f3cc.pdf",
-      "preview": "materials/VL3_paper_D_en_v18-50ad1724f3cc.html",
-      "sha256": "20dbdf676167ee3345b0de1dfa2019e62933a4f8abb4f4f0ad7de816558d12dc",
-      "preview_sha256": "ac25c6585f397276e19d1f26954cf32be4dba81a22cb52ddbda6f8f7c91a378d",
-      "bytes": 101553,
+      "filename": "VL3_paper_D_en_ws2-vl18-7799bfec45d5.pdf",
+      "pdf": "materials/VL3_paper_D_en_ws2-vl18-7799bfec45d5.pdf",
+      "preview": "materials/VL3_paper_D_en_ws2-vl18-7799bfec45d5.html",
+      "sha256": "be5eec7b43a2156ffe843f29bc4c3d97d4e820b796874949b69eee7a22966abc",
+      "preview_sha256": "fb2096ea0a4a62c8f51a57ffab98964d4b5af94f32819aa4dd3ad1c217dd5cca",
+      "bytes": 110204,
       "audit": [
         {
           "page": "D1",
           "overflow": [],
-          "mainHeight": 425.9375,
+          "mainHeight": 590.09375,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -954,7 +980,7 @@
         {
           "page": "D2",
           "overflow": [],
-          "mainHeight": 494.4375,
+          "mainHeight": 677.4375,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -962,7 +988,7 @@
         {
           "page": "D3",
           "overflow": [],
-          "mainHeight": 635.6875,
+          "mainHeight": 522.75,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -970,7 +996,7 @@
         {
           "page": "D4",
           "overflow": [],
-          "mainHeight": 860.46875,
+          "mainHeight": 726.921875,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -978,7 +1004,15 @@
         {
           "page": "D5",
           "overflow": [],
-          "mainHeight": 458.53125,
+          "mainHeight": 634.96875,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "D6",
+          "overflow": [],
+          "mainHeight": 503.125,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -986,219 +1020,198 @@
       ],
       "pack_range": [
         10,
-        14
+        15
       ]
     },
     {
       "code": "FULL",
       "language": "en",
       "title": "Complete teacher print pack",
-      "pages": 14,
+      "pages": 15,
       "page_codes": [
         "A1",
         "A2",
-        "A3",
         "B1",
         "B2",
         "B3",
         "B4",
+        "B5",
         "C1",
         "C2",
         "D1",
         "D2",
         "D3",
         "D4",
-        "D5"
+        "D5",
+        "D6"
       ],
-      "filename": "VL3_paper_FULL_en_v18-50ad1724f3cc.pdf",
-      "pdf": "materials/VL3_paper_FULL_en_v18-50ad1724f3cc.pdf",
-      "preview": "materials/VL3_paper_FULL_en_v18-50ad1724f3cc.html",
-      "sha256": "991a9d272d474b97ffb053e52cfee495a15f14d40b10f51365ecedc5e36ddf13",
-      "preview_sha256": "9135bed4062f9fa509ff28851c7c2694eb88e4d88af11f92897b6643edd906ef",
-      "bytes": 239383,
+      "filename": "VL3_paper_FULL_en_ws2-vl18-7799bfec45d5.pdf",
+      "pdf": "materials/VL3_paper_FULL_en_ws2-vl18-7799bfec45d5.pdf",
+      "preview": "materials/VL3_paper_FULL_en_ws2-vl18-7799bfec45d5.html",
+      "sha256": "c64fbf6b995e35f75faa8818666e7a997438176120eac59f0360c99d7b51c798",
+      "preview_sha256": "5784e4aaa854fc375b68f1c50e28591bcaf1d217253396494fcc5fcd1382a630",
+      "bytes": 257413,
       "audit": [
         {
           "page": "A1",
           "overflow": [],
-          "mainHeight": 625.71875,
-          "lines": [
-            2
-          ],
-          "writing_regions": [
-            {
-              "field": "observation",
-              "lines": [
-                [
-                  36.84375,
-                  478.01953125,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  491.51953125,
-                  558.421875
-                ]
-              ]
-            }
-          ],
+          "mainHeight": 750.484375,
+          "lines": [],
+          "writing_regions": [],
           "identity": 1
         },
         {
           "page": "A2",
           "overflow": [],
-          "mainHeight": 644.671875,
-          "lines": [
-            2,
-            2
-          ],
-          "writing_regions": [
-            {
-              "field": "reason",
-              "lines": [
-                [
-                  36.84375,
-                  156.8671875,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  170.3671875,
-                  558.421875
-                ]
-              ]
-            },
-            {
-              "field": "hypothesis-revision",
-              "lines": [
-                [
-                  36.84375,
-                  531.01171875,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  544.51171875,
-                  558.421875
-                ]
-              ]
-            }
-          ],
-          "identity": 0
-        },
-        {
-          "page": "A3",
-          "overflow": [],
-          "mainHeight": 691,
-          "lines": [
-            2,
-            2
-          ],
-          "writing_regions": [
-            {
-              "field": "controlPlan",
-              "lines": [
-                [
-                  36.84375,
-                  271.546875,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  285.046875,
-                  558.421875
-                ]
-              ]
-            },
-            {
-              "field": "setupDescription",
-              "lines": [
-                [
-                  36.84375,
-                  565.7578125,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  579.2578125,
-                  558.421875
-                ]
-              ]
-            }
-          ],
+          "mainHeight": 599.171875,
+          "lines": [],
+          "writing_regions": [],
           "identity": 0
         },
         {
           "page": "B1",
           "overflow": [],
-          "mainHeight": 561.953125,
-          "lines": [],
-          "writing_regions": [],
+          "mainHeight": 926.984375,
+          "lines": [
+            2,
+            2,
+            2,
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "paper-label-A",
+              "lines": [
+                [
+                  40.59375,
+                  246.26953125,
+                  203.953125
+                ],
+                [
+                  40.59375,
+                  259.76953125,
+                  203.953125
+                ]
+              ]
+            },
+            {
+              "field": "paper-label-B",
+              "lines": [
+                [
+                  215.953125,
+                  246.26953125,
+                  379.3125
+                ],
+                [
+                  215.953125,
+                  259.76953125,
+                  379.3125
+                ]
+              ]
+            },
+            {
+              "field": "paper-label-C",
+              "lines": [
+                [
+                  391.3125,
+                  246.26953125,
+                  554.671875
+                ],
+                [
+                  391.3125,
+                  259.76953125,
+                  554.671875
+                ]
+              ]
+            },
+            {
+              "field": "paper-control",
+              "lines": [
+                [
+                  36.84375,
+                  716.49609375,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  729.99609375,
+                  558.421875
+                ]
+              ]
+            }
+          ],
           "identity": 0
         },
         {
           "page": "B2",
           "overflow": [],
-          "mainHeight": 798.234375,
-          "lines": [
-            2
-          ],
-          "writing_regions": [
-            {
-              "field": "tipReason",
-              "lines": [
-                [
-                  36.84375,
-                  317.3671875,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  329.3671875,
-                  558.421875
-                ]
-              ]
-            }
-          ],
-          "identity": 0
-        },
-        {
-          "page": "B3",
-          "overflow": [],
-          "mainHeight": 454.734375,
-          "lines": [
-            2
-          ],
-          "writing_regions": [
-            {
-              "field": "extReason",
-              "lines": [
-                [
-                  36.84375,
-                  284.61328125,
-                  558.421875
-                ],
-                [
-                  36.84375,
-                  298.11328125,
-                  558.421875
-                ]
-              ]
-            }
-          ],
-          "identity": 0
-        },
-        {
-          "page": "B4",
-          "overflow": [],
-          "mainHeight": 991.40625,
+          "mainHeight": 976.71875,
           "lines": [],
           "writing_regions": [],
           "identity": 0
         },
         {
+          "page": "B3",
+          "overflow": [],
+          "mainHeight": 820.140625,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "B4",
+          "overflow": [],
+          "mainHeight": 940.890625,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "B5",
+          "overflow": [],
+          "mainHeight": 645.765625,
+          "lines": [
+            2,
+            2
+          ],
+          "writing_regions": [
+            {
+              "field": "paper-observation",
+              "lines": [
+                [
+                  36.84375,
+                  440.6484375,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  454.1484375,
+                  558.421875
+                ]
+              ]
+            },
+            {
+              "field": "reflection",
+              "lines": [
+                [
+                  36.84375,
+                  506.0390625,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  519.5390625,
+                  558.421875
+                ]
+              ]
+            }
+          ],
+          "identity": 0
+        },
+        {
           "page": "C1",
           "overflow": [],
-          "mainHeight": 578.75,
+          "mainHeight": 791.578125,
           "lines": [],
           "writing_regions": [],
           "identity": 1
@@ -1206,22 +1219,38 @@
         {
           "page": "C2",
           "overflow": [],
-          "mainHeight": 417,
+          "mainHeight": 726.8125,
           "lines": [
+            2,
             2
           ],
           "writing_regions": [
             {
-              "field": "reflection",
+              "field": "paper-correction-1",
               "lines": [
                 [
                   36.84375,
-                  360.2578125,
+                  542.2265625,
                   558.421875
                 ],
                 [
                   36.84375,
-                  373.7578125,
+                  555.7265625,
+                  558.421875
+                ]
+              ]
+            },
+            {
+              "field": "paper-correction-2",
+              "lines": [
+                [
+                  36.84375,
+                  592.6171875,
+                  558.421875
+                ],
+                [
+                  36.84375,
+                  606.1171875,
                   558.421875
                 ]
               ]
@@ -1232,7 +1261,7 @@
         {
           "page": "D1",
           "overflow": [],
-          "mainHeight": 425.9375,
+          "mainHeight": 590.09375,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -1240,7 +1269,7 @@
         {
           "page": "D2",
           "overflow": [],
-          "mainHeight": 494.4375,
+          "mainHeight": 677.4375,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -1248,7 +1277,7 @@
         {
           "page": "D3",
           "overflow": [],
-          "mainHeight": 635.6875,
+          "mainHeight": 522.75,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -1256,7 +1285,7 @@
         {
           "page": "D4",
           "overflow": [],
-          "mainHeight": 860.46875,
+          "mainHeight": 726.921875,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -1264,7 +1293,15 @@
         {
           "page": "D5",
           "overflow": [],
-          "mainHeight": 458.53125,
+          "mainHeight": 634.96875,
+          "lines": [],
+          "writing_regions": [],
+          "identity": 0
+        },
+        {
+          "page": "D6",
+          "overflow": [],
+          "mainHeight": 503.125,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -1272,11 +1309,11 @@
       ],
       "pack_range": [
         1,
-        14
+        15
       ]
     }
   ],
-  "source_digest": "f7d4ff7e55a73cee6e41ab98d19d662550eb30e2caaef9b507313d39d1256af4",
+  "source_digest": "2f78572f4575a55cb1705a34c0a220ca0498c058ec14eded38db4ab2226f9d95",
   "option_order": {
     "selects": [
       {

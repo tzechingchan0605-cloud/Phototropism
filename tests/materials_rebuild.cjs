@@ -13,7 +13,7 @@ const fs=require("node:fs/promises"),path=require("node:path"),os=require("node:
     await new Promise((resolve,reject)=>execFile(process.execPath,["scripts/build-materials.cjs"],{cwd:copy,env:process.env,timeout:120000},(error,stdout,stderr)=>{if(error)reject(Error(stdout+stderr));else resolve();}));
     const after=JSON.parse(await fs.readFile(path.join(copy,"materials/manifest.json"),"utf8"));
     assert.notEqual(after.version,before.version);assert.notEqual(after.source_digest,before.source_digest);assert.equal(after.books.length,10);
-    assert((await fs.readFile(path.join(copy,after.books[0].preview),"utf8")).includes("你的初步觀察"));
+    assert((await fs.readFile(path.join(copy,after.books.find(book=>book.code==="B").preview),"utf8")).includes("你的初步觀察"));
     for (const book of before.books) await assert.rejects(fs.access(path.join(copy,book.pdf)));
     for (const book of after.books) await fs.access(path.join(copy,book.pdf));
     console.log("PASS: an isolated live-question edit changes source/version digests, rebuilds ten PDFs and previews, updates manifest/catalog and removes obsolete versions; original repository untouched.");

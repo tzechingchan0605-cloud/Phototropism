@@ -40,7 +40,7 @@ window.PaperMaterials = (() => {
         const latest = await response.json();
         const digest = await sha(new TextEncoder().encode(JSON.stringify(VL3PaperContent.canonical())));
         if (requestGeneration !== generation || !authorised()) return false;
-        if (latest.experiment_version !== EXPERIMENT_VERSION || latest.source_digest !== digest || latest.books.length !== 10) return fail();
+        if (latest.material_revision !== VL3PaperContent.revision || latest.experiment_version !== EXPERIMENT_VERSION || latest.source_digest !== digest || latest.books.length !== 10) return fail();
         catalog = latest;
         render();
         return true;
@@ -90,7 +90,7 @@ window.PaperMaterials = (() => {
     document.querySelector("#paperDownloads").innerHTML = entries.map(book =>
       `<article><strong data-student-text>${esc(book.code)} · ${esc(book.title)} · ${book.pages} ${language.value === "en" ? "pages" : "頁"}<small>${language.value === "en" ? "Pack pages" : "套裝頁碼"} ${book.pack_range.join("–")}</small></strong><div><button type="button" class="secondary" data-paper-preview="${esc(book.code)}">預覽</button><a class="paper-pdf-link" href="${esc(book.pdf)}" download="${esc(book.filename)}" data-paper-download="${esc(book.code)}">下載 PDF</a></div></article>`
     ).join("");
-    document.querySelector("#paperVersion").textContent = (language.value === "en" ? "Question version: " : "題目版本：")+EXPERIMENT_VERSION+" · "+catalog.version;
+    document.querySelector("#paperVersion").textContent = (language.value === "en" ? "Paper curriculum: WS" : "紙本教學版本：WS")+catalog.material_revision+" · VL "+EXPERIMENT_VERSION+" · "+catalog.version;
     clearPreview();
     panel.querySelectorAll("[data-paper-preview]").forEach(button => {
       button.onclick = () => {

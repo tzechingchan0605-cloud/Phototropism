@@ -14,6 +14,8 @@ const base=process.env.LAB_URL,hash=bytes=>crypto.createHash("sha256").update(by
     assert.equal(await page.evaluate(()=>PaperMaterials.download("A")),false);
     await page.fill("#profileName","Paper teacher test");await page.fill("#profileClass","X1");await page.fill("#profileEmail","tzechingchan0605@gmail.com");await page.click("#profileForm button");
     await page.waitForSelector('[data-paper-download="A"]');
+    assert.match(await page.locator("#paperMaterials").innerText(),/15–20/);
+    assert.match(await page.locator("#paperVersion").innerText(),/WS2/);
     assert(await page.locator("#teacherLogin").isVisible(),"Blank materials must not require cloud unlock");
     await page.fill("#teacherPassword",(await fs.readFile(process.env.VL3_TEST_PASSWORD_FILE,"utf8")).trim());await page.click("#teacherLogin button");
     await page.waitForFunction(()=>document.querySelector("#teacherLogin").hidden);
@@ -51,6 +53,10 @@ const base=process.env.LAB_URL,hash=bytes=>crypto.createHash("sha256").update(by
     assert.equal(await page.evaluate(()=>VL3Language.current),"en");
     assert.equal(await page.evaluate(()=>PaperMaterials.setAccess(true)),true);
     assert.equal(await page.inputValue("#paperLanguage"),"en");
+    // Reject an old curriculum even if a copied digest matches, then stale source and corrupt PDF.
+    await page.route("**/materials/manifest.json",route=>route.fulfill({json:{...manifest,material_revision:1}}));
+    assert.equal(await page.evaluate(()=>PaperMaterials.setAccess(true)),false);
+    await page.unroute("**/materials/manifest.json");assert.equal(await page.evaluate(()=>PaperMaterials.setAccess(true)),true);
     // Reject outdated source and damaged PDF, then recover with the original records intact.
     await page.route("**/materials/manifest.json",route=>route.fulfill({json:{...manifest,source_digest:"0".repeat(64)}}));
     assert.equal(await page.evaluate(()=>PaperMaterials.setAccess(true)),false);

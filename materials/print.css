@@ -34,7 +34,7 @@ label { display:block; margin-bottom:6px; }
 .context-timing-note { text-align:center; }
 .plant-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin:8px 0; }
 .plant-grid figure { border:1px solid #aaa; padding:4px; text-align:center; }.plant-grid figcaption { font-size:11px; font-weight:700; min-height:25px; }.plant-pair { display:flex; }.stage-figure { width:50%; }.stage-figure svg { width:100%; height:135px; }.stage-caption { display:block; font-size:11px; line-height:16px; }
-.four-plants { grid-template-columns:repeat(2,1fr); }.four-plants figcaption { min-height:18px; }.four-plants .plant-pair svg { height:185px; }.four-plants [data-protractor] text { font-size:12px; }
+.four-plants { grid-template-columns:repeat(2,1fr); }.four-plants figcaption { min-height:18px; }.four-plants .plant-pair svg { height:185px; }.four-plants [data-protractor] text { font-size:11px; }
 [data-page="B4"] .plant-grid { gap:4px; margin:5px 0; }
 table { border-collapse:collapse; width:100%; margin:6px 0 9px; table-layout:fixed; }th,td { border:1px solid #aaa; text-align:left; vertical-align:top; padding:5px; overflow-wrap:anywhere; }th { font-weight:700; background:#eee; }th:first-child { width:20%; }
 .observation-table { font-size:11px; }.observation-table th:first-child { width:7%; }.observation-table th:nth-child(2) { width:19%; }.observation-table label { margin:0; }.observation-table .circle-options { font-size:11px; }.observation-table .answer-lines i { height:13px; }.angle-blank { display:block; margin:3px 0; }
@@ -47,3 +47,42 @@ table { border-collapse:collapse; width:100%; margin:6px 0 9px; table-layout:fix
 body[lang="en"] { line-height:1.4; }
 @media print { html,body { background:white; }.paper-page { margin:0; } * { print-color-adjust:exact; -webkit-print-color-adjust:exact; } }
 @media screen and (max-width:820px) { body { width:210mm; } }
+/* WS2 self-study sequence; preserve vector images and two-line responses. */
+.structure { display:flex; align-items:center; gap:14px; margin:5px 0 10px; }
+.structure svg { width:52%; height:140px; flex-shrink:0; }
+.structure p { flex:1; font-size:12px; }
+.method-example { display:flex; align-items:center; gap:14px; margin:8px 0; }
+.method-example > svg { width:235px; height:210px; flex-shrink:0; }
+[data-page="A1"] .learning-points li { font-size:13px; margin-bottom:8px; }
+[data-page="A1"] .mechanism-svg { margin:6px 0; }
+.initial-setups svg { width:100%; height:125px; }
+.setup-label { font-size:11px; }
+[data-page="B1"] .variable-pills { grid-template-columns:1fr 1fr 1fr; gap:3px 8px; }
+[data-page="B1"] .variable-pills label { font-size:10px; }
+[data-page="B1"] .variable-group { padding:3px 6px; margin:5px 0; }
+[data-page="B1"] .vl3-card { margin-bottom:5px; }
+[data-page="B2"] .plant-grid:first-of-type { grid-template-columns:repeat(3,1fr); }
+[data-page="B2"] .stage-figure svg { height:105px; }
+[data-page="B2"] .plant-grid figcaption { min-height:18px; }
+[data-page="B2"] label { font-size:12px; margin-bottom:4px; }
+[data-page="B2"] .observation-table { margin:4px 0 7px; }
+[data-page="B3"] .four-plants { margin:4px 0; gap:4px; }
+[data-page="B3"] .four-plants,[data-page="B4"] .four-plants { grid-template-columns:1fr; }
+[data-page="B3"] .four-plants .stage-figure svg,[data-page="B4"] .four-plants .stage-figure svg { height:235px; }
+[data-page="B3"] label { margin-bottom:4px; }
+[data-page="B5"] .context-frame { width:220px; }
+[data-page="B5"] .context-frame svg { height:230px; }
+[data-page="C1"] th:first-child { width:15%; }
+[data-page="C1"] .agar-answers th:first-child { width:6%; }
+[data-page="C1"] .agar-answers th:nth-child(2) { width:28%; }
+[data-page="C1"] .agar-answers th:nth-child(3) { width:33%; }
+.mapping { font-size:11px; }
+.mapping th:first-child { width:23%; }
+.mapping th:nth-child(2) { width:12%; }
+.mapping th:nth-child(3) { width:24%; }
+.mapping th:nth-child(4) { width:16%; }
+.mapping th:nth-child(5) { width:25%; }
+.mapping td { padding:7px 5px; }
+.timing { font-size:11px; }
+.timing th:first-child { width:25%; }
+.timing th:nth-child(2),.timing th:nth-child(3) { width:10%; }

@@ -13,6 +13,12 @@ const hash=bytes=>crypto.createHash("sha256").update(bytes).digest("hex");
   const canonical=JSON.parse(await fs.readFile(path.join(root,"materials/source.json"),"utf8"));
   assert.equal(hash(JSON.stringify(canonical)),manifest.source_digest);
   assert.equal(manifest.books.length,10);
+  assert.equal(manifest.material_revision,2);
+  assert.equal(manifest.instruction_mode,"explanation-example-guided-independent-check");
+  assert.deepEqual(manifest.duration_minutes,[15,20]);
+  assert.equal(canonical.material_revision,2);
+  assert.equal(canonical.mapping.length,19);
+  assert(!JSON.stringify(canonical).includes("先保存原始設計才派 B"));
   for (const book of manifest.books) {
     assert.equal(hash(await fs.readFile(path.join(root,book.pdf))),book.sha256);
     assert.equal(hash(await fs.readFile(path.join(root,book.preview))),book.preview_sha256);
@@ -48,6 +54,11 @@ const hash=bytes=>crypto.createHash("sha256").update(bytes).digest("hex");
         return {code:section.dataset.page,overflow,identity:section.querySelectorAll(".identity-fields").length,lines:[...section.querySelectorAll(".answer-lines")].map(node=>node.children.length)};
       }));
       assert.deepEqual(actual.map(page=>page.code),book.page_codes);
+      const clipped=await previewPage.evaluate(()=>[...document.querySelectorAll('svg text')].filter(node=>{
+        const r=node.getBoundingClientRect(),s=node.ownerSVGElement.getBoundingClientRect();
+        return r.width && (r.left<s.left-2 || r.right>s.right+2 || r.top<s.top-2 || r.bottom>s.bottom+2);
+      }).map(node=>node.textContent));
+      assert.deepEqual(clipped,[],book.filename+" clipped SVG labels");
       for (const pageAudit of actual) {
         assert.deepEqual(pageAudit.overflow,[],book.filename+" "+pageAudit.code);
         assert(pageAudit.lines.every(count=>count===2));
@@ -62,8 +73,18 @@ const hash=bytes=>crypto.createHash("sha256").update(bytes).digest("hex");
         }
         assert.equal(await previewPage.locator("input,textarea,select,button,canvas").count(),0);
         const content=await previewPage.locator("body").innerText();
-        assert.doesNotMatch(content,/✓|✕|參考答案|Reference answer|SPS|tzechingchan0605|\b35°/i);
-        if (book.code!=="C") assert.doesNotMatch(content,/生長素|向光性|\bauxin\b|phototropism/i);
+        assert.doesNotMatch(content,/✓|✕|SPS|tzechingchan0605/i);
+        if (book.code==="B") assert.doesNotMatch(content,/參考答案|Reference answers|\b35°/i);
+        if (book.code==="A") {
+          assert.match(content,book.language==="en" ? /auxin/i : /生長素/);
+          assert.match(content,book.language==="en" ? /phototropism/i : /向光性/);
+          assert.match(content,book.language==="en" ? /protects the young leaf/ : /保護幼葉/);
+          assert.match(content,book.language==="en" ? /Worked example/ : /已解說示例/);
+          assert.doesNotMatch(content,/E[^\n]*0°|G[^\n]*35°|H[^\n]*35°/);
+          assert.equal(await previewPage.locator('[data-cell-side="lit"]').count(),5);
+          assert.equal(await previewPage.locator('[data-cell-side="shaded"]').count(),5);
+        }
+        if (book.code==="C") assert.match(content,/33–37|33-37/);
         if (book.language==="zh-Hant") {
           const blocks=await previewPage.evaluate(()=>({fields:[...document.querySelectorAll("[data-answer-field]")].map(node=>node.dataset.answerField),choices:[...document.querySelectorAll(".circle-options")].map(node=>({id:node.dataset.answerField,options:[...node.children].map(node=>node.textContent.trim())})),text:document.body.innerText}));
           blocks.fields.forEach(field=>collected.fields.add(field));
@@ -75,17 +96,25 @@ const hash=bytes=>crypto.createHash("sha256").update(bytes).digest("hex");
         const stripped=text.replace(/（(?:胚芽鞘|向光性|生長素|瓊脂|延長|不透光)）/g,"");
         assert.doesNotMatch(stripped,/[\u3400-\u9fff]/,book.filename);
       }
-      if (book.code==="A") {
-        const order=await previewPage.evaluate(()=>{const drawing=document.querySelector(".drawing-frame"),written=document.querySelector('[data-answer-field="setupDescription"]');return Boolean(drawing.compareDocumentPosition(written)&Node.DOCUMENT_POSITION_FOLLOWING);});
-        assert(order);
+      if (book.code==="B") {
+        const labels=await previewPage.locator('.initial-setups figcaption').allTextContents();
+        assert.deepEqual(labels,["A","B","C"]);
+        assert.equal(await previewPage.locator(".initial-setups .answer-lines").count(),3);
+        const models=await previewPage.locator('.four-plants figure').evaluateAll(nodes=>nodes.map(node=>({label:node.querySelector('figcaption').textContent,stem:node.querySelector('[data-ext-stem]').dataset.extStem,agar:node.querySelector('[data-agar-block]').dataset.agarBlock})));
+        assert.deepEqual(models.map(node=>node.stem),["E","F","G","H"]);
+        const finalNeedles=await previewPage.locator('.four-plants figure .stage-figure:last-child [data-protractor-pointer]').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('d')));
+        assert.notEqual(finalNeedles[2],finalNeedles[3],"G/H pointers must have opposite orientations");
       }
       await previewPage.close();
     }
-    live.fields.forEach(field=>assert(collected.fields.has(field),"Missing live text question: "+field));
-    live.options.forEach(choice=>assert.deepEqual(collected.choices.get(choice.id),choice.options,"Missing or changed options: "+choice.id));
+    ["reflection","paper-control","paper-observation","paper-correction-1","paper-correction-2"].forEach(field=>assert(collected.fields.has(field),"Missing paper response: "+field));
+    const retained=["qShade","qBelow","qTip","qCap","extEF","extXAmount","extCellElongation","extBendDirection",...['A','B','D'].map(id=>"obs-"+id),...['A','C'].map(id=>"tip-growth-"+id),...['E','F','G','H'].map(id=>"ext-direction-"+id)];
+    live.options.filter(choice=>retained.includes(choice.id)).forEach(choice=>assert.deepEqual(collected.choices.get(choice.id),choice.options,"Changed shared options: "+choice.id));
+    assert(!collected.fields.has("reason"),"Advance guesses must become examples, not original-hypothesis scoring");
+    assert(!collected.fields.has("setupDescription"),"Autonomous design must become provided-diagram labelling");
     [...live.assumptions,...live.variables].forEach(label=>assert(collected.text.includes(label),"Missing shared choice: "+label));
     assert.deepEqual(errors,[]);
     await context.close();
   } finally {await browser.close();await new Promise(resolve=>service.close(resolve));}
-  console.log("PASS: current shared source digest, ten PDF/preview checksums, every live text field and option, two writing lines, first-page identity rules, no answer leaks, drawing order, bilingual glossary and all-page overflow.");
+  console.log("PASS: current shared source digest, ten PDF/preview checksums, self-study concepts before practice, all three investigations, retained live options and equivalent-question mapping, two writing lines, first-page identity rules, no premature answer-key leaks, distinct comparison variables, bilingual glossary and all-page overflow.");
 })().catch(error=>{console.error(error);process.exitCode=1;});

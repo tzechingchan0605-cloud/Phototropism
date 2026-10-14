@@ -40,11 +40,21 @@ class BackendTest(unittest.TestCase):
                 self.assertEqual(request('/.data/teacher-password')[0],404)
                 self.assertEqual(request('/api/teacher/login',{'email':'tzechingchan0605@gmail.com','password':'wrong'})[0],401)
                 # Exercise the allowlisted scripts with only a temporary database.
-                for asset in ['tip-inquiry.js','i18n.js','i18n-strings.js']:
+                for asset in ['tip-inquiry.js','i18n.js','i18n-strings.js','paper-content.js','paper-ui.js']:
                     with urllib.request.urlopen(f'http://127.0.0.1:{port}/{asset}') as response:
                         self.assertEqual(response.status,200)
                         self.assertEqual(response.headers.get_content_type(),'text/javascript')
                         self.assertEqual(response.read(),(ROOT/asset).read_bytes())
+                # Actual static material responses work on the local fallback too.
+                with urllib.request.urlopen(f'http://127.0.0.1:{port}/materials/manifest.json') as response:
+                    manifest=json.loads(response.read())
+                    self.assertEqual(manifest['material_revision'],2)
+                for book in manifest['books']:
+                    with urllib.request.urlopen(f'http://127.0.0.1:{port}/{book["pdf"]}') as response:
+                        self.assertEqual(response.headers.get_content_type(),'application/pdf')
+                        self.assertEqual(response.read(),(ROOT/book['pdf']).read_bytes())
+                self.assertEqual(request('/materials/../../.data/teacher-password')[0],404)
+                self.assertEqual(request('/materials/source.json')[0],404)
                 fixture={
                     'moduleId':'VL_BIO_PHOTOTROPISM','schemaVersion':1,'experimentVersion':5,
                     'id':'backend-test-'+secrets.token_hex(8),

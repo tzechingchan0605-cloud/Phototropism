@@ -3,7 +3,7 @@
 window.VL3_ENGLISH = Object.fromEntries(
   String.raw`
 下載紙本對照組工作紙 PDF	Download paper control-group worksheets (PDF)
-依次派發 A、B、C；D 及完整套裝只供教師。先保存原始設計才派 B，固定探究答案後才派 C。	Give A, B and C in order. D and the full pack are for teachers only. Preserve the original design before B; fix inquiry answers before C.
+A 從開始即可自學概念及示例；B 是練習與獨立應用；完成 B 後才派 C 核對修正。兩組均為 15–20 分鐘。D 及完整套裝只供教師。	A is available from the start for self-study concepts and examples; B provides practice and independent application; give C for checking and correction only after B. Both groups have 15–20 minutes. D and the full pack are for teachers only.
 工作紙語言	Worksheet language
 繁體中文	Traditional Chinese
 紙本工作紙預覽	Paper worksheet preview

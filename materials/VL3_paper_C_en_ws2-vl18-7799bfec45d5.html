@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Answer checking and correction</title><style>@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+html,body { margin:0; background:#e4e4e4; color:#161616; font-family:"Noto Sans CJK HK","Noto Sans CJK TC",Arial,sans-serif; }
+body { font-size:13px; line-height:1.45; }
+.paper-page { width:210mm; height:297mm; padding:12mm 13mm 11mm; background:white; position:relative; margin:8px auto; break-after:page; overflow:visible; }
+.paper-page:last-child { break-after:auto; }
+.paper-page > header { display:flex; justify-content:space-between; border-bottom:1px solid #555; padding-bottom:5px; margin-bottom:9px; font-size:15px; }
+.paper-page > footer { position:absolute; bottom:7mm; left:13mm; right:13mm; display:flex; justify-content:space-between; font-size:9px; color:#666; }
+.paper-page > main { display:block; }
+h1,h2,h3,p,figure,fieldset,ol,ul { margin:0 0 6px; }
+h2,h3 { font-size:15px; line-height:1.35; }
+h1 { font-size:19px; line-height:1.4; }
+ol,ul { padding-left:22px; } li { margin-bottom:5px; }
+label { display:block; margin-bottom:6px; }
+.vl3-card { margin:0 0 9px; padding:0; border:0; background:none; }
+.card-kicker,.phase-badge { font-size:10px; color:#666; margin-bottom:3px; }
+.muted,.materials-note,.materials-list,.design-hint,.hypothesis-save-note { color:#666; font-size:10px; line-height:1.4; }
+.notice { padding:5px 7px; border:1px solid #888; font-size:11px; }
+.inquiry-highlight,.learning-highlight { color:#a32020; font-weight:700; }
+.identity-fields { display:flex; gap:14px; margin:10px 0 16px; font-size:12px; }
+.identity-fields span { flex:1; white-space:nowrap; }.identity-fields i { display:inline-block; width:55%; border-bottom:1px solid #444; height:15px; }
+.answer-lines { margin:2px 0 7px; width:100%; }
+.answer-lines i { display:block; height:18px; border-bottom:1px solid #888; }
+.drawing-frame { width:100%; height:35mm; border:1px solid #555; margin:5px 0 7px; }
+.circle-options { font-size:12px; white-space:normal; }.circle-options > span { display:inline; }
+.paper-check { font-size:14px; margin-right:4px; }
+.variable-group { border:1px solid #aaa; padding:5px 8px; margin:6px 0; }
+.variable-group legend { font-weight:bold; padding:0 4px; }
+.variable-pills { display:grid; grid-template-columns:1fr 1fr; column-gap:12px; }
+.variable-pills label { margin:1px 0; font-size:12px; }
+[data-vl-source="assumptions"] { display:grid; grid-template-columns:1fr 1fr; gap:3px 12px; margin:4px 0 7px; }
+[data-vl-source="assumptions"] label { font-size:11px; margin:0; }
+.context-comparison { display:flex; align-items:center; justify-content:center; gap:12px; }.context-frame { width:220px; }.context-frame svg { width:100%; height:230px; }.context-transition { width:100px; text-align:center; }.context-transition svg { width:65px; }
+.context-timing-note { text-align:center; }
+.plant-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin:8px 0; }
+.plant-grid figure { border:1px solid #aaa; padding:4px; text-align:center; }.plant-grid figcaption { font-size:11px; font-weight:700; min-height:25px; }.plant-pair { display:flex; }.stage-figure { width:50%; }.stage-figure svg { width:100%; height:135px; }.stage-caption { display:block; font-size:11px; line-height:16px; }
+.four-plants { grid-template-columns:repeat(2,1fr); }.four-plants figcaption { min-height:18px; }.four-plants .plant-pair svg { height:185px; }.four-plants [data-protractor] text { font-size:11px; }
+[data-page="B4"] .plant-grid { gap:4px; margin:5px 0; }
+table { border-collapse:collapse; width:100%; margin:6px 0 9px; table-layout:fixed; }th,td { border:1px solid #aaa; text-align:left; vertical-align:top; padding:5px; overflow-wrap:anywhere; }th { font-weight:700; background:#eee; }th:first-child { width:20%; }
+.observation-table { font-size:11px; }.observation-table th:first-child { width:7%; }.observation-table th:nth-child(2) { width:19%; }.observation-table label { margin:0; }.observation-table .circle-options { font-size:11px; }.observation-table .answer-lines i { height:13px; }.angle-blank { display:block; margin:3px 0; }
+.extension-position-question,.cloze-question { border:0; padding:0; margin:6px 0; }.extension-position-question legend { font-weight:700; }.extension-position-question label { margin:2px 0; }
+.learning-points li { font-size:14px; margin-bottom:12px; }.mechanism-svg { width:100%; height:auto; display:block; margin:12px 0; }
+.reflection-context { margin:8px auto; text-align:center; }.reflection-context svg { width:260px; height:280px; }
+.rubric th:first-child { width:22%; }.rubric th:nth-child(2) { width:8%; }.rubric { font-size:12px; }
+[data-page="B2"] .plant-pair svg { height:150px; }[data-page="B2"] .plant-grid { grid-template-columns:1fr 1fr; margin:4px 0; }[data-page="B2"] .vl3-card { margin-bottom:5px; }[data-page="B2"] .answer-lines i { height:16px; }
+[data-page="B4"] .circle-options { font-size:11px; }
+body[lang="en"] { line-height:1.4; }
+@media print { html,body { background:white; }.paper-page { margin:0; } * { print-color-adjust:exact; -webkit-print-color-adjust:exact; } }
+@media screen and (max-width:820px) { body { width:210mm; } }
+/* WS2 self-study sequence; preserve vector images and two-line responses. */
+.structure { display:flex; align-items:center; gap:14px; margin:5px 0 10px; }
+.structure svg { width:52%; height:140px; flex-shrink:0; }
+.structure p { flex:1; font-size:12px; }
+.method-example { display:flex; align-items:center; gap:14px; margin:8px 0; }
+.method-example > svg { width:235px; height:210px; flex-shrink:0; }
+[data-page="A1"] .learning-points li { font-size:13px; margin-bottom:8px; }
+[data-page="A1"] .mechanism-svg { margin:6px 0; }
+.initial-setups svg { width:100%; height:125px; }
+.setup-label { font-size:11px; }
+[data-page="B1"] .variable-pills { grid-template-columns:1fr 1fr 1fr; gap:3px 8px; }
+[data-page="B1"] .variable-pills label { font-size:10px; }
+[data-page="B1"] .variable-group { padding:3px 6px; margin:5px 0; }
+[data-page="B1"] .vl3-card { margin-bottom:5px; }
+[data-page="B2"] .plant-grid:first-of-type { grid-template-columns:repeat(3,1fr); }
+[data-page="B2"] .stage-figure svg { height:105px; }
+[data-page="B2"] .plant-grid figcaption { min-height:18px; }
+[data-page="B2"] label { font-size:12px; margin-bottom:4px; }
+[data-page="B2"] .observation-table { margin:4px 0 7px; }
+[data-page="B3"] .four-plants { margin:4px 0; gap:4px; }
+[data-page="B3"] .four-plants,[data-page="B4"] .four-plants { grid-template-columns:1fr; }
+[data-page="B3"] .four-plants .stage-figure svg,[data-page="B4"] .four-plants .stage-figure svg { height:235px; }
+[data-page="B3"] label { margin-bottom:4px; }
+[data-page="B5"] .context-frame { width:220px; }
+[data-page="B5"] .context-frame svg { height:230px; }
+[data-page="C1"] th:first-child { width:15%; }
+[data-page="C1"] .agar-answers th:first-child { width:6%; }
+[data-page="C1"] .agar-answers th:nth-child(2) { width:28%; }
+[data-page="C1"] .agar-answers th:nth-child(3) { width:33%; }
+.mapping { font-size:11px; }
+.mapping th:first-child { width:23%; }
+.mapping th:nth-child(2) { width:12%; }
+.mapping th:nth-child(3) { width:24%; }
+.mapping th:nth-child(4) { width:16%; }
+.mapping th:nth-child(5) { width:25%; }
+.mapping td { padding:7px 5px; }
+.timing { font-size:11px; }
+.timing th:first-child { width:25%; }
+.timing th:nth-child(2),.timing th:nth-child(3) { width:10%; }
+</style></head><body lang="en"><section class="paper-page" data-page="C1"><header><b>VL3 · <span data-en="C · Check answers">C · Check answers</span></b><span>C1</span></header><div class="identity-fields"><span><span data-en="Name">Name</span>:<i></i></span><span><span data-en="Class">Class</span>:<i></i></span><span><span data-en="Student number">Student number</span>:<i></i></span></div><main><p class="notice"><span data-en="Read only after completing B. Keep A available; check these answers without overwriting your first responses.">Read only after completing B. Keep A available; check these answers without overwriting your first responses.</span></p><h3><span data-en="B1: labels, variables and fair comparisons">B1: labels, variables and fair comparisons</span></h3><p><span data-en="Labels: A uncovered; B tip shaded; C shaded below the tip.">Labels: A uncovered; B tip shaded; C shaded below the tip.</span></p><table><tbody><tr><td>Independent variable</td><td>Light-blocking treatment</td></tr><tr><td>Dependent variable</td><td>The coleoptile（胚芽鞘）’s bending response</td></tr><tr><td>Controlled variables</td><td>Light direction and intensity; Coleoptile（胚芽鞘） type, starting height and growth stage; Time exposed to light; Temperature and water supply</td></tr></tbody></table><p><span data-en="Valid assumptions: similar initial growth condition; shading does not restrict elongation or bending; shading creates no clear temperature difference. The same species does not remove the need to control initial size.">Valid assumptions: similar initial growth condition; shading does not restrict elongation（延長） or bending; shading creates no clear temperature difference. The same species does not remove the need to control initial size.</span></p><p><span data-en="A is uncovered and provides a baseline without shading in the same environment. A–B changes tip shading; A–C changes shading below the tip. Keep conditions such as initial size and temperature the same to avoid other influences.">A is uncovered and provides a baseline without shading in the same environment. A–B changes tip shading; A–C changes shading below the tip. Keep conditions such as initial size and temperature the same to avoid other influences.</span></p><h3><span data-en="B2 / B3 / B4: check observations">B2 / B3 / B4: check observations</span></h3><table><thead><tr><th><span data-en="Setup">Setup</span></th><th><span data-en="Treatment">Treatment</span></th><th><span data-en="Direction">Direction</span></th></tr></thead><tbody><tr><td>A</td><td>No light blocked</td><td>Bends left</td></tr><tr><td>B</td><td>Light blocked at the tip</td><td>No clear bending</td></tr><tr><td>C</td><td>Light blocked below the tip</td><td>Bends left</td></tr></tbody></table><table><thead><tr><th><span data-en="Setup">Setup</span></th><th><span data-en="Treatment">Treatment</span></th><th><span data-en="Elongation">Elongation（延長）</span></th></tr></thead><tbody><tr><td>A</td><td>No light blocked</td><td>Yes</td></tr><tr><td>D</td><td>Tip removed</td><td>No</td></tr></tbody></table><table class="agar-answers"><thead><tr><th><span data-en="Setup">Setup</span></th><th><span data-en="Treatment">Treatment</span></th><th><span data-en="Angle">Angle</span></th><th><span data-en="Direction">Direction</span></th></tr></thead><tbody><tr><td>E</td><td>Blank agar（瓊脂） · Centre</td><td>0°（Teaching model）</td><td>No clear bending</td></tr><tr><td>F</td><td>Treated agar（瓊脂） · Centre</td><td>0°（Teaching model）</td><td>No clear bending</td></tr><tr><td>G</td><td>Treated agar（瓊脂） · Left</td><td>35°（Teaching model; ±2°）</td><td>Bends right</td></tr><tr><td>H</td><td>Treated agar（瓊脂） · Right</td><td>35°（Teaching model; ±2°）</td><td>Bends left</td></tr></tbody></table><p class="muted"><span data-en="Method check: E/F are 0°. G/H accept 33–37°, with equal angle magnitudes but opposite directions. Observations and readings are model data, not auxin concentrations.">Method check: E/F are 0°. G/H accept 33–37°, with equal angle magnitudes but opposite directions. Observations and readings are model data, not auxin（生長素） concentrations.</span></p></main><footer><span data-paper-version="">ws2-vl18-7799bfec45d5</span><span>C1</span></footer></section><section class="paper-page" data-page="C2"><header><b>VL3 · <span data-en="C · Check reasoning and correct">C · Check reasoning and correct</span></b><span>C2</span></header><main><h3><span data-en="B2 / B3 / B4: check analysis">B2 / B3 / B4: check analysis</span></h3><p><b>3. Which part may sense light from one side?</b> Tip</p><p><b>1. Compare A and B: What changes when light is blocked at the tip?</b> No clear bending towards the light.</p><p><b>2. Compare A and C: Does it still bend when the lower part receives no direct light?</b> It can still bend towards light.</p><p><b>1. What does comparing elongation（延長） in A and D support?</b> The presence of the tip also affects the coleoptile（胚芽鞘）’s growth / elongation（延長）.</p><p><b>1. What does the comparison of E and F support?</b> The tip may produce a growth-promoting effect that can be transferred.</p><p><b>2. What does the comparison of F, G and H support?</b> The position of treated agar（瓊脂） affects the direction of coleoptile（胚芽鞘） bending.</p><p>3. <span>When treated agar（瓊脂） is placed on the</span> <strong class="inquiry-highlight">left</strong> <span>side of a coleoptile（胚芽鞘） with its tip removed, compared with the right side, the left side receives</span> more <span>substance X, causing cells on the left to</span> <strong class="inquiry-highlight" data-en="elongate">elongate（延長）</strong><span data-en=""></span> more <span>and the coleoptile（胚芽鞘） to bend to the</span> right <span>side.</span></p><h3><span data-en="B5: independent application">B5: independent application</span></h3><p><span data-en="A–D: whether the tip is present. E–F: whether agar previously touched the tip, with both in the centre. F–G–H: treated agar position, with the same agar type. The main comparison changes shading treatment.">A–D: whether the tip is present. E–F: whether agar（瓊脂） previously touched the tip, with both in the centre. F–G–H: treated agar（瓊脂） position, with the same agar（瓊脂） type. The main comparison changes shading treatment.</span></p><p><span data-en="Window-side context: initially straighter, then bent towards the light on the right.">Window-side context: initially straighter, then bent towards the light on the right.</span></p><p><span data-en="The light is on the right, so the left is the shaded side. The tip senses light from one side; auxin is more abundant on the shaded left and its growth-promoting effect passes down. Cells on the left elongate more than those on the right, making the coleoptile bend towards the right-side light.">The light is on the right, so the left is the shaded side. The tip senses light from one side; auxin（生長素） is more abundant on the shaded left and its growth-promoting effect passes down. Cells on the left elongate（延長） more than those on the right, making the coleoptile（胚芽鞘） bend towards the right-side light.</span></p><p><span data-en="Cutting creates a wound and removes tissue, so it cannot establish a unique mechanism alone. Dark agar results support a transferable growth-promoting effect and unequal elongation. Bending is not caused by light during incubation; the results neither measure auxin concentration directly nor identify the substance.">Cutting creates a wound and removes tissue, so it cannot establish a unique mechanism alone. Dark agar（瓊脂） results support a transferable growth-promoting effect and unequal elongation（延長）. Bending is not caused by light during incubation; the results neither measure auxin（生長素） concentration directly nor identify the substance.</span></p><h3><span data-en="Check and correct">Check and correct</span></h3><div class="paper-question" data-paper-question="paper-correction-1"><p><span data-en="Identify one answer you corrected and the image or comparison supporting the correction. If correct initially, give one supporting piece of evidence.">Identify one answer you corrected and the image or comparison supporting the correction. If correct initially, give one supporting piece of evidence.</span></p><div class="answer-lines" data-answer-field="paper-correction-1"><i></i><i></i></div></div><div class="paper-question" data-paper-question="paper-correction-2"><p><span data-en="In one sentence, explain how auxin, differential elongation and bending are related.">In one sentence, explain how auxin（生長素）, differential elongation（延長） and bending are related.</span></p><div class="answer-lines" data-answer-field="paper-correction-2"><i></i><i></i></div></div></main><footer><span data-paper-version="">ws2-vl18-7799bfec45d5</span><span>C2</span></footer></section></body></html>
