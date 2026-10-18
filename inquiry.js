@@ -195,7 +195,8 @@ function initExtension() {
     <article class="vl3-card"><p class="card-kicker">04 · 延伸探究二</p><h3>物質 X 能否傳遞生長作用？位置如何影響彎曲？</h3>
     <p><span>研究員準備了</span> <strong class="inquiry-highlight">曾接觸頂端的瓊脂</strong> <span>，讓你測試這種作用能否</span> <strong class="inquiry-highlight">傳遞</strong> <span>，以及作用位置如何</span> <strong class="inquiry-highlight">影響彎曲</strong><span>。</span></p>
     <p class="materials-note">延伸二材料：切去頂端的燕麥胚芽鞘 × 4、培養容器 × 4、空白瓊脂 × 1、處理瓊脂 × 3、計時工具 × 1。</p>
-    <p><span>兩種瓊脂外觀相同。</span> <strong>空白瓊脂</strong> <strong class="inquiry-highlight">未接觸</strong> <span>胚芽鞘頂端；</span> <strong>處理瓊脂</strong> <strong class="inquiry-highlight">曾接觸</strong> <span>胚芽鞘頂端。瓊脂可讓一些物質進入及通過。</span></p>
+    <p><span>兩種瓊脂外觀相同。</span> <strong>空白瓊脂</strong> <strong class="inquiry-highlight">未接觸</strong> <span>胚芽鞘頂端；</span> <strong>處理瓊脂</strong> <strong class="inquiry-highlight">曾接觸</strong> <span>胚芽鞘頂端。</span></p>
+    <p>瓊脂接觸胚芽鞘頂端時，生長促進物質可從頂端擴散進入瓊脂。之後，把這塊瓊脂放在切去頂端的胚芽鞘上，生長促進物質便可從瓊脂擴散到胚芽鞘內。</p>
     ${selectHTML("extPrediction", { left: "向左彎曲", right: "向右彎曲", straight: "保持較直" }, "", '<span data-en="If">把</span> <strong class="inquiry-highlight" data-en="treated agar">處理瓊脂</strong> <span>放在切頂胚芽鞘</span> <strong class="inquiry-highlight">左側</strong> <span>，你預測它會怎樣生長？</span>')}
     <label for="extReason">我的理由</label><textarea id="extReason" maxlength="1500"></textarea>
     <button id="runExtension" class="primary">進行物質 X 比較（模擬 24 小時）</button><p id="extensionStatus" role="status">等待預測及理由</p></article>

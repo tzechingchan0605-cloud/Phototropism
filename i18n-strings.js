@@ -369,7 +369,7 @@ VL3 · 植物向光生長｜作答會自動傳送至 VL3 Google 收集端，供�
 空白瓊脂	Blank agar
 未接觸胚芽鞘頂端；	has not touched a coleoptile tip;
 處理瓊脂	Treated agar
-曾與胚芽鞘頂端接觸。瓊脂可讓一些物質進入及通過。	has touched coleoptile tips. Some substances can enter and pass through agar.
+曾與胚芽鞘頂端接觸。瓊脂可讓一些物質進入及通過。	has touched coleoptile tips. While agar is in contact with a coleoptile tip, a growth-promoting substance can diffuse from the tip into the agar. Later, when this agar is placed on a coleoptile with its tip removed, the growth-promoting substance can diffuse out of the agar and into the coleoptile.
 把處理瓊脂放在切頂胚芽鞘左側，你預測它會怎樣生長？	Predict how a coleoptile with its tip removed will grow if treated agar is placed on its left side.
 保持較直	Stays fairly straight
 我的理由	My reason
@@ -788,7 +788,8 @@ A、B、C 三組遮光處理、單側光源及固定條件清楚；圖片與文�
 未接觸	has not been in contact with
 曾接觸	has been in contact with
 胚芽鞘頂端；	coleoptile tips;
-胚芽鞘頂端。瓊脂可讓一些物質進入及通過。	coleoptile tips. Some substances can enter and pass through agar.
+胚芽鞘頂端。	coleoptile tips.
+瓊脂接觸胚芽鞘頂端時，生長促進物質可從頂端擴散進入瓊脂。之後，把這塊瓊脂放在切去頂端的胚芽鞘上，生長促進物質便可從瓊脂擴散到胚芽鞘內。	While agar is in contact with a coleoptile tip, a growth-promoting substance can diffuse from the tip into the agar. Later, when this agar is placed on a coleoptile with its tip removed, the growth-promoting substance can diffuse out of the agar and into the coleoptile.
 經處理瓊脂的放置位置影響胚芽鞘的彎曲方向。	The position of treated agar affects the direction of coleoptile bending.
 經處理瓊脂的放置位置不影響胚芽鞘的彎曲方向。	The position of treated agar does not affect the direction of coleoptile bending.
 經處理瓊脂的放置位置	The position of treated agar

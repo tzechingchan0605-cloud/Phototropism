@@ -1,16 +1,16 @@
 {
   "material_revision": 2,
-  "version": "ws2-vl18-7799bfec45d5",
+  "version": "ws2-vl18-be78ddd7d120",
   "experiment_version": 18,
   "sources": {
     "index.html": "fba4dc2df5094cf68bdde5f91fba8aa92e3a9b8c76040862111f2fa2fceedd6a",
     "app.js": "cf1102e6d77b69cda82d0dcb456ead09664e43f0a3e5ebd3952683978c3e71d0",
-    "inquiry.js": "aeaa73cd08b1ef8a865196add5a02bbe329a32b9ad8a225777e31be22c578e70",
+    "inquiry.js": "5dd0ebcd0c5b457d4aa7a8c0a4231e3f7e2d7304d6ff3ae98b59b7df82ce9d01",
     "tip-inquiry.js": "79984b5e34fe4e43a073c3c28da7dd979fef2cdf77c74c9ebec76e38a5e2070e",
     "excel.js": "83a36eadb68f191423e6d9666457cee55568499acc1d7e13dee23810333ab92c",
     "i18n.js": "c94d18db86d0a03754ed9041db972b4cc7a0ea07e39bb715fc34c82b0d18e8ee",
-    "i18n-strings.js": "a6a88e034887894804e3b7bbfffb5b0f320e4629c913083acfbc65db7eba30ba",
-    "paper-content.js": "26e76ce9babd7d39839896073284d2e17b727407d39232f116f87ac042e713f0",
+    "i18n-strings.js": "a985baa728d90d06d4f58de039be9ae8192f2e4829ad23c6d75d166d1ccc9e46",
+    "paper-content.js": "dea780fac41695f86bfa9b6fdf2de54a8465a8721158e475132a0367bbbd2614",
     "materials/print.css": "56757b4e6679120258656db219090d252766c6d01dee97d307ba43a50bdfdd2c",
     "scripts/build-materials.cjs": "14dffd035e2c73142c28f987bdcb53c9746aade34f0a37f1263026ad22fa8828"
   },
@@ -45,12 +45,12 @@
         "A1",
         "A2"
       ],
-      "filename": "VL3_paper_A_zh-Hant_ws2-vl18-7799bfec45d5.pdf",
-      "pdf": "materials/VL3_paper_A_zh-Hant_ws2-vl18-7799bfec45d5.pdf",
-      "preview": "materials/VL3_paper_A_zh-Hant_ws2-vl18-7799bfec45d5.html",
-      "sha256": "b45853a27b33063eb3d1bf028ea53f9bbcc25c3302cc3d5ab88cce87b90ab369",
-      "preview_sha256": "44ff886b72bdf1f497fd1d328b1e545cc9d1c3d37c354660e9fa1ab4fe634a09",
-      "bytes": 494889,
+      "filename": "VL3_paper_A_zh-Hant_ws2-vl18-be78ddd7d120.pdf",
+      "pdf": "materials/VL3_paper_A_zh-Hant_ws2-vl18-be78ddd7d120.pdf",
+      "preview": "materials/VL3_paper_A_zh-Hant_ws2-vl18-be78ddd7d120.html",
+      "sha256": "9cde1ded39f76a9e060686f171213f6dbd93e7062b849ef7553db819d8432292",
+      "preview_sha256": "0836bff5cb126e43ea722076891815622d3e9534bb1d722da0322aacc16eee52",
+      "bytes": 495950,
       "audit": [
         {
           "page": "A1",
@@ -63,7 +63,7 @@
         {
           "page": "A2",
           "overflow": [],
-          "mainHeight": 517.375,
+          "mainHeight": 536.21875,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -86,12 +86,12 @@
         "B4",
         "B5"
       ],
-      "filename": "VL3_paper_B_zh-Hant_ws2-vl18-7799bfec45d5.pdf",
-      "pdf": "materials/VL3_paper_B_zh-Hant_ws2-vl18-7799bfec45d5.pdf",
-      "preview": "materials/VL3_paper_B_zh-Hant_ws2-vl18-7799bfec45d5.html",
-      "sha256": "42b8c2717cf737ab95c91c6a7b7e251bd1e35998f2a7d2cff2b4d58f4d7d971f",
-      "preview_sha256": "5887428dd5cb15d275fbef7263f07af28d551c50d45476bd95c76c70df24fb86",
-      "bytes": 624250,
+      "filename": "VL3_paper_B_zh-Hant_ws2-vl18-be78ddd7d120.pdf",
+      "pdf": "materials/VL3_paper_B_zh-Hant_ws2-vl18-be78ddd7d120.pdf",
+      "preview": "materials/VL3_paper_B_zh-Hant_ws2-vl18-be78ddd7d120.html",
+      "sha256": "6394a549be95e12062b14a1a01ebf18d3783ef44d5db8229fa93eb85cd885946",
+      "preview_sha256": "578c7385b45c03507b7b11b6a843b18aafee723aab7da2c0a9fa0ac9fb157d57",
+      "bytes": 623675,
       "audit": [
         {
           "page": "B1",
@@ -248,12 +248,12 @@
         "C1",
         "C2"
       ],
-      "filename": "VL3_paper_C_zh-Hant_ws2-vl18-7799bfec45d5.pdf",
-      "pdf": "materials/VL3_paper_C_zh-Hant_ws2-vl18-7799bfec45d5.pdf",
-      "preview": "materials/VL3_paper_C_zh-Hant_ws2-vl18-7799bfec45d5.html",
-      "sha256": "05659711bd9e30d5ed9ba13ec2c71b94cc578ef9263c4c7a51dc3e32480e10e1",
-      "preview_sha256": "15dd92cdadaf8a391b7be36eff1150e5e33f57ab2351b271a401ca2f2aba5ed0",
-      "bytes": 458503,
+      "filename": "VL3_paper_C_zh-Hant_ws2-vl18-be78ddd7d120.pdf",
+      "pdf": "materials/VL3_paper_C_zh-Hant_ws2-vl18-be78ddd7d120.pdf",
+      "preview": "materials/VL3_paper_C_zh-Hant_ws2-vl18-be78ddd7d120.html",
+      "sha256": "12b39992e07268ddb78334b664729d885e779d8990299e5c8ace46f4221604a6",
+      "preview_sha256": "238fdd456fc2040c804ab0c8671ee691f10a85153c352aa366166bb45686c65a",
+      "bytes": 457435,
       "audit": [
         {
           "page": "C1",
@@ -324,12 +324,12 @@
         "D5",
         "D6"
       ],
-      "filename": "VL3_paper_D_zh-Hant_ws2-vl18-7799bfec45d5.pdf",
-      "pdf": "materials/VL3_paper_D_zh-Hant_ws2-vl18-7799bfec45d5.pdf",
-      "preview": "materials/VL3_paper_D_zh-Hant_ws2-vl18-7799bfec45d5.html",
-      "sha256": "401bbbf6d05275d33c07eb1040d85873c837ad864480498b817e390e39c6e402",
-      "preview_sha256": "8cdc6b46f1ce943fe31c8b9273f0c91ad1b2f68caa0129e763e5adc94e9de90e",
-      "bytes": 707311,
+      "filename": "VL3_paper_D_zh-Hant_ws2-vl18-be78ddd7d120.pdf",
+      "pdf": "materials/VL3_paper_D_zh-Hant_ws2-vl18-be78ddd7d120.pdf",
+      "preview": "materials/VL3_paper_D_zh-Hant_ws2-vl18-be78ddd7d120.html",
+      "sha256": "def892f2627f4ff68addeb5c67fc041282dee1859a468a7b27ddae2176336305",
+      "preview_sha256": "a99e58f9d4259e5c9f65387a50cfeda1dd82beabeb2ba0351b6c557488d973fe",
+      "bytes": 706969,
       "audit": [
         {
           "page": "D1",
@@ -407,12 +407,12 @@
         "D5",
         "D6"
       ],
-      "filename": "VL3_paper_FULL_zh-Hant_ws2-vl18-7799bfec45d5.pdf",
-      "pdf": "materials/VL3_paper_FULL_zh-Hant_ws2-vl18-7799bfec45d5.pdf",
-      "preview": "materials/VL3_paper_FULL_zh-Hant_ws2-vl18-7799bfec45d5.html",
-      "sha256": "a06abe990e9df885885455658c9681531a8e76037206246de85f02cf2a9be1b8",
-      "preview_sha256": "9339ed3d199f45fc9337460aec24f1737b5dc201f2af1dbedb4f5e5771822847",
-      "bytes": 959530,
+      "filename": "VL3_paper_FULL_zh-Hant_ws2-vl18-be78ddd7d120.pdf",
+      "pdf": "materials/VL3_paper_FULL_zh-Hant_ws2-vl18-be78ddd7d120.pdf",
+      "preview": "materials/VL3_paper_FULL_zh-Hant_ws2-vl18-be78ddd7d120.html",
+      "sha256": "695cb142202fcf33fc2ffef1ac62acec8d2e32a71e82e8b92be1800892d8a391",
+      "preview_sha256": "bbf5b27944172ba3e871c71fa9a718b82bf9944fb4c40f9b984227c360f07b92",
+      "bytes": 960761,
       "audit": [
         {
           "page": "A1",
@@ -425,7 +425,7 @@
         {
           "page": "A2",
           "overflow": [],
-          "mainHeight": 517.375,
+          "mainHeight": 536.21875,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -683,12 +683,12 @@
         "A1",
         "A2"
       ],
-      "filename": "VL3_paper_A_en_ws2-vl18-7799bfec45d5.pdf",
-      "pdf": "materials/VL3_paper_A_en_ws2-vl18-7799bfec45d5.pdf",
-      "preview": "materials/VL3_paper_A_en_ws2-vl18-7799bfec45d5.html",
-      "sha256": "36b31f5fe5d53cdf02aad860cb9f4e567087291cc850a09940088f25d5c25a08",
-      "preview_sha256": "af78c7930a87e6a5f97529c16b7d6f06bc4c1712fb7b2c3210c87bd3aa50135f",
-      "bytes": 133309,
+      "filename": "VL3_paper_A_en_ws2-vl18-be78ddd7d120.pdf",
+      "pdf": "materials/VL3_paper_A_en_ws2-vl18-be78ddd7d120.pdf",
+      "preview": "materials/VL3_paper_A_en_ws2-vl18-be78ddd7d120.html",
+      "sha256": "726d798cdff0b65d5019d1236dd4293dec4fe61d982550ed79b55f91bc214896",
+      "preview_sha256": "2176c435d53ec87558bc325b3713a891d89550eaa12d19b427d3d9f8e357da98",
+      "bytes": 133639,
       "audit": [
         {
           "page": "A1",
@@ -701,7 +701,7 @@
         {
           "page": "A2",
           "overflow": [],
-          "mainHeight": 599.171875,
+          "mainHeight": 635.546875,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -724,12 +724,12 @@
         "B4",
         "B5"
       ],
-      "filename": "VL3_paper_B_en_ws2-vl18-7799bfec45d5.pdf",
-      "pdf": "materials/VL3_paper_B_en_ws2-vl18-7799bfec45d5.pdf",
-      "preview": "materials/VL3_paper_B_en_ws2-vl18-7799bfec45d5.html",
-      "sha256": "4a9ad32d6bfd140fd80907e6e31f1924a0972f6e2964273ed09e52f94766520d",
-      "preview_sha256": "edcbb4b9905193455ca7581cbfa49f4d24d94aeb1bf90734db583cfd21f31212",
-      "bytes": 143834,
+      "filename": "VL3_paper_B_en_ws2-vl18-be78ddd7d120.pdf",
+      "pdf": "materials/VL3_paper_B_en_ws2-vl18-be78ddd7d120.pdf",
+      "preview": "materials/VL3_paper_B_en_ws2-vl18-be78ddd7d120.html",
+      "sha256": "825b0eab304b0646b4728c13d1fec71e0f7be94b41ebf5e71d85e185123fa02d",
+      "preview_sha256": "550403a452bc149d1e2fcca1d53c782dd2f4cb454691236f0d3969653d919d0a",
+      "bytes": 143771,
       "audit": [
         {
           "page": "B1",
@@ -886,12 +886,12 @@
         "C1",
         "C2"
       ],
-      "filename": "VL3_paper_C_en_ws2-vl18-7799bfec45d5.pdf",
-      "pdf": "materials/VL3_paper_C_en_ws2-vl18-7799bfec45d5.pdf",
-      "preview": "materials/VL3_paper_C_en_ws2-vl18-7799bfec45d5.html",
-      "sha256": "e436308274214ead3de2dcf1a715ffa77b0e704354d16d858a99f0910d9af49e",
-      "preview_sha256": "3feddc3e52b422cf891e59d3b5d28f7d15247074a530f900c3a4dafe48853d48",
-      "bytes": 81389,
+      "filename": "VL3_paper_C_en_ws2-vl18-be78ddd7d120.pdf",
+      "pdf": "materials/VL3_paper_C_en_ws2-vl18-be78ddd7d120.pdf",
+      "preview": "materials/VL3_paper_C_en_ws2-vl18-be78ddd7d120.html",
+      "sha256": "e44c255a02eba141815c7dcc53674593f1ad7ba190fb58e55a89c8ea02023944",
+      "preview_sha256": "9f942ccd5111d156ca45601a6b3e1e1ad560cf7df4fae34b034da1e293342617",
+      "bytes": 80500,
       "audit": [
         {
           "page": "C1",
@@ -962,12 +962,12 @@
         "D5",
         "D6"
       ],
-      "filename": "VL3_paper_D_en_ws2-vl18-7799bfec45d5.pdf",
-      "pdf": "materials/VL3_paper_D_en_ws2-vl18-7799bfec45d5.pdf",
-      "preview": "materials/VL3_paper_D_en_ws2-vl18-7799bfec45d5.html",
-      "sha256": "be5eec7b43a2156ffe843f29bc4c3d97d4e820b796874949b69eee7a22966abc",
-      "preview_sha256": "fb2096ea0a4a62c8f51a57ffab98964d4b5af94f32819aa4dd3ad1c217dd5cca",
-      "bytes": 110204,
+      "filename": "VL3_paper_D_en_ws2-vl18-be78ddd7d120.pdf",
+      "pdf": "materials/VL3_paper_D_en_ws2-vl18-be78ddd7d120.pdf",
+      "preview": "materials/VL3_paper_D_en_ws2-vl18-be78ddd7d120.html",
+      "sha256": "8a74175c81e2e86642bfdddd2fe221c35bf4610d8b0575e72c3099e028d22aa7",
+      "preview_sha256": "7b6ca7b4d314a6cdef44ab20673e0fcdab428e49c61dd72ba3eb862fed072b31",
+      "bytes": 110118,
       "audit": [
         {
           "page": "D1",
@@ -1045,12 +1045,12 @@
         "D5",
         "D6"
       ],
-      "filename": "VL3_paper_FULL_en_ws2-vl18-7799bfec45d5.pdf",
-      "pdf": "materials/VL3_paper_FULL_en_ws2-vl18-7799bfec45d5.pdf",
-      "preview": "materials/VL3_paper_FULL_en_ws2-vl18-7799bfec45d5.html",
-      "sha256": "c64fbf6b995e35f75faa8818666e7a997438176120eac59f0360c99d7b51c798",
-      "preview_sha256": "5784e4aaa854fc375b68f1c50e28591bcaf1d217253396494fcc5fcd1382a630",
-      "bytes": 257413,
+      "filename": "VL3_paper_FULL_en_ws2-vl18-be78ddd7d120.pdf",
+      "pdf": "materials/VL3_paper_FULL_en_ws2-vl18-be78ddd7d120.pdf",
+      "preview": "materials/VL3_paper_FULL_en_ws2-vl18-be78ddd7d120.html",
+      "sha256": "b0c2b88360f557bbb8b50a1d65716d95894b85de773d9fe1ddce78e7e1058434",
+      "preview_sha256": "dab691580c65a34f167e57e1abbc2e2285adfc3c7a43abb44921a0a9065e904a",
+      "bytes": 257560,
       "audit": [
         {
           "page": "A1",
@@ -1063,7 +1063,7 @@
         {
           "page": "A2",
           "overflow": [],
-          "mainHeight": 599.171875,
+          "mainHeight": 635.546875,
           "lines": [],
           "writing_regions": [],
           "identity": 0
@@ -1313,7 +1313,7 @@
       ]
     }
   ],
-  "source_digest": "2f78572f4575a55cb1705a34c0a220ca0498c058ec14eded38db4ab2226f9d95",
+  "source_digest": "d9d5cf9ad9a371f2e148bb1c1c439719bae65bc6a4dd6f3a4a1962442ebf9038",
   "option_order": {
     "selects": [
       {
