@@ -1,9 +1,9 @@
 {
   "material_revision": 3,
-  "version": "ws3-vl19-7e5f343196fc",
+  "version": "ws3-vl19-868ff7a69b34",
   "experiment_version": 19,
   "sources": {
-    "index.html": "2562c441465941a4be2b1ef26827626a6ddcc1af00e37097ba310a0a701b4bee",
+    "index.html": "59d4798abbc03ab5a59467a67eb0485ae0ba8cf89a5bb63b79c65f72b25d4272",
     "app.js": "7ed08674fed2af2bbbe7486be4d090bd7dad07d520bc7fa4ddeaf78247e77808",
     "inquiry.js": "e120e426ca50ca207775e1dd550c82be0ee3f49621fc64c868204400cb1ae16d",
     "tip-inquiry.js": "79984b5e34fe4e43a073c3c28da7dd979fef2cdf77c74c9ebec76e38a5e2070e",
@@ -23,106 +23,106 @@
       "title": "完整學生版",
       "pages": 4,
       "code": "studentPDF",
-      "path": "materials/VL3_WS3_student_zh-Hant_ws3-vl19-7e5f343196fc.pdf",
-      "filename": "VL3_WS3_student_zh-Hant_ws3-vl19-7e5f343196fc.pdf",
+      "path": "materials/VL3_WS3_student_zh-Hant_ws3-vl19-868ff7a69b34.pdf",
+      "filename": "VL3_WS3_student_zh-Hant_ws3-vl19-868ff7a69b34.pdf",
       "mime": "application/pdf",
-      "sha256": "55194f82a3901a8cd62d969eb3994f2c0161881aac95b7a09a61b9db6e1142a5",
-      "preview": "materials/VL3_WS3_student_zh-Hant_ws3-vl19-7e5f343196fc.html"
+      "sha256": "e17b72c6d84db9ad4574f4e941bfb7127cdc257f6aafbee2102c5678ccaab459",
+      "preview": "materials/VL3_WS3_student_zh-Hant_ws3-vl19-868ff7a69b34.html"
     },
     {
       "language": "zh-Hant",
       "title": "完整學生版",
       "pages": 4,
       "code": "studentWord",
-      "path": "materials/VL3_WS3_student_zh-Hant_ws3-vl19-7e5f343196fc.docx",
-      "filename": "VL3_WS3_student_zh-Hant_ws3-vl19-7e5f343196fc.docx",
+      "path": "materials/VL3_WS3_student_zh-Hant_ws3-vl19-868ff7a69b34.docx",
+      "filename": "VL3_WS3_student_zh-Hant_ws3-vl19-868ff7a69b34.docx",
       "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      "sha256": "ede4305f8adfc2e91b9fa9df0006ea047dd19c5db49de9286af6569f53e13bf0"
+      "sha256": "d3c81f8b2bfac51cd6b6237a5fdbdfcb2a50bfa1bffb04831dd01ffd7609c2bb"
     },
     {
       "language": "zh-Hant",
       "title": "完整連參考答案版",
       "pages": 4,
       "code": "answersPDF",
-      "path": "materials/VL3_WS3_answers_zh-Hant_ws3-vl19-7e5f343196fc.pdf",
-      "filename": "VL3_WS3_answers_zh-Hant_ws3-vl19-7e5f343196fc.pdf",
+      "path": "materials/VL3_WS3_answers_zh-Hant_ws3-vl19-868ff7a69b34.pdf",
+      "filename": "VL3_WS3_answers_zh-Hant_ws3-vl19-868ff7a69b34.pdf",
       "mime": "application/pdf",
-      "sha256": "d107f73376aa59311a83b1c04539c9cac71aeddd1a39411ae5567d59de6a918b",
-      "preview": "materials/VL3_WS3_answers_zh-Hant_ws3-vl19-7e5f343196fc.html"
+      "sha256": "9181c626e011e2af015ef9496a80a039f3e8de0c9f7058c40be264b113e7c2b7",
+      "preview": "materials/VL3_WS3_answers_zh-Hant_ws3-vl19-868ff7a69b34.html"
     },
     {
       "language": "zh-Hant",
       "title": "完整連參考答案版",
       "pages": 4,
       "code": "answersWord",
-      "path": "materials/VL3_WS3_answers_zh-Hant_ws3-vl19-7e5f343196fc.docx",
-      "filename": "VL3_WS3_answers_zh-Hant_ws3-vl19-7e5f343196fc.docx",
+      "path": "materials/VL3_WS3_answers_zh-Hant_ws3-vl19-868ff7a69b34.docx",
+      "filename": "VL3_WS3_answers_zh-Hant_ws3-vl19-868ff7a69b34.docx",
       "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      "sha256": "3c96b4b230a1f4959562f03a075c2e2672e4b22d590066191e858afa499b7725"
+      "sha256": "5c574362ce6d840c11604a8476f94204a45626f551bd95a2c40bbbf0af981af6"
     },
     {
       "language": "zh-Hant",
       "title": "教師指引、配對及評分",
       "pages": 5,
       "code": "DPDF",
-      "path": "materials/VL3_WS3_D_zh-Hant_ws3-vl19-7e5f343196fc.pdf",
-      "filename": "VL3_WS3_D_zh-Hant_ws3-vl19-7e5f343196fc.pdf",
+      "path": "materials/VL3_WS3_D_zh-Hant_ws3-vl19-868ff7a69b34.pdf",
+      "filename": "VL3_WS3_D_zh-Hant_ws3-vl19-868ff7a69b34.pdf",
       "mime": "application/pdf",
-      "sha256": "70adf35556f8b99438807946b0c2d2f5bdcf2323d916c3535a2a05e2cbe0c487",
-      "preview": "materials/VL3_WS3_D_zh-Hant_ws3-vl19-7e5f343196fc.html"
+      "sha256": "c0ca59fd7f89bb38fcb1fa8c58e9ba6d0c051962a4e830214c5ed7bbadcc3891",
+      "preview": "materials/VL3_WS3_D_zh-Hant_ws3-vl19-868ff7a69b34.html"
     },
     {
       "language": "en",
       "title": "Complete student worksheet",
       "pages": 4,
       "code": "studentPDF",
-      "path": "materials/VL3_WS3_student_en_ws3-vl19-7e5f343196fc.pdf",
-      "filename": "VL3_WS3_student_en_ws3-vl19-7e5f343196fc.pdf",
+      "path": "materials/VL3_WS3_student_en_ws3-vl19-868ff7a69b34.pdf",
+      "filename": "VL3_WS3_student_en_ws3-vl19-868ff7a69b34.pdf",
       "mime": "application/pdf",
-      "sha256": "84cd88ee2136cfbc546c8422b595ea0c0d9030a858ed3ced89efd8559a043065",
-      "preview": "materials/VL3_WS3_student_en_ws3-vl19-7e5f343196fc.html"
+      "sha256": "26946a9405531fff6818748285a23f7e26ddcc9d9aca8cf43fc93f7994d8797c",
+      "preview": "materials/VL3_WS3_student_en_ws3-vl19-868ff7a69b34.html"
     },
     {
       "language": "en",
       "title": "Complete student worksheet",
       "pages": 4,
       "code": "studentWord",
-      "path": "materials/VL3_WS3_student_en_ws3-vl19-7e5f343196fc.docx",
-      "filename": "VL3_WS3_student_en_ws3-vl19-7e5f343196fc.docx",
+      "path": "materials/VL3_WS3_student_en_ws3-vl19-868ff7a69b34.docx",
+      "filename": "VL3_WS3_student_en_ws3-vl19-868ff7a69b34.docx",
       "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      "sha256": "5990f3a04869132cabd804fbe9d73c8a060ed1efbd84bfbb3c2111653535dc4d"
+      "sha256": "eac7cb8ec967c0603a9864f7b3f1ea2c165248a73c3d6439693265385c0b127f"
     },
     {
       "language": "en",
       "title": "Complete worksheet with reference answers",
       "pages": 4,
       "code": "answersPDF",
-      "path": "materials/VL3_WS3_answers_en_ws3-vl19-7e5f343196fc.pdf",
-      "filename": "VL3_WS3_answers_en_ws3-vl19-7e5f343196fc.pdf",
+      "path": "materials/VL3_WS3_answers_en_ws3-vl19-868ff7a69b34.pdf",
+      "filename": "VL3_WS3_answers_en_ws3-vl19-868ff7a69b34.pdf",
       "mime": "application/pdf",
-      "sha256": "678f720196903fbd1fcd8f21349124f2ed36cb447f90c527a4f152a2adbca011",
-      "preview": "materials/VL3_WS3_answers_en_ws3-vl19-7e5f343196fc.html"
+      "sha256": "0dd141e137e4b7732b7e30d0bb2bf55b442fb252cd68505b44e80549e4baf35a",
+      "preview": "materials/VL3_WS3_answers_en_ws3-vl19-868ff7a69b34.html"
     },
     {
       "language": "en",
       "title": "Complete worksheet with reference answers",
       "pages": 4,
       "code": "answersWord",
-      "path": "materials/VL3_WS3_answers_en_ws3-vl19-7e5f343196fc.docx",
-      "filename": "VL3_WS3_answers_en_ws3-vl19-7e5f343196fc.docx",
+      "path": "materials/VL3_WS3_answers_en_ws3-vl19-868ff7a69b34.docx",
+      "filename": "VL3_WS3_answers_en_ws3-vl19-868ff7a69b34.docx",
       "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      "sha256": "672f73f628f29c33460144586f96764871fd28732c3e2bb3ac20e48549914f33"
+      "sha256": "4064a1cacfe38bb3b484ce29eed8b02fdcd62a9b13f42a6dbdd64b645f9bcc28"
     },
     {
       "language": "en",
       "title": "Teacher guide, alignment and marking",
       "pages": 5,
       "code": "DPDF",
-      "path": "materials/VL3_WS3_D_en_ws3-vl19-7e5f343196fc.pdf",
-      "filename": "VL3_WS3_D_en_ws3-vl19-7e5f343196fc.pdf",
+      "path": "materials/VL3_WS3_D_en_ws3-vl19-868ff7a69b34.pdf",
+      "filename": "VL3_WS3_D_en_ws3-vl19-868ff7a69b34.pdf",
       "mime": "application/pdf",
-      "sha256": "7acd3658588895e23bddc5702ecae6ce6e04f57f031ee6eaceb67b290340efb8",
-      "preview": "materials/VL3_WS3_D_en_ws3-vl19-7e5f343196fc.html"
+      "sha256": "706425b0131d66912e2cdda74f7dbc228c02c0575f0ef310c23a90c09b102f31",
+      "preview": "materials/VL3_WS3_D_en_ws3-vl19-868ff7a69b34.html"
     }
   ],
   "source_digest": "39616790766bf3b45895078aac3365806a60f2e4a1e337a26da44b15aeddf2ed"
