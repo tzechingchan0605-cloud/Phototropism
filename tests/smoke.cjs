@@ -120,7 +120,7 @@ async function flow(p, student = true) {
   await p.click("#saveDrawing");
   await p.click("#toExperiment");
   assert(await p.locator("#phase-3").isVisible());
-  assert.equal(await p.evaluate(() => state.experimentVersion), 18);
+  assert.equal(await p.evaluate(() => state.experimentVersion), 19);
   assert.deepEqual(await p.evaluate(() => MAIN_IDS), ["A", "B", "D"]);
   assert.equal(await p.locator("#bench .specimen").count(), 3);
   assert.equal(await p.locator("#growth-C").count(), 0);
@@ -402,7 +402,7 @@ async function flow(p, student = true) {
   assert(await p.locator("#extPrediction").isDisabled());
   assert.equal(await p.locator("#originalHypothesis").count(), 0);
   assert.equal(await p.locator("#reflectionCard h3").innerText(), "學習反思");
-  assert.equal(await p.locator('label[for="reflection"]').innerText(), "試運用學習重點所學，解釋圖中胚芽鞘為何會向右彎曲。");
+  assert.equal(await p.locator('label[for="reflection"]').innerText(), "綜合實驗結果與學習重點，解釋圖中胚芽鞘為何會向右彎曲。");
   assert.equal(await p.locator("#reflectionContext svg").count(), 1);
   assert.equal(await p.locator('#reflectionContext [data-stem="before"]').count(), 0);
   assert.equal(await p.evaluate(() => document.querySelector("#reflectionContext svg").outerHTML === document.querySelector('#contextPlant [data-stem="after"]').closest("svg").outerHTML), true);
@@ -467,7 +467,7 @@ async function flow(p, student = true) {
   assert.doesNotMatch(report, /整體分數|SPS 總分/);
   assert.doesNotMatch(report, /初步想法/);
   assert.doesNotMatch(report, /單側光與物質 X 的推論/);
-  assert.match(report, /試運用學習重點所學，解釋圖中胚芽鞘為何會向右彎曲。/);
+  assert.match(report, /綜合實驗結果與學習重點，解釋圖中胚芽鞘為何會向右彎曲。/);
   assert.equal(await p.evaluate(() => document.querySelector("#printReport .reflection-context svg").outerHTML === document.querySelector("#reflectionContext svg").outerHTML), true);
   assert.match(
     await p.evaluate(() =>

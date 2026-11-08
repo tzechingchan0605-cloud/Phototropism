@@ -234,6 +234,7 @@ window.VL3Language = (() => {
   function requestSwitch() {
     language = language === "zh" ? "en" : "zh";
     refresh();
+    document.dispatchEvent(new Event("vl3languagechange"));
     return true;
   }
   function initialise() {

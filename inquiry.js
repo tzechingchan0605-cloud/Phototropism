@@ -90,7 +90,8 @@ const EXT_POSITION_OPTIONS = {
   position: "經處理瓊脂的放置位置影響胚芽鞘的彎曲方向。",
   noEffect: "經處理瓊脂的放置位置不影響胚芽鞘的彎曲方向。",
 };
-const REFLECTION_PROMPT = "試運用學習重點所學，解釋圖中胚芽鞘為何會向右彎曲。";
+const LEGACY_REFLECTION_PROMPT = "試運用學習重點所學，解釋圖中胚芽鞘為何會向右彎曲。";
+const REFLECTION_PROMPT = "綜合實驗結果與學習重點，解釋圖中胚芽鞘為何會向右彎曲。";
 const REFLECTION_REFERENCE = "圖中光源在右側，胚芽鞘頂端感受單側光照。生長素移向左側（背光側）並向下傳遞，令左側細胞延長較多，因此胚芽鞘向右側光源彎曲，屬正向光性。由教師評閱，不自動判錯。";
 function extensionAnswersFor(record) {
   if (record.experimentVersion >= 16) return EXT_ANSWERS;
@@ -652,7 +653,7 @@ function reflectionReport(record, open) {
   const reference = record.experimentVersion >= 17 ? REFLECTION_REFERENCE : threeStage(record)
     ? "引用遮光主探究、頂端比較及瓊脂延伸各一項比較，修訂三段原始預測，連結感光、生長訊號與不均勻延長。由教師評閱，不自動判錯。"
     : "引用主探究及延伸各一項比較，修訂兩次原始預測，連結感光、生長訊號與不均勻延長。由教師評閱，不自動判錯。";
-  return `<section class="report-card"><h2>學習反思</h2>${record.experimentVersion >= 17 ? `<p>${REFLECTION_PROMPT}</p>${reflectionContext()}` : ""}${open("實際反思", record.form.reflection, reference)}</section>`;
+  return `<section class="report-card"><h2>學習反思</h2>${record.experimentVersion >= 17 ? `<p>${record.experimentVersion >= 19 ? REFLECTION_PROMPT : LEGACY_REFLECTION_PROMPT}</p>${reflectionContext()}` : ""}${open("實際反思", record.form.reflection, reference)}</section>`;
 }
 function newReport(r) {
   const f = r.form,

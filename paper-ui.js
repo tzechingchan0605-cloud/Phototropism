@@ -1,109 +1,48 @@
 "use strict";
-window.PaperMaterials = (() => {
-  let permitted = false;
-  let generation = 0, catalog, previewURL;
-  const panel = document.querySelector("#paperMaterials");
-  const language = document.querySelector("#paperLanguage");
-  const preview = document.querySelector("#paperPreview");
-  const status = document.querySelector("#paperStatus");
-  const sha = async bytes => [...new Uint8Array(await crypto.subtle.digest("SHA-256",bytes))].map(value=>value.toString(16).padStart(2,"0")).join("");
-  function authorised() {
-    return permitted && teacher();
+window.PaperMaterials=(()=>{
+  let permitted=false,generation=0,catalog,previewURL;
+  const panel=document.querySelector('#paperMaterials'),preview=document.querySelector('#paperPreview'),status=document.querySelector('#paperStatus');
+  const codes=['studentPDF','studentWord','answersPDF','answersWord','DPDF'];
+  const language=()=>VL3Language.current==='en'?'en':'zh-Hant';
+  const sha=async bytes=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(v=>v.toString(16).padStart(2,'0')).join('');
+  const authorised=()=>permitted&&teacher();
+  function clear(){preview.hidden=true;preview.removeAttribute('src');if(previewURL)URL.revokeObjectURL(previewURL);previewURL=undefined;}
+  function fail(){catalog=undefined;document.querySelector('#paperDownloads').replaceChildren();clear();status.textContent=VL3Language.current==='en'?'Worksheet files are missing, outdated or damaged. Reload the materials.':'工作紙缺失、過期或損壞，請重新載入教材。';return false;}
+  function render(){
+    if(!authorised()||!catalog)return;clear();
+    const en=language()==='en';
+    document.querySelector('#paperDownloads').innerHTML=codes.map(code=>{
+      const b=catalog.books.find(b=>b.code===code&&b.language===language());
+      return `<article><strong data-student-text>${esc(b.title)} · ${code.endsWith('Word')?'Word':'PDF'}</strong><div>${code.endsWith('PDF')?`<button type="button" class="secondary" data-paper-preview="${code}">${en?'Preview':'預覽'}</button>`:''}<button type="button" data-paper-download="${code}">${en?'Download':'下載'}</button></div></article>`;
+    }).join('');
+    document.querySelector('#paperVersion').textContent=catalog.version;
+    panel.querySelectorAll('[data-paper-preview]').forEach(b=>b.onclick=()=>previewBook(b.dataset.paperPreview));
+    panel.querySelectorAll('[data-paper-download]').forEach(b=>b.onclick=()=>downloadBook(b.dataset.paperDownload));
   }
-  function clearPreview() {
-    preview.hidden = true;
-    preview.removeAttribute("src");
-    if (previewURL) URL.revokeObjectURL(previewURL);
-    previewURL = undefined;
+  async function setAccess(value){
+    const token=++generation;permitted=Boolean(value);panel.hidden=!authorised();clear();catalog=undefined;
+    if(panel.hidden)return false;status.textContent='';
+    try{
+      const response=await fetch('materials/manifest.json',{cache:'no-store'});if(!response.ok)throw Error();const latest=await response.json();
+      const digest=await sha(new TextEncoder().encode(JSON.stringify(VL3PaperContent.canonical())));
+      if(token!==generation||!authorised())return false;
+      if(latest.material_revision!==3||latest.experiment_version!==EXPERIMENT_VERSION||latest.source_digest!==digest||latest.books.length!==10)throw Error();
+      for(const lang of ['zh-Hant','en'])for(const code of codes){const matches=latest.books.filter(b=>b.language===lang&&b.code===code);if(matches.length!==1||!/^materials\/VL3_WS3_/.test(matches[0].path)||!matches[0].filename.includes(latest.version))throw Error();}
+      catalog=latest;render();return true;
+    }catch{if(token!==generation||!authorised())return false;return fail();}
   }
-  function fail() {
-    catalog = undefined;
-    document.querySelector("#paperDownloads").replaceChildren();
-    clearPreview();
-    status.textContent = VL3Language.t("工作紙版本不一致或檔案損壞，請重建材料後再試。");
-    return false;
+  async function verified(code){
+    if(!authorised()||!catalog)return;
+    const token=generation,lang=language(),book=catalog.books.find(b=>b.code===code&&b.language===lang);if(!book)return;
+    const response=await fetch(book.path,{cache:'no-store'});if(!response.ok||response.headers.get('content-type')?.split(';')[0]!==book.mime)throw Error();
+    const bytes=await response.arrayBuffer(),magic=new Uint8Array(bytes);
+    if(await sha(bytes)!==book.sha256||(code.endsWith('PDF')?new TextDecoder().decode(bytes.slice(0,5))!=='%PDF-':magic[0]!==80||magic[1]!==75))throw Error();
+    if(token!==generation||lang!==language()||!authorised())return;
+    return {book,blob:new Blob([bytes],{type:book.mime})};
   }
-  async function setAccess(value) {
-    const requestGeneration = ++generation;
-    permitted = Boolean(value);
-    panel.hidden = !authorised();
-    clearPreview();
-    if (panel.hidden) {
-      catalog = undefined;
-      return false;
-    } else {
-      status.textContent = "";
-      language.value = VL3Language.current === "en" ? "en" : "zh-Hant";
-      try {
-        const response = await fetch("materials/manifest.json",{cache:"no-store"});
-        if (!response.ok) throw Error("Materials unavailable");
-        const latest = await response.json();
-        const digest = await sha(new TextEncoder().encode(JSON.stringify(VL3PaperContent.canonical())));
-        if (requestGeneration !== generation || !authorised()) return false;
-        if (latest.material_revision !== VL3PaperContent.revision || latest.experiment_version !== EXPERIMENT_VERSION || latest.source_digest !== digest || latest.books.length !== 10) return fail();
-        catalog = latest;
-        render();
-        return true;
-      } catch {
-        if (requestGeneration !== generation || !authorised()) return false;
-        return fail();
-      }
-    }
-  }
-  async function verifiedPDF(code) {
-    if (!authorised() || !catalog) return;
-    const book = catalog.books.find(book=>book.code===code && book.language===language.value);
-    if (!book) return;
-    const response = await fetch(book.pdf,{cache:"no-store"});
-    if (!response.ok) throw Error("Missing PDF");
-    const bytes = await response.arrayBuffer();
-    if (new TextDecoder().decode(bytes.slice(0,5)) !== "%PDF-" || await sha(bytes) !== book.sha256) throw Error("PDF integrity mismatch");
-    if (!authorised()) return;
-    return {book,blob:new Blob([bytes],{type:"application/pdf"})};
-  }
-  async function downloadBook(code) {
-    if (!authorised()) return false;
-    try {
-      const result = await verifiedPDF(code);
-      if (!result) return false;
-      download(result.blob,result.book.filename);
-      status.textContent = "";
-      return true;
-    } catch {return fail();}
-  }
-  async function previewBook(code) {
-    if (!authorised()) return false;
-    try {
-      const result = await verifiedPDF(code);
-      if (!result) return false;
-      clearPreview();
-      previewURL = URL.createObjectURL(result.blob);
-      preview.src = previewURL;
-      preview.hidden = false;
-      return true;
-    } catch {return fail();}
-  }
-  function render() {
-    if (!authorised()) return;
-    if (!catalog) return;
-    const entries = catalog.books.filter(book => book.language === language.value);
-    document.querySelector("#paperDownloads").innerHTML = entries.map(book =>
-      `<article><strong data-student-text>${esc(book.code)} · ${esc(book.title)} · ${book.pages} ${language.value === "en" ? "pages" : "頁"}<small>${language.value === "en" ? "Pack pages" : "套裝頁碼"} ${book.pack_range.join("–")}</small></strong><div><button type="button" class="secondary" data-paper-preview="${esc(book.code)}">預覽</button><a class="paper-pdf-link" href="${esc(book.pdf)}" download="${esc(book.filename)}" data-paper-download="${esc(book.code)}">下載 PDF</a></div></article>`
-    ).join("");
-    document.querySelector("#paperVersion").textContent = (language.value === "en" ? "Paper curriculum: WS" : "紙本教學版本：WS")+catalog.material_revision+" · VL "+EXPERIMENT_VERSION+" · "+catalog.version;
-    clearPreview();
-    panel.querySelectorAll("[data-paper-preview]").forEach(button => {
-      button.onclick = () => {
-        previewBook(button.dataset.paperPreview);
-      };
-    });
-    panel.querySelectorAll("[data-paper-download]").forEach(link => {
-      link.onclick = event => {event.preventDefault();downloadBook(link.dataset.paperDownload);};
-    });
-    VL3Language.translateTree(panel);
-  }
-  language.onchange = render;
-  document.querySelector("#paperReload").onclick = () => setAccess(teacher());
-  setAccess(teacher());
+  async function downloadBook(code){const token=generation;try{const r=await verified(code);if(!r)return false;download(r.blob,r.book.filename);return true;}catch{return token===generation?fail():false;}}
+  async function previewBook(code){if(!code.endsWith('PDF'))return false;const token=generation;try{const r=await verified(code);if(!r)return false;clear();previewURL=URL.createObjectURL(r.blob);preview.src=previewURL;preview.hidden=false;return true;}catch{return token===generation?fail():false;}}
+  document.addEventListener('vl3languagechange',()=>{++generation;clear();if(authorised()){if(catalog)render();else setAccess(true);}});
+  document.querySelector('#paperReload').onclick=()=>setAccess(teacher());setAccess(teacher());
   return {setAccess,download:downloadBook,preview:previewBook};
 })();

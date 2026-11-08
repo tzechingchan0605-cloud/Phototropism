@@ -48,11 +48,11 @@ class BackendTest(unittest.TestCase):
                 # Actual static material responses work on the local fallback too.
                 with urllib.request.urlopen(f'http://127.0.0.1:{port}/materials/manifest.json') as response:
                     manifest=json.loads(response.read())
-                    self.assertEqual(manifest['material_revision'],2)
+                    self.assertEqual(manifest['material_revision'],3)
                 for book in manifest['books']:
-                    with urllib.request.urlopen(f'http://127.0.0.1:{port}/{book["pdf"]}') as response:
-                        self.assertEqual(response.headers.get_content_type(),'application/pdf')
-                        self.assertEqual(response.read(),(ROOT/book['pdf']).read_bytes())
+                    with urllib.request.urlopen(f'http://127.0.0.1:{port}/{book["path"]}') as response:
+                        self.assertEqual(response.headers.get_content_type(),book['mime'])
+                        self.assertEqual(response.read(),(ROOT/book['path']).read_bytes())
                 self.assertEqual(request('/materials/../../.data/teacher-password')[0],404)
                 self.assertEqual(request('/materials/source.json')[0],404)
                 fixture={

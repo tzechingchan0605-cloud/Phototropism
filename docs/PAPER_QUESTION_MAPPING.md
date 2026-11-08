@@ -1,25 +1,20 @@
-# Phototropism 紙本逐題配對 / Question mapping
+# WS3逐題來源配對
 
-材料教學版本 WS2；原 VL 題目版本 18。/ Paper curriculum WS2; native VL question version 18.
+來源：VL19。題目及完整選項於生成時直接取現行DOM／共用常數；中英提示分別沿用VL顯示來源。共同題型不代表改寫題幹。
 
-| ID | VL 原題 / Original | 處理 / Treatment | 新版 / Revised | 共同目標 / Shared goal | 理由 / Reason |
-| --- | --- | --- | --- | --- | --- |
-| P1 | 初步外形及方向觀察<br>Initial shape and direction observation | 保留／靜態化<br>Retain / static | 觀察窗邊胚芽鞘前後圖，描述外形及方向的改變。<br>Describe changes in shape and direction in the window-side images. | 觀察及記錄<br>Observation and recording | 保留同一情境；以圖像代替動畫。<br>Same context; images replace animation. |
-| E1 | 主探究原始假說與理由<br>Original main-inquiry hypothesis and reason | 改為示例<br>Worked example | 評估指定預測：遮住頂端以下位置仍可能向光彎曲。<br>Evaluate a given prediction: blocking light below the tip may still allow bending towards light. | 可測試預測及理由<br>Testable prediction and reasoning | 先解說機制，再示範如何提出有根據的預測；不評原始假說。<br>Teach the mechanism first; model an evidence-based prediction without scoring an original hypothesis. |
-| P2 | 三組自主裝置繪圖／文字設計<br>Autonomous setup drawing / written design | 改寫／靜態化<br>Rewrite / static | 在所提供三組圖補全遮光標示。<br>Label the shading treatments in three provided diagrams. | 辨認裝置與處理<br>Identify apparatus and treatments | 提供相同三組圖，讓自學學生處理科學標示；不假稱是虛擬操作。<br>Provide the same setups for scientific labelling; do not equate this with virtual operation. |
-| P3 | 主探究三類變量與實驗前提<br>Main-inquiry variables and assumptions | 保留<br>Retain | 選主探究變量與所有適用前提。<br>Select main-inquiry variables and all applicable assumptions. | 分類與控制變量<br>Classify and control variables | 沿用變量選項及初始大小、溫度、遮光物不限制生長等前提。<br>Keep variable choices and assumptions about initial size, temperature and unrestricted growth. |
-| P4 | 自主對照組設計<br>Autonomous control design | 等值改寫<br>Equivalent rewrite | 解釋不遮光 A 的作用，以及 A–B／A–C 如何公平比較。<br>Explain the role of uncovered A and fair comparisons A–B / A–C. | 公平比較與對照<br>Fair comparison and controls | 指定對照，仍要求比較基準及控制條件的推理。<br>Supply the control while retaining reasoning about baseline and controlled conditions. |
-| P5 | 主探究 A／B／C 方向記錄<br>Main A / B / C direction records | 靜態化<br>Static | 圈選三組培養後的彎曲方向。<br>Circle the bending direction after incubation for each setup. | 觀察及記錄<br>Observation and recording | 共用前後模型圖及原方向選項。<br>Shared before/after models and original direction options. |
-| P6 | 1. 比較 A 與 B：頂端遮光後有甚麼不同？<br>Compare A and B: what changes when the tip is shaded? | 保留<br>Retain | 1. 比較 A 與 B：頂端遮光後有甚麼不同？<br>Compare A and B: what changes when the tip is shaded? | 比較及推論<br>Comparison and inference | 保留原題及選項；運用已教概念解讀資料。<br>Keep the question and options; apply taught concepts to data. |
-| P7 | 2. 比較 A 與 C：下部沒有直接受光，是否仍會彎曲？<br>Compare A and C: does it bend without direct light below the tip? | 保留<br>Retain | 2. 比較 A 與 C：下部沒有直接受光，是否仍會彎曲？<br>Compare A and C: does it bend without direct light below the tip? | 比較及推論<br>Comparison and inference | 使用學生標示 C；不重編舊 D 紀錄。<br>Use displayed C without renumbering legacy D records. |
-| P8 | 3. 哪個部位可能感受單側光照？<br>Which part may sense light from one side? | 保留<br>Retain | 3. 哪個部位可能感受單側光照？<br>Which part may sense light from one side? | 證據支持感光推論<br>Infer light sensing from evidence | 保留 A/B、A/C 證據鏈。<br>Keep the A/B and A/C evidence chain. |
-| E2 | 延伸一原始預測與理由<br>Original extension-one prediction and reason | 改為應用示範<br>Application example | 用頂端可產生生長促進作用評估切頂的預測及界限。<br>Use the tip's growth-promoting role to evaluate a cut-tip prediction and its limits. | 有根據的預測<br>Reasoned prediction | 先教作用與傷口界限，不再評事前猜測。<br>Teach the role and wound caveat rather than scoring an advance guess. |
-| P9 | A/D 延長記錄及實驗結論<br>A/D elongation records and conclusion | 保留／靜態化<br>Retain / static | 圈選 A、D 是否延長，再完成頂端作用結論。<br>Record whether A and D elongate, then conclude about the tip's role. | 定性觀察及推論<br>Qualitative observation and inference | 共用 A 與切頂 D 圖及原有／沒有選項。<br>Shared intact A / cut-tip D images and yes/no options. |
-| E3 | 延伸二原始預測與理由<br>Original extension-two prediction and reason | 改為教學解說<br>Explanation | 解說瓊脂承載作用、放置位置與兩側延長的關係。<br>Explain how agar carries an effect and how placement relates to differential elongation. | 模型理解及預測<br>Model understanding and prediction | 先教方法，再讓學生獨立解讀黑暗 E–H。<br>Teach the method before independent interpretation of dark E–H. |
-| P10 | E–H 虛擬指針量角及方向<br>E–H adjustable-pointer measurement and direction | 靜態化<br>Static | 讀靜態量角器並另記方向。<br>Read static protractors and record direction separately. | 量度及記錄<br>Measurement and recording | 保持 0/0/35/35 模型；讀圖分數不等同虛擬操作。<br>Retain the 0/0/35/35 model; image reading is not virtual-operation scoring. |
-| P11 | 1. E 與 F 的比較支持甚麼？<br>What does comparing E and F support? | 保留<br>Retain | 1. E 與 F 的比較支持甚麼？<br>What does comparing E and F support? | 傳遞作用的證據<br>Evidence for a transferable effect | 兩組中央，只有瓊脂是否接觸頂端不同。<br>Both are central; only prior tip contact differs. |
-| P12 | 2. F、G、H 的比較支持甚麼？<br>What does comparing F, G and H support? | 保留<br>Retain | 2. F、G、H 的比較支持甚麼？<br>What does comparing F, G and H support? | 作用位置及彎曲<br>Placement and bending | 同種處理瓊脂，不同放置位置；黑暗無當時光照。<br>Same treated agar, different positions; no light during dark incubation. |
-| P13 | 延伸二第3題左右延長句內填空<br>Extension-two cloze on differential elongation | 保留<br>Retain | 左側物質 X 較多／少、細胞延長較多／少、向左／右彎曲。<br>Select more/less X on the left, more/less elongation, and left/right bending. | 兩側延長推理<br>Reason about differential elongation | 保留原選項，學生圈選而不是下拉。<br>Keep options as circling choices rather than dropdowns. |
-| P14 | 三段探究的公平比較目標<br>Fair-comparison aims across three investigations | 等值應用<br>Equivalent application | 分別辨認 A–D、E–F、F–G–H 的獨立變量。<br>Identify the independent variable separately for A–D, E–F and F–G–H. | 遷移變量分類<br>Transfer variable classification | 避免把遮光、切頂及瓊脂位置視作同一變量。<br>Distinguish shading, tip removal, agar conditioning and placement. |
-| P15 | 試運用學習重點所學，解釋圖中胚芽鞘為何會向右彎曲。<br>Use the learning points to explain the right-bending coleoptile in the diagram. | 保留／獨立應用<br>Retain / independent application | 試運用學習重點所學，解釋圖中胚芽鞘為何會向右彎曲。<br>Use the learning points to explain the right-bending coleoptile in the diagram. | 整合概念與解釋<br>Integrate concepts in an explanation | 仍連結右方光、左背光、生長素、差異延長；不改為修訂假說。<br>Link right-side light, shaded left, auxin and differential elongation, not hypothesis revision. |
-| C1 | 最後才揭示學習重點<br>Learning points revealed at the end | 移至 A；C 核對修正<br>Move to A; C checks/corrects | 開始可讀概念；完成 B 後核對並另記修正。<br>Read concepts from the start; after B, check answers and record corrections separately. | 概念理解及修正<br>Conceptual understanding and correction | 符合無課前講授的自學比較組條件。<br>Fits the self-study condition without a prelesson lecture. |
+| WS位置 | VL來源 | 概念／技能 | 分數 |
+|---|---|---|---:|
+| 部分1變量 | #variableChoices、VARIABLES、VARIABLE_DISPLAY_ORDER、EXPECTED | 辨識／控制變量；三列重複全部候選，剔選多選 | 4 |
+| 部分1前提 | #assumptions、#assumptionDefinition、兩段.design-hint | 公平比較的前提，保留干擾項與定義 | 1 |
+| 部分1對照 | #controlPlan及原括號提示 | 不遮光A作基準，其餘條件相同 | 1 |
+| 2.1方向紀錄 | #bench、#observationTable、mainModel | 靜態讀A/B/C方向，保留原方向選項 | 1 |
+| 2.1三分析 | #qShade、#qBelow、#qTip及其全部option | 遮光比較與頂端感光推論 | 3 |
+| 2.2延長紀錄 | #tipBench、#tipObservationTable、tipModel | 完整A／切頂D定性觀察，只記延長 | 1 |
+| 2.2分析 | #qCap及全部option | 頂端存在與延長作用 | 1 |
+| 2.3角度／方向 | #extensionBench、#extensionTable、EXT_MODEL | 0/0/35/35、直/直/右/左，鉛直量角，E/F零容差、G/H±2° | 3 |
+| 2.3分析1 | #extEF及全部option | 可轉移生長促進作用 | 1 |
+| 2.3分析2 | EXT_POSITION_QUESTION／OPTIONS | 處理瓊脂位置與方向 | 1 |
+| 2.3句內填空 | extensionClozeSentence、三個原select | 多／多／右，三項各1/3 | 1 |
+| 部分3 | #reflection、windowSeedling(true)、REFLECTION_REFERENCE、rubric.js | 相同右光情境，學習重點→課題需知；五個因果連結 | 5 |
+
+WS共23分。對照題只有原有開放作答，不增加理由追問。選擇題以句內全部選項圈選，多選以方格；不加問原本沒有的證據或限制。沒有設計標示、指定比較、假說補位或額外變量題。未提供初步觀察、三段原始預測／理由、繪圖設計及動態操作機會：不適用，不能給0。VL流程仍先探究、提交後揭示機制／反思、反思提交後解鎖PDF。

@@ -1,6 +1,6 @@
 "use strict";
 const MODULE_ID = "VL_BIO_PHOTOTROPISM";
-const EXPERIMENT_VERSION = 18;
+const EXPERIMENT_VERSION = 19;
 const CURRENT_KEY = "phototropismLab.current.v1",
   RECORDS_KEY = "phototropismLab.records.v1";
 const TEACHER_EMAIL = "tzechingchan0605@gmail.com";
@@ -510,6 +510,7 @@ function applyLock() {
   $("#learningReveal").hidden = !locked;
   lockTipInquiry();
   lockExtension();
+  $('label[for="reflection"]').textContent = state.experimentVersion >= 19 ? REFLECTION_PROMPT : LEGACY_REFLECTION_PROMPT;
   $("#reflection").disabled = complete();
   $("#saveReflection").disabled = !locked || complete();
   $("#downloadPDF").disabled = !complete();
@@ -806,7 +807,7 @@ $("#submitInvestigation").onclick = () => {
     observations: state.observations,
   });
   applyLock();
-  message("探究答案已鎖定。請閱讀學習重點，然後回顧原始假說。");
+  message("探究答案已鎖定。請閱讀學習重點，然後解釋情境圖。");
   $("#learningCard").scrollIntoView({
     block: "start",
     behavior: scrollBehavior(),
@@ -1231,20 +1232,23 @@ function scoringWorkbook(all) {
     ["run", "實作｜延伸角度量度準確性（0–2）", "conducting"],
     ["setup", "實作｜裝置設計・教師（0–2）", "conducting", 2],
     ["conducting", "SPS 實作（0–4）", "conducting"],
-    ["conclusions", "推論｜主探究及延伸比較（0–2）", "inferring"],
-    ["evidence", "推論｜數據解釋・教師（0–2）", "inferring", 2],
+    ["conclusions", "推論｜主探究及延伸比較（舊0–2／新版0–4）", "inferring"],
+    ["evidence", "推論｜數據解釋・教師（舊0–2／新版不適用）", "inferring", 2],
     ["inferring", "SPS 推論（0–4）", "inferring"],
-    ["reflection", "溝通｜反思表達・教師（0–2）", "communicating", 2],
-    ["submission", "溝通｜數據紀錄及證據表達・教師（0–2）", "communicating", 2],
+    ["reflection", "溝通｜反思表達・教師（舊0–2／新版不適用）", "communicating", 2],
+    ["submission", "溝通｜數據紀錄及證據表達・教師（舊0–2／新版0–4）", "communicating", 2],
     ["communicating", "SPS 溝通（0–4）", "communicating"],
     ["sps", "SPS 總分（0–24）", "score"],
     ["tip", "知識｜向光性名稱及感光部位・教師（0–2）", "knowledge", 2],
     ["growth", "知識｜不均勻延長及彎曲方向・教師（0–2）", "knowledge", 2],
     ["auxin", "知識｜生長素與生長訊號・教師（0–2）", "knowledge", 2],
     ["revision", "知識｜情境應用／舊版證據修訂・教師（0–2）", "knowledge", 2],
-    ["knowledge", "新知識總分（0–8）", "score"],
-    ["overall", "整體（0–32）", "score"],
+    ["knowledge", "知識／綜合解釋總分（舊0–8／新版0–5）", "score"],
+    ["overall", "整體（舊0–32／新版0–29）", "score"],
     ["marking", "評分狀態", "score"],
+    ["integrated", "綜合解釋・教師（新版0–5／舊版不適用）", "knowledge", 5],
+    ["rubricVersion", "題目／評分版本", "reference"],
+    ["activityMax", "活動滿分", "reference"],
   ];
   const col = Object.fromEntries(cols.map((c, i) => [c[0], colName(i)]));
   const rows = [cols.map((c) => excelCell(c[1], c[2]))],
@@ -1253,8 +1257,15 @@ function scoringWorkbook(all) {
   all.forEach((r, i) => {
     const n = i + 2,
       ref = (id) => col[id] + n;
-    const sum = (ids, required = ids) =>
-      `IF(COUNT(${required.map(ref).join(",")})=${required.length},ROUND(SUM(${ids.map(ref).join(",")}),2),"待評")`;
+    const current = r.experimentVersion >= 19;
+    const applicable = c => c[3] && (current ? ["initial","hypothesis","control","setup","submission","integrated"].includes(c[0]) : c[0] !== "integrated" && (newExperiment(r) || c[0] !== "tip"));
+    const maximum = c => current && c[0] === "submission" ? 4 : c[3];
+    const valid = (id,max,integer=true) => `IFERROR(AND(ISNUMBER(${ref(id)}),${ref(id)}>=0,${ref(id)}<=${max}${integer?`,MOD(${ref(id)},1)=0`:''}),FALSE)`;
+    const sum = (ids, required = ids) => {
+      const needed=[...new Set([...required,...ids.filter(id=>applicable(cols.find(c=>c[0]===id)))])];
+      const guards=needed.map(id=>{const c=cols.find(c=>c[0]===id);return c[3]?valid(id,maximum(c)):valid(id,["sps"].includes(id)?24:id==="knowledge"?(current?5:8):4,false);});
+      return `IF(AND(${guards.join(',')}),ROUND(SUM(${ids.map(ref).join(",")}),2),"待評")`;
+    };
     const raw = {
       id: r.id,
       name: r.profile.name,
@@ -1278,7 +1289,9 @@ function scoringWorkbook(all) {
             Object.keys(GROUPS).every((id) => OUTCOMES[r.observations[id]])
           ? 2
           : 0,
-      conclusions: inferenceScore(r),
+      conclusions: current ? Math.round(inferenceScore(r)*200)/100 : inferenceScore(r),
+      rubricVersion: current ? VL3_RUBRIC19.version : "legacy-v"+r.experimentVersion,
+      activityMax: current ? VL3_RUBRIC19.activityMax : 32,
       submission: graphScore(r),
       tip: !newExperiment(r) ? (r.form.qTip === ANSWERS.qTip ? 2 : 0) : "",
     };
@@ -1290,8 +1303,8 @@ function scoringWorkbook(all) {
         ["hypothesis", "control"],
       ),
       conducting: sum(["run", "setup"], ["setup"]),
-      inferring: sum(["conclusions", "evidence"], ["evidence"]),
-      communicating: sum(["reflection", "submission"], ["reflection"]),
+      inferring: current ? ref("conclusions") : sum(["conclusions", "evidence"], ["evidence"]),
+      communicating: current ? sum(["submission"]) : sum(["reflection", "submission"], ["reflection"]),
       sps: sum([
         "observing",
         "classifying",
@@ -1300,26 +1313,22 @@ function scoringWorkbook(all) {
         "inferring",
         "communicating",
       ]),
-      knowledge: sum(
+      knowledge: current ? sum(["integrated"]) : sum(
         ["tip", "growth", "auxin", "revision"],
         newExperiment(r)
           ? ["tip", "growth", "auxin", "revision"]
           : ["growth", "auxin", "revision"],
       ),
       overall: `IF(AND(COUNT(${ref("sps")},${ref("knowledge")})=2,${ref("status")}="已完成"),ROUND(SUM(${ref("sps")},${ref("knowledge")}),2),"待評／未完成")`,
-      marking: `IF(AND(COUNT(${cols
-        .filter((c) => c[3] && (newExperiment(r) || c[0] !== "tip"))
-        .map((c) => ref(c[0]))
-        .join(
-          ",",
-        )})=${newExperiment(r) ? 11 : 10},${ref("status")}="已完成"),"評分完成","待教師評分／學生未完成")`,
+      marking: `IF(AND(${cols.filter(applicable).map(c=>valid(c[0],maximum(c))).join(',')},${ref("status")}="已完成"),"評分完成","待教師評分／學生未完成")`,
     };
     rows.push(
       cols.map((c) => {
-        if (c[3] && (newExperiment(r) || c[0] !== "tip")) {
-          validations.push({ range: ref(c[0]), max: c[3] });
-          conditional.push(colourRule(ref(c[0]), ref(c[0]), c[3]));
+        if (applicable(c)) {
+          validations.push({ range: ref(c[0]), max: maximum(c) });
+          conditional.push(colourRule(ref(c[0]), ref(c[0]), maximum(c)));
         }
+        if (c[3] && !applicable(c) && !(c[0] === "tip" && !newExperiment(r))) return excelCell("不適用",c[2]);
         return formula[c[0]]
           ? excelFormula(formula[c[0]], c[2])
           : excelCell(raw[c[0]] ?? "", c[2]);
@@ -1335,8 +1344,8 @@ function scoringWorkbook(all) {
     ].forEach((id) => conditional.push(colourRule(ref(id), ref(id), 4)));
     conditional.push(
       colourRule(ref("sps"), ref("sps"), 24),
-      colourRule(ref("knowledge"), ref("knowledge"), 8),
-      colourRule(ref("overall"), ref("overall"), 32),
+      colourRule(ref("knowledge"), ref("knowledge"), current ? 5 : 8),
+      colourRule(ref("overall"), ref("overall"), current ? 29 : 32),
     );
   });
   const rubric = [
@@ -1434,6 +1443,9 @@ function scoringWorkbook(all) {
       "分數只存在教師保存的 Excel 檔案；再次下載不會讀入舊檔人工分數。",
     ],
   ];
+  rubric.push(["版本19：綜合解釋",5,VL3_RUBRIC19.points.map((p,i)=>(i+1)+". "+p[0]).join("；")+" "+VL3_RUBRIC19.marking[0]],
+    ["版本19：SPS與適用欄",24,"觀察、分類、設計、實作各4分；推論按現有7項比較比例計4分；溝通只按讀數與方向表達評0–4（完整清楚4，大致清楚3，部分2，少量1，無相關表達0）。不再以反思內容在SPS或舊知識欄重複計分。"],
+    ["版本19：總分及非法值",29,"六項SPS24＋綜合解釋5＝29；舊版保留32與原規準。僅適用人工欄須填；空白待評、0已評、不適用不阻擋。公式檢查整數上下限及文字，貼上非法分數不能得有效總分。舊Excel須重新匯出。"]);
   return {
     sheet: { name: "教師評分", rows, validations, conditional },
     rubric: {
@@ -1659,8 +1671,8 @@ async function exportExcel() {
       conditional.push(
         colourRule(
           colName(c) + n,
-          `INDIRECT("'教師評分'!${scoring.col[id]}${n}")`,
-          max,
+          `INDIRECT("'教師評分'!${scoring.col[r.experimentVersion >= 19 && id === "reflection" ? "integrated" : id]}${n}")`,
+          r.experimentVersion >= 19 && id === "reflection" ? 5 : max,
         ),
       ),
     );

@@ -22,7 +22,7 @@ TEACHER = 'tzechingchan0605@gmail.com'
 MODULE = 'VL_BIO_PHOTOTROPISM'
 FIELDS = ['observation','hypothesisPart','hypothesisOutcome','reason','controlPlan','setupDescription','qTip','qCap','qBelow','qLimit','evidence','reflection']
 PUBLIC = {'/':'index.html','/index.html':'index.html','/styles.css':'styles.css','/app.js':'app.js','/excel.js':'excel.js','/i18n.js':'i18n.js','/i18n-strings.js':'i18n-strings.js','/inquiry.js':'inquiry.js','/tip-inquiry.js':'tip-inquiry.js','/cloud-config.js':'cloud-config.js','/cloud-bridge.js':'cloud-bridge.js','/cloud-sync.js':'cloud-sync.js'}
-PUBLIC.update({'/paper-content.js':'paper-content.js','/paper-ui.js':'paper-ui.js'})
+PUBLIC.update({'/rubric.js':'rubric.js','/paper-content.js':'paper-content.js','/paper-ui.js':'paper-ui.js'})
 SESSIONS = {}
 ATTEMPTS = {}
 LOCK = threading.Lock()
@@ -112,7 +112,7 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_json(200, {'records':rows})
         if path in PUBLIC:
             file = ROOT / PUBLIC[path]
-        elif path == '/materials/manifest.json' or re.fullmatch(r'/materials/VL3_paper_(?:A|B|C|D|FULL)_(?:zh-Hant|en)_(?:ws\d+-vl\d+|v\d+)-[a-f0-9]{12}\.(?:pdf|html)', path):
+        elif path == '/materials/manifest.json' or re.fullmatch(r'/materials/VL3_WS3_(?:student|answers|D)_(?:zh-Hant|en)_ws3-vl\d+-[a-f0-9]{12}\.(?:pdf|html|docx)', path):
             # Only public, generated blank teaching materials; never record files.
             file = ROOT / path.lstrip('/')
         else:
@@ -121,7 +121,7 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_json(404, {'error':'not_found'})
         data = file.read_bytes()
         self.send_response(200)
-        self.send_header('Content-Type', {'html':'text/html; charset=utf-8','css':'text/css; charset=utf-8','js':'text/javascript; charset=utf-8','json':'application/json; charset=utf-8','pdf':'application/pdf'}[file.suffix[1:]])
+        self.send_header('Content-Type', {'html':'text/html; charset=utf-8','css':'text/css; charset=utf-8','js':'text/javascript; charset=utf-8','json':'application/json; charset=utf-8','pdf':'application/pdf','docx':'application/vnd.openxmlformats-officedocument.wordprocessingml.document'}[file.suffix[1:]])
         self.send_header('Content-Length',str(len(data)))
         self.send_header('Cache-Control','no-cache')
         self.send_header('X-Content-Type-Options','nosniff')

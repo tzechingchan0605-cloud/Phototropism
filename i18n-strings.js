@@ -815,6 +815,10 @@ A、B、C 三組遮光處理、單側光源及固定條件清楚；圖片與文�
 背光側生長素較多，該側細胞延長較多，使胚芽鞘向光彎曲	more auxin is found on the shaded side, so cells on that side elongate more, making the coleoptile bend towards light
 解釋圖中胚芽鞘向右彎曲的原因……	Explain why the coleoptile in the diagram bends to the right...
 第一次開始實驗前，系統會固定保存完整原始假說及理由，作為探究紀錄。	Your full original hypothesis and reason will be saved before your first experiment as part of your inquiry record.
+探究答案已鎖定。請閱讀學習重點，然後解釋情境圖。	Your inquiry answers are locked. Read the learning points, then explain the context diagram.
+綜合實驗結果與學習重點，解釋圖中胚芽鞘為何會向右彎曲。	Use the experimental results and learning points to explain why the coleoptile in the diagram bends to the right.
+下載工作紙三及教師教材	Download Worksheet 3 and teaching materials
+完整學生版、完整連參考答案版及 D 教師指引。首次答案保存後才派答案版；時間安排見 D。	Complete student worksheet, worksheet with reference answers, and D teacher guide. Distribute answers after preserving first responses; see D for timing.
 試運用學習重點所學，解釋圖中胚芽鞘為何會向右彎曲。	Use what you have learnt from the learning points to explain why the coleoptile in the diagram bends to the right.
 圖中光源在右側，胚芽鞘頂端感受單側光照。生長素移向左側（背光側）並向下傳遞，令左側細胞延長較多，因此胚芽鞘向右側光源彎曲，屬正向光性。由教師評閱，不自動判錯。	The light source is on the right, and the coleoptile tip senses light from one side. Auxin moves towards the left (shaded side) and passes downwards, causing cells on the left to elongate more. The coleoptile therefore bends towards the light on the right, showing positive phototropism. The teacher reviews this; it is not automatically marked wrong.
 `

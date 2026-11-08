@@ -1,23 +1,22 @@
-# WS2 實際驗證紀錄
+# WS3實際驗證紀錄
 
-材料版本：`ws2-vl18-7799bfec45d5`；學生 VL 仍為版本 18。日期：2026-10-14。
+日期：2026-11-08（香港）；題目版本19；rubric `vl19-causal-5`；教材版本見materials/manifest.json。
 
-## 執行環境與指令
+已讀WS1學生版附件（四頁）及VL1 `a9ea711`、VL2 `a5ec00a`現行教材與生成來源。部署前實讀線上VL3仍為版本18；GitHub Pages API確認來源為main根目錄，legacy build。VL1／VL2線上manifest與參考checkout比對，非只讀提示詞。
 
-Node 24、Chromium、Python 3.12、Playwright 1.62.1、PyMuPDF 1.26.6、Noto CJK、poppler-utils。以 `CHROMIUM_PATH=/usr/bin/chromium npm test` 執行全套隔離測試，包含材料重建、HTML、實際 PDF、下載瀏覽器、雲端模擬、語言、實際 Excel 及 SQLite 相容測試。
+## 實際執行
 
-## 檢查結果
+`npm ci`、`python -m pip install -r requirements-test.txt`、`npm run materials:build`、`npm test`。Node24、Python3.12、Chromium／Playwright、Noto CJK、PyMuPDF、poppler-utils、python-docx、CairoSVG及LibreOffice。
 
-- 十份真正的兩語 PDF：A 2 頁、B 5 頁、C 2 頁、D 6 頁；完整套裝各15頁。套裝範圍：A 1–2、B 3–7、C 8–9、D 10–15。
-- 全頁 PDF 可見文字與 HTML 預覽一致、字形嵌入、A4、無文字／圖像標示裁切或頁面溢出；文字作答、標示及修正區實際向量線各兩條。姓名／班別／學號只在 A1、C1。
-- 所有完整套裝頁面彩色及灰階渲染，逐頁版面檢閱；另放大檢視概念、兩側細胞、量角器及學生答案表。量角器數字標示拉開間距；前後圖保持相同比例。
-- A 提前教完整核心概念及示例；B 涵蓋遮光、切頂和黑暗 E–H，不印核對答案表或分數；C 提供完成 B 後的核對及修正；D 提供獨立14分形成性準則及19項配對。E 不延長，E/F 角度要求0°，G/H 33–37°，方向相反。
-- 實際下載兩語 A/B/C/D/FULL，PDF magic bytes、檔名與 SHA-256 全部吻合；真正 PDF Blob 預覽正常。教師入口、學生隱藏、390px 手機、語言獨立選擇及登出檢查通過。
-- 舊教學版本、錯誤來源 digest 及損壞 PDF 被攔截。WS2 腳本 URL 使用版本標記，PDF 使用新 hash 檔名，manifest／PDF 無快取讀取；隔離來源變更重建十份 PDF、更新目錄並移除舊版。
-- 預覽／下載前後，完整 state、localStorage、sessionStorage、答案、畫布、控制項、計時／事件、本機及模擬雲端紀錄相同；材料過程對 collector 的請求數為0；教師 Excel 實際位元組相同。
-- 學生 VL 原探究、三段原始預測鎖定、動畫、C/D 顯示映射、舊版本1/3/4、離線補傳、教師示範隔離、兩語及實際 PDF／八頁 Excel 回歸通過。
-- 本機後備伺服器可讀兩個紙本腳本、manifest 及十份 PDF，MIME 正確；私人資料及路徑越界請求仍被拒絕。未新增 Apps Script，沒有送資料到正式學生 collector。
+- 兩語共十個真檔：學生PDF／Word及完整答案PDF／Word各4頁，D PDF各5頁。三PDF預覽、五類下載，MIME、magic bytes、SHA-256及來源fingerprint核對。
+- 六PDF文字可選、圖形為向量；全頁A4、可見字至少11pt、正文12pt、一般行距19pt、課題需知33pt。四Word以LibreOffice實際開啟及轉PDF，各4頁，正文／表格／作答可編輯，含SVG與高解像後備圖，深灰1pt作答線、藍色答案、紅色概念。全頁渲染於/tmp供版面檢閱；自動檢查文字及圖形邊界。
+- 原變量每列重複全部六因素及順序，多選剔選；原單選全部選項、前提定義與對照括號提示、A/B/C、A/D及E–H全部保留。不加假說補位／指定比較／理由／限制追問或棒形圖。量角用0/0/35/35模型且學生版不印角度答案。
+- 教師及教師示範入口、未登入學生隱藏、390px手機、兩語各五檔下載與三PDF預覽通過。面板跟隨介面語言；刻意延遲舊語言請求，切換後舊回應不能回填。缺英文、404、錯MIME、損壞Word/PDF、過期版本及來源digest錯誤拒絕，重新載入可恢復。
+- 材料操作前後完整state、local/sessionStorage、答案、控制項、繪圖、計時、事件、本機及模擬雲端紀錄相同；正式collector請求為0；前後實際教師Excel位元組相同。
+- 學生三段探究、原始預測、首次／最後觀察、鎖定、延後揭示、反思後PDF、雙語、離線／重整／補傳、教師排除、分頁、錯誤確認、不完整匯出阻擋及歷史版本回歸通過。
+- 真XLSX八頁、圖像、驗證、底色及條件色彩檢查；LibreOffice實際重算混合19/18/8/3/1紀錄，新版29／歷史32，空白待評、0有效、負數／超限／小數／文字不能產生有效總分。不適用欄不阻擋。原文、ID、快照、事件及雲端佇列保留。
+- 隔離副本變更現行題目，重建十檔、更新fingerprint/checksum並移除舊生成檔。SQLite後備伺服器驗證所有檔案MIME、私密檔案保護、權限、重啟持久性。
 
-## 範圍與仍待研究者核對
+## 限制
 
-瀏覽器下載及 Google 雲端測試使用隔離本機服務；不等同正式 Google 雲端寫入、班級試教或實體列印。兩語在15–20分鐘內的實際完成率／閱讀負荷、實體灰階與量角器清晰度、教師澄清一致性、形成性評分者校準及正式共同測驗程序仍待研究者核對。已提供15與20分鐘時間表，不宣稱時長已實測等值。
+Google流程使用隔離模擬，未寫入正式學生試算表。自動驗證不等同學生試教、實體列印、Microsoft Word／Excel各版本相容或效度研究。15–20分鐘、實體量角器／灰階、兩語負荷及評分者校準仍待試教。WS23與VL29不可直接宣稱等值。正式部署結果以提交及GitHub Actions／線上checksum核對為準。

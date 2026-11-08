@@ -37,8 +37,8 @@ assert [o.cell(row,8).value for row in range(2,7)]==['主探究']*3+['延伸一'
 assert all(o.cell(5,col).value=='有' for col in (5,6,7))
 assert all(o.cell(6,col).value=='沒有' for col in (5,6,7))
 assert o['F5'].font.color.rgb==o['F6'].font.color.rgb=='FF00834A'
-assert len(s.data_validations.dataValidation)==11
-assert len(s.conditional_formatting)==20
+assert len(s.data_validations.dataValidation)==6
+assert len(s.conditional_formatting)==15
 assert len(a.conditional_formatting)==9
 assert {str(cf.sqref) for cf in a.conditional_formatting}=={'E2','F2','G2','L2','M2','R2','S2','AJ2','AK2'}
 assert a['AJ2'].value=='延長表現相近'
@@ -54,26 +54,15 @@ assert a['AN2'].font.color.rgb=='FF173E34'
 assert w.calculation.fullCalcOnLoad and w.calculation.forceFullCalc
 assert len(w['評分準則']['A'])>=19
 manual=[str(v.sqref).split(':')[0] for v in s.data_validations.dataValidation]
-assert manual==['E2','L2','N2','Q2','T2','V2','W2','Z2','AA2','AB2','AC2']
+assert manual==['E2','L2','N2','Q2','W2','AG2']
 assert all(s[c].value in ('',None) for c in manual)
-def number(v):return isinstance(v,(int,float)) and not isinstance(v,bool)
-def ev(cell,seen=None):
-    seen=set() if seen is None else seen
-    assert cell not in seen
-    v=s[cell].value
-    if not isinstance(v,str) or not v.startswith('='):return '' if v is None else v
-    seen=seen|{cell};parts=v[1:].split('"')
-    expr=''.join(('"'+p+'"') if i%2 else re.sub(r'\b[A-Z]+[0-9]+\b',lambda m:repr(ev(m[0],seen)),p) for i,p in enumerate(parts))
-    expr=re.sub(r'(?<![<>=!])=(?!=)','==',expr)
-    funcs={'IF':lambda c,a,b:a if c else b,'AND':lambda *xs:all(xs),'COUNT':lambda *xs:sum(number(x) for x in xs),'SUM':lambda *xs:sum(x for x in xs if number(x)),'ROUND':lambda x,n:round(x,n)}
-    return eval(expr,{'__builtins__':{}},funcs)
-assert ev('AE2')=='待評／未完成' and ev('Y2')=='待評' and ev('AD2')=='待評'
-assert ev('K2')==4 and ev('M2')==1 and ev('S2')==2
-for validation in s.data_validations.dataValidation:s[str(validation.sqref).split(':')[0]]=int(validation.formula2)
-assert ev('Y2')==24 and ev('AD2')==8 and ev('AE2')==32 and ev('AF2')=='評分完成'
-s['AA2']=0;assert ev('AD2')==6 and ev('AE2')==30
-s['AA2']=None;assert ev('AD2')=='待評' and ev('AE2')=='待評／未完成'
-s['AA2']=2;s['D2']='待提交反思';assert ev('AE2')=='待評／未完成'
+assert all(s[c].value=='不適用' for c in ['T2','V2','Z2','AA2','AB2','AC2'])
+assert s['AH2'].value=='vl19-causal-5' and s['AI2'].value==29
+assert s['AD2'].value=='=IF(AND(IFERROR(AND(ISNUMBER(AG2),AG2>=0,AG2<=5,MOD(AG2,1)=0),FALSE)),ROUND(SUM(AG2),2),"待評")'
+# The formula evaluator uses LibreOffice in tests/scoring.py, including invalid pasted values.
+
+def number(value):return isinstance(value,(int,float)) and not isinstance(value,bool)
+def ev(cell):return s[cell].value
 def colour_matches(target):
     rules=next(rs for cf,rs in a.conditional_formatting._cf_rules.items() if str(cf.sqref)==target)
     matches=[]
@@ -93,7 +82,7 @@ for target in ['AJ2','AK2']:
     s['L2']=2;assert colour_matches(target)==[0]
     s['L2']=0;assert colour_matches(target)==[1]
     s['L2']=1;assert colour_matches(target)==[2]
-print('PASS: actual XLSX archive, XML, eight sheets, preserved answer/observation columns, ABD main and AC tip observations, embedded design and chart, original hypothesis, first observations, colours, ten manual fields in their original positions, pending vs zero, six SPS totals, knowledge and overall formulas, conditional colours.')
+print('PASS: actual XLSX archive, XML, eight sheets, preserved answer/observation columns, ABD main and AC tip observations, embedded design and chart, original hypothesis, first observations, colours, six applicable manual fields and legacy columns retained, pending vs zero, six SPS totals, knowledge and overall formulas, conditional colours.')
 
 # Actual exported variable cells and scores agree for wrong, omitted and extra choices.
 variable_book=load_workbook('/tmp/vl3-variable-marking.xlsx')
@@ -120,7 +109,7 @@ print('PASS: Excel variable ✓/✕ marks, preserved choices, colours and automa
 multi=load_workbook('/tmp/vl3-multi.xlsx')
 answers=multi['學生探究答案']
 assert {answers.cell(r,2).value for r in range(2,answers.max_row+1)}=={'陳小明','李同學'}
-assert len(multi['教師評分'].data_validations.dataValidation)==22
+assert len(multi['教師評分'].data_validations.dataValidation)==12
 for name in ['陳小明','李同學']:
     rows=[row for row in multi['定性觀察紀錄'].iter_rows(min_row=2) if row[1].value==name]
     assert [row[2].value for row in rows]==['A','B','C','A','D']
@@ -141,7 +130,7 @@ assert [a[c+'2'].value for c in ('AQ','AR','AS')]==['多','多','右']
 assert all(a[c+'2'].font.color.rgb=='FF00834A' for c in ('AQ','AR','AS'))
 chunks=w['原始與遞交快照']
 r=json.loads(''.join(chunks.cell(i,3).value for i in range(2,chunks.max_row+1)))
-assert r['experimentVersion']==18
+assert r['experimentVersion']==19
 assert 'extLightInference' not in r['form']
 assert list(r['observations'])==list(r['firstObservations'])==['A','B','D']
 assert r['firstObservations']['D']['direction']=='straight'

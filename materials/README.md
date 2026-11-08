@@ -1,24 +1,7 @@
-# VL3 紙本對照組材料
+# 工作紙三：植物的向光生長
 
-版本：`ws2-vl18-be78ddd7d120`
+每語言五類：完整學生PDF、完整學生Word、完整連參考答案PDF、完整連參考答案Word、D教師指引PDF。學生及完整答案各4頁，D獨立5頁。當前檔案、版本及SHA-256見[manifest.json](manifest.json)；網站教師面板提供三類PDF預覽及五類下載。
 
-| 冊別 | 繁中頁數 | 英文頁數 | 套裝頁碼（繁中／英文） |
-| --- | ---: | ---: | --- |
-| A · 自學概念、圖像及示例 | 2 | 2 | 1–2／1–2 |
-| B · 有提示練習及獨立應用 | 5 | 5 | 3–7／3–7 |
-| C · 核對答案及修正 | 2 | 2 | 8–9／8–9 |
-| D · 教師指引、參考答案及評分準則 | 6 | 6 | 10–15／10–15 |
-| 完整教師套裝 | 15 | 15 | 全部 |
+`npm run materials:build` 可重跑；依index.html、現行動態題目與模型、語言來源、rubric.js、paper-content.js及生成器的fingerprint更新十份檔案並移除過時成品。PDF為向量且文字可選；Word正文、選項、表格及作答欄可編輯，圖含SVG與高解像相容後備圖。沒有A/B/C分冊或FULL教師套裝。
 
-檔名：`VL3_paper_{A|B|C|D|FULL}_{zh-Hant|en}_ws2-vl18-be78ddd7d120.pdf`。
-
-- [zh-Hant A · 2 頁](VL3_paper_A_zh-Hant_ws2-vl18-be78ddd7d120.pdf) · [預覽](VL3_paper_A_zh-Hant_ws2-vl18-be78ddd7d120.html)
-- [zh-Hant B · 5 頁](VL3_paper_B_zh-Hant_ws2-vl18-be78ddd7d120.pdf) · [預覽](VL3_paper_B_zh-Hant_ws2-vl18-be78ddd7d120.html)
-- [zh-Hant C · 2 頁](VL3_paper_C_zh-Hant_ws2-vl18-be78ddd7d120.pdf) · [預覽](VL3_paper_C_zh-Hant_ws2-vl18-be78ddd7d120.html)
-- [zh-Hant D · 6 頁](VL3_paper_D_zh-Hant_ws2-vl18-be78ddd7d120.pdf) · [預覽](VL3_paper_D_zh-Hant_ws2-vl18-be78ddd7d120.html)
-- [zh-Hant FULL · 15 頁](VL3_paper_FULL_zh-Hant_ws2-vl18-be78ddd7d120.pdf) · [預覽](VL3_paper_FULL_zh-Hant_ws2-vl18-be78ddd7d120.html)
-- [en A · 2 頁](VL3_paper_A_en_ws2-vl18-be78ddd7d120.pdf) · [預覽](VL3_paper_A_en_ws2-vl18-be78ddd7d120.html)
-- [en B · 5 頁](VL3_paper_B_en_ws2-vl18-be78ddd7d120.pdf) · [預覽](VL3_paper_B_en_ws2-vl18-be78ddd7d120.html)
-- [en C · 2 頁](VL3_paper_C_en_ws2-vl18-be78ddd7d120.pdf) · [預覽](VL3_paper_C_en_ws2-vl18-be78ddd7d120.html)
-- [en D · 6 頁](VL3_paper_D_en_ws2-vl18-be78ddd7d120.pdf) · [預覽](VL3_paper_D_en_ws2-vl18-be78ddd7d120.html)
-- [en FULL · 15 頁](VL3_paper_FULL_en_ws2-vl18-be78ddd7d120.pdf) · [預覽](VL3_paper_FULL_en_ws2-vl18-be78ddd7d120.html)
+首次答案保存後才派參考答案，另一顏色修正且保留原答。程序、配對、科學限制、23分紙本與29分VL的差異見D及[教學說明](../docs/TEACHING_NOTES.md)。材料下載不讀寫學生作答或正式Google收集端。

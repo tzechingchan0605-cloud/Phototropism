@@ -464,6 +464,9 @@ if (process.env.VL3_COLLECTOR_ONLY === "1") {
           ".html": "text/html",
           ".js": "application/javascript",
           ".css": "text/css",
+          ".pdf": "application/pdf",
+          ".json": "application/json",
+          ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         }[path.extname(target)] || "application/octet-stream",
       );
       res.end(fs.readFileSync(target));
