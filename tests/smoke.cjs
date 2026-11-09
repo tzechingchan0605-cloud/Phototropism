@@ -850,7 +850,7 @@ async function flow(p, student = true) {
     await p.screenshot({ path: "/tmp/vl3-mobile.png", fullPage: true });
     assert.deepEqual(errors, []);
     console.log(
-      "PASS: ABD main + AC tip + EFGH agar inquiry, sequential gates, three locked original predictions, first observations/readings/analysis, growth/directions, adjustable protractor, bar-chart consistency, delayed teaching reveal, reflection/PDF, real XLSX, cloud browsers, offline retries, reload login, separate attempts, version 1/3/4 compatibility, complete teacher demo exclusion and mobile layout.",
+      "PASS: ABC main + AD tip + EFGH agar inquiry (current display labels), sequential gates, three locked original predictions, first observations/readings/analysis, growth/directions, adjustable protractor, current angle/direction records and legacy chart compatibility, delayed teaching reveal, reflection/PDF, real XLSX, cloud browsers, offline retries, reload login, separate attempts, version 1/3/4 compatibility, complete teacher demo exclusion and mobile layout.",
     );
   } finally {
     await browser.close();

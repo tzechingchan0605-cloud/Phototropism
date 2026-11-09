@@ -82,7 +82,7 @@ for target in ['AJ2','AK2']:
     s['L2']=2;assert colour_matches(target)==[0]
     s['L2']=0;assert colour_matches(target)==[1]
     s['L2']=1;assert colour_matches(target)==[2]
-print('PASS: actual XLSX archive, XML, eight sheets, preserved answer/observation columns, ABD main and AC tip observations, embedded design and chart, original hypothesis, first observations, colours, six applicable manual fields and legacy columns retained, pending vs zero, six SPS totals, knowledge and overall formulas, conditional colours.')
+print('PASS: actual XLSX archive, XML, eight sheets, preserved answer/observation columns, ABC main and AD tip observations, embedded design and preserved legacy chart, original hypothesis, first observations, colours, six applicable manual fields and legacy columns retained, pending vs zero, six SPS totals, knowledge and overall formulas, conditional colours.')
 
 # Actual exported variable cells and scores agree for wrong, omitted and extra choices.
 variable_book=load_workbook('/tmp/vl3-variable-marking.xlsx')

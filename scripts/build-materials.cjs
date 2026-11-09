@@ -62,6 +62,12 @@ async function build(){
       }
     }
     await fs.writeFile(path.join(output,'manifest.json'),JSON.stringify(manifest,null,2)+'\n');
+    await fs.writeFile(path.join(output,'catalog.js'),'window.VL3_PAPER_CATALOG='+JSON.stringify(manifest)+';\n');
+    const codes=['studentPDF','studentWord','answersPDF','answersWord','DPDF'];
+    const links=(code,language)=>{const b=books.find(b=>b.code===code&&b.language===language);return `[${language==='en'?'English':'繁體中文'} · ${b.pages}頁](${b.filename})`;};
+    const labels=['完整學生 PDF','完整學生 Word','完整連參考答案 PDF','完整連參考答案 Word','D · 教師指引、配對及評分 PDF'];
+    const rows=codes.map((code,i)=>`| ${labels[i]} | ${links(code,'zh-Hant')} | ${links(code,'en')} |`);
+    await fs.writeFile(path.join(output,'README.md'),'# 工作紙三：植物的向光生長\n\n版本：`'+stamp.version+'`。學生版與完整連答案版各四頁；D獨立。\n\n| 教材 | 繁體中文 | English |\n|---|---|---|\n'+rows.join('\n')+'\n\n每語言只有上述五類，沒有A／B／C分冊或舊完整套裝。網站教師教材面板提供三類PDF預覽；Word可直接下載。\n\n以 `npm run materials:build` 重建；`npm run materials:check` 核對來源fingerprint及SHA-256。Word正文、選項、表格及作答欄可編輯，圖含SVG與高解像後備圖；PDF圖為向量。\n\n首次答案保存後才派答案版，以另一顏色修正並保留原答。派發、逐題來源、科學限制及WS23／VL29評分差異見D及[教學說明](../docs/TEACHING_NOTES.md)。下載不改寫學生資料。\n');
     const keep=new Set(books.flatMap(b=>[b.filename,b.preview&&path.basename(b.preview)]).filter(Boolean));
     for(const name of await fs.readdir(output))if(/\.(pdf|html|docx)$/.test(name)&&!keep.has(name))await fs.unlink(path.join(output,name));
     console.log('Built '+stamp.version+': ten files, five types per language');return manifest;

@@ -1,7 +1,17 @@
 # 工作紙三：植物的向光生長
 
-每語言五類：完整學生PDF、完整學生Word、完整連參考答案PDF、完整連參考答案Word、D教師指引PDF。學生及完整答案各4頁，D獨立5頁。當前檔案、版本及SHA-256見[manifest.json](manifest.json)；網站教師面板提供三類PDF預覽及五類下載。
+版本：`ws3-vl19-cdae02a6ee9f`。學生版與完整連答案版各四頁；D獨立。
 
-`npm run materials:build` 可重跑；依index.html、現行動態題目與模型、語言來源、rubric.js、paper-content.js及生成器的fingerprint更新十份檔案並移除過時成品。PDF為向量且文字可選；Word正文、選項、表格及作答欄可編輯，圖含SVG與高解像相容後備圖。沒有A/B/C分冊或FULL教師套裝。
+| 教材 | 繁體中文 | English |
+|---|---|---|
+| 完整學生 PDF | [繁體中文 · 4頁](VL3_WS3_student_zh-Hant_ws3-vl19-cdae02a6ee9f.pdf) | [English · 4頁](VL3_WS3_student_en_ws3-vl19-cdae02a6ee9f.pdf) |
+| 完整學生 Word | [繁體中文 · 4頁](VL3_WS3_student_zh-Hant_ws3-vl19-cdae02a6ee9f.docx) | [English · 4頁](VL3_WS3_student_en_ws3-vl19-cdae02a6ee9f.docx) |
+| 完整連參考答案 PDF | [繁體中文 · 4頁](VL3_WS3_answers_zh-Hant_ws3-vl19-cdae02a6ee9f.pdf) | [English · 4頁](VL3_WS3_answers_en_ws3-vl19-cdae02a6ee9f.pdf) |
+| 完整連參考答案 Word | [繁體中文 · 4頁](VL3_WS3_answers_zh-Hant_ws3-vl19-cdae02a6ee9f.docx) | [English · 4頁](VL3_WS3_answers_en_ws3-vl19-cdae02a6ee9f.docx) |
+| D · 教師指引、配對及評分 PDF | [繁體中文 · 5頁](VL3_WS3_D_zh-Hant_ws3-vl19-cdae02a6ee9f.pdf) | [English · 5頁](VL3_WS3_D_en_ws3-vl19-cdae02a6ee9f.pdf) |
 
-首次答案保存後才派參考答案，另一顏色修正且保留原答。程序、配對、科學限制、23分紙本與29分VL的差異見D及[教學說明](../docs/TEACHING_NOTES.md)。材料下載不讀寫學生作答或正式Google收集端。
+每語言只有上述五類，沒有A／B／C分冊或舊完整套裝。網站教師教材面板提供三類PDF預覽；Word可直接下載。
+
+以 `npm run materials:build` 重建；`npm run materials:check` 核對來源fingerprint及SHA-256。Word正文、選項、表格及作答欄可編輯，圖含SVG與高解像後備圖；PDF圖為向量。
+
+首次答案保存後才派答案版，以另一顏色修正並保留原答。派發、逐題來源、科學限制及WS23／VL29評分差異見D及[教學說明](../docs/TEACHING_NOTES.md)。下載不改寫學生資料。

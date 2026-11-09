@@ -1,13 +1,13 @@
-@page{size:A4;margin:0}*{box-sizing:border-box}html,body{margin:0;background:#eee;color:#202b2c;font-family:"Noto Sans CJK TC",Arial,sans-serif;font-size:12pt;line-height:19pt}.paper-page{position:relative;width:210mm;height:297mm;padding:12mm 14mm 15mm;background:white;margin:8px auto;break-after:page}.paper-page:last-child{break-after:auto}header{height:9mm;border-bottom:1px solid #9eaaa8;margin-bottom:3mm;font-size:11pt;display:flex;justify-content:space-between}footer{position:absolute;left:14mm;right:14mm;bottom:6mm;font-size:11pt;display:flex;justify-content:space-between;border-top:1px solid #9eaaa8;padding-top:1mm}footer [data-paper-version]{font-size:11pt}h1{font-size:16pt;line-height:23pt;margin:0 0 3mm;color:#25666a}h2{font-size:13pt;line-height:20pt;color:#25666a;margin:3mm 0 2mm}h3,p,figure{margin:0 0 2mm}strong{color:#b7312c;font-weight:bold}.reference-answer,.reference-answer *{color:#145da0!important;font-weight:bold;text-decoration:underline}.concept-box{background:#f1f8f5;border:1px solid #b8cec5;padding:3mm;border-radius:2mm}.knowledge-grid{display:grid;grid-template-columns:36mm 1fr;gap:3mm}.knowledge-grid svg{width:100%;height:36mm}.mechanism-svg{width:100%;height:40mm;display:block}.concept-box p{margin:0 0 2mm}.identity-fields{white-space:nowrap;font-size:12pt;margin-bottom:3mm}.hint,.design-hint{font-size:11pt;line-height:16.5pt;color:#607574}.question{margin:2mm 0;line-height:19pt}.circle-options{font-size:12pt}.variables{table-layout:fixed}.variables th:first-child,.variables td:first-child{width:28%}.variables td{line-height:19pt}.variables td:first-child span{display:block;font-size:11pt;color:#607574}table{border-collapse:collapse;width:100%;font-size:12pt;margin:2mm 0}th,td{border:1px solid #bed0d2;padding:1.5mm;vertical-align:top}th{background:#f1f5f3;color:#25666a}.answer-lines{margin:1mm 0 2mm}.answer-lines>div{height:26pt;border-bottom:1pt solid #333333;line-height:26pt}.answer-lines:has(.reference-answer){min-height:52pt}.answer-lines .reference-answer{font-size:12pt;line-height:19pt}.answer-lines>div:has(.reference-answer){height:auto;min-height:26pt;line-height:19pt}.plant-grid{display:flex;gap:2mm;align-items:start;margin:2mm 0}.plant-grid figure{flex:1;min-width:0}figcaption{font-size:12pt;text-align:center}.plant-pair{display:flex;align-items:center}.plant-pair svg{width:46%;height:32mm}.plant-pair span{font-size:12pt}.observations th:first-child,.readings th:first-child{width:12%}.observations td,.readings td{padding:1mm 1.5mm}.reflection-figure{width:60mm;margin:2mm auto}.reflection-figure svg{width:100%;height:60mm}main>svg{width:100%;height:auto}body[lang="en"]{font-family:Arial,"Noto Sans CJK TC",sans-serif}body[lang="en"] .plant-pair svg{height:28mm}body[lang="en"] .concept-box{line-height:18pt}body[lang="en"] .variables td{line-height:18pt}header b{font-weight:normal} @media print{html,body{background:white}.paper-page{margin:0}*{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+@page{size:A4;margin:0}*{box-sizing:border-box}html,body{margin:0;background:#eee;color:#202b2c;font-family:"Noto Sans CJK TC",Arial,sans-serif;font-size:12pt;line-height:19pt}.paper-page{position:relative;width:210mm;height:297mm;padding:12mm 14mm 15mm;background:white;margin:8px auto;break-after:page}.paper-page:last-child{break-after:auto}header{height:9mm;border-bottom:1px solid #9eaaa8;margin-bottom:3mm;font-size:11pt;display:flex;justify-content:space-between}footer{position:absolute;left:14mm;right:14mm;bottom:6mm;font-size:11pt;display:flex;justify-content:space-between;border-top:1px solid #9eaaa8;padding-top:1mm}footer [data-paper-version]{font-size:11pt}h1{font-size:16pt;line-height:23pt;margin:0 0 3mm;color:#25666a}h2{font-size:13pt;line-height:20pt;color:#25666a;margin:3mm 0 2mm}h3,p,figure{margin:0 0 2mm}strong{color:#b7312c;font-weight:bold}.reference-answer,.reference-answer *{color:#145da0!important;font-weight:bold;text-decoration:underline}.concept-box{background:#f1f8f5;border:1px solid #b8cec5;padding:3mm;border-radius:2mm}.knowledge-grid{display:grid;grid-template-columns:36mm 1fr;gap:3mm}.knowledge-grid svg{width:100%;height:36mm}.mechanism-svg{width:100%;height:40mm;display:block}.concept-box p{margin:0 0 2mm}.identity-fields{white-space:nowrap;font-size:12pt;margin-bottom:3mm}.hint,.design-hint{font-size:11pt;line-height:16.5pt;color:#607574}.question{margin:2mm 0;line-height:19pt}.circle-options{font-size:12pt}.variables{table-layout:fixed}.variables th:first-child,.variables td:first-child{width:28%}.variables td{line-height:19pt}.variables td:first-child span{display:block;font-size:11pt;color:#607574}table{border-collapse:collapse;width:100%;font-size:12pt;margin:2mm 0}th,td{border:1px solid #bed0d2;padding:1.5mm;vertical-align:top}th{background:#f1f5f3;color:#25666a}.answer-lines{margin:1mm 0 2mm}.answer-lines>div{height:26pt;border-bottom:1pt solid #333333;line-height:26pt}.answer-lines:has(.reference-answer){min-height:52pt}.answer-lines .reference-answer{font-size:12pt;line-height:19pt}.answer-lines>div:has(.reference-answer){height:auto;min-height:26pt;line-height:19pt}.plant-grid{display:flex;gap:2mm;align-items:start;margin:2mm 0}.plant-grid figure{flex:1;min-width:0}figcaption{font-size:12pt;text-align:center}.plant-pair{display:flex;align-items:center}.plant-pair>svg{width:46%;height:32mm}.plant-pair span{font-size:12pt}.observations th:first-child,.readings th:first-child{width:12%}.observations td,.readings td{padding:1mm 1.5mm}.reflection-figure{width:60mm;margin:2mm auto}.reflection-figure svg{width:100%;height:60mm}main>svg{width:100%;height:auto}body[lang="en"]{font-family:Arial,"Noto Sans CJK TC",sans-serif}body[lang="en"] .plant-pair>svg{height:28mm}body[lang="en"] .concept-box{line-height:18pt}body[lang="en"] .variables td{line-height:18pt}header b{font-weight:normal} @media print{html,body{background:white}.paper-page{margin:0}*{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
 
 /* Preserve WS1 reading rhythm; economise unlabelled diagram whitespace. */
-.plant-pair svg,body[lang="en"] .plant-pair svg{height:22mm}.concept-box .mechanism-svg{height:30mm}.knowledge-grid svg{height:30mm}.knowledge-grid{grid-template-columns:30mm 1fr}.concept-box p{margin-bottom:1mm}
+.plant-pair>svg,body[lang="en"] .plant-pair>svg{height:22mm}.concept-box .mechanism-svg{height:30mm}.knowledge-grid svg{height:30mm}.knowledge-grid{grid-template-columns:30mm 1fr}.concept-box p{margin-bottom:1mm}
 
-.paper-page{padding-top:10mm;padding-bottom:12mm}footer{bottom:5mm}.observations td,.readings td{padding-top:.6mm;padding-bottom:.6mm}.plant-pair svg,body[lang="en"] .plant-pair svg{height:20mm}
+.paper-page{padding-top:10mm;padding-bottom:12mm}footer{bottom:5mm}.observations td,.readings td{padding-top:.6mm;padding-bottom:.6mm}.plant-pair>svg,body[lang="en"] .plant-pair>svg{height:20mm}
 p,figure{margin-bottom:1.5mm}h2{margin-top:2.5mm;margin-bottom:1.5mm}
 
-/* Final WS1 attachment: topic-note text has generous 33pt leading. */
-[data-page="1"] .concept-box{line-height:33pt;padding:4mm;background:white;border:0}
+/* Topic notes retain the series structure with readable 19pt leading. */
+[data-page="1"] .concept-box{line-height:19pt;padding:4mm;background:white;border:0}
 [data-page="1"] .concept-box .mechanism-svg{height:65mm}
 [data-page="1"] .knowledge-grid{grid-template-columns:36mm 1fr}
 [data-page="1"] .knowledge-grid svg{height:55mm}
@@ -23,10 +23,27 @@ p,figure{margin-bottom:1.5mm}h2{margin-top:2.5mm;margin-bottom:1.5mm}
 
 h3{font-size:13pt;line-height:20pt;color:#25666a;margin:2.5mm 0 1.5mm}
 [data-page="3"] .question{margin:1mm 0}
-[data-page="3"] .plant-pair svg{height:18mm}
+[data-page="3"] .plant-pair>svg{height:18mm}
 [data-page="3"] .observations td{padding-top:.3mm;padding-bottom:.3mm}
 [data-page="3"] h2{margin-top:1.5mm;margin-bottom:1mm}
 
-body[lang="en"] [data-page="1"] .concept-box{line-height:33pt}
+body[lang="en"] [data-page="1"] .concept-box{line-height:19pt}
 
 .mechanism-labels{display:grid;grid-template-columns:1fr 1fr;gap:3mm;font-size:12pt;line-height:19pt;color:#25666a;text-align:center;margin-bottom:3mm}
+
+/* Native vector states share a tighter viewport and a short time arrow. */
+.topic-points{margin:0;padding-left:5mm;list-style:disc}.topic-points li{margin:0 0 3mm;padding-left:.5mm}
+.plant-grid{gap:0}.plant-grid figure{padding:0 1.5mm}.main-setups figure:not(:last-child),.initial-setups figure:not(:last-child){border-right:1pt solid #91a5a9}
+.plant-pair{justify-content:center}.plant-pair>svg{width:100%;max-width:100%}
+.initial-setups .plant-pair>svg{height:20mm!important}
+.main-setups .plant-pair>svg{height:40mm!important}
+.tip-setups .plant-pair>svg{height:28mm!important}
+body[lang="en"] .plant-grid figcaption{min-height:38pt}
+
+/* Keep 12pt text; place the experiment context before the variable page. */
+[data-page="1"] .concept-box,body[lang="en"] [data-page="1"] .concept-box{line-height:19pt}
+[data-page="1"] .topic-points li{line-height:19pt;margin-bottom:2mm}
+[data-page="4"] h2{margin-top:2mm;margin-bottom:1mm}
+[data-page="4"] p.hint{margin-bottom:.5mm}
+
+[data-page="4"] .question{margin:.5mm 0}

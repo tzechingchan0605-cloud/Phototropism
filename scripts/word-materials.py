@@ -9,12 +9,12 @@ from docx.oxml.ns import qn
 from docx.opc.part import Part
 from docx.opc.constants import RELATIONSHIP_TYPE as RT
 import cairosvg
-soup=BeautifulSoup(Path(sys.argv[1]).read_text(),'html.parser');d=Document();sec=d.sections[0]
+soup=BeautifulSoup(Path(sys.argv[1]).read_text(),'html.parser');FONT='Arial' if soup.html.get('lang')=='en' else 'Noto Sans CJK TC';d=Document();sec=d.sections[0]
 sec.page_width=Cm(21);sec.page_height=Cm(29.7);sec.top_margin=Cm(1.1);sec.bottom_margin=Cm(1.1);sec.left_margin=sec.right_margin=Cm(1.4)
 sec.header_distance=sec.footer_distance=Cm(.5)
-st=d.styles['Normal'];st.font.name='Noto Sans CJK TC';st.font.size=Pt(12);st.element.rPr.rFonts.set(qn('w:eastAsia'),'Noto Sans CJK TC');st.paragraph_format.line_spacing=Pt(19);st.paragraph_format.space_after=Pt(3)
+st=d.styles['Normal'];st.font.name=FONT;st.font.size=Pt(12);st.element.rPr.rFonts.set(qn('w:eastAsia'),'Noto Sans CJK TC');st.paragraph_format.line_spacing=Pt(19);st.paragraph_format.space_after=Pt(3)
 for name,size in [('Heading 1',16),('Heading 2',13),('Heading 3',12)]:
- st=d.styles[name];st.font.name='Noto Sans CJK TC';st.font.size=Pt(size);st.font.color.rgb=RGBColor.from_string('25666A');st.paragraph_format.line_spacing=Pt(size*1.5);st.paragraph_format.space_after=Pt(3);st.paragraph_format.space_before=Pt(4)
+ st=d.styles[name];st.font.name=FONT;st.font.size=Pt(size);st.font.color.rgb=RGBColor.from_string('25666A');st.paragraph_format.line_spacing=Pt(size*1.5);st.paragraph_format.space_after=Pt(3);st.paragraph_format.space_before=Pt(4)
 sec.header.paragraphs[0].text=soup.header.get_text(' ',strip=True)
 f=sec.footer.paragraphs[0];f.text='VL3 · WS3 | ';fld=OxmlElement('w:fldSimple');fld.set(qn('w:instr'),'PAGE');f._p.append(fld)
 for p in [sec.header.paragraphs[0],f]:
@@ -23,7 +23,7 @@ imagecount=0
 def runs(p,node,colour=None,bold=False):
  if isinstance(node,NavigableString):
   if not str(node):return
-  r=p.add_run(re.sub(r'\s+',' ',str(node)));r.font.name='Noto Sans CJK TC';r._element.get_or_add_rPr().rFonts.set(qn('w:eastAsia'),'Noto Sans CJK TC');r.font.size=Pt(12);r.bold=bold
+  r=p.add_run(re.sub(r'\s+',' ',str(node)));r.font.name=FONT;r._element.get_or_add_rPr().rFonts.set(qn('w:eastAsia'),'Noto Sans CJK TC');r.font.size=Pt(12);r.bold=bold
   if colour:r.font.color.rgb=RGBColor.from_string(colour)
   if colour=='145DA0':r.underline=True
   return
@@ -62,6 +62,9 @@ def render(parent,node,width=18.2):
  cl=node.get('class',[])
  if node.name=='svg':picture(parent,node,width);return
  if node.name in ['h1','h2','h3']:para(parent,node,'Heading '+node.name[1]);return
+ if node.name=='li':
+  p=parent.add_paragraph();p.paragraph_format.left_indent=Cm(.45);p.paragraph_format.first_line_indent=Cm(-.45)
+  p.add_run('• ');runs(p,node);return
  if node.name in ['p','figcaption'] or 'question' in cl:para(parent,node);return
  if node.name=='table':
   rows=node.find_all('tr',recursive=False) or node.select('tbody > tr');t=parent.add_table(rows=0,cols=len(rows[0].find_all(['th','td'],recursive=False)));t.style='Table Grid';t.autofit=False
@@ -92,26 +95,30 @@ def render(parent,node,width=18.2):
   return
  if 'reflection-response' in cl:
   t=parent.add_table(rows=1,cols=2);t.autofit=False;t.columns[0].width=Cm(3.5);t.columns[1].width=Cm(width-3.8)
-  picture(t.cell(0,0),node.svg,3.5,3.5)
+  picture(t.cell(0,0),node.svg,3.1,3.5)
   for cell in t.rows[0].cells:cell._element.remove(cell.paragraphs[0]._element)
   render(t.cell(0,1),node.select_one('.answer-lines'),width-3.8);return
  if 'reflection-figure' in cl:picture(parent,node.svg,3.5,3.5);return
  if 'mechanism-svg' in cl:picture(parent,node,width,4);return
  if 'plant-grid' in cl:
-  figs=node.find_all('figure',recursive=False);t=parent.add_table(rows=1,cols=len(figs));t.autofit=False
-  for cell,fig in zip(t.rows[0].cells,figs):
-   cell.width=Cm(width/len(figs));para(cell,fig.figcaption)
-   cell._element.remove(cell.paragraphs[0]._element)
-   # Two vector states in a single horizontal SVG.
-   svgs=fig.find_all('svg');body=''.join(f'<g transform="translate({i*270} 0)">'+''.join(str(c) for c in svg.children)+'</g>' for i,svg in enumerate(svgs))
-   combined=BeautifulSoup(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 260">{body}</svg>','html.parser').svg
-   picture(cell,combined,width/len(figs)-.3,2.0)
+  figs=node.find_all('figure',recursive=False);t=parent.add_table(rows=2,cols=len(figs));t.autofit=False
+  for col in t.columns:col.width=Cm(width/len(figs))
+  for index,fig in enumerate(figs):
+   caption=t.cell(0,index);caption.width=Cm(width/len(figs));p=caption.paragraphs[0];runs(p,fig.figcaption);p.alignment=1
+   cell=t.cell(1,index);cell.width=Cm(width/len(figs));cell._element.remove(cell.paragraphs[0]._element)
+   picture(cell,fig.select_one('.plant-pair > svg'),width/len(figs)-.4,float(node.get('data-diagram-height','3.5')))
+   if len(figs)==3 and index<len(figs)-1:
+    for row in t.rows:
+     borders=OxmlElement('w:tcBorders');edge=OxmlElement('w:right')
+     for key,value in {'val':'single','sz':'8','color':'91A5A9'}.items():edge.set(qn('w:'+key),value)
+     borders.append(edge);row.cells[index]._tc.get_or_add_tcPr().append(borders)
+  for row in t.rows:row._tr.get_or_add_trPr().append(OxmlElement('w:cantSplit'))
   return
  if 'knowledge-grid' in cl:
   t=parent.add_table(rows=1,cols=2);t.autofit=False;t.columns[0].width=Cm(3.6);t.columns[1].width=Cm(width-3.6)
-  picture(t.cell(0,0),node.svg,3.0,3.0)
+  picture(t.cell(0,0),node.svg,3.2,5.5)
   for cell in t.rows[0].cells:cell._element.remove(cell.paragraphs[0]._element)
-  for p in node.select('p'):para(t.cell(0,1),p)
+  for item in node.select('.topic-points > li'):render(t.cell(0,1),item,width-3.6)
   return
  if 'mechanism-labels' in cl:
   p=parent.add_paragraph();p.paragraph_format.line_spacing=Pt(19)
@@ -125,12 +132,12 @@ def render(parent,node,width=18.2):
    if getattr(c,'get',None) and c.name=='svg':picture(parent,c,width,6.5)
    else:render(parent,c,width)
   for para_ in d.paragraphs[first:]:
-   if not para_._p.xpath('.//w:drawing'):para_.paragraph_format.line_spacing=Pt(33)
+   if not para_._p.xpath('.//w:drawing'):para_.paragraph_format.line_spacing=Pt(19)
   for table_ in d.tables:
    for row_ in table_.rows:
     for cell_ in row_.cells:
      for para_ in cell_.paragraphs:
-      if not para_._p.xpath('.//w:drawing'):para_.paragraph_format.line_spacing=Pt(33)
+      if not para_._p.xpath('.//w:drawing'):para_.paragraph_format.line_spacing=Pt(19)
   return
  for c in node.children:render(parent,c,width)
 for i,page in enumerate(soup.select('.paper-page')):

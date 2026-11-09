@@ -594,7 +594,7 @@ async function saveExcel(page, target) {
       "Tests must never contact production Google or any external collector",
     );
     console.log(
-      "PASS (ISOLATED): complete ABD/AC/EFGH flow, direct Chinese/English switching without dialogs, full system text and all placeholders, six approved support terms, unaltered student text/state/canvas/options/locks/three originals/events/time, main and tip running animations, translated actual PDFs, byte-identical Chinese XLSX/images/formulas, teacher demonstration isolation, phone, offline outbox/retry and Chinese reload default. No production requests.",
+      "PASS (ISOLATED): complete ABC/AD/EFGH flow (current display labels), direct Chinese/English switching without dialogs, full system text and all placeholders, six approved support terms, unaltered student text/state/canvas/options/locks/three originals/events/time, main and tip running animations, translated actual PDFs, byte-identical Chinese XLSX/images/formulas, teacher demonstration isolation, phone, offline outbox/retry and Chinese reload default. No production requests.",
     );
   } finally {
     await browser.close();
