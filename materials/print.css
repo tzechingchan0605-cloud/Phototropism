@@ -47,3 +47,20 @@ body[lang="en"] .plant-grid figcaption{min-height:38pt}
 [data-page="4"] p.hint{margin-bottom:.5mm}
 
 [data-page="4"] .question{margin:.5mm 0}
+
+/* One concept page, followed by two proposed shading designs and the questions. */
+[data-page="1"] .knowledge-grid{grid-template-columns:48mm 1fr}
+body[lang="en"] [data-page="1"] .knowledge-grid{grid-template-columns:36mm 1fr}
+.vertical-flow{width:140mm;max-width:100%;margin:2mm auto 0;text-align:center}
+.vertical-flow .flow-step{padding:.6mm 2mm;border-radius:1.5mm;line-height:19pt}
+[data-page="1"] .vertical-flow .flow-arrow{font-size:14pt;line-height:14pt;margin:0}
+.context-designs>p{margin:1mm 0 2mm}
+.initial-setups .plant-pair>svg{height:57mm!important}
+body[lang="en"] [data-page="2"] .context-designs{display:grid;grid-template-columns:1fr 2fr;gap:2mm;align-items:center}
+body[lang="en"] [data-page="2"] .initial-setups figure{display:grid;grid-template-columns:45% 55%;align-items:center}
+body[lang="en"] [data-page="2"] .initial-setups figcaption{min-height:0;line-height:19pt;text-align:left}
+body[lang="en"] [data-page="2"] .initial-setups .plant-pair>svg{height:30mm!important}
+body[lang="en"] [data-page="2"] .variables th,body[lang="en"] [data-page="2"] .variables td{padding:.5mm}
+body[lang="en"] [data-page="2"] p{margin-bottom:1mm}
+body[lang="en"] [data-page="2"] h2,body[lang="en"] [data-page="2"] h3{margin-top:2mm;margin-bottom:1mm}
+[data-page="4"] .readings{margin-top:1mm;margin-bottom:1mm}

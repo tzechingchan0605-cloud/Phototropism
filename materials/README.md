@@ -1,14 +1,14 @@
 # 工作紙三：植物的向光生長
 
-版本：`ws3-vl19-cdae02a6ee9f`。學生版與完整連答案版各四頁；D獨立。
+版本：`ws3-vl19-bb2e4c71ac8c`。學生版與完整連答案版各四頁；D獨立。
 
 | 教材 | 繁體中文 | English |
 |---|---|---|
-| 完整學生 PDF | [繁體中文 · 4頁](VL3_WS3_student_zh-Hant_ws3-vl19-cdae02a6ee9f.pdf) | [English · 4頁](VL3_WS3_student_en_ws3-vl19-cdae02a6ee9f.pdf) |
-| 完整學生 Word | [繁體中文 · 4頁](VL3_WS3_student_zh-Hant_ws3-vl19-cdae02a6ee9f.docx) | [English · 4頁](VL3_WS3_student_en_ws3-vl19-cdae02a6ee9f.docx) |
-| 完整連參考答案 PDF | [繁體中文 · 4頁](VL3_WS3_answers_zh-Hant_ws3-vl19-cdae02a6ee9f.pdf) | [English · 4頁](VL3_WS3_answers_en_ws3-vl19-cdae02a6ee9f.pdf) |
-| 完整連參考答案 Word | [繁體中文 · 4頁](VL3_WS3_answers_zh-Hant_ws3-vl19-cdae02a6ee9f.docx) | [English · 4頁](VL3_WS3_answers_en_ws3-vl19-cdae02a6ee9f.docx) |
-| D · 教師指引、配對及評分 PDF | [繁體中文 · 5頁](VL3_WS3_D_zh-Hant_ws3-vl19-cdae02a6ee9f.pdf) | [English · 5頁](VL3_WS3_D_en_ws3-vl19-cdae02a6ee9f.pdf) |
+| 完整學生 PDF | [繁體中文 · 4頁](VL3_WS3_student_zh-Hant_ws3-vl19-bb2e4c71ac8c.pdf) | [English · 4頁](VL3_WS3_student_en_ws3-vl19-bb2e4c71ac8c.pdf) |
+| 完整學生 Word | [繁體中文 · 4頁](VL3_WS3_student_zh-Hant_ws3-vl19-bb2e4c71ac8c.docx) | [English · 4頁](VL3_WS3_student_en_ws3-vl19-bb2e4c71ac8c.docx) |
+| 完整連參考答案 PDF | [繁體中文 · 4頁](VL3_WS3_answers_zh-Hant_ws3-vl19-bb2e4c71ac8c.pdf) | [English · 4頁](VL3_WS3_answers_en_ws3-vl19-bb2e4c71ac8c.pdf) |
+| 完整連參考答案 Word | [繁體中文 · 4頁](VL3_WS3_answers_zh-Hant_ws3-vl19-bb2e4c71ac8c.docx) | [English · 4頁](VL3_WS3_answers_en_ws3-vl19-bb2e4c71ac8c.docx) |
+| D · 教師指引、配對及評分 PDF | [繁體中文 · 5頁](VL3_WS3_D_zh-Hant_ws3-vl19-bb2e4c71ac8c.pdf) | [English · 5頁](VL3_WS3_D_en_ws3-vl19-bb2e4c71ac8c.pdf) |
 
 每語言只有上述五類，沒有A／B／C分冊或舊完整套裝。網站教師教材面板提供三類PDF預覽；Word可直接下載。
 

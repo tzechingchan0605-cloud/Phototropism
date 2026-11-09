@@ -100,14 +100,44 @@ def render(parent,node,width=18.2):
   render(t.cell(0,1),node.select_one('.answer-lines'),width-3.8);return
  if 'reflection-figure' in cl:picture(parent,node.svg,3.5,3.5);return
  if 'mechanism-svg' in cl:picture(parent,node,width,4);return
+ if 'vertical-flow' in cl:
+  t=parent.add_table(rows=0,cols=1);t.autofit=False;t.columns[0].width=Cm(14);t.alignment=1
+  for step in node.find_all(['div','p'],recursive=False):
+   cell=t.add_row().cells[0];cell.width=Cm(14);p=cell.paragraphs[0];runs(p,step);p.alignment=1
+   arrow='flow-arrow' in step.get('class',[])
+   p.paragraph_format.line_spacing=Pt(14 if arrow else 19);p.paragraph_format.space_before=Pt(0 if arrow else 1.7);p.paragraph_format.space_after=Pt(0 if arrow else 1.7)
+   if arrow:
+    for r in p.runs:r.font.size=Pt(14)
+   else:
+    shading=OxmlElement('w:shd');shading.set(qn('w:fill'),step['data-fill']);cell._tc.get_or_add_tcPr().append(shading)
+   t.rows[-1]._tr.get_or_add_trPr().append(OxmlElement('w:cantSplit'))
+  return
  if 'plant-grid' in cl:
+  english=soup.html.get('lang')=='en';initial='initial-setups' in cl
+  height=float(node.get('data-diagram-height-en' if english else 'data-diagram-height','3.5'))
+  if initial and english:
+   figs=node.find_all('figure',recursive=False);t=parent.add_table(rows=1,cols=len(figs));t.autofit=False
+   for col in t.columns:col.width=Cm(width/len(figs))
+   for index,fig in enumerate(figs):
+    cell=t.cell(0,index);cell.width=Cm(width/len(figs));nested=cell.add_table(rows=1,cols=2);nested.autofit=False
+    left=(width/len(figs)-.4)*.43;right=(width/len(figs)-.4)*.57
+    for c,w in zip(nested.columns,[left,right]):c.width=Cm(w)
+    runs(nested.cell(0,0).paragraphs[0],fig.figcaption)
+    pic=nested.cell(0,1);pic._element.remove(pic.paragraphs[0]._element);picture(pic,fig.svg,right-.2,height)
+    # Word requires paragraphs around nested tables; keep these structural blanks tiny.
+    for p in cell.paragraphs:p.paragraph_format.line_spacing=Pt(1);p.paragraph_format.space_after=Pt(0)
+    if index<len(figs)-1:
+     borders=OxmlElement('w:tcBorders');edge=OxmlElement('w:right')
+     for k,v in {'val':'single','sz':'8','color':'91A5A9'}.items():edge.set(qn('w:'+k),v)
+     borders.append(edge);cell._tc.get_or_add_tcPr().append(borders)
+   t.rows[0]._tr.get_or_add_trPr().append(OxmlElement('w:cantSplit'));return
   figs=node.find_all('figure',recursive=False);t=parent.add_table(rows=2,cols=len(figs));t.autofit=False
   for col in t.columns:col.width=Cm(width/len(figs))
   for index,fig in enumerate(figs):
    caption=t.cell(0,index);caption.width=Cm(width/len(figs));p=caption.paragraphs[0];runs(p,fig.figcaption);p.alignment=1
    cell=t.cell(1,index);cell.width=Cm(width/len(figs));cell._element.remove(cell.paragraphs[0]._element)
-   picture(cell,fig.select_one('.plant-pair > svg'),width/len(figs)-.4,float(node.get('data-diagram-height','3.5')))
-   if len(figs)==3 and index<len(figs)-1:
+   picture(cell,fig.select_one('.plant-pair > svg'),width/len(figs)-.4,height)
+   if (initial or len(figs)==3) and index<len(figs)-1:
     for row in t.rows:
      borders=OxmlElement('w:tcBorders');edge=OxmlElement('w:right')
      for key,value in {'val':'single','sz':'8','color':'91A5A9'}.items():edge.set(qn('w:'+key),value)
@@ -115,10 +145,11 @@ def render(parent,node,width=18.2):
   for row in t.rows:row._tr.get_or_add_trPr().append(OxmlElement('w:cantSplit'))
   return
  if 'knowledge-grid' in cl:
-  t=parent.add_table(rows=1,cols=2);t.autofit=False;t.columns[0].width=Cm(3.6);t.columns[1].width=Cm(width-3.6)
-  picture(t.cell(0,0),node.svg,3.2,5.5)
+  first_width=3.6 if soup.html.get('lang')=='en' else 4.8
+  t=parent.add_table(rows=1,cols=2);t.autofit=False;t.columns[0].width=Cm(first_width);t.columns[1].width=Cm(width-first_width)
+  picture(t.cell(0,0),node.svg,first_width-.4,5.5)
   for cell in t.rows[0].cells:cell._element.remove(cell.paragraphs[0]._element)
-  for item in node.select('.topic-points > li'):render(t.cell(0,1),item,width-3.6)
+  for item in node.select('.topic-points > li'):render(t.cell(0,1),item,width-first_width)
   return
  if 'mechanism-labels' in cl:
   p=parent.add_paragraph();p.paragraph_format.line_spacing=Pt(19)
@@ -133,14 +164,11 @@ def render(parent,node,width=18.2):
    else:render(parent,c,width)
   for para_ in d.paragraphs[first:]:
    if not para_._p.xpath('.//w:drawing'):para_.paragraph_format.line_spacing=Pt(19)
-  for table_ in d.tables:
-   for row_ in table_.rows:
-    for cell_ in row_.cells:
-     for para_ in cell_.paragraphs:
-      if not para_._p.xpath('.//w:drawing'):para_.paragraph_format.line_spacing=Pt(19)
   return
  for c in node.children:render(parent,c,width)
 for i,page in enumerate(soup.select('.paper-page')):
- if i:d.add_page_break()
+ first=len(d.paragraphs)
  for node in page.main.children:render(d,node)
+ # Start the next page on its heading, without an extra empty break paragraph.
+ if i:d.paragraphs[first].paragraph_format.page_break_before=True
 d.core_properties.title='WS3 | '+('Reference answers' if soup.select('.reference-answer') else 'Student worksheet');d.save(sys.argv[2])
