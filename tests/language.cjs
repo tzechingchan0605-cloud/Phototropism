@@ -379,6 +379,10 @@ async function saveExcel(page, target) {
       await page.locator("#learningCard").innerText(),
       /hormone(?!（)/i,
     );
+    assert.equal(await page.locator('#mechanismFlow .flow-step').count(),5);
+    assert.equal(await page.locator('#mechanismFlow [data-flow-highlight="bend-left"]').innerText(),'bends left');
+    assert.match(await page.locator('#mechanismFlow [data-flow-highlight="more-elongation"]').innerText(),/elongate（延長） more/);
+    assert.equal(await page.locator('.cloze-question [data-bending-highlight]').innerText(),'bending');
     assert.equal(await page.locator("#originalHypothesis").count(), 0);
     assert.equal(await page.locator("#reflectionCard h3").innerText(), "Learning reflection");
     assert.match(await page.locator('label[for="reflection"]').innerText(), /why the coleoptile（胚芽鞘） in the diagram bends to the right/);
@@ -402,6 +406,7 @@ async function saveExcel(page, target) {
     assert.equal(await page.title(), await page.evaluate(() => window.printedTitle));
     await page.evaluate(() => window.dispatchEvent(new Event("afterprint")));
     await noChineseSystem(page, "#printReport");
+    assert.equal(await page.evaluate(()=>document.querySelector('#printReport .phototropism-flow').outerHTML===document.querySelector('#mechanismFlow .phototropism-flow').outerHTML),true);
     assert.match(
       await page.locator("#printReport").innerText(),
       /Reference answer/,

@@ -207,7 +207,7 @@ async function flow(p, student = true) {
   assert(await p.locator("#learningReveal").isHidden());
   await p.click("#toExtension");
   assert(await p.locator("#tipSection").isVisible());
-  assert.doesNotMatch(await p.locator("#tipSection").innerText(), /延伸一材料|唯一獨立變量/);
+  assert.doesNotMatch(await p.locator("#tipSection").innerText(), /延伸一材料|唯一自變量/);
   assert.equal(await p.locator("#tipFair,#tipLimit").count(), 0);
   assert.deepEqual(
     await p.locator("#tip-growth-A option").allTextContents(),
@@ -380,6 +380,7 @@ async function flow(p, student = true) {
   await p.check("#extPosition-position");
   assert.equal(await p.evaluate(() => state.form.extPosition), "position");
   assert.equal(await p.locator(".cloze-question legend").count(), 0);
+  assert.equal(await p.locator('.cloze-question [data-bending-highlight]').innerText(),'彎曲');
   assert.equal(await p.locator("#extSides").count(), 0);
   await reminder(p, "#submitInvestigation", /延伸分析/, "extXAmount");
   await p.selectOption("#extXAmount", "more");
@@ -393,6 +394,10 @@ async function flow(p, student = true) {
   assert.doesNotMatch(await p.locator("main").innerText(), /生長素|向光性/);
   await p.click("#submitInvestigation");
   assert(await p.locator("#learningReveal").isVisible());
+  assert.equal(await p.locator('#mechanismFlow .flow-step').count(),5);
+  assert.equal(await p.locator('#mechanismFlow .flow-arrow').count(),4);
+  assert.deepEqual(await p.locator('#mechanismFlow [data-flow-step="4"] strong').allTextContents(),['右側','延長較多']);
+  assert.equal(await p.locator('#mechanismFlow [data-flow-highlight="bend-left"]').innerText(),'向左彎曲');
   await p.waitForFunction(() =>
     Math.abs(document.querySelector("#learningCard").getBoundingClientRect().top) < 2,
   );
@@ -451,7 +456,7 @@ async function flow(p, student = true) {
       missing:marks({iv:[0],dv:[1],cv:[2,3,4]}),
       extra:marks({iv:[0],dv:[1],cv:[0,2,3,4,5]}),
       empty:marks({iv:[],dv:[],cv:[]}),
-      printed:[...document.querySelectorAll("#printReport .report-answer")].filter(answer => ["獨立變量","因變量","控制變量"].includes(answer.querySelector("strong")?.textContent)).map(answer => answer.querySelector("b")?.textContent),
+      printed:[...document.querySelectorAll("#printReport .report-answer")].filter(answer => ["自變量","因變量","控制變量"].includes(answer.querySelector("strong")?.textContent)).map(answer => answer.querySelector("b")?.textContent),
     };
   });
   assert.deepEqual(variableMarks.correct.map(answer => answer.mark), ["✓","✓","✓"]);
@@ -465,6 +470,8 @@ async function flow(p, student = true) {
   assert.deepEqual(variableMarks.empty.map(answer => answer.mark), ["","",""]);
   assert.deepEqual(variableMarks.printed, ["✓","✓","✓"]);
   assert.doesNotMatch(report, /整體分數|SPS 總分/);
+  assert.equal(await p.evaluate(()=>document.querySelector('#printReport .phototropism-flow').outerHTML===document.querySelector('#mechanismFlow .phototropism-flow').outerHTML),true);
+  assert.match(report,/自變量/);
   assert.doesNotMatch(report, /初步想法/);
   assert.doesNotMatch(report, /單側光與物質 X 的推論/);
   assert.match(report, /綜合實驗結果與學習重點，解釋圖中胚芽鞘為何會向右彎曲。/);
@@ -611,7 +618,7 @@ async function flow(p, student = true) {
         ["partial", {iv:[4],dv:[],cv:[2,3,4,5]}],
       ].map(([name, variables]) => ({...record,profile:{...record.profile,name},variables}));
       const rows = [
-        ["姓名", "獨立變量", "因變量", "控制變量"].map(label => excelCell(label, "classifying")),
+        ["姓名", "自變量", "因變量", "控制變量"].map(label => excelCell(label, "classifying")),
         ...fixtures.map(r => [excelCell(r.profile.name), ...["iv", "dv", "cv"].map(key => variableExcelCell(r, key))]),
       ];
       download(workbook([{name:"變量判定",rows},scoringWorkbook(fixtures).sheet]), "variable-marking.xlsx");

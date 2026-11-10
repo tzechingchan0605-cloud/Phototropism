@@ -177,7 +177,7 @@ function selectHTML(id, values, value = "", label = "") {
     .join("")}</select></label>`;
 }
 function extensionClozeSentence(fill) {
-  return `<span>將處理瓊脂放在切去頂端的胚芽鞘</span> <strong class="inquiry-highlight">左側</strong> <span>時，與右側相比，左側會獲得較</span> ${fill("extXAmount")} <span>的物質 X，令左側</span> <strong class="inquiry-highlight" data-en="elongate">細胞延長</strong><span data-en="">較</span> ${fill("extCellElongation")} <span>，最終使胚芽鞘向</span> ${fill("extBendDirection")} <span>方彎曲。</span>`;
+  return `<span>將處理瓊脂放在切去頂端的胚芽鞘</span> <strong class="inquiry-highlight">左側</strong> <span>時，與右側相比，左側會獲得較</span> ${fill("extXAmount")} <span>的物質 X，令左側</span> <strong class="inquiry-highlight" data-en="elongate">細胞延長</strong><span data-en="">較</span> ${fill("extCellElongation")} <span data-en=", finally causing ">，最終使胚芽鞘向</span> ${fill("extBendDirection")} <span data-en=" ">方</span><strong class="inquiry-highlight" data-bending-highlight="true" data-en="bending">彎曲</strong><span data-en=" of the coleoptile.">。</span>`;
 }
 function extensionPositionHTML() {
   return `<fieldset class="extension-position-question"><legend>${EXT_POSITION_QUESTION}</legend><input id="extPosition" type="hidden" value="">
@@ -503,6 +503,17 @@ function learningPointsHTML() {
     <li><span>單側光照下，</span> <strong class="learning-highlight">背光側生長素較多，該側細胞延長較多，使胚芽鞘向光彎曲</strong><span>。</span></li>
   </ol>`;
 }
+// One bilingual flow for the submitted VL, report and worksheet topic notes.
+function phototropismFlowHTML() {
+  const steps=[
+    ['FFF0C7',[['左方光源','Light from the left']]],
+    ['E4EFF7',[['右側是','The right side is '],['背光側','shaded',true]]],
+    ['EEE8F7',[['較多','More '],['生長素','auxin',true],['沿背光側向下傳遞',' passes down the shaded side',true]]],
+    ['E5F2E3',[['右側','On the right, ',true,'right-side'],['細胞','cells '],['延長較多','elongate more',true,'more-elongation']]],
+    ['DEF0ED',[['枝條','The shoot '],['向左彎曲','bends left',true,'bend-left']]],
+  ];
+  return `<div class="vertical-flow phototropism-flow" role="list" aria-label="左側光照下的生長流程">${steps.map(([fill,parts],i)=>`${i?'<p class="flow-arrow" aria-hidden="true">↓</p>':''}<div class="flow-step" role="listitem" data-flow-step="${i+1}" data-fill="${fill}" style="background:#${fill}">${parts.map(([zh,en,highlight,key])=>`<${highlight?'strong class="learning-highlight"':'span'}${key?` data-flow-highlight="${key}"`:''} data-en="${esc(en)}">${esc(zh)}</${highlight?'strong':'span'}>`).join('')}</div>`).join('')}</div>`;
+}
 function mechanismSVG() {
   const dots = (positions, radius = 2.5) => positions.map(([x, y]) =>
     `<circle cx="${x}" cy="${y}" r="${radius}" fill="#d94b4b"/>`).join("");
@@ -543,8 +554,8 @@ function mechanismSVG() {
   const lengthArrows = cellLengthArrow(116, "lit", "#2572b8") + cellLengthArrow(214, "shaded", "#c22b32");
   const [tipX, tipY] = point(165, 56);
   return `<svg class="mechanism-svg" viewBox="0 0 820 390" role="img" aria-label="左側光照下，完整頂端的胚芽鞘背光側生長素較多；放大圖顯示背光側細胞延長較多，使胚芽鞘向光彎曲。"><rect x="5" y="5" width="395" height="375" rx="18" fill="#edf8f2"/><rect x="420" y="5" width="395" height="375" rx="18" fill="#edf8f2"/>
-  <text x="202" y="35" text-anchor="middle" font-size="17">1 · 左側光照</text><path d="M202 310L202 240C202 196 167 150 133 131" fill="none" stroke="#65a772" stroke-width="26"/><circle data-intact-tip="true" cx="133" cy="131" r="13" fill="#65a772"/><path d="M212 306L212 240C213 191 171 143 139 122" fill="none" stroke="#d5e989" stroke-width="5" stroke-linecap="round"/><g data-auxin-dots="true">${auxin}</g><rect x="30" y="92" width="13" height="55" rx="4" fill="#f3b946"/><path d="M50 120H108M99 112L108 120L99 128" stroke="#bb8725" fill="none"/><text x="34" y="76" font-size="14">光源</text><text x="68" y="178" font-size="14">向左彎曲</text><text x="240" y="115" font-size="14" fill="#c22b32">右側＝背光側</text><text x="240" y="141" font-size="14" fill="#c22b32">生長素較多</text><text x="240" y="167" font-size="14" fill="#c22b32">細胞延長較多</text><path d="M239 178L189 191" fill="none" stroke="#526d71"/><text x="225" y="260" font-size="13">頂端以下彎曲</text><text x="35" y="342" font-size="13">頂端感光 → 生長訊號向下傳遞</text><circle cx="40" cy="363" r="3" fill="#d94b4b"/><text x="52" y="368" font-size="12">紅點＝生長素</text>
-  <text x="618" y="35" text-anchor="middle" font-size="17">2 · 左側光照：細胞放大</text><circle cx="${tipX}" cy="${tipY}" r="40" fill="#e4f3d7" stroke="#65a772" stroke-width="2"/>${cells}${lengthArrows}<rect x="438" y="170" width="10" height="46" rx="3" fill="#f3b946"/><path d="M455 193H515M507 185L515 193L507 201" fill="none" stroke="#bb8725"/><text x="437" y="155" font-size="13">光源</text><text x="440" y="92" font-size="14">向左彎曲</text><text x="695" y="101" font-size="13">右側＝背光側</text><text x="695" y="124" font-size="13">生長素較多</text><path d="M695 132L645 169" fill="none" stroke="#526d71"/><text x="592" y="265" text-anchor="end" data-label-width="152" font-size="13" fill="#2572b8">細胞延長較少</text><text x="713" y="237" data-label-width="92" font-size="13" fill="#c22b32">細胞延長較多</text><text x="440" y="342" font-size="13">背光側延長較多 → 向左彎曲</text></svg>`;
+  <text x="202" y="35" text-anchor="middle" font-size="17">1 · 左側光照</text><path d="M202 310L202 240C202 196 167 150 133 131" fill="none" stroke="#65a772" stroke-width="26"/><circle data-intact-tip="true" cx="133" cy="131" r="13" fill="#65a772"/><path d="M212 306L212 240C213 191 171 143 139 122" fill="none" stroke="#d5e989" stroke-width="5" stroke-linecap="round"/><g data-auxin-dots="true">${auxin}</g><rect x="30" y="92" width="13" height="55" rx="4" fill="#f3b946"/><path d="M50 120H108M99 112L108 120L99 128" stroke="#bb8725" fill="none"/><text x="34" y="76" font-size="14">光源</text><text x="68" y="178" font-size="14" fill="#c22b32" font-weight="700">向左彎曲</text><text x="240" y="115" font-size="14" fill="#c22b32">右側＝背光側</text><text x="240" y="141" font-size="14" fill="#c22b32">生長素較多</text><text x="240" y="167" font-size="14" fill="#c22b32"><tspan fill="#15333b" data-en="cells ">細胞</tspan><tspan data-en="elongate more">延長較多</tspan></text><path d="M239 178L189 191" fill="none" stroke="#526d71"/><text x="225" y="260" font-size="13">頂端以下彎曲</text><text x="35" y="342" font-size="13">頂端感光 → 生長訊號向下傳遞</text><circle cx="40" cy="363" r="3" fill="#d94b4b"/><text x="52" y="368" font-size="12">紅點＝生長素</text>
+  <text x="618" y="35" text-anchor="middle" font-size="17">2 · 左側光照：細胞放大</text><circle cx="${tipX}" cy="${tipY}" r="40" fill="#e4f3d7" stroke="#65a772" stroke-width="2"/>${cells}${lengthArrows}<rect x="438" y="170" width="10" height="46" rx="3" fill="#f3b946"/><path d="M455 193H515M507 185L515 193L507 201" fill="none" stroke="#bb8725"/><text x="437" y="155" font-size="13">光源</text><text x="440" y="92" font-size="14" fill="#c22b32" font-weight="700">向左彎曲</text><text x="695" y="101" font-size="13">右側＝背光側</text><text x="695" y="124" font-size="13">生長素較多</text><path d="M695 132L645 169" fill="none" stroke="#526d71"/><text x="592" y="265" text-anchor="end" data-label-width="152" font-size="13" fill="#2572b8">細胞延長較少</text><text x="713" y="237" data-label-width="92" font-size="13" fill="#c22b32"><tspan fill="#15333b" data-en="cells ">細胞</tspan><tspan data-en="elongate more">延長較多</tspan></text><text x="440" y="342" font-size="13"><tspan data-en="More elongation on the shaded side → ">背光側延長較多 → </tspan><tspan fill="#c22b32" data-en="bends left">向左彎曲</tspan></text></svg>`;
 }
 const PREVIOUS_Q_LIMIT = {
   indirect:
@@ -632,7 +643,7 @@ function reportAnswer(
 }
 function variableReportHTML(record) {
   const definitions = variableDefinitions(record);
-  return [["iv", "獨立變量"], ["dv", "因變量"], ["cv", "控制變量"]]
+  return [["iv", "自變量"], ["dv", "因變量"], ["cv", "控制變量"]]
     .map(([key, title]) => {
       const selected = record.variables[key];
       return reportAnswer(
@@ -722,7 +733,7 @@ function newReport(r) {
   ${threeStage(r) ? tipReportHTML(r) : ""}
   <section class="report-card"><h2>${threeStage(r) ? "04 · 延伸探究二：物質 X" : "04 · 延伸預測與觀察"}</h2>${open("原始預測", DIRECTIONS[e.initialPrediction?.prediction], "處理瓊脂放左側，模型中左側延長較多而向右彎曲；原始預測由教師按可測試性評閱。")}${open("原始理由", e.initialPrediction?.reason, "合理理由不因結果不符直接判錯。")}${r.experimentVersion < 12 ? open("公平比較", f.extFair, "E–F 均放中央，保持瓊脂大小、胚芽鞘初始大小及狀況、黑暗、溫度、供水及時間相同。") : ""}<h3>首次確認讀數</h3>${firstExt}<h3>最後讀數</h3>${extensionTableHTML(e.readings)}${EXT_IDS.map((id) => reportAnswer(id + " 最終角度", e.readings[id]?.angle === undefined ? "" : e.readings[id].angle + "°", extensionAngleReference(id), e.readings[id] ? extensionAngleCorrect(id, e.readings[id].angle) : null)).join("")}${r.experimentVersion < 9 ? `<h3>學生棒形圖</h3>${Object.keys(e.graph).length ? barChartSVG(e.graph) : "未確認"}<p class="report-reference">圖表以學生本身讀數核對；量度準確性另與模型比較。不用鉛直高度差推算延長量。</p>` : ""}</section>
   <section class="report-card"><h2>${threeStage(r) ? "04 · 延伸二分析" : "04 · 延伸分析"}</h2>${r.experimentVersion >= 16 ? questions({extEF:"transfer",extPosition:"position"}) + extensionClozeReport(r) : questions(extensionAnswersFor(r))}${r.experimentVersion >= 13 && r.experimentVersion < 17 ? open("單側光與物質 X 的推論", f.extLightInference, "單側光可能使物質 X 移向背光側，再向下傳遞，促進背光側細胞延長。背光側延長較多，使胚芽鞘向光彎曲；這是結合比較結果提出的推論，瓊脂實驗並未直接觀察光照下物質 X 的分布。") : ""}${r.experimentVersion < 9 ? open("延伸證據", f.extEvidence, "E–F 支持可轉移的生長促進作用；G–H 支持作用位置影響彎曲方向。") : ""}${r.experimentVersion < 9 ? open("額外對照（選答）", f.extControl, "可把空白瓊脂放左側及右側，以排除單側放置本身的影響。") : ""}</section>
-  ${r.submittedAt ? `<section class="report-card"><h2>學習重點</h2>${r.experimentVersion >= 17 ? learningPointsHTML() : `<p>向光性是因光照方向而產生的定向生長；向光源屬正向光性。頂端參與感光，生長素是影響植物生長的激素。${threeStage(r) ? "探究中的物質 X 可結合其他研究理解為生長素；瓊脂比較本身並未鑑定其身分。" : ""}背光側生長素較多、細胞延長較多，使胚芽鞘向光彎曲。</p>`}${mechanismSVG()}${r.experimentVersion < 14 ? `<p class="report-reference">本模型未直接鑑定瓊脂內的物質或量得單側光下的生長素分布；名稱及機制由其他研究支持。</p>` : ""}${r.experimentVersion < 14 ? reportAnswer("名稱檢核", answerOption("knowledgeName", f.knowledgeName), "正向光性", f.knowledgeName ? f.knowledgeName === "positive" : null) : ""}</section>` : ""}
+  ${r.submittedAt ? `<section class="report-card"><h2>學習重點</h2>${r.experimentVersion >= 17 ? learningPointsHTML() : `<p>向光性是因光照方向而產生的定向生長；向光源屬正向光性。頂端參與感光，生長素是影響植物生長的激素。${threeStage(r) ? "探究中的物質 X 可結合其他研究理解為生長素；瓊脂比較本身並未鑑定其身分。" : ""}背光側生長素較多、細胞延長較多，使胚芽鞘向光彎曲。</p>`}${mechanismSVG()}${r.experimentVersion >= 19 ? phototropismFlowHTML() : ""}${r.experimentVersion < 14 ? `<p class="report-reference">本模型未直接鑑定瓊脂內的物質或量得單側光下的生長素分布；名稱及機制由其他研究支持。</p>` : ""}${r.experimentVersion < 14 ? reportAnswer("名稱檢核", answerOption("knowledgeName", f.knowledgeName), "正向光性", f.knowledgeName ? f.knowledgeName === "positive" : null) : ""}</section>` : ""}
   ${reflectionReport(r, open)}<p class="report-reference">動畫、24 小時及角度為教學模擬。學生報告不顯示分數。</p>`;
 }
 function graphScore(r) {

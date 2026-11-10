@@ -1069,3 +1069,13 @@ button {
     break-inside: avoid;
   }
 }
+
+/* This summary sits inside the existing post-submission learning reveal. */
+.phototropism-flow{width:min(100%,680px);margin:22px auto 12px;break-inside:avoid}
+.phototropism-flow .flow-step{padding:9px 14px;border-radius:7px;text-align:center;font-size:16px;line-height:1.6;overflow-wrap:break-word}
+.phototropism-flow .flow-arrow{margin:0;text-align:center;font-size:22px;line-height:1.1}
+@media print{
+  .phototropism-flow{width:100%;margin:10px auto;break-inside:avoid}
+  .phototropism-flow .flow-step{padding:4px 9px;font-size:11pt;line-height:1.4}
+  .phototropism-flow .flow-arrow{font-size:14pt;line-height:1.05}
+}

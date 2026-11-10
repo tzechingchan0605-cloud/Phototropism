@@ -117,7 +117,7 @@ A、B、D 三組遮光處理、單側光源及固定條件清楚；圖片與文�
 04 · 延伸探究一	04 · Extension 1
 頂端除了感受光照，是否也影響胚芽鞘的生長／延長？	Does the tip also affect coleoptile growth / elongation, as well as sensing light?
 遮光比較為感光部位提供了線索，但頂端是否還有其他作用？這次只改變「頂端是否存在」，比較完整的 A 與切去頂端的 C。	Light-blocking comparisons gave clues about the part that senses light. Does the tip have other roles? This time, change only whether the tip is present. Compare intact setup A with setup C, which has its tip removed.
-唯一獨立變量：頂端是否存在。兩組接受相同左側光照；種類、處理前大小及生長狀況、培養時間、溫度及供水相同。	The only independent variable is whether the tip is present. Both setups receive the same light from the left. Keep type, starting size and growth condition, growing time, temperature and water supply the same.
+唯一自變量：頂端是否存在。兩組接受相同左側光照；種類、處理前大小及生長狀況、培養時間、溫度及供水相同。	The only independent variable is whether the tip is present. Both setups receive the same light from the left. Keep type, starting size and growth condition, growing time, temperature and water supply the same.
 延伸一材料：燕麥胚芽鞘 × 2、剪刀 × 1、單側光源 × 1、計時工具 × 1。	Extension 1 materials: oat coleoptiles × 2, scissors × 1, light source on one side × 1, timer × 1.
 切去頂端後，與完整胚芽鞘相比，你預測延長表現如何？	After the tip is removed, how do you predict elongation will compare with an intact coleoptile?
 比較 A 與 C 時，除了頂端是否存在，哪些條件需要保持相同？	When comparing A and C, which conditions should stay the same, apart from whether the tip is present?
@@ -220,7 +220,7 @@ IBL 虛擬實驗室 · 植物的感應	IBL virtual lab · Plant responses
 A 與 B：頂端遮光處理	A and B: blocking light at the tip
 A 與 C：頂端是否存在	A and C: whether the tip is present
 A 與 D：下部遮光處理	A and D: blocking light below the tip
-獨立變量	Independent variable
+自變量	Independent variable
 因變量	Dependent variable
 控制變量	Controlled variables
 （主動改變的因素）	(the factor changed on purpose)
@@ -241,7 +241,7 @@ A 與 D：下部遮光處理	A and D: blocking light below the tip
 植物種類相同便毋須控制初始大小。	If the plants are the same type, their starting size does not need to be controlled.
 04 · 探究的對照組	04 · The control group
 若想判斷不同處理是否影響胚芽鞘的生長方向，你會保留甚麼未經處理的裝置作比較？哪些條件需要保持相同？	To find out whether the treatments affect growth direction, which untreated setup would you keep for comparison? Which conditions should stay the same?
-（提示：對照組主要功能是作為比較的基準，用來確認實驗中的改變是由獨立變量所引起，而非其他外在因素的干擾，因此對照組不包含獨立變量的處理條件）	(Hint: The control group provides a baseline for comparison. It helps you confirm that a change is caused by the independent variable rather than other external factors, so the control group does not receive the independent variable treatment.)
+（提示：對照組主要功能是作為比較的基準，用來確認實驗中的改變是由自變量所引起，而非其他外在因素的干擾，因此對照組不包含自變量的處理條件）	(Hint: The control group provides a baseline for comparison. It helps you confirm that a change is caused by the independent variable rather than other external factors, so the control group does not receive the independent variable treatment.)
 對照組設計	Control group plan
 05 · 實驗裝置設計	05 · Experiment setup
 繪畫並標示你的實驗裝置	Draw and label your experiment setup
@@ -484,6 +484,7 @@ VL3 · 幼芽為甚麼向光生長？	VL3 · Why do young shoots grow towards li
 延伸證據	Extension evidence
 額外對照（選答）	Extra control (optional)
 學習重點	Learning points
+左側光照下的生長流程	Growth flow with light from the left
 名稱檢核	Name check
 學習反思	Learning reflection
 實際反思	Your reflection

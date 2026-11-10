@@ -419,7 +419,7 @@ function renderBench(p = 0) {
 }
 function renderVariables() {
   $("#variableChoices").innerHTML = [
-    ["iv", "獨立變量", "主動改變的因素"],
+    ["iv", "自變量", "主動改變的因素"],
     ["dv", "因變量", "量度或觀察的結果"],
     ["cv", "控制變量", "保持不變的因素"],
   ]
@@ -1157,6 +1157,7 @@ $("#contextPlant").innerHTML = contextComparison();
 $("#reflectionContext").innerHTML = reflectionContext();
 $("#learningPoints").innerHTML = learningPointsHTML();
 $("#mechanismDiagram").innerHTML = mechanismSVG();
+$("#mechanismFlow").innerHTML = phototropismFlowHTML();
 document.addEventListener("visibilitychange", () => {
   accountTime();
   timingVisible = !document.hidden;
@@ -1221,7 +1222,7 @@ function scoringWorkbook(all) {
     ["initial", "觀察｜初步觀察・教師（0–2）", "observing", 2],
     ["observations", "觀察｜主探究及頂端比較・自動（0–2）", "observing"],
     ["observing", "SPS 觀察（0–4）", "observing"],
-    ["iv", "分類｜獨立變量（0–1）", "classifying"],
+    ["iv", "分類｜自變量（0–1）", "classifying"],
     ["dv", "分類｜因變量（0–1）", "classifying"],
     ["cv", "分類｜控制變量（0–2）", "classifying"],
     ["classifying", "SPS 分類（0–4）", "classifying"],
@@ -1468,7 +1469,7 @@ async function exportExcel() {
     ["初步觀察", "observing"],
     ["原始假說", "designing"],
     ["原始理由", "designing"],
-    ["獨立變量", "classifying"],
+    ["自變量", "classifying"],
     ["因變量", "classifying"],
     ["控制變量", "classifying"],
     ["實驗前提", "designing"],
