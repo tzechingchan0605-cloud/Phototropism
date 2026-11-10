@@ -23,6 +23,7 @@ p,figure{margin-bottom:1.5mm}h2{margin-top:2.5mm;margin-bottom:1.5mm}
 
 h3{font-size:13pt;line-height:20pt;color:#25666a;margin:2.5mm 0 1.5mm}
 [data-page="3"] .question{margin:1mm 0}
+[data-page="3"] .plant-grid{margin:1mm 0}
 [data-page="3"] .plant-pair>svg{height:18mm}
 [data-page="3"] .observations td{padding-top:.3mm;padding-bottom:.3mm}
 [data-page="3"] h2{margin-top:1.5mm;margin-bottom:1mm}
@@ -39,6 +40,7 @@ body[lang="en"] [data-page="1"] .concept-box{line-height:19pt}
 .main-setups .plant-pair>svg{height:40mm!important}
 .tip-setups .plant-pair>svg{height:28mm!important}
 body[lang="en"] .plant-grid figcaption{min-height:38pt}
+body[lang="en"] .tip-setups figcaption{min-height:0}
 
 /* Keep 12pt text; place the experiment context before the variable page. */
 [data-page="1"] .concept-box,body[lang="en"] [data-page="1"] .concept-box{line-height:19pt}
@@ -49,8 +51,9 @@ body[lang="en"] .plant-grid figcaption{min-height:38pt}
 [data-page="4"] .question{margin:.5mm 0}
 
 /* One concept page, followed by two proposed shading designs and the questions. */
-[data-page="1"] .knowledge-grid{grid-template-columns:48mm 1fr}
-body[lang="en"] [data-page="1"] .knowledge-grid{grid-template-columns:36mm 1fr}
+[data-page="1"] .knowledge-grid{grid-template-columns:54mm 1fr}
+[data-page="1"] .knowledge-grid svg{height:62mm}
+body[lang="en"] [data-page="1"] .knowledge-grid{grid-template-columns:42mm 1fr}
 .vertical-flow{width:140mm;max-width:100%;margin:2mm auto 0;text-align:center}
 .vertical-flow .flow-step{padding:.6mm 2mm;border-radius:1.5mm;line-height:19pt}
 [data-page="1"] .vertical-flow .flow-arrow{font-size:14pt;line-height:14pt;margin:0}

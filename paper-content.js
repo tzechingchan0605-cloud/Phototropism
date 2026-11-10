@@ -3,6 +3,12 @@
 // a learner's answers or call reset(), phase(), log(), save() or cloud APIs.
 window.VL3PaperContent = (() => {
   const record = {experimentVersion: EXPERIMENT_VERSION};
+  // Paper treatments keep their design labels when the control is added last.
+  // Keys are the existing internal model IDs; learner/VL records are untouched.
+  const PAPER_MAIN_IDS = ['B','D','A'];
+  const PAPER_LABELS = {B:'A',D:'B',A:'C',C:'D'};
+  const paperName = id => PAPER_LABELS[id];
+  const paperLetters = Object.fromEntries(Object.keys(PAPER_LABELS).map(id=>[sampleName(id,record),paperName(id)]));
   const element = (html) => {
     const root = document.createElement("div");
     root.innerHTML = html;
@@ -97,14 +103,17 @@ window.VL3PaperContent = (() => {
   function choice(id,answers,number) {
     const correct={...MAIN_ANSWERS,...TIP_ANSWERS,...EXT_ANSWERS}[id];
     const options=[...document.getElementById(id).options].filter(o=>o.value).map(o=>({value:o.value,text:VL3Language.sourceText(o).trim()}));
-    return `<div class="question" data-question="${id}" data-paper-number="${number}">${label(id)} <span class="circle-options">（${options.map(o=>answers&&o.value===correct?blue(esc(o.text)):esc(o.text)).join(' ／ ')}）</span></div>`;
+    if(id==='qCap')return `<div class="question" data-question="${id}" data-paper-number="${number}">${label(id)}<br>${options.map(o=>`<span class="tick-option"><span class="paper-check">${answers&&o.value===correct?'☑':'□'}</span> <span class="paper-option">${answers&&o.value===correct?blue(esc(o.text)):esc(o.text)}</span></span>`).join('<br>')}</div>`;
+    return `<div class="question" data-question="${id}" data-paper-number="${number}">${label(id)}${['qShade','qTip'].includes(id)?'<br>':' '}<span class="circle-options">（${options.map(o=>`<span class="paper-option">${answers&&o.value===correct?blue(esc(o.text)):esc(o.text)}</span>`).join(' ／ ')}）</span></div>`;
   }
   function plant(id,progress) {
     const root=element(seedling(id,progress));root.querySelectorAll('text').forEach(n=>n.remove());
     // A/B and the lower-shaded model retain their tips; internal C is the cut D.
     if(id!=='C'){
       const stem=root.querySelector('[data-stem]'),xy=stem.getAttribute('d').match(/-?\d+(?:\.\d+)?/g).slice(-2);
-      stem.insertAdjacentHTML('afterend',`<circle data-paper-intact-tip="true" cx="${xy[0]}" cy="${xy[1]}" r="7.5" fill="#59a16a"/>`);
+      // Match the stem's round cap exactly, without widening the shoot tip.
+      const radius=Number(stem.getAttribute('stroke-width'))/2;
+      stem.insertAdjacentHTML('afterend',`<circle data-paper-intact-tip="true" cx="${xy[0]}" cy="${xy[1]}" r="${radius}" fill="${stem.getAttribute('stroke')}"/>`);
     }
     root.querySelector('svg').setAttribute('viewBox','10 20 180 235');
     return root.innerHTML;
@@ -115,7 +124,7 @@ window.VL3PaperContent = (() => {
   function plants(ids,initial=false) {
     const type=initial?'initial-setups':ids.length===3?'main-setups':'tip-setups';
     const height=initial?5.7:ids.length===3?4:2.8;
-    return `<div class="plant-grid ${type}" data-diagram-height="${height}" data-diagram-height-en="${initial?3:height}">${ids.map((id,i)=>`<figure><figcaption>${initial?tr('設計方案 '+String.fromCharCode(65+i),'Design '+String.fromCharCode(65+i)):tr('裝置 '+sampleName(id,record),'Setup '+sampleName(id,record))} · <span>${esc(GROUPS[id].label)}</span></figcaption><div class="plant-pair">${initial?plant(id,0):plantPair(id)}</div></figure>`).join('')}</div>`;
+    return `<div class="plant-grid ${type}" data-diagram-height="${height}" data-diagram-height-en="${initial?3:height}">${ids.map((id,i)=>`<figure data-paper-setup="${paperName(id)}" data-model-id="${id}"><figcaption>${initial?tr('設計方案 '+String.fromCharCode(65+i),'Design '+String.fromCharCode(65+i)):tr('裝置 '+paperName(id),'Setup '+paperName(id))} · <span>${esc(GROUPS[id].label)}</span></figcaption><div class="plant-pair">${initial?plant(id,0):plantPair(id)}</div></figure>`).join('')}</div>`;
   }
   function windowDiagram() {
     const root=element(windowSeedling(true));
@@ -134,18 +143,19 @@ window.VL3PaperContent = (() => {
     return root.innerHTML;
   }
   function observations(ids,tip,answers) {
-    return `<table class="observations"><tr><th>${tr('裝置','Setup')}</th><th data-paper-number="${tip?8:4}">${tr(tip?'延長表現':'彎曲方向',tip?'Elongation':'Bending direction')}</th></tr>${ids.map(id=>`<tr><td>${sampleName(id,record)}</td><td>（${Object.entries(tip?TIP_GROWTH:DIRECTIONS).map(([v,t])=>answers&&v===(tip?tipModel(id,record).growth:mainModel(id,record).direction)?blue(`<span>${esc(t)}</span>`):`<span>${esc(t)}</span>`).join(' ／ ')}）</td></tr>`).join('')}</table>`;
+    return `<table class="observations"><tr><th>${tr('裝置','Setup')}</th><th data-paper-number="${tip?8:4}">${tr(tip?'延長表現':'彎曲方向',tip?'Elongation':'Bending direction')}</th></tr>${ids.map(id=>`<tr><td>${paperName(id)}</td><td>（${Object.entries(tip?TIP_GROWTH:DIRECTIONS).map(([v,t])=>answers&&v===(tip?tipModel(id,record).growth:mainModel(id,record).direction)?blue(`<span>${esc(t)}</span>`):`<span>${esc(t)}</span>`).join(' ／ ')}）</td></tr>`).join('')}</table>`;
   }
   function agarDiagram() {
     const one=(id,x)=>{
       const model=EXT_MODEL[id],sign=model.direction==='left'?-1:1;
-      const heading=`<text x="85" y="15" text-anchor="middle" font-size="16">${id}</text><text x="85" y="32" text-anchor="middle" font-size="15" data-en="${id==='E'?'Blank agar':'Treated agar'}">${id==='E'?'空白瓊脂':'處理瓊脂'}</text><text x="85" y="49" text-anchor="middle" font-size="15" data-en="${id==='G'?'Left':id==='H'?'Right':'Centre'}">${id==='G'?'左側':id==='H'?'右側':'中央'}</text>`;
+      const heading=`<text x="85" y="15" text-anchor="middle" font-size="16">${id}</text><text x="85" y="32" text-anchor="middle" font-size="15" data-en="${id==='E'?'Blank agar':'Treated agar'}">${id==='E'?'空白瓊脂':'處理瓊脂'}</text><text data-paper-position-label="${id}" x="85" y="49" text-anchor="middle" font-size="15" data-en="Position: ${id==='G'?'Left':id==='H'?'Right':'Centre'}">放置位置：${id==='G'?'左側':id==='H'?'右側':'中央'}</text>`;
       const angle=model.angle*Math.PI/180, tx=85+sign*Math.sin(angle)*60,ty=135-Math.cos(angle)*60;
       const top=model.growth==='none'?135:85;
       let s=`<g transform="translate(${x} 0)">${heading}<path d="M85 178V${top}" stroke="#6aa579" stroke-width="12" fill="none"/>`;
       if(model.angle)s=`<g transform="translate(${x} 0)">${heading}<path d="M85 178V150Q85 135 ${tx} ${ty}" stroke="#6aa579" stroke-width="12" fill="none"/>`;
-      const ax=id==='G'?tx-10:id==='H'?tx+2:79,ay=model.angle?ty-8:top-8;
-      s+=`<rect x="${ax}" y="${ay}" width="14" height="8" fill="${id==='E'?'#ddd':'#e7bc72'}" stroke="#555"/>`;
+      const offset=id==='G'?-6:id==='H'?6:0;
+      // Like the VL, place the agar in the cut tip's own rotating frame.
+      s+=`<g data-paper-agar-block="${id}" transform="translate(${model.angle?tx:85} ${model.angle?ty:top}) rotate(${sign*model.angle})"><rect x="${offset-7}" y="-8" width="14" height="8" fill="${id==='E'?'#ddd':'#e7bc72'}" stroke="#555"/></g>`;
       // Model-based tangent pointer; vertical is 0°, every small tick is 5°.
       s+='<path d="M85 135V78" stroke="#888" stroke-dasharray="3 3"/>';
       for(let a=-90;a<=90;a+=5){const rad=a*Math.PI/180,r=a%30===0?52:57;s+=`<path d="M${85+Math.sin(rad)*r} ${135-Math.cos(rad)*r}L${85+Math.sin(rad)*62} ${135-Math.cos(rad)*62}" stroke="#555"/>`;if(a%30===0&&Math.abs(a)<90)s+=`<text x="${85+Math.sin(rad)*70}" y="${139-Math.cos(rad)*70}" text-anchor="middle" font-size="15">${Math.abs(a)}</text>`;}
@@ -173,17 +183,27 @@ window.VL3PaperContent = (() => {
     const pages=[];
     pages.push(page(1,knowledge(),answers,true));
     pages.push(page(2,h('部分 1｜研究情境與公平比較','Part 1 | Context and fair comparisons')+`<div class="context-designs">${p('探究目的：比較遮光部位對胚芽鞘生長方向的影響。','Aim: investigate how shading position affects coleoptile growth direction.')}${plants(['B','D'],true)}</div>`+p('辨識實驗變量：在每列剔選適當因素；每類可選多於一項。','Identify the variables: tick the appropriate factors in each row. You may choose more than one.','numbered-variable')+variables(answers)+canonicalClone(document.querySelector('.assumptions-card h3')).outerHTML+hints+ASSUMPTIONS.map(([id,t,ok])=>p((answers&&ok?'☑ ':'□ ')+t,(answers&&ok?'☑ ':'□ ')+VL3Language.t(t),answers&&ok?'reference-answer':'')).join('')+h('探究的對照組','Control group')+canonicalClone(control.querySelector('h3')).innerHTML+canonicalClone(control.querySelector('.design-hint')).outerHTML+line('controlPlan',2,correct(controlAnswer)),answers));
-    pages.push(page(3,h('部分 2｜實驗結果與分析','Part 2 | Results and analysis')+h('2.1 遮光','2.1 Shading')+p('光源統一在左方；遮光套覆蓋頂端以下的整段，頂端外露，不限制延長或彎曲。','Light is on the left. The sleeve covers below the exposed tip without restricting growth.')+plants(MAIN_IDS)+observations(MAIN_IDS,false,answers)+['qShade','qBelow','qTip'].map((id,i)=>choice(id,answers,i+5)).join('')+h('2.2 切頂','2.2 Tip removal')+plants(TIP_IDS)+observations(TIP_IDS,true,answers)+choice('qCap',answers,9),answers));
-    const position=`<div class="question" data-question="extPosition" data-paper-number="12">${EXT_POSITION_QUESTION} （${Object.entries(EXT_POSITION_OPTIONS).map(([id,t])=>answers&&id==='position'?blue(t):t).join(' ／ ')}）</div>`;
+    pages.push(page(3,h('部分 2｜實驗結果與分析','Part 2 | Results and analysis')+h('2.1 主探究：遮光對生長的影響','2.1 Main investigation: effect of shading on growth')+p('光源統一在左方；遮光套覆蓋頂端以下的整段，頂端外露，不限制延長或彎曲。','Light is on the left. The sleeve covers below the exposed tip without restricting growth.')+plants(PAPER_MAIN_IDS)+observations(PAPER_MAIN_IDS,false,answers)+['qShade','qBelow','qTip'].map((id,i)=>choice(id,answers,i+5)).join('')+h('延伸探究：頂端切除對生長的影響','Extension investigation: effect of tip removal on growth')+plants(TIP_IDS)+observations(TIP_IDS,true,answers)+choice('qCap',answers,9),answers));
+    const position=`<div class="question" data-question="extPosition" data-paper-number="12">${EXT_POSITION_QUESTION} （${Object.entries(EXT_POSITION_OPTIONS).map(([id,t])=>`<span class="paper-option">${answers&&id==='position'?blue(t):t}</span>`).join(' ／ ')}）</div>`;
     const cloze=extensionClozeSentence(id=>{const select=element(extensionClozeSelect(id)).querySelector('select');return '（'+[...select.options].filter(o=>o.value).map(o=>answers&&o.value===EXT_CLOZE_ANSWERS[id]?blue(`<span>${o.textContent}</span>`):`<span>${o.textContent}</span>`).join(' ／ ')+'）';});
     pages.push(page(4,h('2.3 瓊脂','2.3 Agar')+p('全部胚芽鞘均已切頂、初始大小相近，在黑暗中培養。空白瓊脂未接觸頂端；處理瓊脂曾接觸頂端。','All cut-tip coleoptiles start at similar sizes and stay in darkness. Blank agar has not touched a tip; treated agar has.')+agarDiagram()+p('虛線為鉛直 0°，每小格 5°。','Dashed line: vertical 0°. Each small interval is 5°.','hint')+`<table class="readings"><tr><th>${tr('裝置','Setup')}</th><th>${tr('角度（°）','Angle (°)')}</th><th data-paper-number="10">${tr('彎曲方向','Bending direction')}</th></tr>${EXT_IDS.map(id=>`<tr><td>${id}</td><td>${answers?blue(EXT_MODEL[id].angle+'°'):'________'}</td><td>（${Object.entries(DIRECTIONS).map(([v,t])=>answers&&v===EXT_MODEL[id].direction?blue(t):t).join(' ／ ')}）</td></tr>`).join('')}</table>`+choice('extEF',answers,11)+position+`<div class="question" data-question="ext-cloze" data-paper-number="13">3. ${cloze}</div>`+h('部分 3｜整合解釋','Part 3 | Integrated explanation')+p('綜合實驗結果與課題需知，解釋圖中胚芽鞘為何會向右彎曲。','Use the experimental results and topic notes to explain why the coleoptile in the diagram bends to the right.')+`<div class="reflection-response"><div class="reflection-figure">${diagram(windowDiagram())}</div>`+line('reflection',4,correct(tr(REFLECTION_REFERENCE.replace('由教師評閱，不自動判錯。',''),'Light is on the right and sensed at the tip. More auxin is on the shaded left side and passes down. Left-side cells elongate more, causing bending towards the light on the right (positive phototropism).')))+`</div>`,answers));
     return pages;
   }
   function canonical(){
-    return {material_revision:REVISION,paper_layout_revision:3,experiment_version:EXPERIMENT_VERSION,notes:knowledge(),nativeMechanism:mechanismSVG(),context:windowSeedling(true),reflection:REFLECTION_PROMPT,rubric:VL3_RUBRIC19,variables:VARIABLES,order:VARIABLE_DISPLAY_ORDER,expected:EXPECTED,assumptions:ASSUMPTIONS,main:MAIN_IDS.map(id=>({id:sampleName(id,record),label:GROUPS[id].label,result:mainModel(id,record)})),tip:TIP_IDS.map(id=>({id:sampleName(id,record),label:GROUPS[id].label,result:tipModel(id,record)})),agar:EXT_MODEL,questions:['qShade','qBelow','qTip','qCap','extEF'].map(id=>({id,label:label(id),options:[...document.getElementById(id).options].filter(o=>o.value).map(o=>({id:o.value,text:VL3Language.sourceText(o)}))})),position:EXT_POSITION_OPTIONS,cloze:extensionClozeSentence(id=>id),control:canonicalClone(document.querySelector('.control-card')).textContent.replace(/\s+/g,' ').trim(),assumptionTitle:canonicalClone(document.querySelector(".assumptions-card h3")).textContent,definition:canonicalClone(document.querySelector('#assumptionDefinition')).textContent.trim()};
+    return {material_revision:REVISION,paper_layout_revision:5,paper_setup_mapping:paperLetters,experiment_version:EXPERIMENT_VERSION,notes:knowledge(),nativeMechanism:mechanismSVG(),context:windowSeedling(true),reflection:REFLECTION_PROMPT,rubric:VL3_RUBRIC19,variables:VARIABLES,order:VARIABLE_DISPLAY_ORDER,expected:EXPECTED,assumptions:ASSUMPTIONS,main:MAIN_IDS.map(id=>({id:sampleName(id,record),label:GROUPS[id].label,result:mainModel(id,record)})),tip:TIP_IDS.map(id=>({id:sampleName(id,record),label:GROUPS[id].label,result:tipModel(id,record)})),agar:EXT_MODEL,questions:['qShade','qBelow','qTip','qCap','extEF'].map(id=>({id,label:label(id),options:[...document.getElementById(id).options].filter(o=>o.value).map(o=>({id:o.value,text:VL3Language.sourceText(o)}))})),position:EXT_POSITION_OPTIONS,cloze:extensionClozeSentence(id=>id),control:canonicalClone(document.querySelector('.control-card')).textContent.replace(/\s+/g,' ').trim(),assumptionTitle:canonicalClone(document.querySelector(".assumptions-card h3")).textContent,definition:canonicalClone(document.querySelector('#assumptionDefinition')).textContent.trim()};
   }
   function render(answers=false){
     const root=element(worksheet(answers).join(''));VL3Language.translateTree(root);
+    // Translate the shared questions first, then relabel only paper setup letters.
+    ['qShade','qBelow','qCap'].forEach(id=>{
+      const walk=document.createTreeWalker(root.querySelector(`[data-question="${id}"]`),NodeFilter.SHOW_TEXT);
+      while(walk.nextNode())walk.currentNode.data=walk.currentNode.data.replace(/\b[ABCD]\b/g,letter=>paperLetters[letter]);
+    });
+    root.querySelectorAll('.paper-option').forEach(option=>{
+      const walk=document.createTreeWalker(option,NodeFilter.SHOW_TEXT);let last;
+      while(walk.nextNode())if(walk.currentNode.data.trim())last=walk.currentNode;
+      if(last)last.data=last.data.replace(/[。.](\s*)$/u,'$1');
+    });
     root.querySelector('.numbered-variable').dataset.paperNumber='1';
     root.querySelector('[data-page="2"] h3').dataset.paperNumber='2';
     [...root.querySelectorAll('[data-page="2"] h2')].at(-1).dataset.paperNumber='3';
@@ -210,9 +230,9 @@ window.VL3PaperContent = (() => {
         p("15分鐘：概念3、變量與公平比較4、遮光及切頂3、瓊脂3、整合2。20分鐘：概念4、公平比較5、遮光及切頂4、瓊脂4、整合3。首次作答後的核對修正另按共同研究程序安排；若計入同一節，試教調整分配，不刪核心探究。","15 minutes: concepts 3, variables/fair comparisons 4, shading/tip removal 3, agar 3, integration 2. For 20 minutes: 4, 5, 4, 4, 3 respectively. Arrange answer checking after preserving first responses under the shared study procedure; if included in the same period, pilot the allocation without removing core inquiries.")+
         p("教師只澄清程序、字詞及讀圖方法；首次作答前不透露答案。記錄額外支援及實際用時；不宣稱所有學生必定完成。保存有研究ID的首次答案與修正版，依既定私隱程序處理。","Clarify procedures, vocabulary and how to read figures without revealing answers before first responses. Record additional support and actual time; completion by every learner is not guaranteed. Preserve first and corrected responses with study IDs under the established privacy procedure.")],
       ["逐題VL來源、概念與配分","VL sources, concepts and points",
-        p("部分1只展示遮光設計方案A（頂端遮光）和B（頂端以下遮光），不預先展示對照。部分2的結果裝置B、C分別對應上述兩個方案；結果裝置A為完整不遮光對照。這是設計方案與結果裝置兩套標示，不改VL字母或資料。題號1–14只整理現有作答，沒有新增題目。","Part 1 shows only Design A (tip shaded) and Design B (below-tip shaded), withholding the control. These correspond to result Setups B and C in Part 2. Result Setup A is the intact, uncovered control. Design and result labels are separate; VL labels and records are unchanged. Q1–14 number existing responses without adding questions.")+
+        p("工作紙統一以A為頂端遮光、B為頂端以下遮光、C為完整不遮光、D為切頂。部分1只展示方案A／B，部分2以相同字母顯示兩種處理，最後加入對照C。與VL的配對：WS A→VL B、WS B→VL C、WS C→VL A、WS D→VL D。第5題比較C與A、第6題C與B、第9題C與D。題號1–14及配分不變。","Paper labels are A tip shaded, B below-tip shaded, C intact uncovered and D cut tip. Part 1 shows Designs A/B; Part 2 keeps these labels and adds control C last. Alignment: WS A to VL B, WS B to VL C, WS C to VL A, WS D to VL D. Q5 compares C/A, Q6 C/B and Q9 C/D. Q1–14 and points are unchanged.")+
         p("第1題變量：#variableChoices；IV1、DV1、CV2，共4。完整選對該類才給該類分；不漏選或多選。第2題前提：#assumptions及#assumptionDefinition，1分，三項正確且不選干擾項。第3題對照：#controlPlan，1分，另設完整不遮光胚芽鞘為基準並保持其餘條件相同。","Q1 variables: #variableChoices, IV 1, DV 1, CV 2 (4 total). Award each category only for the complete correct set. Q2 assumptions: #assumptions and #assumptionDefinition, 1 for all three correct items without the distractor. Q3 control: #controlPlan, 1 for adding an intact, uncovered coleoptile as baseline with other conditions constant.")+
-        p("第4題遮光：#bench與#observationTable，A左、B不明顯、C左，共1，按三項比例給分。第5–7題#qShade、#qBelow、#qTip各1，共3。第8題切頂：#tipBench與#tipObservationTable，A有、D沒有，共1，按兩項比例；第9題#qCap 1分。","Q4 shading: #bench / #observationTable, A left, B no clear bending, C left: 1 proportionally across three records. Q5–7 #qShade, #qBelow and #qTip: 1 each. Q8 tip removal: #tipBench / #tipObservationTable, A yes, D no: 1 proportionally; Q9 #qCap: 1.")+
+        p("第4題遮光：#bench與#observationTable，A不明顯、B左、C左，共1，按三項比例給分。第5–7題#qShade、#qBelow、#qTip各1，共3。第8題切頂：#tipBench與#tipObservationTable，C有、D沒有，共1，按兩項比例；第9題#qCap為方格單選，1分。","Q4 shading: #bench / #observationTable, paper A no clear bending, B left, C left: 1 proportionally across three records. Q5–7 #qShade, #qBelow and #qTip: 1 each. Q8 tip removal: #tipBench / #tipObservationTable, paper C yes, D no: 1 proportionally; Q9 #qCap: tick one, 1 point.")+
         p("第10題瓊脂：#extensionBench與#extensionTable。E0°直、F0°直、G35°右、H35°左。角度每組0.5共2；方向每組0.25共1。E/F只接受0°；G/H容差±2°。第11、12題#extEF、#extPosition各1；第13題句內#extXAmount、#extCellElongation、#extBendDirection各1/3，共1。","Q10 agar: #extensionBench / #extensionTable. E 0° straight, F 0° straight, G 35° right, H 35° left. Angles 0.5 each (2 total); directions 0.25 each (1 total). E/F require 0°; G/H allow ±2°. Q11–12 #extEF and #extPosition: 1 each; Q13 #extXAmount, #extCellElongation and #extBendDirection: 1/3 each (1 total).")+
         p("第14題整合：#reflection，與VL同圖，只將學習重點改為課題需知，5分。WS形成性共23分，與VL29分不能直接換算；比較成效使用另行既定共同測驗。","Q14 integration: #reflection, same diagram as VL; only learning points becomes topic notes, 5 points. Worksheet formative total: 23; it cannot be converted directly to the VL activity total of 29. Use the separately established common assessment for outcomes.")],
       ["參考答案及可接受表述","Reference answers and acceptable wording",
@@ -226,7 +246,7 @@ window.VL3PaperContent = (() => {
         p("Excel空白為待評、0為已評零分、不適用不阻擋。適用人工欄檢查整數上下限，公式亦拒絕貼上負數、超限、小數、文字。反思提交及適用評分完整才顯示總分。舊版保持原題、模型、圖表、滿分32與rubric；混合匯出逐列按版本。研究ID、原文、快照、圖片、事件及佇列保留；人工分數只留在另存Excel。舊Excel須重新匯出。","Excel blank means pending, 0 assessed zero, and not applicable does not block totals. Applicable manual columns enforce integer ranges; formulas also reject pasted negatives, excessive values, fractions and text. Totals require submitted reflection and valid applicable scores. Older rows retain their questions, models, graphs, total 32 and rubric; mixed exports use per-row versions. Preserve IDs, original text, snapshots, images, events and queues. Manual marks remain in saved Excel copies. Re-export old Excel files.")],
       ["科學限制與教學目標","Scientific limits and teaching objectives",
         p("胚芽鞘是禾本科幼苗地上部的一部分，包裹並保護幼葉。枝條通常呈正向光性；頂端組織的感光受體感受光照，生長素本身不探測光源。左光機制圖顯示右側背光、右側細胞延長較多而向左彎；窗邊圖的光源在右，方向相反。", "A coleoptile is part of a grass seedling’s shoot and protects young leaves. Shoots usually show positive phototropism. Photoreceptors in tip tissue sense light; auxin itself does not detect the light source. In the left-lit mechanism figure, the shaded right side elongates more and the shoot bends left. The window figure is lit from the right, reversing these sides.")+
-        p("三組遮光比較支持頂端參與感光；切頂亦造成傷口並移除其他組織，不能單靠它確定感光機制。D不延長是本模型設定，不是所有切頂植物必定停止生長。E/F比較只支持可轉移的生長促進作用，不單獨鑑定生長素或單側光下分布。黑暗左置瓊脂令左側延長較多而向右彎，右置相反；中央處理瓊脂直立延長，中央空白沒有明顯延長。","Shading supports tip involvement in sensing light. Cutting also wounds and removes other tissues, so cannot alone establish the sensing mechanism. No elongation in D is a model setting, not a universal rule for cut plants. E/F supports a transferable growth-promoting effect without identifying auxin or its distribution under unilateral light. In darkness, left-placed treated agar promotes left-side elongation and bending right, with the reverse for right placement. Central treated agar produces straight elongation; central blank agar gives no clear elongation.")+
+        p("三組遮光比較支持頂端參與感光；切頂亦造成傷口並移除其他組織，不能單靠它確定感光機制。切頂D不延長是本模型設定，不是所有切頂植物必定停止生長。E/F比較只支持可轉移的生長促進作用，不單獨鑑定生長素或單側光下分布。黑暗左置瓊脂令左側延長較多而向右彎，右置相反；中央處理瓊脂直立延長，中央空白沒有明顯延長。","Shading supports tip involvement in sensing light. Cutting also wounds and removes other tissues, so cannot alone establish the sensing mechanism. No elongation in D is a model setting, not a universal rule for cut plants. E/F supports a transferable growth-promoting effect without identifying auxin or its distribution under unilateral light. In darkness, left-placed treated agar promotes left-side elongation and bending right, with the reverse for right placement. Central treated agar produces straight elongation; central blank agar gives no clear elongation.")+
         p("目標：辨識變量及控制條件，讀取定性觀察與角度，運用三段比較推論感光與生長作用，因果解釋向光彎曲。靜態讀圖不等於動態操作；模型不是實測值。不恢復已刪除棒形圖、指定比較或額外追問。衍生答案依學生自身有效讀數核對，量度誤差不連鎖扣分；本WS未增加衍生題。","Objectives: identify variables and controls, read qualitative outcomes and angles, infer sensing and growth effects from the three comparisons, and explain bending causally. Static reading is not dynamic operation; model values are not measurements. Do not restore deleted graphs, prescribed comparisons or extra follow-ups. Check derived answers against the student's own valid readings without cascading penalties; this WS adds no derived question.")+
         p("rubric為活動回饋初稿，未聲稱跨VL等值、官方課綱認證或效度證據。正式共同測驗及研究缺失資料規則依既定方案；缺答先標未提供／待評，未問標不適用，已評錯答才給0。兩語閱讀負荷、實體列印、評分一致性及15–20分鐘負荷需試教確認。","This is a draft activity-feedback rubric, without claims of cross-VL equivalence, official syllabus endorsement or validity evidence. Follow the established common assessment and missing-data protocol: missing responses remain unavailable/pending, unasked items are not applicable, assessed incorrect responses score 0. Pilot bilingual reading load, physical printing, marking consistency and the 15–20-minute allocation.")]
     ];

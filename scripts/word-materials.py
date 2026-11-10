@@ -145,9 +145,9 @@ def render(parent,node,width=18.2):
   for row in t.rows:row._tr.get_or_add_trPr().append(OxmlElement('w:cantSplit'))
   return
  if 'knowledge-grid' in cl:
-  first_width=3.6 if soup.html.get('lang')=='en' else 4.8
+  first_width=4.2 if soup.html.get('lang')=='en' else 5.4
   t=parent.add_table(rows=1,cols=2);t.autofit=False;t.columns[0].width=Cm(first_width);t.columns[1].width=Cm(width-first_width)
-  picture(t.cell(0,0),node.svg,first_width-.4,5.5)
+  picture(t.cell(0,0),node.svg,first_width-.4,6.2)
   for cell in t.rows[0].cells:cell._element.remove(cell.paragraphs[0]._element)
   for item in node.select('.topic-points > li'):render(t.cell(0,1),item,width-first_width)
   return
