@@ -94,3 +94,10 @@ body[lang="en"] [data-page="3"] .plant-grid,
 body[lang="en"] [data-page="3"] .table-question,
 body[lang="en"] [data-page="3"] .observations{margin:0}
 body[lang="en"] [data-page="3"] main>p:not(.numbered-question){margin-bottom:.5mm}
+/* Separate tick choices keep the same type size and room for reflection. */
+body[lang="en"] [data-page="4"] .readings th{padding-top:1mm;padding-bottom:1mm}
+body[lang="en"] [data-page="4"] .readings td{padding-top:.3mm;padding-bottom:.3mm}
+body[lang="en"] [data-page="4"] h2{margin-top:.5mm;margin-bottom:.25mm}
+body[lang="en"] [data-page="4"] .table-question,
+body[lang="en"] [data-page="4"] .readings{margin:0}
+body[lang="en"] [data-page="4"] h2{margin-bottom:0}
