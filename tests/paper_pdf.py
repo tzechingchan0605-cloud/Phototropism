@@ -4,6 +4,7 @@ import hashlib,json,re,zipfile,subprocess
 import fitz
 from bs4 import BeautifulSoup
 from docx import Document
+from xml.etree import ElementTree as ET
 ROOT=Path(__file__).resolve().parents[1];m=json.loads((ROOT/'materials/manifest.json').read_text());out=Path('/tmp/vl3-paper-review');out.mkdir(exist_ok=True)
 for b in m['books']:
  p=ROOT/b['path'];assert hashlib.sha256(p.read_bytes()).hexdigest()==b['sha256']
@@ -13,6 +14,8 @@ for b in m['books']:
    xml=z.read('word/document.xml').decode();assert 'w:sz w:val="24"' in xml and 'w:line="380"' in xml
    assert '333333' in xml and '<w:tbl>' in xml and '<w:t' in xml
    assert any(n.endswith('.svg') for n in z.namelist())
+   root=ET.fromstring(xml);ns={'w':'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
+   hanging=[n for n in root.findall('.//w:pPr/w:ind',ns) if n.get('{'+ns['w']+'}hanging')=='425' and n.get('{'+ns['w']+'}left')=='425'];assert len(hanging)==14,(b['filename'],len(hanging))
   continue
  d=fitz.open(p);assert len(d)==b['pages'];assert len(d)==4 if b['code']!='DPDF' else len(d)>=4
  text=''.join(page.get_text() for page in d);assert '\ufffd' not in text

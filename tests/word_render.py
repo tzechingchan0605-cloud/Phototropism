@@ -1,6 +1,6 @@
 """Actually open both languages' Word documents, then inspect the rendered pages."""
 from pathlib import Path
-import json,subprocess,tempfile
+import json,subprocess,tempfile,re
 import fitz
 m=json.loads(Path('materials/manifest.json').read_text())
 with tempfile.TemporaryDirectory(prefix='vl3-word-') as folder:
@@ -11,7 +11,7 @@ with tempfile.TemporaryDirectory(prefix='vl3-word-') as folder:
   d=fitz.open(root/(p.stem+'.pdf'));assert len(d)==4,(p,len(d))
   text=''.join(page.get_text() for page in d)
   assert 'Worksheet 3' in text if '_en_' in p.name else '工作紙三' in text
-  assert '3. ' in text and ('Integrated explanation' in text or '整合解釋' in text)
+  assert re.search(r'\b3\.\s',text) and ('Integrated explanation' in text or '整合解釋' in text)
   for page in d:
    for b in page.get_text('blocks'):assert b[0]>=20 and b[2]<=page.rect.width-20 and b[1]>=10 and b[3]<=page.rect.height-10,(p,b)
   for i,page in enumerate(d):page.get_pixmap().save('/tmp/'+p.stem+f'-word-{i+1}.png')

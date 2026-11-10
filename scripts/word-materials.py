@@ -4,13 +4,14 @@ from pathlib import Path
 from bs4 import BeautifulSoup, NavigableString
 from docx import Document
 from docx.shared import Pt,Cm,RGBColor
+from docx.enum.text import WD_TAB_ALIGNMENT
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.opc.part import Part
 from docx.opc.constants import RELATIONSHIP_TYPE as RT
 import cairosvg
 soup=BeautifulSoup(Path(sys.argv[1]).read_text(),'html.parser');FONT='Arial' if soup.html.get('lang')=='en' else 'Noto Sans CJK TC';d=Document();sec=d.sections[0]
-sec.page_width=Cm(21);sec.page_height=Cm(29.7);sec.top_margin=Cm(1.1);sec.bottom_margin=Cm(1.1);sec.left_margin=sec.right_margin=Cm(1.4)
+sec.page_width=Cm(21);sec.page_height=Cm(29.7);sec.top_margin=Cm(.9);sec.bottom_margin=Cm(1.1);sec.left_margin=sec.right_margin=Cm(1)
 sec.header_distance=sec.footer_distance=Cm(.5)
 st=d.styles['Normal'];st.font.name=FONT;st.font.size=Pt(12);st.element.rPr.rFonts.set(qn('w:eastAsia'),'Noto Sans CJK TC');st.paragraph_format.line_spacing=Pt(19);st.paragraph_format.space_after=Pt(3)
 for name,size in [('Heading 1',16),('Heading 2',13),('Heading 3',12)]:
@@ -32,12 +33,18 @@ def runs(p,node,colour=None,bold=False):
  col='145DA0' if 'reference-answer' in cl else 'B7312C' if node.name=='strong' else colour
  for c in node.children:runs(p,c,col,bold or node.name in ['b','strong'])
 def para(parent,node,style=None):
- p=parent.add_paragraph(style=style);runs(p,node)
+ p=parent.add_paragraph(style=style)
+ if 'numbered-question' in node.get('class',[]):
+  p.paragraph_format.left_indent=Cm(.75);p.paragraph_format.first_line_indent=Cm(-.75);p.paragraph_format.tab_stops.add_tab_stop(Cm(.6),WD_TAB_ALIGNMENT.RIGHT);p.paragraph_format.tab_stops.add_tab_stop(Cm(.75));p.paragraph_format.line_spacing=Pt(19)
+  p.add_run('\t'+node['data-paper-number']+'.\t');runs(p,node.select_one('.question-content'))
+ else:
+  runs(p,node)
+  if node.find_parent(class_='assumptions-block') or node.find_parent(class_='control-paper'):p.paragraph_format.left_indent=Cm(.75)
  if 'hint' in node.get('class',[]) or 'design-hint' in node.get('class',[]):
   p.paragraph_format.line_spacing=Pt(16.5)
   for r in p.runs:r.font.size=Pt(11)
  return p
-def picture(parent,node,width=18.2,height=None):
+def picture(parent,node,width=19,height=None):
  global imagecount
  imagecount+=1;svg=str(node).replace("viewbox=", "viewBox=").replace("textlength=", "textLength=").replace("lengthadjust=", "lengthAdjust=")
  svg=re.sub(r'<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ',svg,1) if not node.get('xmlns') else svg
@@ -55,7 +62,7 @@ def picture(parent,node,width=18.2,height=None):
  from lxml import etree
  v=etree.Element('{http://schemas.microsoft.com/office/drawing/2016/SVG/main}svgBlip');v.set(qn('r:embed'),rid);ext.append(v);extlist.append(ext);blip.append(extlist)
  return p
-def render(parent,node,width=18.2):
+def render(parent,node,width=19):
  if isinstance(node,NavigableString):
   if node.strip():para(parent,BeautifulSoup('<p>'+str(node)+'</p>','html.parser').p)
   return
@@ -85,6 +92,7 @@ def render(parent,node,width=18.2):
    b.append(rule);p._p.get_or_add_pPr().append(b);return
   for child in node.find_all('div',recursive=False):
    p=para(parent,child);p.paragraph_format.space_after=Pt(0);p.paragraph_format.line_spacing=Pt(26)
+   if node.get('data-answer-field')=='controlPlan':p.paragraph_format.left_indent=Cm(.75)
    if not p.text:p.add_run(' ')
    b=OxmlElement('w:pBdr')
    for edge in ['bottom','between']:

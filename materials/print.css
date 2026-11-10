@@ -74,3 +74,23 @@ body[lang="en"] [data-page="2"] .variables th,body[lang="en"] [data-page="2"] .v
 body[lang="en"] [data-page="2"] p{margin-bottom:1mm}
 body[lang="en"] [data-page="2"] h2,body[lang="en"] [data-page="2"] h3{margin-top:2mm;margin-bottom:1mm}
 [data-page="4"] .readings{margin-top:1mm;margin-bottom:1mm}
+
+/* A hanging number leaves all choices and wrapped text aligned with the stem. */
+.paper-page{padding-top:8mm;padding-left:10mm;padding-right:10mm}
+header{height:7mm;margin-bottom:2mm}footer{left:10mm;right:10mm}
+.numbered-question{position:relative;padding-left:7.5mm}
+.question-number{position:absolute;left:0;top:0;width:7.5mm;padding-right:1.5mm;text-align:right;white-space:nowrap}
+.question-content{display:block}
+.table-question{margin:1mm 0}
+.assumptions-block>p,.control-paper>p,.control-paper>.answer-lines{margin-left:7.5mm}
+/* Recover unused vector and paragraph whitespace while keeping 12pt/19pt text. */
+body[lang="en"] [data-page="3"] .main-setups .plant-pair>svg{height:37.1mm!important}
+body[lang="en"] [data-page="3"] .table-question,body[lang="en"] [data-page="3"] .observations{margin:.5mm 0}
+body[lang="en"] [data-page="3"] h2{margin-top:.5mm;margin-bottom:.5mm}
+body[lang="en"] [data-page="4"] main>svg{display:block}
+body[lang="en"] [data-page="4"] .table-question,body[lang="en"] [data-page="4"] .readings{margin:.5mm 0}
+body[lang="en"] [data-page="4"] h2{margin-top:1mm;margin-bottom:.5mm}
+body[lang="en"] [data-page="3"] .plant-grid,
+body[lang="en"] [data-page="3"] .table-question,
+body[lang="en"] [data-page="3"] .observations{margin:0}
+body[lang="en"] [data-page="3"] main>p:not(.numbered-question){margin-bottom:.5mm}
